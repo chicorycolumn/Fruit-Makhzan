@@ -2,7 +2,7 @@
 class Fruit{
  
     private $conn;
-    private $table_name = "fruit";
+    private $table_name = "v1";
     private $use_conn_dot_query_as_opposed_to_mysqli_underscore_query = 1;
  
     public $id;

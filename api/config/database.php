@@ -6,11 +6,10 @@ class Database{
     private $username = "root";
     private $password = "";
     public $connection;
- 
+    private $table_name = "v9";
     // $this->conn->exec("set names utf8");
 
-    public function execute_query($query, $con)
-    {
+    public function execute_query($query, $con){
         $res = $con->query($query);
     
         if (!$res) {
@@ -35,6 +34,40 @@ class Database{
             echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
             exit;
         }
+
+        //CREATE THE v1 TABLE
+        $query = "CREATE TABLE ".$this->table_name." (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` varchar(255) NOT NULL,
+            `quantity` int(11) NOT NULL,
+            `selling_price` int(11) NOT NULL,
+            `total_sales` int(11) DEFAULT 0,
+            `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+          )";  
+
+         if(mysqli_query($this->connection, $query)){  
+
+            $query_array = [
+                "INSERT INTO ".$this->table_name." (`name`, `quantity`, `selling_price`, `total_sales`) VALUES
+            ('Morangines', 50, 5, 20)",
+            
+            "INSERT INTO ".$this->table_name." (`name`, `quantity`, `selling_price`) VALUES
+            ('Miwiwoos', 50, 5)",
+            
+            "INSERT INTO ".$this->table_name." (`name`, `quantity`, `selling_price`) VALUES
+            ('Matey-wateys', 30, 10)"
+            ];
+            
+            foreach($query_array as $query){
+                mysqli_query($this->connection, $query);
+            }
+
+ 
+        //********* */
+        //  mysqli_close($this->connection);  
+
+
+
         
         // echo "Success: A proper connection to MySQL was made! The my_db database is great." . PHP_EOL;
         // echo "Host information: " . mysqli_get_host_info($this->connection) . PHP_EOL;
@@ -47,5 +80,6 @@ class Database{
         return $this->connection;
 
     }
+}
 }
 ?>
