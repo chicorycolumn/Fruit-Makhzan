@@ -5,9 +5,14 @@ class Database{
     private $db_name = "fruit_makhzan_db";
     private $username = "root";
     private $password = "";
+    public $table_name = null;
     public $connection;
-    private $table_name = "v9";
+
     // $this->conn->exec("set names utf8");
+
+    public function __construct(){
+        $this->table_name = "v".(time()-1590000000);
+    }
 
     public function execute_query($query, $con){
         $res = $con->query($query);
@@ -65,9 +70,6 @@ class Database{
  
         //********* */
         //  mysqli_close($this->connection);  
-
-
-
         
         // echo "Success: A proper connection to MySQL was made! The my_db database is great." . PHP_EOL;
         // echo "Host information: " . mysqli_get_host_info($this->connection) . PHP_EOL;
@@ -77,8 +79,8 @@ class Database{
         // $query = "INSERT INTO fruit(name, quantity, selling_price, total_sales) VALUES('jumpy', 5, 6, 7)";
         // $this->execute_query($query, $this->connection);
 
-        return $this->connection;
-
+        //return $this->connection;
+        return $this;
     }
 }
 }

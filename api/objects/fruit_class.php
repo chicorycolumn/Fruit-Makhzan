@@ -2,7 +2,7 @@
 class Fruit{
  
     private $conn;
-    private $table_name = "v1";
+    private $table_name = "fruit";
     private $use_conn_dot_query_as_opposed_to_mysqli_underscore_query = 1;
  
     public $id;
@@ -12,8 +12,9 @@ class Fruit{
     public $total_sales;
     public $created;
  
-    public function __construct($db){
-        $this->conn = $db;
+    public function __construct($dbwhole){
+        $this->conn = $dbwhole->connection;
+        $this->table_name = $dbwhole->table_name;
     }
 
     public function execute_query($query, $conn){

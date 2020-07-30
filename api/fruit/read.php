@@ -4,16 +4,20 @@ include_once '../config/database.php';
 include_once '../objects/fruit_class.php';
  
 $database = new Database();
-$db = $database->getConnection();
+// $db = $database->getConnection();
+$dbwhole = $database->getConnection();
+$db = $dbwhole->connection;
+// echo "hi there";
+// return;
 
-$fruit = new Fruit($db);
+$fruit = new Fruit($dbwhole);
+
+
  
 $result = $fruit->read();
 
-////
-// print_r($stmt);
+// echo $result;
 // return;
-////
 
 $num = $result->num_rows;
 
