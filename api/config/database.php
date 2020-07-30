@@ -1,10 +1,16 @@
 <?php
 class Database{
  
-    private $host = "localhost";
-    private $db_name = "fruit_makhzan_db";
-    private $username = "root";
-    private $password = "";
+    // private $username = "root";
+    // private $password = "";
+    // private $host = "localhost";
+    // private $db_name = "fruit_makhzan_db";
+
+    private $username = "b4709ad1452782";
+    private $password = "7d6b0f7d";
+    private $host = "us-cdbr-east-02.cleardb.com";
+    private $db_name = "heroku_cb0feae1098e18e";
+
     public $table_name = null;
     public $connection;
 
