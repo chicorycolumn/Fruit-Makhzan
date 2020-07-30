@@ -5,7 +5,6 @@ class Database{
     // private $password = "";
     // private $host = "localhost";
     // private $db_name = "fruit_makhzan_db";
-
     private $username = "b4709ad1452782";
     private $password = "7d6b0f7d";
     private $host = "us-cdbr-east-02.cleardb.com";
