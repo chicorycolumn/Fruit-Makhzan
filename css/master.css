@@ -1,0 +1,42 @@
+body {
+  background-color: lightyellow;
+}
+
+.mainHeader {
+  font-size: 22px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+  /* border: red solid 1pt; */
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.contentWrapper {
+  /* border: blue solid 0.5pt; */
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.table {
+  border-collapse: separate;
+  border-spacing: 50px 0;
+}
+
+td {
+  padding: 5px 0px 5px 0px;
+}
+
+.wrapper {
+  background-color: rgba(0, 255, 0, 0.1);
+  height: 95vh;
+}
+
+.mainDiv {
+  border: black dashed 2pt;
+  margin: 20px 0px 20px 0px;
+}

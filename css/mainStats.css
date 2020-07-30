@@ -1,0 +1,45 @@
+.mainDivStats {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.topHalf {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.mainStatBox {
+  /* border: yellow dotted 0.5pt; */
+  width: 20%;
+}
+
+.mainStatTitle {
+  /* color: red; */
+}
+
+.mainStatText {
+  /* color: powderblue; */
+}
+
+.statusBar {
+  margin-left: auto;
+  margin-right: auto;
+  border: black solid 2pt;
+  width: 200px;
+  height: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.statusBarFill {
+  background-color: lightgray;
+  height: 100%;
+  width: 40%;
+}
+
+p {
+  margin: 5px;
+}
