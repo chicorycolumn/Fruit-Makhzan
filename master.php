@@ -7,7 +7,7 @@
   <link rel="icon" href="../images/favicon.ico" type="image/ico">
 </head>
 <body>
-<div class="wrapper" onclick="true ? window.location.href = '../play' : ''">
+<div class="wrapper" onclick="false ? window.location.href = '../play' : ''">
 
   <header class="mainHeader">
  

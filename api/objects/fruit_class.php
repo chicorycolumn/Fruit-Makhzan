@@ -3,7 +3,7 @@ class Fruit{
  
     private $conn;
     private $table_name = "fruit";
-    private $use_conn_dot_query_as_opposed_to_mysqli_underscore_query = 1;
+    private $use_oop = 1;
  
     public $id;
     public $name;
@@ -31,13 +31,11 @@ class Fruit{
 
     function read(){
 
-        // echo "oi oi";
-        // return;
 
         $query = 'SELECT * FROM '.$this->table_name;
         // $query = "INSERT INTO fruit(name, quantity, selling_price, total_sales) VALUES('dumbo', 5, 6, 7)";
 
-        if ($this->use_conn_dot_query_as_opposed_to_mysqli_underscore_query){
+        if ($this->use_oop){
             $res = $this->execute_query($query, $this->conn);
         }else{
             $res = mysqli_query($this->conn, $query);
@@ -58,6 +56,35 @@ class Fruit{
     }
 
     function read_single(){
+
+        $stmt = $this->conn->prepare("SELECT
+        `id`, `name`, `quantity`, `selling_price`, `total_sales`, `created`
+     FROM
+         " . $this->table_name . " 
+     WHERE
+         id=?");
+
+        // $id = null;
+        // $name = null;
+        // $quantity = null;
+        // $selling_price = null;
+        // $total_sales = null;
+        // $created = null;
+
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        // echo json_encode($stmt);
+        return $result; 
+
+
+        $stmt->close();
+        return;
+
+
+
+
     
         $query = "SELECT
                    `id`, `name`, `quantity`, `selling_price`, `total_sales`, `created`
@@ -66,13 +93,12 @@ class Fruit{
                 WHERE
                     id= '".$this->id."'";
     
-        $stmt = $this->conn->prepare($query);
-        if($stmt->execute()){
-            return $stmt;
+        if ($this->use_oop){
+            $res = $this->execute_query($query, $this->conn);
+        }else{
+            $res = mysqli_query($this->conn, $query);
         }
-        return false;
-
-
+        return $res;
     }
 
     function create_self(){

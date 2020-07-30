@@ -1,15 +1,12 @@
 <?php
 class Database{
- 
-    // private $username = "root";
-    // private $password = "";
-    // private $host = "localhost";
-    // private $db_name = "fruit_makhzan_db";
-    private $username = "b4709ad1452782";
-    private $password = "7d6b0f7d";
-    private $host = "us-cdbr-east-02.cleardb.com";
-    private $db_name = "heroku_cb0feae1098e18e";
 
+    private $use_clear_db = 0;
+ 
+    private $username = "root";
+    private $password = "";
+    private $host = "localhost";
+    private $db_name = "fruit_makhzan_db";
     public $table_name = null;
     public $connection;
 
@@ -17,6 +14,13 @@ class Database{
 
     public function __construct(){
         $this->table_name = "v".(time()-1590000000);
+
+        if ($this->use_clear_db){
+            $this->username = "b4709ad1452782";
+            $this->password = "7d6b0f7d";
+            $this->host = "us-cdbr-east-02.cleardb.com";
+            $this->db_name = "heroku_cb0feae1098e18e";
+        }
     }
 
     public function execute_query($query, $con){

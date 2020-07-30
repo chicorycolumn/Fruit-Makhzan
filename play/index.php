@@ -85,9 +85,39 @@ $content = '
 include('../master.php');
 ?>
 
+
+<script>
+  function printSingle(id){
+$.ajax(
+        {
+            type: "POST",
+            url: '../api/fruit/restock.php',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            error: function (result) {
+              console.log("error", result)
+                // alert(result);
+            },
+            success: function (result) {
+              console.log("success result is", result)
+                if (result) {
+                console.log(result);
+                }
+                else {
+                  console.log("else")
+                    // alert(result['message']);
+                }
+            }
+        });}
+      </script>
+
+
+
+
 <script>
   function restockFruit(id){
-
 $.ajax(
         {
             type: "POST",
@@ -152,7 +182,7 @@ XHreq.onreadystatechange = function(){
         "<td>"+data[fruit].quantity+"</td>"+
         "<td>"+data[fruit].selling_price+"</td>"+
         "<td>"+data[fruit].total_sales+"</td>"+
-        "<td><button class='button1' onClick=restockFruit('"+data[fruit].id+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+data[fruit].id+"','"+formattedName+"')>Throw away</button></td>"+
+        "<td><button class='button1' onClick=printSingle('"+data[fruit].id+"')>Print single</button> <button class='button1' onClick=restockFruit('"+data[fruit].id+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+data[fruit].id+"','"+formattedName+"')>Throw away</button></td>"+
         "</tr>";
     }
     $(response).appendTo($("#fruit"));

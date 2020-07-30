@@ -4,21 +4,11 @@ include_once '../config/database.php';
 include_once '../objects/fruit_class.php';
  
 $database = new Database();
-// $db = $database->getConnection();
 $dbwhole = $database->getConnection();
 $db = $dbwhole->connection;
-// echo "hi there";
-// return;
 
 $fruit = new Fruit($dbwhole);
-
-
- 
 $result = $fruit->read();
-
-// echo $result;
-// return;
-
 $num = $result->num_rows;
 
 if($num>0){
