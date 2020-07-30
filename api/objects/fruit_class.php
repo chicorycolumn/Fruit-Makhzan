@@ -3,6 +3,7 @@ class Fruit{
  
     private $conn;
     private $table_name = "fruit";
+    private $use_conn_dot_query_as_opposed_to_mysqli_underscore_query = 1;
  
     public $id;
     public $name;
@@ -32,11 +33,10 @@ class Fruit{
         // echo "oi oi";
         // return;
 
-        $query = 'SELECT * FROM fruit';
+        $query = 'SELECT * FROM '.$this->table_name;
         // $query = "INSERT INTO fruit(name, quantity, selling_price, total_sales) VALUES('dumbo', 5, 6, 7)";
 
-        $caprice = 0;
-        if ($caprice){
+        if ($this->use_conn_dot_query_as_opposed_to_mysqli_underscore_query){
             $res = $this->execute_query($query, $this->conn);
         }else{
             $res = mysqli_query($this->conn, $query);
