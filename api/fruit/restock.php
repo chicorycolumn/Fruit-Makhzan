@@ -5,39 +5,29 @@ include_once '../objects/fruit_class.php';
 include '../../utils/build_array.php';
 
 $database = new Database();
-$dbwhole = $database->getConnection();
-$db = $dbwhole->connection;
+$db = $database->getConnection();
 
-$fruit = new Fruit($dbwhole);
+$fruit = new Fruit($db);
 $fruit->id = $_POST['id'];
-
 $result = $fruit->read_single();
 
-if ($single_fruit = build_array($result)) {
-  if ($fruit->restock_self($single_fruit[0]["quantity"] + 10)) {
-    if ($result = $fruit->read_single()) {
-      $single_fruit = build_array($result);
-      $response = $single_fruit[0];
+if (array_key_exists("status", $result)) {
+  $response = $result;
+} else {
+  $single_fruit = build_array($result);
+  if ($result = $fruit->restock_self($single_fruit[0]["quantity"] + 10)) {
+    if ($result["status"]) {
+      $result = $fruit->read_single();
+      $response = build_array($result)[0];
     } else {
-      $response = [
-        "status" => false,
-        "message" =>
-          "Unable to read single. An error such as the wrong id perhaps.",
-      ];
+      $response = $result;
     }
   } else {
     $response = [
       "status" => false,
-      "message" =>
-        "Unable to restock self. An error in fruit_class, such as the query string being malformed.",
+      "message" => "restock_self failed in an unknown way.",
     ];
   }
-} else {
-  $response = [
-    "status" => false,
-    "message" =>
-      "Unable to read single. An error such as the wrong id perhaps.",
-  ];
 }
 print_r(json_encode($response));
 ?>

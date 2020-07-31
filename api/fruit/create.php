@@ -11,8 +11,10 @@ $fruit->name = $_POST['name'];
 $fruit->quantity = $_POST['quantity'];
 $fruit->selling_price = $_POST['selling_price'];
 
-if ($fruit->create_self()) {
-  $fruit_arr = [
+$result = $fruit->create_self();
+
+if ($result["status"]) {
+  $response = [
     "status" => true,
     "message" => "Successfully created!",
     "id" => $fruit->id,
@@ -22,10 +24,7 @@ if ($fruit->create_self()) {
     "total_sales" => $fruit->total_sales,
   ];
 } else {
-  $fruit_arr = [
-    "status" => false,
-    "message" => "Unable to add fruit!",
-  ];
+  $response = $result;
 }
-print_r(json_encode($fruit_arr));
+print_r(json_encode($response));
 ?>

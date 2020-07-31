@@ -5,10 +5,9 @@ include_once '../objects/fruit_class.php';
 include '../../utils/build_array.php';
 
 $database = new Database();
-$dbwhole = $database->getConnection();
-$db = $dbwhole->connection;
+$db = $database->getConnection();
 
-$fruit = new Fruit($dbwhole);
+$fruit = new Fruit($db);
 $fruit->id = $_POST['id'];
 
 $result = $fruit->read_single();

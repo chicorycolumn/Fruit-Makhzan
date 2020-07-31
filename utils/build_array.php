@@ -4,7 +4,6 @@ function build_array($result)
 {
   if ($result->num_rows) {
     $fruit_arr = [];
-    $fruit_arr["fruit"] = [];
 
     while ($row = $result->fetch_assoc()) {
       $fruit_item = [
@@ -15,9 +14,9 @@ function build_array($result)
         "total_sales" => $row["total_sales"],
         "created" => $row["created"],
       ];
-      array_push($fruit_arr["fruit"], $fruit_item);
+      array_push($fruit_arr, $fruit_item);
     }
-    return $fruit_arr["fruit"];
+    return $fruit_arr;
   } else {
     return false;
   }

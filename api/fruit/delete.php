@@ -8,16 +8,14 @@ $db = $database->getConnection();
 
 $fruit = new Fruit($db);
 $fruit->id = $_POST['id'];
+$result = $fruit->delete_self();
 
-if ($fruit->delete_self()) {
-  $response = [
-    "status" => true,
-    "message" => "Successfully deleted!",
-  ];
+if ($result) {
+  $response = $result;
 } else {
   $response = [
     "status" => false,
-    "message" => "Cannot be deleted.",
+    "message" => "An error in api/delete.",
   ];
 }
 print_r(json_encode($response));

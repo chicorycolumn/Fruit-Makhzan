@@ -123,7 +123,7 @@ class Database
     }
 
     //  mysqli_close($this->connection);
-    return $this;
+    return $this->connection;
   }
 }
 ?>

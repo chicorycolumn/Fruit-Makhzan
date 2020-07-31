@@ -106,7 +106,7 @@ include '../master.php';
 
 <script>
 function checkSession(){
-  console.log("<?php echo $_SESSION['favcolor']; ?>");
+  console.log(`<?php echo json_encode($_SESSION); ?>`);
 }
 </script>
 
@@ -124,6 +124,7 @@ function fillTable(shouldWipe){
             dataType: 'json',
             error: function (result) {
               console.log("An error occurred immediately in $.ajax request.", result)
+              console.log(result.responseText)
             },
             success: function (result) {
             
@@ -167,6 +168,7 @@ function fillTable(shouldWipe){
             },
             error: function (result) {
               console.log("An error occurred immediately in $.ajax request.", result)
+              console.log(result.responseText)
             },
             success: function (result) {
                 if (result) {
@@ -192,7 +194,9 @@ function fillTable(shouldWipe){
                 id: id
             },
             error: function (result) {
-              console.log("An error occurred immediately in $.ajax request.", result)
+              console.log("An error occurred immediately in $.ajax request.")
+              console.log(result.responseText)
+              console.log(result)
             },
             success: function (result) {
                 if (result['quantity']) {     
@@ -227,7 +231,9 @@ function fillTable(shouldWipe){
                 id: id
             },
             error: function (result) {
-              console.log("An error occurred immediately in $.ajax request.", result)
+              console.log("An error occurred immediately in $.ajax request.")
+              console.log(result.responseText)
+              console.log(result)
             },
             success: function (result) {
                 if (result['status'] == true) {
@@ -236,6 +242,7 @@ function fillTable(shouldWipe){
                   }).parent('tr').remove()
                 } else {
                     alert(result['message']);
+                    console.log(result)
                 }
             }
         });
