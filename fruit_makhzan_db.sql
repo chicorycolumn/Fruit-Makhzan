@@ -5,7 +5,7 @@ CREATE TABLE `fruit` (
   `selling_price` int(11) NOT NULL,
   `total_sales` int(11) DEFAULT 0,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1; 
 
 INSERT INTO `fruit` (`name`, `quantity`, `selling_price`, `total_sales`) VALUES
 ('Orangines', 50, 5, 20);

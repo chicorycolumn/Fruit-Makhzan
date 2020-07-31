@@ -7,5 +7,5 @@ $mainButton = '
 <button>Open up shop</button>
 <button>Buy special</button>
 </div>
-'
-  ?>
+';
+?>

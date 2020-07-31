@@ -1,6 +1,5 @@
-<?php 
-  $content = '<div class="row">
-          
+<?php
+$content = '<div class="row">   
                 <div class="col">
             
                   <div class="box">
@@ -32,7 +31,7 @@
                   
                 </div>
               </div>';
-  include('../master.php');
+include '../master.php';
 ?>
 <script>
   function AddFruit(){

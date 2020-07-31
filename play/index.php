@@ -1,33 +1,41 @@
 <?php
 session_start();
 if (!isset($_SESSION['game_begun'])) {
-  header("Location: ../home"); 
-  exit; 
+  header("Location: ../home");
+  exit();
 }
 ?>
 
 <?php
-
 $money = 30;
 $days = 756;
 echo "<link rel='stylesheet' type='text/css' href='../css/playIndex.css' />";
-include('content/mainStats.php');
-include('content/mainBulletin.php');
-include('content/mainButton.php');
+include 'content/mainStats.php';
+include 'content/mainBulletin.php';
+include 'content/mainButton.php';
 
-$content = '
-<h1>'.$days.'</h1>
+$content =
+  '
+<h1>' .
+  $days .
+  '</h1>
 <button onClick=checkSession()>CHECK SESSION</button>
 <div class="mainDiv">
-  '.$mainStats.'
+  ' .
+  $mainStats .
+  '
 </div>
 
 <div class="mainDiv">
-  '.$mainBulletin.'
+  ' .
+  $mainBulletin .
+  '
 </div>
 
 <div class="mainDiv">
-  '.$mainButton.'
+  ' .
+  $mainButton .
+  '
 </div>
   
 <div class="mainDiv mainDivTable1">
@@ -92,7 +100,7 @@ $content = '
 
 ';
 
-include('../master.php');
+include '../master.php';
 ?>
 
 <script>
@@ -115,7 +123,6 @@ function fillTable(shouldWipe){
 
     // console.log(this);
     // return;
-    // notice.innerHTML = this.responseText
 
     let data = JSON.parse(this.responseText)
   
@@ -186,15 +193,16 @@ XHreq.send();
               console.log("error", result)
             },
             success: function (result) {
-                if (result['quantity']) {     
 
+                if (result['quantity']) {     
                   let specificName = result['name']
                   $("table tr td").filter(function() {
                       return $(this).text() == specificName;
                   }).parent('tr').children().eq(2).text(result['quantity'])
-
-                } else if (result['status'] == false) {
+                
+                } else if (!result['status']) {
                   console.log(result["message"]);
+               
                 }else {
                    console.log("no quantity key was detected")
                 }
