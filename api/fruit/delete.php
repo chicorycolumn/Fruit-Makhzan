@@ -11,17 +11,15 @@ $fruit = new Fruit($db);
 $fruit->id = $_POST['id'];
  
 if($fruit->delete_self()){
-    $fruit_arr=array(
+    $response=array(
         "status" => true,
         "message" => "Successfully deleted!"
     );
-}
-else
-{
-    $fruit_arr=array(
+} else {
+    $response=array(
         "status" => false,
-        "message" => "Hda m'esf! Cannot be deleted."
+        "message" => "Cannot be deleted."
     );
 }
-print_r(json_encode($fruit_arr));
+print_r(json_encode($response));
 ?>

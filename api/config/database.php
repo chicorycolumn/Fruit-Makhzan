@@ -1,4 +1,7 @@
 <?php
+
+if(session_status() == PHP_SESSION_NONE){session_start();}
+
 class Database{
 
     private $use_clear_db = 0;
@@ -13,8 +16,6 @@ class Database{
     // $this->conn->exec("set names utf8");
 
     public function __construct(){
-        $this->table_name = "v".(time()-1590000000);
-
         if ($this->use_clear_db){
             $this->username = "b4709ad1452782";
             $this->password = "7d6b0f7d";
@@ -38,8 +39,16 @@ class Database{
         }
     }
 
-    public function getConnection(){
- 
+    public function makeConnection(){
+
+        $_SESSION["session_id"] = time();
+        $_SESSION["game_begun"] = true;
+        $_SESSION["favcolor"] = "green";
+        $_SESSION["favanimal"] = "cat";
+        $_SESSION["table_name"] = "v".(time()-1590000000);
+
+        $this->table_name = $_SESSION["table_name"];
+
         $this->connection = mysqli_connect($this->host, $this->username, $this->password, $this->db_name);
 
         if (!$this->connection) {
@@ -67,6 +76,12 @@ class Database{
             
             "INSERT INTO ".$this->table_name." (`name`, `quantity`, `selling_price`) VALUES
             ('Miwiwoos', 50, 5)",
+
+            "INSERT INTO ".$this->table_name." (`name`, `quantity`, `selling_price`) VALUES
+            ('Moloko', 80, 4)",
+
+            "INSERT INTO ".$this->table_name." (`name`, `quantity`, `selling_price`) VALUES
+            ('Manchurianos', 200, 100)",
             
             "INSERT INTO ".$this->table_name." (`name`, `quantity`, `selling_price`) VALUES
             ('Matey-wateys', 30, 10)"
@@ -76,21 +91,24 @@ class Database{
                 mysqli_query($this->connection, $query);
             }
 
- 
-        //********* */
         //  mysqli_close($this->connection);  
-        
-        // echo "Success: A proper connection to MySQL was made! The my_db database is great." . PHP_EOL;
-        // echo "Host information: " . mysqli_get_host_info($this->connection) . PHP_EOL;
-
-        // $sql = "INSERT INTO fruit(name)VALUES ('".$_POST["name"]."')";
-
-        // $query = "INSERT INTO fruit(name, quantity, selling_price, total_sales) VALUES('jumpy', 5, 6, 7)";
-        // $this->execute_query($query, $this->connection);
-
-        //return $this->connection;
-        return $this;
+        // return $this;
     }
+    }
+
+    public function getConnection(){
+ 
+        $this->connection = mysqli_connect($this->host, $this->username, $this->password, $this->db_name);
+
+        if (!$this->connection) {
+            echo "Error: Unable to connect to MySQL." . PHP_EOL;
+            echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+            echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+            exit;
+        }
+
+        //  mysqli_close($this->connection);  
+        return $this;
 }
 }
 ?>

@@ -1,4 +1,13 @@
 <?php
+session_start();
+if (!isset($_SESSION['game_begun'])) {
+  header("Location: ../home"); 
+  exit; 
+}
+?>
+
+<?php
+
 $money = 30;
 $days = 756;
 echo "<link rel='stylesheet' type='text/css' href='../css/playIndex.css' />";
@@ -8,6 +17,7 @@ include('content/mainButton.php');
 
 $content = '
 <h1>'.$days.'</h1>
+<button onClick=checkSession()>CHECK SESSION</button>
 <div class="mainDiv">
   '.$mainStats.'
 </div>
@@ -85,89 +95,28 @@ $content = '
 include('../master.php');
 ?>
 
+<script>
+function checkSession(){
+  console.log("<?php echo $_SESSION['favcolor']; ?>");
+}
+</script>
 
 <script>
-  function printSingle(id){
-$.ajax(
-        {
-            type: "POST",
-            url: '../api/fruit/restock.php',
-            dataType: 'json',
-            data: {
-                id: id
-            },
-            error: function (result) {
-              console.log("error", result)
-                // alert(result);
-            },
-            success: function (result) {
-              console.log("success result is", result)
-                if (result) {
-                console.log(result);
-                }
-                else {
-                  console.log("else")
-                    // alert(result['message']);
-                }
-            }
-        });}
-      </script>
-
-
-
-
-<script>
-  function restockFruit(id){
-$.ajax(
-        {
-            type: "POST",
-            url: '../api/fruit/restock.php',
-            dataType: 'json',
-            data: {
-                id: id
-            },
-            error: function (result) {
-              console.log("error", result)
-                alert(result);
-            },
-            success: function (result) {
-              console.log("success result is", result)
-                if (result['quantity']) {
-                  console.log(result['quantity'])
-                  
-                  let specificName = result['name']
-
-                  $("table tr td").filter(function() {
-                      return $(this).text() == specificName;
-                  }).parent('tr').children().eq(2).text(result['quantity'])
-
-                }
-                else {
-                    alert(result['message']);
-                }
-            }
-        });}
-      </script>
-
-
-
-<script>
-
-  fillTable()
-
+fillTable()
 function fillTable(shouldWipe){
+  
   if (shouldWipe){$('#fruit tbody > tr').remove();}
 
-let XHreq = new XMLHttpRequest();
+  let XHreq = new XMLHttpRequest();
 
-XHreq.onreadystatechange = function(){
+  XHreq.onreadystatechange = function(){
   console.log("readyState is", this.readyState);
   if (this.readyState == 4 && this.status == 200){
 
     // console.log(this);
     // return;
-
     // notice.innerHTML = this.responseText
+
     let data = JSON.parse(this.responseText)
   
     let response="";
@@ -189,17 +138,73 @@ XHreq.onreadystatechange = function(){
   }
   
 }
-
-//BROWSER PATH: http://localhost/fruit_makhzan/api/fruit/TARGET
 XHreq.open("GET", "../api/fruit/read.php", true)
 XHreq.send();
-
 }
-
 </script>
 
-<script>
 
+<script>
+  function printSingle(id){ $.ajax(
+        {
+            type: "POST",
+            url: '../api/fruit/read_single.php',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            error: function (result) {
+              console.log("error", result)
+                // alert(result);
+            },
+            success: function (result) {
+              console.log("success result is", result)
+                if (result) {
+                console.log(result);
+                }
+                else {
+                  console.log("else")
+                    // alert(result['message']);
+                }
+            }
+        });}
+</script>
+
+
+<script>
+  function restockFruit(id){
+    
+    $.ajax(
+        {
+            type: "POST",
+            url: '../api/fruit/restock.php',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            error: function (result) {
+              console.log("error", result)
+            },
+            success: function (result) {
+                if (result['quantity']) {     
+
+                  let specificName = result['name']
+                  $("table tr td").filter(function() {
+                      return $(this).text() == specificName;
+                  }).parent('tr').children().eq(2).text(result['quantity'])
+
+                } else if (result['status'] == false) {
+                  console.log(result["message"]);
+                }else {
+                   console.log("no quantity key was detected")
+                }
+            }
+        });
+      }
+</script>
+
+
+<script>
   function deleteFruit(id, name){
 
    name = name.replace("%20", " ")
@@ -216,7 +221,7 @@ XHreq.send();
                 id: id
             },
             error: function (result) {
-                alert(result.responseText);
+                console.log(result.responseText);
             },
             success: function (result) {
                 if (result['status'] == true) {

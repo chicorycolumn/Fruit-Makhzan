@@ -1,9 +1,11 @@
 <?php
+if(session_status() == PHP_SESSION_NONE){session_start();}
+
 class Fruit{
  
     private $conn;
-    private $table_name = "fruit";
-    private $use_oop = 1;
+    private $table_name = null;
+    private $use_oop = true;
  
     public $id;
     public $name;
@@ -15,6 +17,13 @@ class Fruit{
     public function __construct($dbwhole){
         $this->conn = $dbwhole->connection;
         $this->table_name = $dbwhole->table_name;
+
+        if (isset($_SESSION['table_name'])){
+            $this->table_name = $_SESSION['table_name'];
+        } else {
+            return "Error. No table is set.";
+        }
+
     }
 
     public function execute_query($query, $conn){
@@ -57,48 +66,21 @@ class Fruit{
 
     function read_single(){
 
-        $stmt = $this->conn->prepare("SELECT
+        $stmt = $this->conn->prepare(
+            "SELECT
         `id`, `name`, `quantity`, `selling_price`, `total_sales`, `created`
-     FROM
+            FROM
          " . $this->table_name . " 
-     WHERE
-         id=?");
-
-        // $id = null;
-        // $name = null;
-        // $quantity = null;
-        // $selling_price = null;
-        // $total_sales = null;
-        // $created = null;
+            WHERE
+         id=?"
+        );
 
         $stmt->bind_param("i", $this->id);
         $stmt->execute();
         $result = $stmt->get_result();
-
-        // echo json_encode($stmt);
-        return $result; 
-
-
         $stmt->close();
-        return;
 
-
-
-
-    
-        $query = "SELECT
-                   `id`, `name`, `quantity`, `selling_price`, `total_sales`, `created`
-                FROM
-                    " . $this->table_name . " 
-                WHERE
-                    id= '".$this->id."'";
-    
-        if ($this->use_oop){
-            $res = $this->execute_query($query, $this->conn);
-        }else{
-            $res = mysqli_query($this->conn, $query);
-        }
-        return $res;
+        return $result; 
     }
 
     function create_self(){
@@ -137,18 +119,21 @@ class Fruit{
 
     function restock_self($new_quantity){
 
-        $query = "UPDATE
+        $stmt = $this->conn->prepare(
+            
+            "UPDATE
             " . $this->table_name . "
         SET
-            quantity='".$new_quantity."'
+            quantity=?
         WHERE
-            id='".$this->id."'";
-    
-        $stmt = $this->conn->prepare($query);
-        if($stmt->execute()){
-            return true;
-        }
-        return false;
+            id=?"
+        );
+
+        $stmt->bind_param("ii", $new_quantity, $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        return $result; 
     }
 
     function delete_self(){
