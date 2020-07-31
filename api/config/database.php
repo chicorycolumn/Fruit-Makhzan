@@ -78,6 +78,12 @@ class Database{
             ('Miwiwoos', 50, 5)",
 
             "INSERT INTO ".$this->table_name." (`name`, `quantity`, `selling_price`) VALUES
+            ('Misty Vistas', 50, 5)",
+
+            "INSERT INTO ".$this->table_name." (`name`, `quantity`, `selling_price`) VALUES
+            ('My Old Man The Mango', 80, 4)",
+
+            "INSERT INTO ".$this->table_name." (`name`, `quantity`, `selling_price`) VALUES
             ('Moloko', 80, 4)",
 
             "INSERT INTO ".$this->table_name." (`name`, `quantity`, `selling_price`) VALUES

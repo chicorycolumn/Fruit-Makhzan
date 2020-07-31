@@ -15,10 +15,7 @@ if($num>0){
     $fruit_arr=array();
     $fruit_arr["fruit"]=array();
 
-    while($row = $result->fetch_assoc()) {
-
-        // echo "<tr><td>".$row["id"]."</td><td>".$row["firstname"]." ".$row["lastname"]."</td></tr>";
-    
+    while($row = $result->fetch_assoc()) { 
 
         $fruit_item=array(
             "id" => $row["id"],

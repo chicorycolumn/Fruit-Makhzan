@@ -123,7 +123,7 @@ function fillTable(shouldWipe){
 
     for(let fruit in data){
 
-    let formattedName = data[fruit].name.replace(" ", "%20")
+    let formattedName = data[fruit].name.replace(/\s/g, "%20")
 
         response += "<tr>"+
         "<td>"+data[fruit].id+"</td>"+
@@ -207,8 +207,7 @@ XHreq.send();
 <script>
   function deleteFruit(id, name){
 
-   name = name.replace("%20", " ")
-   console.log(name)
+   name = name.replace(/%20/g, " ")
 
     let result = confirm("Chuck all " + name + " into the street?"); 
     if (result == true) { 

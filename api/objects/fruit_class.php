@@ -26,53 +26,31 @@ class Fruit{
 
     }
 
-    public function execute_query($query, $conn){
-        $res = $conn->query($query);
-        if (!$res) {
-            echo "failed to execute query: $query\n";
-        } else {
-            return $res;
-        }
-        if (is_object($res)) {
-            $res->close();
-        }
-    }
-
     function read(){
+$query = "SELECT * FROM " . $this->table_name;
 
+        $stmt = $this->conn->prepare(
+            $query
+        );
+        
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
 
-        $query = 'SELECT * FROM '.$this->table_name;
-        // $query = "INSERT INTO fruit(name, quantity, selling_price, total_sales) VALUES('dumbo', 5, 6, 7)";
-
-        if ($this->use_oop){
-            $res = $this->execute_query($query, $this->conn);
-        }else{
-            $res = mysqli_query($this->conn, $query);
-        }
-        // 
-        // $query = "SELECT
-        //             `id`, `name`, `quantity`, `selling_price`, `total_sales`, `created`
-        //         FROM
-        //             " . $this->table_name . " 
-        //         ORDER BY
-        //             id DESC";
-
-        // $stmt = $this->execute_query($query, $this->conn)
-    
-        // $stmt = $this->conn->prepare($query);
-        // $stmt->execute();
-        return $res;
+        return $result; 
     }
 
     function read_single(){
 
+$query =  "SELECT
+`id`, `name`, `quantity`, `selling_price`, `total_sales`, `created`
+    FROM
+ " . $this->table_name . " 
+    WHERE
+ id=?";
+
         $stmt = $this->conn->prepare(
-            "SELECT
-        `id`, `name`, `quantity`, `selling_price`, `total_sales`, `created`
-            FROM
-         " . $this->table_name . " 
-            WHERE
-         id=?"
+           $query
         );
 
         $stmt->bind_param("i", $this->id);
@@ -119,14 +97,15 @@ class Fruit{
 
     function restock_self($new_quantity){
 
-        $stmt = $this->conn->prepare(
+$query = "UPDATE
+" . $this->table_name . "
+SET
+quantity=?
+WHERE
+id=?";
+
+        $stmt = $this->conn->prepare($query
             
-            "UPDATE
-            " . $this->table_name . "
-        SET
-            quantity=?
-        WHERE
-            id=?"
         );
 
         $stmt->bind_param("ii", $new_quantity, $this->id);
@@ -138,16 +117,19 @@ class Fruit{
 
     function delete_self(){
 
-        $query = "DELETE FROM
-                    " . $this->table_name . "
-                WHERE
-                    id= '".$this->id."'";
-        
-        $stmt = $this->conn->prepare($query);
+        $query = "DELETE FROM " . $this->table_name . " WHERE id=?";
+
+        $stmt = $this->conn->prepare(
+            $query);
+
+        $stmt->bind_param("i", $this->id);
+
         if($stmt->execute()){
-            return true;
-        }
-        return false;
+            $bool = true;
+        } else {$bool =  false;}
+    
+        $stmt->close();
+        return $bool;
     }
 
     function does_entry_exist(){

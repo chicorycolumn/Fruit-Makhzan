@@ -14,7 +14,7 @@ From here you aim to become the best fruit seller in all of Al-Andalus!
 <br/>
 <img src="../images/pineapple.png" style="height:75px; width:50px;" />
 <br/>
-<a href="../play"><button onClick=makeConnection()>START NEW GAME</button></a>
+<a href="../play"><button style="height:150px;" onClick=makeConnection()>START NEW GAME</button></a>
 ';
 
 include('../master.php');
