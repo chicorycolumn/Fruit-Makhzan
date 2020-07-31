@@ -43,24 +43,21 @@ include '../master.php';
             url: '../api/fruit/create.php',
             dataType: 'json',
             data: {
-         
                 name: $("#name").val(),
                 quantity: $("#quantity").val(),        
                 selling_price: $("#selling_price").val(),
        
             },
             error: function (result) {
-              console.log("error!")
-                alert(result.responseText);
+              console.log("An error occurred immediately in $.ajax request.", result)
             },
             success: function (result) {
-                if (result['status'] == true) {
-                    alert("Successfully Added New Fruit!");
+                if (result['status']) {
                     window.location.href = '../play';
                 }
                 else {
-                  console.log("else couldn't")
-                    alert(result['message']);
+                  console.log("In success clause but no true status was received.")
+                    console.log(result['message']);
                 }
             }
         });

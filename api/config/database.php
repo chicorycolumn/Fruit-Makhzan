@@ -12,7 +12,7 @@ class Database
   private $password = "";
   private $host = "localhost";
   private $db_name = "fruit_makhzan_db";
-  public $table_name = null;
+  public $table_name;
   public $connection;
   // $this->conn->exec("set names utf8");
 
@@ -26,28 +26,9 @@ class Database
     }
   }
 
-  public function execute_query($query, $con)
-  {
-    $res = $con->query($query);
-
-    if (!$res) {
-      echo "failed to execute query: $query\n";
-    } else {
-      return $res;
-      // echo "Query: $query executed\n";
-    }
-
-    if (is_object($res)) {
-      $res->close();
-    }
-  }
-
   public function makeConnection()
   {
     $_SESSION["session_id"] = time();
-    $_SESSION["game_begun"] = true;
-    $_SESSION["favcolor"] = "green";
-    $_SESSION["favanimal"] = "cat";
     $_SESSION["table_name"] = "v" . (time() - 1590000000);
 
     $this->table_name = $_SESSION["table_name"];
@@ -66,7 +47,6 @@ class Database
       exit();
     }
 
-    //CREATE THE v1 TABLE
     $query =
       "CREATE TABLE " .
       $this->table_name .

@@ -1,12 +1,13 @@
 <?php
 session_start();
-if (!isset($_SESSION['game_begun'])) {
+if (!isset($_SESSION['session_id'])) {
   header("Location: ../home");
   exit();
 }
 ?>
 
 <?php
+$version = 1536;
 $money = 30;
 $days = 756;
 echo "<link rel='stylesheet' type='text/css' href='../css/playIndex.css' />";
@@ -16,8 +17,8 @@ include 'content/mainButton.php';
 
 $content =
   '
-<h1>' .
-  $days .
+<h1> version ' .
+  $version .
   '</h1>
 <button onClick=checkSession()>CHECK SESSION</button>
 <div class="mainDiv">
@@ -109,44 +110,48 @@ function checkSession(){
 }
 </script>
 
+
 <script>
 fillTable()
 function fillTable(shouldWipe){
   
   if (shouldWipe){$('#fruit tbody > tr').remove();}
 
-  let XHreq = new XMLHttpRequest();
+  $.ajax(
+        {
+            type: "GET",
+            url: '../api/fruit/read.php',
+            dataType: 'json',
+            error: function (result) {
+              console.log("An error occurred immediately in $.ajax request.", result)
+            },
+            success: function (result) {
+            
+              if (result.length){                 
+                  let response="";
 
-  XHreq.onreadystatechange = function(){
-  console.log("readyState is", this.readyState);
-  if (this.readyState == 4 && this.status == 200){
+                  for (let fruit in result){
+                  let formattedName = result[fruit].name.replace(/\s/g, "%20")
 
-    // console.log(this);
-    // return;
+                      response += "<tr>"+
+                      "<td>"+result[fruit].id+"</td>"+
+                      "<td>"+result[fruit].name+"</td>"+
+                      "<td>"+result[fruit].quantity+"</td>"+
+                      "<td>"+result[fruit].selling_price+"</td>"+
+                      "<td>"+result[fruit].total_sales+"</td>"+
+                      "<td><button class='button1' onClick=printSingle('"+result[fruit].id+"')>Print single</button> <button class='button1' onClick=restockFruit('"+result[fruit].id+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+result[fruit].id+"','"+formattedName+"')>Throw away</button></td>"+
+                      "</tr>";
+                  }
+                  $(response).appendTo($("#fruit"));}
 
-    let data = JSON.parse(this.responseText)
-  
-    let response="";
-
-    for(let fruit in data){
-
-    let formattedName = data[fruit].name.replace(/\s/g, "%20")
-
-        response += "<tr>"+
-        "<td>"+data[fruit].id+"</td>"+
-        "<td>"+data[fruit].name+"</td>"+
-        "<td>"+data[fruit].quantity+"</td>"+
-        "<td>"+data[fruit].selling_price+"</td>"+
-        "<td>"+data[fruit].total_sales+"</td>"+
-        "<td><button class='button1' onClick=printSingle('"+data[fruit].id+"')>Print single</button> <button class='button1' onClick=restockFruit('"+data[fruit].id+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+data[fruit].id+"','"+formattedName+"')>Throw away</button></td>"+
-        "</tr>";
-    }
-    $(response).appendTo($("#fruit"));
-  }
-  
-}
-XHreq.open("GET", "../api/fruit/read.php", true)
-XHreq.send();
+                else if (result['status'] == false) {
+                  console.log(result["message"]);
+                }else {
+                  console.log("Not even a false status came back.")
+                  console.log(result)
+                }
+            }
+        });
 }
 </script>
 
@@ -161,17 +166,14 @@ XHreq.send();
                 id: id
             },
             error: function (result) {
-              console.log("error", result)
-                // alert(result);
+              console.log("An error occurred immediately in $.ajax request.", result)
             },
             success: function (result) {
-              console.log("success result is", result)
                 if (result) {
                 console.log(result);
                 }
                 else {
-                  console.log("else")
-                    // alert(result['message']);
+                  console.log("In the success clause, but no data came back.")
                 }
             }
         });}
@@ -190,21 +192,19 @@ XHreq.send();
                 id: id
             },
             error: function (result) {
-              console.log("error", result)
+              console.log("An error occurred immediately in $.ajax request.", result)
             },
             success: function (result) {
-
                 if (result['quantity']) {     
                   let specificName = result['name']
                   $("table tr td").filter(function() {
                       return $(this).text() == specificName;
                   }).parent('tr').children().eq(2).text(result['quantity'])
                 
-                } else if (!result['status']) {
+                } else if (result['status'] == false) {
                   console.log(result["message"]);
-               
                 }else {
-                   console.log("no quantity key was detected")
+                   console.log("The data that came back did not have the right keys.")
                 }
             }
         });
@@ -216,9 +216,8 @@ XHreq.send();
   function deleteFruit(id, name){
 
    name = name.replace(/%20/g, " ")
-
-    let result = confirm("Chuck all " + name + " into the street?"); 
-    if (result == true) { 
+    
+    if (result = confirm("Chuck all " + name + " into the street?")) { 
         $.ajax(
         {
             type: "POST",
@@ -228,15 +227,14 @@ XHreq.send();
                 id: id
             },
             error: function (result) {
-                console.log(result.responseText);
+              console.log("An error occurred immediately in $.ajax request.", result)
             },
             success: function (result) {
                 if (result['status'] == true) {
                   $("table tr td").filter(function() {
                       return $(this).text() == name;
                   }).parent('tr').remove()
-                }
-                else {
+                } else {
                     alert(result['message']);
                 }
             }

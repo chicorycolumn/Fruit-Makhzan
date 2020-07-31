@@ -14,9 +14,7 @@ $fruit->id = $_POST['id'];
 $result = $fruit->read_single();
 
 if ($single_fruit = build_array($result)) {
-  $new_quantity = $single_fruit[0]["quantity"] + 10;
-
-  if ($fruit->restock_self($new_quantity)) {
+  if ($fruit->restock_self($single_fruit[0]["quantity"] + 10)) {
     if ($result = $fruit->read_single()) {
       $single_fruit = build_array($result);
       $response = $single_fruit[0];
