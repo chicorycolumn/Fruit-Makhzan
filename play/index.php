@@ -7,7 +7,7 @@ if (!isset($_SESSION['session_id'])) {
 ?>
 
 <?php
-$version = 1536;
+$version = 1851;
 $money = 30;
 $days = 756;
 echo "<link rel='stylesheet' type='text/css' href='../css/playIndex.css' />";

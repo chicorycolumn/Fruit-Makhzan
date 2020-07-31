@@ -16,10 +16,12 @@ if (array_key_exists("status", $result)) {
   $num = $result->num_rows;
 
   if ($fruit_arr = build_array($result)) {
-    echo json_encode($fruit_arr);
+    $response = $fruit_arr;
   } else {
-    echo [];
+    $response = [];
   }
+  $database->closeConnection();
+  echo json_encode($response);
 }
 
 ?>

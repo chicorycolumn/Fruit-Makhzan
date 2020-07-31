@@ -18,5 +18,6 @@ if ($result) {
     "message" => "An error in api/delete.",
   ];
 }
+$database->closeConnection();
 print_r(json_encode($response));
 ?>

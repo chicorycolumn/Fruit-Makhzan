@@ -12,5 +12,6 @@ $fruit->id = $_POST['id'];
 
 $result = $fruit->read_single();
 
+$database->closeConnection();
 echo json_encode(build_array($result));
 ?>

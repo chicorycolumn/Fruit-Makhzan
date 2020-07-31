@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 class Database
 {
-  private $use_clear_db = 0;
+  private $use_clear_db = 1;
 
   private $username = "root";
   private $password = "";
@@ -101,8 +101,7 @@ class Database
         mysqli_query($this->connection, $query);
       }
 
-      //  mysqli_close($this->connection);
-      // return $this;
+      mysqli_close($this->connection);
     }
   }
 
@@ -122,8 +121,12 @@ class Database
       exit();
     }
 
-    //  mysqli_close($this->connection);
     return $this->connection;
+  }
+
+  public function closeConnection()
+  {
+    mysqli_close($this->connection);
   }
 }
 ?>

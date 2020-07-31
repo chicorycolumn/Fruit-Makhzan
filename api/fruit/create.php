@@ -26,5 +26,6 @@ if ($result["status"]) {
 } else {
   $response = $result;
 }
+$database->closeConnection();
 print_r(json_encode($response));
 ?>

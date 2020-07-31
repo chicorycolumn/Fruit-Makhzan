@@ -29,5 +29,6 @@ if (array_key_exists("status", $result)) {
     ];
   }
 }
+$database->closeConnection();
 print_r(json_encode($response));
 ?>
