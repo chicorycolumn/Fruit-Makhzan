@@ -21,6 +21,7 @@ $content =
   $version .
   '</h1>
 <button onClick=checkSession()>CHECK SESSION</button>
+<button onClick=exampleGameID()>SEE A GAME ID</button>
 <div class="mainDiv">
   ' .
   $mainStats .
@@ -103,6 +104,13 @@ $content =
 
 include '../master.php';
 ?>
+
+<script>
+  function exampleGameID(){
+    console.log('<?php echo include "../utils/get_gid.php"; ?>')
+  }
+</script>
+
 
 <script>
 function checkSession(){

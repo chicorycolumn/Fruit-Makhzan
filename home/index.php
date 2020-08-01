@@ -13,26 +13,34 @@ From here you aim to become the best fruit seller in all of Al-Andalus!
 <br/>
 <img src="../images/pineapple.png" style="height:75px; width:50px;" />
 <br/>
-<a href="../play"><button style="height:150px;" onClick=makeConnection()>START NEW GAME</button></a>
+<button style="height:150px;" onClick=makeConnection(false)>NEW TABLE BUT STAY ON THIS PAGE</button>
+<button style="height:150px;" onClick=makeConnection(true)>START NEW GAME</button>
 ';
 
 include '../master.php';
 ?>
 
+<script>
+function sayHello(){
+  console.log("way eai man")
+}
+</script>
+
 
 <script>
-  function makeConnection(){
+  function makeConnection(shouldNavigate){
     $.ajax(
         {
-            type: "GET",
+            type: "POST",
             url: '../api/fruit/make_connection.php',
             dataType: 'json',
-            data: {},
+            data: {lemon: 0},
             error: function (result) {
-              console.log("error", result)
+              console.log("immediate error from request to make_connection", result)
                 // alert(result);
             },
             success: function (result) {
+
               console.log("success result is", result)
                 if (result) {
                 console.log(result);
@@ -41,6 +49,8 @@ include '../master.php';
                   console.log("else")
                     // alert(result['message']);
                 }
+                if (shouldNavigate){
+                window.location = "../play";}
             }
         });
   }

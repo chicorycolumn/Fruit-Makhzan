@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 class Database
 {
-  private $use_clear_db = 1;
+  private $use_clear_db = 0;
 
   private $username = "root";
   private $password = "";
@@ -28,10 +28,16 @@ class Database
 
   public function makeConnection()
   {
-    $_SESSION["session_id"] = time();
-    $_SESSION["table_name"] = "v" . (time() - 1590000000);
+    include "../../utils/get_gid.php";
+    include "../../utils/make_table.php";
+    //This fxn needs to START A NEW GAME.
+    //So that means create a Gid, add that to Games table.
+    //Then create NST and INV tables.
 
-    $this->table_name = $_SESSION["table_name"];
+    $_SESSION["gid"] = $gid;
+
+    $this->inv_table_name = $_SESSION["gid"] . "__INV";
+    $this->nst_table_name = $_SESSION["gid"] . "__NST";
 
     $this->connection = mysqli_connect(
       $this->host,
@@ -47,62 +53,93 @@ class Database
       exit();
     }
 
-    $query =
-      "CREATE TABLE " .
-      $this->table_name .
-      " (
-            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            `name` varchar(255) NOT NULL,
-            `quantity` int(11) NOT NULL,
-            `selling_price` int(11) NOT NULL,
-            `total_sales` int(11) DEFAULT 0,
-            `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-          )";
+    $table_name = $this->inv_table_name;
+    $create_table_querystring = " (
+      `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      `name` varchar(255) NOT NULL,
+      `quantity` int(11) NOT NULL,
+      `selling_price` int(11) NOT NULL,
+      `total_sales` int(11) DEFAULT 0,
+      `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )";
+    $connection = $this->connection;
+    $query_array = [
+      "INSERT INTO " .
+      $table_name .
+      " (`name`, `quantity`, `selling_price`, `total_sales`) VALUES
+      ('Morangines', 50, 5, 20)",
 
-    if (mysqli_query($this->connection, $query)) {
-      $query_array = [
-        "INSERT INTO " .
-        $this->table_name .
-        " (`name`, `quantity`, `selling_price`, `total_sales`) VALUES
-            ('Morangines', 50, 5, 20)",
+      "INSERT INTO " .
+      $table_name .
+      " (`name`, `quantity`, `selling_price`) VALUES
+      ('Miwiwoos', 50, 5)",
 
-        "INSERT INTO " .
-        $this->table_name .
-        " (`name`, `quantity`, `selling_price`) VALUES
-            ('Miwiwoos', 50, 5)",
+      "INSERT INTO " .
+      $table_name .
+      " (`name`, `quantity`, `selling_price`) VALUES
+      ('Misty Vistas', 50, 5)",
 
-        "INSERT INTO " .
-        $this->table_name .
-        " (`name`, `quantity`, `selling_price`) VALUES
-            ('Misty Vistas', 50, 5)",
+      "INSERT INTO " .
+      $table_name .
+      " (`name`, `quantity`, `selling_price`) VALUES
+      ('My Old Man The Mango', 80, 4)",
 
-        "INSERT INTO " .
-        $this->table_name .
-        " (`name`, `quantity`, `selling_price`) VALUES
-            ('My Old Man The Mango', 80, 4)",
+      "INSERT INTO " .
+      $table_name .
+      " (`name`, `quantity`, `selling_price`) VALUES
+      ('Moloko', 80, 4)",
 
-        "INSERT INTO " .
-        $this->table_name .
-        " (`name`, `quantity`, `selling_price`) VALUES
-            ('Moloko', 80, 4)",
+      "INSERT INTO " .
+      $table_name .
+      " (`name`, `quantity`, `selling_price`) VALUES
+      ('Manchurianos', 200, 100)",
 
-        "INSERT INTO " .
-        $this->table_name .
-        " (`name`, `quantity`, `selling_price`) VALUES
-            ('Manchurianos', 200, 100)",
+      "INSERT INTO " .
+      $table_name .
+      " (`name`, `quantity`, `selling_price`) VALUES
+      ('Matey-wateys', 30, 10)",
+    ];
 
-        "INSERT INTO " .
-        $this->table_name .
-        " (`name`, `quantity`, `selling_price`) VALUES
-            ('Matey-wateys', 30, 10)",
-      ];
+    make_table(
+      $table_name,
+      $create_table_querystring,
+      $connection,
+      $query_array
+    );
 
-      foreach ($query_array as $query) {
-        mysqli_query($this->connection, $query);
-      }
+    $table_name = $this->nst_table_name;
+    $create_table_querystring = " (
+      `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      `name` varchar(255) NOT NULL,
+      `stock_price` int(11) NOT NULL,
+      `durability` int(11) NOT NULL,
+      `popularity` int(11) DEFAULT 0
+    )";
+    $connection = $this->connection;
+    $query_array = [
+      "INSERT INTO " .
+      $table_name .
+      " (`name`, `stock_price`, `durability`, `popularity`) VALUES
+      ('Funkalites', 5, 3, 8)",
 
-      mysqli_close($this->connection);
-    }
+      "INSERT INTO " .
+      $table_name .
+      " (`name`, `stock_price`, `durability`, `popularity`) VALUES
+      ('Frangipanis', 10, 4, 10)",
+
+      "INSERT INTO " .
+      $table_name .
+      " (`name`, `stock_price`, `durability`, `popularity`) VALUES
+      ('Froobs', 1, 5, 7)",
+    ];
+
+    make_table(
+      $table_name,
+      $create_table_querystring,
+      $connection,
+      $query_array
+    );
+    mysqli_close($connection);
   }
 
   public function getConnection()
