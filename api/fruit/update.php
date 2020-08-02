@@ -10,8 +10,9 @@
 // $fruit->name = $_POST['name'];
 // $fruit->quantity = $_POST['quantity'];
 // $fruit->selling_price = $_POST['selling_price'];
+// $table_suffix = $_POST['table'];
 
-// if ($fruit->update_self()) {
+// if ($fruit->update_self($table_suffix)) {
 //   $fruit_arr = [
 //     "status" => true,
 //     "message" => "Updated successfully!",

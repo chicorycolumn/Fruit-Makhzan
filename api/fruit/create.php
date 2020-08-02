@@ -7,11 +7,12 @@ $database = new Database();
 $db = $database->getConnection();
 
 $fruit = new Fruit($db);
-$fruit->name = $_POST['name'];
-$fruit->quantity = $_POST['quantity'];
-$fruit->selling_price = $_POST['selling_price'];
+$fruit->name = $_GET['name'];
+$fruit->quantity = $_GET['quantity'];
+$fruit->selling_price = $_GET['selling_price'];
+$table_suffix = $_GET['table'];
 
-$result = $fruit->create_self();
+$result = $fruit->create_self($table_suffix);
 
 if ($result["status"]) {
   $response = [

@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['session_id'])) {
+if (!isset($_SESSION['gid'])) {
   header("Location: ../home");
   exit();
 }
@@ -57,10 +57,11 @@ include '../master.php';
 
         $.ajax(
         {
-            type: "POST",
+            type: "GET",
             url: '../api/fruit/create.php',
             dataType: 'json',
             data: {
+              table: "inv",
                 name: $("#name").val(),
                 quantity: $("#quantity").val(),        
                 selling_price: $("#selling_price").val(),

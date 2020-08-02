@@ -8,10 +8,20 @@ $database = new Database();
 $db = $database->getConnection();
 
 $fruit = new Fruit($db);
-$fruit->id = $_POST['id'];
+$fruit->id = $_GET['id'];
+$table_suffix = $_GET['table'];
 
-$result = $fruit->read_single();
+$result = $fruit->read_single($table_suffix);
 
 $database->closeConnection();
-echo json_encode(build_array($result));
+
+if ($fruit_arr = build_array($table_suffix, $result)) {
+  $response = $fruit_arr;
+} else {
+  $response = [
+    "status" => false,
+    "message" => "Error in build_array.",
+  ];
+}
+echo json_encode($response);
 ?>

@@ -6,7 +6,8 @@ if (session_status() == PHP_SESSION_NONE) {
 class Fruit
 {
   private $conn;
-  private $table_name;
+  private $inv_table_name;
+  private $nst_table_name;
 
   public $id;
   public $name;
@@ -18,16 +19,36 @@ class Fruit
   public function __construct($db)
   {
     $this->conn = $db;
-    if (isset($_SESSION['table_name'])) {
-      $this->table_name = $_SESSION['table_name'];
+
+    // foreach (["inv_table_name", "nst_table_name"] as $table_name) {
+    //   if (isset($_SESSION[$table_name])) {
+    //     $this->$table_name = $_SESSION[$table_name];
+    //   } else {
+    // echo "Error. No inv_table is set.";
+    // exit();
+    //   }
+    // }
+
+    if (isset($_SESSION["inv_table_name"])) {
+      $this->inv_table_name = $_SESSION["inv_table_name"];
     } else {
-      return "Error. No table is set.";
+      echo "Error. No inv_table is set.";
+      exit();
+    }
+
+    if (isset($_SESSION["nst_table_name"])) {
+      $this->nst_table_name = $_SESSION["nst_table_name"];
+    } else {
+      echo "Error. No inv_table is set.";
+      exit();
     }
   }
 
-  function read()
+  function read($table_suffix)
   {
-    $query = "SELECT * FROM " . $this->table_name . " ORDER BY id DESC";
+    $table_name = $table_suffix . "_table_name";
+
+    $query = "SELECT * FROM " . $this->$table_name . " ORDER BY id DESC";
 
     if ($stmt = $this->conn->prepare($query)) {
       if ($stmt->execute()) {
@@ -48,9 +69,10 @@ class Fruit
     }
   }
 
-  function read_single()
+  function read_single($table_suffix)
   {
-    $query = "SELECT * FROM " . $this->table_name . " WHERE id=?";
+    $table_name = $table_suffix . "_table_name";
+    $query = "SELECT * FROM " . $this->$table_name . " WHERE id=?";
 
     if ($stmt = $this->conn->prepare($query)) {
       $stmt->bind_param("i", $this->id);
@@ -73,17 +95,18 @@ class Fruit
     }
   }
 
-  function create_self()
+  function create_self($table_suffix)
   {
-    if ($this->does_entry_exist()["status"]) {
+    $table_name = $table_suffix . "_table_name";
+    if ($this->does_entry_exist($table_suffix)["status"]) {
       return [
         "status" => false,
         "message" => "Could not create. A fruit of that name already exists.",
       ];
-    } elseif ($this->does_entry_exist()["status"] == false) {
+    } elseif ($this->does_entry_exist($table_suffix)["status"] == false) {
       $query =
         "INSERT INTO  " .
-        $this->table_name .
+        $this->$table_name .
         " ( `name`, `quantity`, `selling_price`) VALUES (?, ?, ?)";
 
       if ($stmt = $this->conn->prepare($query)) {
@@ -118,9 +141,10 @@ class Fruit
     }
   }
 
-  function does_entry_exist()
+  function does_entry_exist($table_suffix)
   {
-    $query = "SELECT * FROM " . $this->table_name . " WHERE name=?";
+    $table_name = $table_suffix . "_table_name";
+    $query = "SELECT * FROM " . $this->$table_name . " WHERE name=?";
 
     if ($stmt = $this->conn->prepare($query)) {
       $stmt->bind_param("s", $this->name);
@@ -138,9 +162,10 @@ class Fruit
     return false;
   }
 
-  function restock_self($new_quantity)
+  function restock_self($table_suffix, $new_quantity)
   {
-    $query = "UPDATE " . $this->table_name . " SET quantity=? WHERE id=?";
+    $table_name = $table_suffix . "_table_name";
+    $query = "UPDATE " . $this->$table_name . " SET quantity=? WHERE id=?";
 
     if ($stmt = $this->conn->prepare($query)) {
       $stmt->bind_param("ii", $new_quantity, $this->id);
@@ -158,9 +183,10 @@ class Fruit
     return ["status" => false, "message" => "Could not prepare query."];
   }
 
-  function delete_self()
+  function delete_self($table_suffix)
   {
-    $query = "DELETE FROM " . $this->table_name . " WHERE id=?";
+    $table_name = $table_suffix . "_table_name";
+    $query = "DELETE FROM " . $this->$table_name . " WHERE id=?";
 
     if ($stmt = $this->conn->prepare($query)) {
       $stmt->bind_param("i", $this->id);
@@ -184,11 +210,12 @@ class Fruit
     }
   }
 
-  function update_self()
+  function update_self($table_suffix)
   {
+    // $table_name = $table_suffix . "_table_name";
     // $query =
     //   "UPDATE " .
-    //   $this->table_name .
+    //   $this->$table_name .
     //   " SET name='" .
     //   $this->name .
     //   "', quantity='" .

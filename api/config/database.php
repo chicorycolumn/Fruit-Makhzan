@@ -12,7 +12,8 @@ class Database
   private $password = "";
   private $host = "localhost";
   private $db_name = "fruit_makhzan_db";
-  public $table_name;
+  public $inv_table_name;
+  public $nst_table_name;
   public $connection;
   // $this->conn->exec("set names utf8");
 
@@ -26,18 +27,17 @@ class Database
     }
   }
 
-  public function makeConnection()
+  public function startNewGame()
   {
     include "../../utils/get_gid.php";
     include "../../utils/make_table.php";
-    //This fxn needs to START A NEW GAME.
-    //So that means create a Gid, add that to Games table.
-    //Then create NST and INV tables.
 
     $_SESSION["gid"] = $gid;
+    $_SESSION["inv_table_name"] = $_SESSION["gid"] . "__INV";
+    $_SESSION["nst_table_name"] = $_SESSION["gid"] . "__NST";
 
-    $this->inv_table_name = $_SESSION["gid"] . "__INV";
-    $this->nst_table_name = $_SESSION["gid"] . "__NST";
+    // $this->inv_table_name = $_SESSION["inv_table_name"];
+    // $this->nst_table_name = $_SESSION["nst_table_name"];
 
     $this->connection = mysqli_connect(
       $this->host,
@@ -53,7 +53,7 @@ class Database
       exit();
     }
 
-    $table_name = $this->inv_table_name;
+    $table_name = $_SESSION["inv_table_name"];
     $create_table_querystring = " (
       `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
       `name` varchar(255) NOT NULL,
@@ -107,7 +107,7 @@ class Database
       $query_array
     );
 
-    $table_name = $this->nst_table_name;
+    $table_name = $_SESSION["nst_table_name"];
     $create_table_querystring = " (
       `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
       `name` varchar(255) NOT NULL,
@@ -119,18 +119,53 @@ class Database
     $query_array = [
       "INSERT INTO " .
       $table_name .
-      " (`name`, `stock_price`, `durability`, `popularity`) VALUES
-      ('Funkalites', 5, 3, 8)",
+      " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      ('Funkalites', 5, 3, 1)",
 
       "INSERT INTO " .
       $table_name .
-      " (`name`, `stock_price`, `durability`, `popularity`) VALUES
-      ('Frangipanis', 10, 4, 10)",
+      " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      ('Froobs', 10, 4, 2)",
 
       "INSERT INTO " .
       $table_name .
-      " (`name`, `stock_price`, `durability`, `popularity`) VALUES
-      ('Froobs', 1, 5, 7)",
+      " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      ('My Old Man The Mango', 1, 5, 3)",
+
+      "INSERT INTO " .
+      $table_name .
+      " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      ('Moloko', 1, 5, 4)",
+
+      // "INSERT INTO " .
+      // $table_name .
+      // " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      // ('Frangipanis', 1, 5, 5)",
+
+      // "INSERT INTO " .
+      // $table_name .
+      // " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      // ('Hunkalites', 5, 3, 6)",
+
+      // "INSERT INTO " .
+      // $table_name .
+      // " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      // ('Hoobs', 10, 4, 7)",
+
+      // "INSERT INTO " .
+      // $table_name .
+      // " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      // ('Hye Old Man The Mango', 1, 5, 8)",
+
+      // "INSERT INTO " .
+      // $table_name .
+      // " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      // ('Holoko', 1, 5, 9)",
+
+      // "INSERT INTO " .
+      // $table_name .
+      // " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      // ('Hangipanis', 1, 5, 10)",
     ];
 
     make_table(
@@ -140,6 +175,7 @@ class Database
       $query_array
     );
     mysqli_close($connection);
+    return true;
   }
 
   public function getConnection()

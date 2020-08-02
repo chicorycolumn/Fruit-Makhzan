@@ -8,24 +8,44 @@ $database = new Database();
 $db = $database->getConnection();
 
 $fruit = new Fruit($db);
-$fruit->id = $_POST['id'];
-$result = $fruit->read_single();
+$fruit->id = $_GET['id'];
+$table_suffix = $_GET['table'];
+$result = $fruit->read_single($table_suffix);
 
 if (array_key_exists("status", $result)) {
   $response = $result;
 } else {
-  $single_fruit = build_array($result);
-  if ($result = $fruit->restock_self($single_fruit[0]["quantity"] + 10)) {
-    if ($result["status"]) {
-      $result = $fruit->read_single();
-      $response = build_array($result)[0];
+  if ($single_fruit = build_array($table_suffix, $result)) {
+    if (
+      $result = $fruit->restock_self(
+        $table_suffix,
+        $single_fruit[0]["quantity"] + 10
+      )
+    ) {
+      if ($result["status"]) {
+        $result = $fruit->read_single($table_suffix);
+
+        $response = build_array($table_suffix, $result)[0];
+
+        if (!$response) {
+          $response = [
+            "status" => false,
+            "message" => "Error in build_array.",
+          ];
+        }
+      } else {
+        $response = $result;
+      }
     } else {
-      $response = $result;
+      $response = [
+        "status" => false,
+        "message" => "restock_self failed in an unknown way.",
+      ];
     }
   } else {
     $response = [
       "status" => false,
-      "message" => "restock_self failed in an unknown way.",
+      "message" => "Error in build_array.",
     ];
   }
 }

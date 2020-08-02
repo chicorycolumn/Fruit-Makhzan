@@ -7,8 +7,9 @@ $database = new Database();
 $db = $database->getConnection();
 
 $fruit = new Fruit($db);
-$fruit->id = $_POST['id'];
-$result = $fruit->delete_self();
+$fruit->id = $_GET['id'];
+$table_suffix = $_GET['table'];
+$result = $fruit->delete_self($table_suffix);
 
 if ($result) {
   $response = $result;
