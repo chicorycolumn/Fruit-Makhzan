@@ -32,6 +32,75 @@ class Database
     include "../../utils/get_gid.php";
     include "../../utils/make_table.php";
 
+    function delete_row($connection, $column, $identifier, $table_name)
+    {
+      // DELETE FROM Customers WHERE CustomerName='Alfreds Futterkiste';
+      // $query = "DELETE FROM Games WHERE Game ID='" . $_SESSION["gid"] . "'";
+      // $query = "DELETE FROM Games WHERE 'Game ID'='yulbafr2cKWcfUI';";
+
+      // $query =
+      //   "DELETE FROM " .
+      //   $table_name .
+      //   " WHERE '" .
+      //   $column .
+      //   "' = '" .
+      //   $identifier .
+      //   "'";
+
+      $query = "DELETE FROM Games where `Game ID` = ?";
+
+      if ($stmt = $connection->prepare($query)) {
+        $stmt->bind_param("s", $identifier);
+        if ($stmt->execute()) {
+          return [
+            "status" => true,
+            "message" =>
+              "Successfully deleted row " .
+              $identifier .
+              " from table " .
+              $table_name,
+          ];
+        } else {
+          return [
+            "status" => false,
+            "message" => "An error in execution.",
+          ];
+        }
+      } else {
+        return [
+          "status" => false,
+          "message" => "Couldn't prepare this query.",
+          "error" => $connection->error,
+        ];
+      }
+    }
+
+    // function delete_self($table_suffix)
+    // {
+    //   $table_name = $table_suffix . "_table_name";
+    //   $query = "DELETE FROM " . $this->$table_name . " WHERE id=?";
+
+    //   if ($stmt = $this->conn->prepare($query)) {
+    //     $stmt->bind_param("i", $this->id);
+
+    //     if ($stmt->execute()) {
+    //       $response = [
+    //         "status" => true,
+    //         "message" => "Successfully deleted!",
+    //       ];
+    //     } else {
+    //       $response = [
+    //         "status" => false,
+    //         "message" => "Error in execution.",
+    //       ];
+    //     }
+    //   } else {
+    //     $response = ["status" => false, "message" => "Could not prepare query."];
+    //   }
+    //   $stmt->close();
+    //   return $response;
+    // }
+
     function delete_table($connection, $table_name)
     {
       $query = "DROP TABLE IF EXISTS " . $table_name;
@@ -51,7 +120,7 @@ class Database
       } else {
         return [
           "status" => false,
-          "message" => "Couldn't prepare query.",
+          "message" => "Couldn't prepare the query.",
         ];
       }
     }
@@ -81,6 +150,18 @@ class Database
       //
       delete_table($this->connection, $_SESSION["inv_table_name"]);
       delete_table($this->connection, $_SESSION["nst_table_name"]);
+      $result = delete_row(
+        $this->connection,
+        "Game ID",
+        $_SESSION["gid"],
+        "Games"
+      );
+
+      if (!$result["status"]) {
+        echo $result["message"];
+        echo $result["error"];
+        die();
+      }
 
       $_SESSION["game_setup_complete"] = false;
     }
