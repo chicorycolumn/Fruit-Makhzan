@@ -38,7 +38,7 @@ function sayHello(){
               console.log("immediate error from request to new_game", result)
             },
             success: function (result) {
-                if (result) {
+                if (result["status"]) {
                 if (!shouldNavigate){
                   alert("Sucessfully created new game!")
                 }else{
@@ -46,7 +46,7 @@ function sayHello(){
                 }
                 }
                 else {
-                  console.log("else", result);
+                  console.log(result["message"]);
                     
                 }
                

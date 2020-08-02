@@ -10,6 +10,16 @@ include_once '../objects/fruit_class.php';
 // }
 
 $database = new Database();
-echo json_encode($database->startNewGame());
+
+if ($result = $database->startNewGame()) {
+  $response = $result;
+} else {
+  $response = [
+    "status" => false,
+    "message" => "An error in api/new_game.",
+  ];
+}
+
+echo json_encode($response);
 return;
 ?>

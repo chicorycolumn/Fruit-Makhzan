@@ -12,23 +12,23 @@ $fruit->name = $_GET['name'];
 $table_suffix = $_GET['table'];
 
 if ($result = $fruit->read_single($table_suffix)) {
-  if (array_key_exists("status", $result) && !$result["status"]) {
-    $response = $result;
-  } else {
-    if ($fruit_arr = build_array($table_suffix, $result)) {
+  if ($result["status"]) {
+    if ($fruit_arr = build_array($table_suffix, $result["data"])) {
       $response["data"] = $fruit_arr;
       $response["status"] = true;
     } else {
       $response = [
         "status" => false,
-        "message" => "Error in build_array.",
+        "message" => "Error in build_array. 1res",
       ];
     }
+  } else {
+    $response = $result;
   }
 } else {
   $response = [
     "status" => false,
-    "message" => "Error in read_single.",
+    "message" => "Error when calling Sfruit->read_single.",
   ];
 }
 $database->closeConnection();

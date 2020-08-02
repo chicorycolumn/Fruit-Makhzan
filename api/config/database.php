@@ -175,7 +175,10 @@ class Database
       $query_array
     );
     mysqli_close($connection);
-    return true;
+    return [
+      "status" => true,
+      "message" => "Successfully started a new game.",
+    ];
   }
 
   public function getConnection()

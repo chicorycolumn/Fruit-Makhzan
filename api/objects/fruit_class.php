@@ -54,9 +54,12 @@ class Fruit
       if ($stmt->execute()) {
         $result = $stmt->get_result();
         $stmt->close();
-        return $result;
+        $response = [
+          "status" => true,
+          "data" => $result,
+        ];
       } else {
-        return [
+        $response = [
           "status" => false,
           "message" => "Error in execution.",
         ];
@@ -67,6 +70,7 @@ class Fruit
         "message" => "Could not prepare query.",
       ];
     }
+    return $response;
   }
 
   function read_single($table_suffix)
@@ -80,19 +84,23 @@ class Fruit
         $result = $stmt->get_result();
         $stmt->close();
 
-        return $result;
+        $response = [
+          "status" => true,
+          "data" => $result,
+        ];
       } else {
-        return [
+        $response = [
           "status" => false,
           "message" => "Error in execution.",
         ];
       }
     } else {
-      return [
+      $response = [
         "status" => false,
         "message" => "Could not prepare query.",
       ];
     }
+    return $response;
   }
 
   function create_self($table_suffix)
@@ -202,12 +210,11 @@ class Fruit
           "message" => "Error in execution.",
         ];
       }
-
-      $stmt->close();
-      return $response;
     } else {
-      return ["status" => false, "message" => "Could not prepare query."];
+      $response = ["status" => false, "message" => "Could not prepare query."];
     }
+    $stmt->close();
+    return $response;
   }
 
   function update_self($table_suffix)

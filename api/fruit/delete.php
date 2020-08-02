@@ -9,16 +9,15 @@ $db = $database->getConnection();
 $fruit = new Fruit($db);
 $fruit->id = $_GET['id'];
 $table_suffix = $_GET['table'];
-$result = $fruit->delete_self($table_suffix);
-
-if ($result) {
+if ($result = $fruit->delete_self($table_suffix)) {
   $response = $result;
 } else {
   $response = [
     "status" => false,
-    "message" => "An error in api/delete.",
+    "message" => "Error when calling Sfruit->delete_self.",
   ];
 }
+
 $database->closeConnection();
 print_r(json_encode($response));
 ?>
