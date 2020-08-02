@@ -32,12 +32,29 @@ class Database
     include "../../utils/get_gid.php";
     include "../../utils/make_table.php";
 
-    $_SESSION["gid"] = $gid;
-    $_SESSION["inv_table_name"] = $_SESSION["gid"] . "__INV";
-    $_SESSION["nst_table_name"] = $_SESSION["gid"] . "__NST";
+    function delete_table($connection, $table_name)
+    {
+      $query = "DROP TABLE IF EXISTS " . $table_name;
 
-    // $this->inv_table_name = $_SESSION["inv_table_name"];
-    // $this->nst_table_name = $_SESSION["nst_table_name"];
+      if ($stmt = $connection->prepare($query)) {
+        if ($stmt->execute()) {
+          return [
+            "status" => true,
+            "message" => "Successfully deleted " . $table_name,
+          ];
+        } else {
+          return [
+            "status" => false,
+            "message" => "An error in execution.",
+          ];
+        }
+      } else {
+        return [
+          "status" => false,
+          "message" => "Couldn't prepare query.",
+        ];
+      }
+    }
 
     $this->connection = mysqli_connect(
       $this->host,
@@ -53,6 +70,32 @@ class Database
       exit();
     }
 
+    if (
+      array_key_exists("game_setup_complete", $_SESSION) &&
+      array_key_exists("gid", $_SESSION) &&
+      $_SESSION["game_setup_complete"] &&
+      $_SESSION["gid"]
+    ) {
+      //Delete tables of old_gid.
+      //
+      //
+      delete_table($this->connection, $_SESSION["inv_table_name"]);
+      delete_table($this->connection, $_SESSION["nst_table_name"]);
+
+      $_SESSION["game_setup_complete"] = false;
+    }
+
+    $_SESSION["gid"] = $gid;
+
+    $_SESSION["inv_table_name"] = $_SESSION["gid"] . "__INV";
+    $_SESSION["nst_table_name"] = $_SESSION["gid"] . "__NST";
+
+    // $this->inv_table_name = $_SESSION["inv_table_name"];
+    // $this->nst_table_name = $_SESSION["nst_table_name"];
+
+    //Make Inventory table.
+    //
+    //
     $table_name = $_SESSION["inv_table_name"];
     $create_table_querystring = " (
       `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -107,6 +150,9 @@ class Database
       $query_array
     );
 
+    //Make New Stock table.
+    //
+    //
     $table_name = $_SESSION["nst_table_name"];
     $create_table_querystring = " (
       `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -174,7 +220,47 @@ class Database
       $connection,
       $query_array
     );
+
+    //Insert into Games table.
+    //
+    //
+    $query =
+      "INSERT INTO Games (`Game ID`, `Last Accessed`, `Trend Calculates`) VALUES (?, ?, ?)";
+
+    //Very interestingly, inserting a number over 9 as a value in json won't work.
+    if ($stmt = $connection->prepare($query)) {
+      $trends = json_encode([
+        "weather" => random_int(1, 9),
+        "love" => random_int(1, 9),
+        "politics" => random_int(1, 9),
+        "decadence" => random_int(1, 9),
+        "conformity" => random_int(1, 9),
+      ]);
+      $g = $_SESSION["gid"];
+      $t = time();
+
+      $stmt->bind_param("sis", $g, $t, $trends);
+      if ($stmt->execute()) {
+      } else {
+        return [
+          "status" => false,
+          "message" => "An error in execution.",
+        ];
+      }
+    } else {
+      return [
+        "status" => false,
+        "message" => "Couldn't prepare query.",
+      ];
+    }
+
+    //Close.
+    //
+    //
+
     mysqli_close($connection);
+    $_SESSION["game_setup_complete"] = true;
+
     return [
       "status" => true,
       "message" => "Successfully started a new game.",

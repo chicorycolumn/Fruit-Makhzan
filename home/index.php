@@ -28,14 +28,14 @@ function sayHello(){
 
 
 <script>
-  function startNewGame(shouldNavigate){
+  function startNewGame(shouldNavigate, dontTryAgain){
     $.ajax(
         {
             type: "POST",
             url: '../api/fruit/new_game.php',
             dataType: 'json',
             error: function (result) {
-              console.log("immediate error from request to new_game", result)
+              console.log("Immediate error from request to new_game. Try clicking New Game button again.", result)
             },
             success: function (result) {
                 if (result["status"]) {
@@ -46,6 +46,11 @@ function sayHello(){
                 }
                 }
                 else {
+
+                  if (!dontTryAgain){
+                    startNewGame(true, true)
+                  }
+
                   console.log(result["message"]);
                     
                 }
