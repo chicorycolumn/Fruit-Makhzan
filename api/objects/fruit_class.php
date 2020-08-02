@@ -72,10 +72,10 @@ class Fruit
   function read_single($table_suffix)
   {
     $table_name = $table_suffix . "_table_name";
-    $query = "SELECT * FROM " . $this->$table_name . " WHERE id=?";
+    $query = "SELECT * FROM " . $this->$table_name . " WHERE name=?";
 
     if ($stmt = $this->conn->prepare($query)) {
-      $stmt->bind_param("i", $this->id);
+      $stmt->bind_param("s", $this->name);
       if ($stmt->execute()) {
         $result = $stmt->get_result();
         $stmt->close();
@@ -165,10 +165,10 @@ class Fruit
   function restock_self($table_suffix, $new_quantity)
   {
     $table_name = $table_suffix . "_table_name";
-    $query = "UPDATE " . $this->$table_name . " SET quantity=? WHERE id=?";
+    $query = "UPDATE " . $this->$table_name . " SET quantity=? WHERE name=?";
 
     if ($stmt = $this->conn->prepare($query)) {
-      $stmt->bind_param("ii", $new_quantity, $this->id);
+      $stmt->bind_param("is", $new_quantity, $this->name);
       if ($stmt->execute()) {
         $result = $stmt->get_result();
         $stmt->close();

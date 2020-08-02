@@ -8,7 +8,7 @@ $database = new Database();
 $db = $database->getConnection();
 
 $fruit = new Fruit($db);
-$fruit->id = $_GET['id'];
+$fruit->name = $_GET['name'];
 $table_suffix = $_GET['table'];
 $result = $fruit->read_single($table_suffix);
 
@@ -23,14 +23,23 @@ if (array_key_exists("status", $result)) {
       )
     ) {
       if ($result["status"]) {
-        $result = $fruit->read_single($table_suffix);
-
-        $response = build_array($table_suffix, $result)[0];
-
-        if (!$response) {
+        if ($result = $fruit->read_single($table_suffix)) {
+          if (array_key_exists("status", $result) && !$result["status"]) {
+            $response = $result;
+          } else {
+            if ($fruit_arr = build_array($table_suffix, $result)) {
+              $response = $fruit_arr;
+            } else {
+              $response = [
+                "status" => false,
+                "message" => "Error in build_array.",
+              ];
+            }
+          }
+        } else {
           $response = [
             "status" => false,
-            "message" => "Error in build_array.",
+            "message" => "Error in read_single.",
           ];
         }
       } else {

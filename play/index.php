@@ -139,7 +139,7 @@ function fillInvTable(shouldWipe){
                       "<td>"+result[fruit].quantity+"</td>"+
                       "<td>"+result[fruit].selling_price+"</td>"+
                       "<td>"+result[fruit].total_sales+"</td>"+
-                      "<td><button class='button1' onClick=printSingle('"+result[fruit].id+"','inv')>Print single</button> <button class='button1' onClick=restockFruit('"+result[fruit].id+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+result[fruit].id+"','"+formattedName+"')>Throw away</button></td>"+
+                      "<td><button class='button1' onClick=printSingle('"+formattedName+"','inv')>Print single</button> <button class='button1' onClick=restockFruit('"+formattedName+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+result[fruit].id+"','"+formattedName+"')>Throw away</button></td>"+
                       "</tr>";
                   }
                   $(response).appendTo($("#inventory"));}
@@ -184,7 +184,7 @@ function fillNstTable(shouldWipe){
                       "<td>"+result[fruit].stock_price+"</td>"+
                       "<td>"+result[fruit].popularity+"</td>"+
                       "<td>"+result[fruit].durability+"</td>"+
-                      "<td><button class='button1' onClick=printSingle('"+result[fruit].id+"','nst')>Print single</button> <button class='button1' onClick=buyFromStock('"+formattedName+"')>Buy</button> </td>"+
+                      "<td><button class='button1' onClick=printSingle('"+formattedName+"','nst')>Print single</button> <button class='button1' onClick=buyFromStock('"+formattedName+"')>Buy</button> </td>"+
                       "</tr>";
                   }
                   $(response).appendTo($("#new_stock"));}
@@ -202,13 +202,15 @@ function fillNstTable(shouldWipe){
 
 
 <script>
-  function printSingle(id, table){ $.ajax(
+  function printSingle(name, table){
+    name = name.replace(/%20/g, " ")
+     $.ajax(
         {
             type: "GET",
             url: '../api/fruit/read_single.php',
             dataType: 'json',
             data: {
-                id: id,
+              name: name,
                 table: table
             },
             error: function (result) {
@@ -228,15 +230,15 @@ function fillNstTable(shouldWipe){
 
 
 <script>
-  function restockFruit(id){
-    
+  function restockFruit(name){
+    name = name.replace(/%20/g, " ")
     $.ajax(
         {
             type: "GET",
             url: '../api/fruit/restock.php',
             dataType: 'json',
             data: {
-                id: id,
+                name: name,
                 table: "inv"
             },
             error: function (result) {
@@ -245,16 +247,18 @@ function fillNstTable(shouldWipe){
               console.log(result)
             },
             success: function (result) {
-                if (result['quantity']) {     
+              let fruit = result[0]
+              console.log(fruit['quantity'])
+                if (fruit['quantity']) {     
 
                   let el = $("table tr td").filter(function() {
-                      return $(this).text() == result['name'] && $(this).parent('tr').parent().parent().is("#inventory");
+                      return $(this).text() == fruit['name'] && $(this).parent('tr').parent().parent().is("#inventory");
                   })
                   
-                  el.parent('tr').children().eq(2).text(result['quantity'])
+                  el.parent('tr').children().eq(2).text(fruit['quantity'])
                 
-                } else if (result['status'] == false) {
-                  console.log(result["message"]);
+                } else if (fruit['status'] == false) {
+                  console.log(fruit["message"]);
                 }else {
                    console.log("The data that came back did not have the right keys.")
                 }
@@ -271,48 +275,91 @@ function fillNstTable(shouldWipe){
                       return $(this).text() == name && $(this).parent('tr').parent().parent().is("#inventory");
                   })
 
-
-console.log(el)
-return
-
     if(el.length){
-      restockFruit(id)
-      return
-    }
- 
-
-    return;
-    
-    $.ajax(
+      console.log(111)
+      restockFruit(name)
+    }else{
+      console.log(222)
+      $.ajax(
         {
             type: "GET",
-            url: '../api/fruit/restock.php',
+            url: '../api/fruit/create.php',
             dataType: 'json',
             data: {
-                id: id,
-                table: "inv"
+              table: "inv",
+                name: name,
+                quantity: 10,
+       
             },
             error: function (result) {
-              console.log("An error occurred immediately in $.ajax request.")
+              console.log("An error occurred immediately in $.ajax request.", result)
               console.log(result.responseText)
-              console.log(result)
             },
             success: function (result) {
-                if (result['quantity']) {     
+                if (result['status']) {
+                  console.log(result)
+                  // fillInvTable(true);
 
-                  let el = $("table tr td").filter(function() {
-                      return $(this).text() == result['name'] && $(this).parent('tr').parent().parent().is("#inventory");
-                  })
-                  
-                  el.parent('tr').children().eq(2).text(result['quantity'])
-                
-                } else if (result['status'] == false) {
-                  console.log(result["message"]);
-                }else {
-                   console.log("The data that came back did not have the right keys.")
+                  if (result.status){   
+                    console.log(333)              
+                  let response="";
+                  let fruit = result["data"][0];
+
+              
+                  let formattedName = fruit.name.replace(/\s/g, "%20")
+
+                      response += "<tr>"+
+                      "<td>"+fruit.id+"</td>"+
+                      "<td>"+fruit.name+"</td>"+
+                      "<td>"+fruit.quantity+"</td>"+
+                      "<td>"+fruit.selling_price+"</td>"+
+                      "<td>"+fruit.total_sales+"</td>"+
+                      "<td><button class='button1' onClick=printSingle('"+formattedName+"','inv')>Print single</button> <button class='button1' onClick=restockFruit('"+formattedName+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+fruit.id+"','"+formattedName+"')>Throw away</button></td>"+
+                      "</tr>";
+     
+                  $(response).prependTo($("#inventory"));}
+
+                }
+                else {
+                  console.log("In success clause but no true status was received.")
+                  console.log(result)
+                    console.log(result['message']);
+                    alert(result['message']);
                 }
             }
         });
+    }
+
+    // $.ajax(
+    //     {
+    //         type: "GET",
+    //         url: '../api/fruit/restock.php',
+    //         dataType: 'json',
+    //         data: {
+    //             id: id,
+    //             table: "inv"
+    //         },
+    //         error: function (result) {
+    //           console.log("An error occurred immediately in $.ajax request.")
+    //           console.log(result.responseText)
+    //           console.log(result)
+    //         },
+    //         success: function (result) {
+    //             if (result['quantity']) {     
+
+    //               let el = $("table tr td").filter(function() {
+    //                   return $(this).text() == result['name'] && $(this).parent('tr').parent().parent().is("#inventory");
+    //               })
+                  
+    //               el.parent('tr').children().eq(2).text(result['quantity'])
+                
+    //             } else if (result['status'] == false) {
+    //               console.log(result["message"]);
+    //             }else {
+    //                console.log("The data that came back did not have the right keys.")
+    //             }
+    //         }
+    //     });
       }
 </script>
 
