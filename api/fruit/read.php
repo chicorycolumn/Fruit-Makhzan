@@ -19,6 +19,7 @@ if ($result = $fruit->read($table_suffix)) {
       $response = [
         "status" => false,
         "message" => "An error in build_array. 1rea",
+        "error" => $db->error,
       ];
     }
   } else {
@@ -28,6 +29,7 @@ if ($result = $fruit->read($table_suffix)) {
   $response = [
     "status" => false,
     "message" => "An error when calling Sfruit->read.",
+    "error" => $db->error,
   ];
 }
 

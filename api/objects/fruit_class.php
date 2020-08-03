@@ -62,12 +62,14 @@ class Fruit
         $response = [
           "status" => false,
           "message" => "Error in execution.",
+          "error" => $this->conn->error,
         ];
       }
     } else {
       return [
         "status" => false,
         "message" => "Could not prepare query.",
+        "error" => $this->conn->error,
       ];
     }
     return $response;
@@ -92,12 +94,14 @@ class Fruit
         $response = [
           "status" => false,
           "message" => "Error in execution.",
+          "error" => $this->conn->error,
         ];
       }
     } else {
       $response = [
         "status" => false,
         "message" => "Could not prepare query.",
+        "error" => $this->conn->error,
       ];
     }
     return $response;
@@ -110,6 +114,7 @@ class Fruit
       return [
         "status" => false,
         "message" => "Could not create. A fruit of that name already exists.",
+        "error" => $this->conn->error,
       ];
     } elseif ($this->does_entry_exist($table_suffix)["status"] == false) {
       $query =
@@ -133,18 +138,21 @@ class Fruit
           return [
             "status" => false,
             "message" => "Error in execution.",
+            "error" => $this->conn->error,
           ];
         }
       } else {
         return [
           "status" => false,
           "message" => "Could not prepare query.",
+          "error" => $this->conn->error,
         ];
       }
     } else {
       return [
         "status" => false,
         "message" => "Error in does_entry_exist.",
+        "error" => $this->conn->error,
       ];
     }
   }
@@ -163,7 +171,11 @@ class Fruit
         if ($result->num_rows) {
           return ["status" => true, "message" => "Entry exists."];
         } else {
-          return ["status" => false, "message" => "Entry does not exist."];
+          return [
+            "status" => false,
+            "message" => "Entry does not exist.",
+            "error" => $this->conn->error,
+          ];
         }
       }
     }
@@ -182,13 +194,18 @@ class Fruit
         $stmt->close();
         return ["status" => true, "message" => "Successfully restocked!"];
       } else {
-        $response = [
+        return [
           "status" => false,
           "message" => "Error in execution.",
+          "error" => $this->conn->error,
         ];
       }
     }
-    return ["status" => false, "message" => "Could not prepare query."];
+    return [
+      "status" => false,
+      "message" => "Could not prepare query.",
+      "error" => $this->conn->error,
+    ];
   }
 
   function delete_self($table_suffix)
@@ -208,10 +225,15 @@ class Fruit
         $response = [
           "status" => false,
           "message" => "Error in execution.",
+          "error" => $this->conn->error,
         ];
       }
     } else {
-      $response = ["status" => false, "message" => "Could not prepare query."];
+      $response = [
+        "status" => false,
+        "message" => "Could not prepare query.",
+        "error" => $this->conn->error,
+      ];
     }
     $stmt->close();
     return $response;

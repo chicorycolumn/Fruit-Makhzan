@@ -26,6 +26,7 @@ if ($result = $fruit->create_self($table_suffix)) {
           $response = [
             "status" => false,
             "message" => "Error in build_array. 1cre",
+            "error" => $db->error,
           ];
         }
       } else {
@@ -35,6 +36,7 @@ if ($result = $fruit->create_self($table_suffix)) {
       $response = [
         "status" => false,
         "message" => "Error when calling Sfruit->read_single.",
+        "error" => $db->error,
       ];
     }
   } else {
@@ -44,6 +46,7 @@ if ($result = $fruit->create_self($table_suffix)) {
   $response = [
     "status" => false,
     "message" => "Error when calling Sfruit->create_self.",
+    "error" => $db->error,
   ];
 }
 

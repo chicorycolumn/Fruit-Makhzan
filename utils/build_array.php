@@ -17,7 +17,6 @@ function build_array($table, $result)
         ];
       } elseif ($table == "nst") {
         $durability_word = $row["durability"] > 6 ? "High" : "Medium";
-
         $durability_word = $row["durability"] < 4 ? "Low" : $durability_word;
 
         $fruit_item = [

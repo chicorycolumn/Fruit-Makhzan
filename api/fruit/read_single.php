@@ -20,6 +20,7 @@ if ($result = $fruit->read_single($table_suffix)) {
       $response = [
         "status" => false,
         "message" => "Error in build_array. 1res",
+        "error" => $db->error,
       ];
     }
   } else {
@@ -29,6 +30,7 @@ if ($result = $fruit->read_single($table_suffix)) {
   $response = [
     "status" => false,
     "message" => "Error when calling Sfruit->read_single.",
+    "error" => $db->error,
   ];
 }
 $database->closeConnection();

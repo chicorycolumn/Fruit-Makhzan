@@ -1,15 +1,47 @@
 <?php
-session_start();
+include_once '../api/config/database.php';
+include '../utils/table_utils.php';
+
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
+
 if (!isset($_SESSION['gid'])) {
   header("Location: ../home");
   exit();
 }
+
+setcookie("makhzan", $_SESSION['gid'], time() + 3600 * 24 * 30, "/");
+
+function update_timestamp()
+{
+  $database = new Database();
+  $db = $database->getConnection();
+  $result = update_row(
+    $db,
+    "Last_Accessed",
+    time(),
+    "Game_ID",
+    $_SESSION['gid'],
+    "Games",
+    "is"
+  );
+  $database->closeConnection();
+  return $result;
+}
+
+$result = update_timestamp();
+
+if (!$result) {
+  echo "Error in updating game's timestamp.";
+  die();
+}
 ?>
 
 <?php
-$version = "sun15h";
 $money = 30;
 $days = 756;
+$version = $_SESSION["gid"];
 echo "<link rel='stylesheet' type='text/css' href='../css/playIndex.css' />";
 include 'content/mainStats.php';
 include 'content/mainBulletin.php';
@@ -19,7 +51,7 @@ include 'content/nstTable.php';
 
 $content =
   '
-<h1> version 
+<h1> 
   ' .
   $version .
   '
@@ -103,6 +135,7 @@ function fillInvTable(shouldWipe){
                     $(response).appendTo($("#inventory"));
                 })}else{
                   console.log(result["message"])
+                  console.log(result["error"])
                 }
           }})   
 }
@@ -144,6 +177,7 @@ function fillNstTable(shouldWipe){
                   $(response).appendTo($("#new_stock"));
                 })}else{
                   console.log(result["message"])
+                  console.log(result["error"]);
                 }
           }})   
 }
@@ -169,6 +203,7 @@ function printSingle(name, table){
               }
               else {
                 console.log(result["message"]);
+                console.log(result["error"]);
               }
           }
       });
@@ -191,7 +226,7 @@ function restockFruit(name){
             console.log(result)
           },
           success: function (result) {
-          
+          console.log("success")
               if (result['status']) {     
                 let fruit = result["data"][0]
                 let el = $("table tr td").filter(function() {
@@ -202,6 +237,7 @@ function restockFruit(name){
               
               } else {
                 console.log(result["message"]);
+                console.log(result["error"]);
               }
           }
       });
@@ -233,7 +269,7 @@ function buyFromStock(name){
             console.log(result.responseText)
           },
           success: function (result) {
-      
+      console.log("success")
                 if (result["status"]){   
                           
                 let response="";
@@ -253,6 +289,7 @@ function buyFromStock(name){
                 $(response).prependTo($("#inventory"));}
               else {
                   console.log(result['message']);
+                  console.log(result["error"]);
               }
           }
       });
@@ -279,6 +316,7 @@ function deleteFruit(id, name){
             console.log(result)
           },
           success: function (result) {
+            console.log("success")
               if (result['status']) {
                 let el = $("table tr td").filter(function() {
                     return $(this).text() == name && $(this).parent('tr').parent().parent().is("#inventory");
@@ -286,6 +324,7 @@ function deleteFruit(id, name){
   el.parent('tr').remove()      
               } else {
                   console.log(result["message"])
+                  console.log(result["error"]);
               }
           }
       });
@@ -294,10 +333,15 @@ function deleteFruit(id, name){
 </script>
 
 <script>
+//  woooooooooooooooooooooooooooooooooooo
   // function exampleGameID(){
-  //   console.log('<?php echo include "../utils/get_gid.php"; ?>')
+  //   console.log('
+  //<
+  //?php echo include "../utils/get_gid.php"; ?>')
   // }
-  function checkSession(){
-  console.log(`<?php echo json_encode($_SESSION); ?>`);
-}
+  // function checkSession(){
+  // console.log(`
+  // <
+  // ?php echo json_encode($_SESSION); ?>`);
+  // }
 </script>

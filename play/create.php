@@ -1,5 +1,8 @@
 <?php
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
+
 if (!isset($_SESSION['gid'])) {
   header("Location: ../home");
   exit();
@@ -72,15 +75,14 @@ include '../master.php';
               console.log(result.responseText)
             },
             success: function (result) {
+              console.log("success")
                 if (result['status']) {
                   console.log(result)
                     window.location.href = '../play';
                 }
                 else {
-                  console.log("In success clause but no true status was received.")
-                  console.log(result)
                     console.log(result['message']);
-                    alert(result['message']);
+                    console.log(result["error"]);
                 }
             }
         });

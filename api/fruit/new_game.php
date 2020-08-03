@@ -10,6 +10,7 @@ include_once '../objects/fruit_class.php';
 // }
 
 $database = new Database();
+$db = $database->getConnection();
 
 if ($result = $database->startNewGame()) {
   $response = $result;
@@ -17,8 +18,12 @@ if ($result = $database->startNewGame()) {
   $response = [
     "status" => false,
     "message" => "An error in api/new_game.",
+    "error" => $db->error,
   ];
 }
+
+$tidbit = cleanUpDB($db);
+$response["extra"] = $tidbit;
 
 echo json_encode($response);
 return;

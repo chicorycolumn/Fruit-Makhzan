@@ -31,99 +31,7 @@ class Database
   {
     include "../../utils/get_gid.php";
     include "../../utils/make_table.php";
-
-    function delete_row($connection, $column, $identifier, $table_name)
-    {
-      // DELETE FROM Customers WHERE CustomerName='Alfreds Futterkiste';
-      // $query = "DELETE FROM Games WHERE Game ID='" . $_SESSION["gid"] . "'";
-      // $query = "DELETE FROM Games WHERE 'Game ID'='yulbafr2cKWcfUI';";
-
-      // $query =
-      //   "DELETE FROM " .
-      //   $table_name .
-      //   " WHERE '" .
-      //   $column .
-      //   "' = '" .
-      //   $identifier .
-      //   "'";
-
-      $query = "DELETE FROM Games where `Game ID` = ?";
-
-      if ($stmt = $connection->prepare($query)) {
-        $stmt->bind_param("s", $identifier);
-        if ($stmt->execute()) {
-          return [
-            "status" => true,
-            "message" =>
-              "Successfully deleted row " .
-              $identifier .
-              " from table " .
-              $table_name,
-          ];
-        } else {
-          return [
-            "status" => false,
-            "message" => "An error in execution.",
-          ];
-        }
-      } else {
-        return [
-          "status" => false,
-          "message" => "Couldn't prepare this query.",
-          "error" => $connection->error,
-        ];
-      }
-    }
-
-    // function delete_self($table_suffix)
-    // {
-    //   $table_name = $table_suffix . "_table_name";
-    //   $query = "DELETE FROM " . $this->$table_name . " WHERE id=?";
-
-    //   if ($stmt = $this->conn->prepare($query)) {
-    //     $stmt->bind_param("i", $this->id);
-
-    //     if ($stmt->execute()) {
-    //       $response = [
-    //         "status" => true,
-    //         "message" => "Successfully deleted!",
-    //       ];
-    //     } else {
-    //       $response = [
-    //         "status" => false,
-    //         "message" => "Error in execution.",
-    //       ];
-    //     }
-    //   } else {
-    //     $response = ["status" => false, "message" => "Could not prepare query."];
-    //   }
-    //   $stmt->close();
-    //   return $response;
-    // }
-
-    function delete_table($connection, $table_name)
-    {
-      $query = "DROP TABLE IF EXISTS " . $table_name;
-
-      if ($stmt = $connection->prepare($query)) {
-        if ($stmt->execute()) {
-          return [
-            "status" => true,
-            "message" => "Successfully deleted " . $table_name,
-          ];
-        } else {
-          return [
-            "status" => false,
-            "message" => "An error in execution.",
-          ];
-        }
-      } else {
-        return [
-          "status" => false,
-          "message" => "Couldn't prepare the query.",
-        ];
-      }
-    }
+    include "../../utils/table_utils.php";
 
     $this->connection = mysqli_connect(
       $this->host,
@@ -140,39 +48,43 @@ class Database
     }
 
     if (
-      array_key_exists("game_setup_complete", $_SESSION) &&
-      array_key_exists("gid", $_SESSION) &&
-      $_SESSION["game_setup_complete"] &&
-      $_SESSION["gid"]
+      isset($_SESSION["gid"]) &&
+      isset($_SESSION["inv_table_name"]) &&
+      isset($_SESSION["nst_table_name"])
     ) {
-      //Delete tables of old_gid.
-      //
-      //
-      delete_table($this->connection, $_SESSION["inv_table_name"]);
-      delete_table($this->connection, $_SESSION["nst_table_name"]);
-      $result = delete_row(
-        $this->connection,
-        "Game ID",
-        $_SESSION["gid"],
-        "Games"
-      );
-
-      if (!$result["status"]) {
+      $result = delete_table($this->connection, $_SESSION["inv_table_name"]);
+      if ($result["status"]) {
+        $result = delete_table($this->connection, $_SESSION["nst_table_name"]);
+        if ($result["status"]) {
+          $result = delete_row(
+            $this->connection,
+            "Game_ID",
+            $_SESSION["gid"],
+            "Games"
+          );
+          if (!$result["status"]) {
+            mysqli_close($this->connection);
+            echo $result["message"];
+            echo $result["error"];
+            die();
+          }
+        } else {
+          mysqli_close($this->connection);
+          echo $result["message"];
+          echo $result["error"];
+          die();
+        }
+      } else {
+        mysqli_close($this->connection);
         echo $result["message"];
         echo $result["error"];
         die();
       }
-
-      $_SESSION["game_setup_complete"] = false;
     }
 
     $_SESSION["gid"] = $gid;
-
     $_SESSION["inv_table_name"] = $_SESSION["gid"] . "__INV";
     $_SESSION["nst_table_name"] = $_SESSION["gid"] . "__NST";
-
-    // $this->inv_table_name = $_SESSION["inv_table_name"];
-    // $this->nst_table_name = $_SESSION["nst_table_name"];
 
     //Make Inventory table.
     //
@@ -306,7 +218,7 @@ class Database
     //
     //
     $query =
-      "INSERT INTO Games (`Game ID`, `Last Accessed`, `Trend Calculates`) VALUES (?, ?, ?)";
+      "INSERT INTO Games (`Game_ID`, `Last_Accessed`, `Trend_Calculates`) VALUES (?, ?, ?)";
 
     //Very interestingly, inserting a number over 9 as a value in json won't work.
     if ($stmt = $connection->prepare($query)) {
@@ -326,22 +238,21 @@ class Database
         return [
           "status" => false,
           "message" => "An error in execution.",
+          "error" => $connection->error,
         ];
       }
     } else {
       return [
         "status" => false,
         "message" => "Couldn't prepare query.",
+        "error" => $connection->error,
       ];
     }
 
     //Close.
     //
     //
-
     mysqli_close($connection);
-    $_SESSION["game_setup_complete"] = true;
-
     return [
       "status" => true,
       "message" => "Successfully started a new game.",

@@ -1,5 +1,7 @@
 <?php
 
+//gid is always exactly 15 chars.
+
 function make($length, $chars)
 {
   $gid = "";
@@ -9,10 +11,6 @@ function make($length, $chars)
   }
   return $gid;
 }
-
-// $after_G_chars = 'hijklmnopqrstuvwxyzHIJKLMNOPQRSTUVWXYZ';
-// $max_after_G_chars = mb_strlen($after_G_chars, '8bit') - 1;
-// $gid = $after_G_chars[random_int(0, $max_after_G_chars)] . $gid;
 
 $gid = make(1, "hjklmnpqrstvwyz");
 $gid .= make(1, "aeiou");

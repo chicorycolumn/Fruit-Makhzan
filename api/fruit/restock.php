@@ -31,6 +31,7 @@ if ($result = $fruit->read_single($table_suffix)) {
                 $response = [
                   "status" => false,
                   "message" => "Error in build_array. 2re",
+                  "error" => $db->error,
                 ];
               }
             } else {
@@ -40,6 +41,7 @@ if ($result = $fruit->read_single($table_suffix)) {
             $response = [
               "status" => false,
               "message" => "Error when calling Sfruit->read_single.",
+              "error" => $db->error,
             ];
           }
         } else {
@@ -49,12 +51,14 @@ if ($result = $fruit->read_single($table_suffix)) {
         $response = [
           "status" => false,
           "message" => "Error when calling Sfruit->restock_self.",
+          "error" => $db->error,
         ];
       }
     } else {
       $response = [
         "status" => false,
         "message" => "Error in build_array. 1re",
+        "error" => $db->error,
       ];
     }
   } else {
@@ -64,6 +68,7 @@ if ($result = $fruit->read_single($table_suffix)) {
   $response = [
     "status" => false,
     "message" => "Error when calling Sfruit->read_single.",
+    "error" => $db->error,
   ];
 }
 

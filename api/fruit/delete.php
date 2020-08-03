@@ -15,6 +15,7 @@ if ($result = $fruit->delete_self($table_suffix)) {
   $response = [
     "status" => false,
     "message" => "Error when calling Sfruit->delete_self.",
+    "error" => $db->error,
   ];
 }
 
