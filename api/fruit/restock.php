@@ -2,7 +2,7 @@
 
 include_once '../config/database.php';
 include_once '../objects/fruit_class.php';
-include '../../utils/build_array.php';
+include '../../utils/table_utils.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -10,68 +10,72 @@ $db = $database->getConnection();
 $fruit = new Fruit($db);
 $fruit->name = $_GET['name'];
 $table_suffix = $_GET['table'];
-if ($result = $fruit->read_single($table_suffix)) {
-  if ($result["status"]) {
-    if ($single_fruit = build_array($table_suffix, $result["data"])) {
-      if (
-        $result = $fruit->restock_self(
-          $table_suffix,
-          $single_fruit[0]["quantity"] + 10
-        )
-      ) {
-        if ($result["status"]) {
-          if ($result = $fruit->read_single($table_suffix)) {
-            if ($result["status"]) {
-              if ($fruit_arr = build_array($table_suffix, $result["data"])) {
-                $response = [
-                  "data" => $fruit_arr,
-                  "status" => true,
-                ];
-              } else {
-                $response = [
-                  "status" => false,
-                  "message" => "Error in build_array. 2re",
-                  "error" => $db->error,
-                ];
-              }
-            } else {
-              $response = $result;
-            }
-          } else {
-            $response = [
-              "status" => false,
-              "message" => "Error when calling Sfruit->read_single.",
-              "error" => $db->error,
-            ];
-          }
-        } else {
-          $response = $result;
-        }
-      } else {
-        $response = [
-          "status" => false,
-          "message" => "Error when calling Sfruit->restock_self.",
-          "error" => $db->error,
-        ];
-      }
-    } else {
-      $response = [
-        "status" => false,
-        "message" => "Error in build_array. 1re",
-        "error" => $db->error,
-      ];
-    }
-  } else {
-    $response = $result;
+
+function go($db, $fruit, $table_suffix)
+{
+  if (!($result = $fruit->read_single($table_suffix))) {
+    return [
+      "status" => false,
+      "message" => "Error when calling Sfruit->read_single.",
+      "error" => $db->error,
+    ];
   }
-} else {
-  $response = [
-    "status" => false,
-    "message" => "Error when calling Sfruit->read_single.",
-    "error" => $db->error,
+
+  if (!$result["status"]) {
+    return $result;
+  }
+
+  if (!($single_fruit = build_array($table_suffix, $result["data"]))) {
+    return [
+      "status" => false,
+      "message" => "Error in build_array. 1re",
+      "error" => $db->error,
+    ];
+  }
+
+  if (
+    !($result = $fruit->restock_self(
+      $table_suffix,
+      $single_fruit[0]["quantity"] + 10
+    ))
+  ) {
+    return [
+      "status" => false,
+      "message" => "Error when calling Sfruit->restock_self.",
+      "error" => $db->error,
+    ];
+  }
+
+  if (!$result["status"]) {
+    return $result;
+  }
+
+  if (!($result = $fruit->read_single($table_suffix))) {
+    return [
+      "status" => false,
+      "message" => "Error when calling Sfruit->read_single.",
+      "error" => $db->error,
+    ];
+  }
+
+  if (!$result["status"]) {
+    return $result;
+  }
+
+  if (!($fruit_arr = build_array($table_suffix, $result["data"]))) {
+    return [
+      "status" => false,
+      "message" => "Error in build_array. 2re",
+      "error" => $db->error,
+    ];
+  }
+  return [
+    "data" => $fruit_arr,
+    "status" => true,
   ];
 }
 
+$response = go($db, $fruit, $table_suffix);
 $database->closeConnection();
 print_r(json_encode($response));
 ?>

@@ -30,7 +30,6 @@ class Database
   public function startNewGame()
   {
     include "../../utils/get_gid.php";
-    include "../../utils/make_table.php";
     include "../../utils/table_utils.php";
 
     $this->connection = mysqli_connect(
@@ -52,34 +51,7 @@ class Database
       isset($_SESSION["inv_table_name"]) &&
       isset($_SESSION["nst_table_name"])
     ) {
-      $result = delete_table($this->connection, $_SESSION["inv_table_name"]);
-      if ($result["status"]) {
-        $result = delete_table($this->connection, $_SESSION["nst_table_name"]);
-        if ($result["status"]) {
-          $result = delete_row(
-            $this->connection,
-            "Game_ID",
-            $_SESSION["gid"],
-            "Games"
-          );
-          if (!$result["status"]) {
-            mysqli_close($this->connection);
-            echo $result["message"];
-            echo $result["error"];
-            die();
-          }
-        } else {
-          mysqli_close($this->connection);
-          echo $result["message"];
-          echo $result["error"];
-          die();
-        }
-      } else {
-        mysqli_close($this->connection);
-        echo $result["message"];
-        echo $result["error"];
-        die();
-      }
+      wipe_previous_game($this->connection);
     }
 
     $_SESSION["gid"] = $gid;
@@ -98,7 +70,7 @@ class Database
       `total_sales` int(11) DEFAULT 0,
       `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
     )";
-    $connection = $this->connection;
+
     $query_array = [
       "INSERT INTO " .
       $table_name .
@@ -139,7 +111,7 @@ class Database
     make_table(
       $table_name,
       $create_table_querystring,
-      $connection,
+      $this->connection,
       $query_array
     );
 
@@ -154,7 +126,7 @@ class Database
       `durability` int(11) NOT NULL,
       `popularity` int(11) DEFAULT 0
     )";
-    $connection = $this->connection;
+
     $query_array = [
       "INSERT INTO " .
       $table_name .
@@ -210,7 +182,7 @@ class Database
     make_table(
       $table_name,
       $create_table_querystring,
-      $connection,
+      $this->connection,
       $query_array
     );
 
@@ -221,27 +193,8 @@ class Database
       "INSERT INTO Games (`Game_ID`, `Last_Accessed`, `Trend_Calculates`) VALUES (?, ?, ?)";
 
     //Very interestingly, inserting a number over 9 as a value in json won't work.
-    if ($stmt = $connection->prepare($query)) {
-      $trends = json_encode([
-        "weather" => random_int(1, 9),
-        "love" => random_int(1, 9),
-        "politics" => random_int(1, 9),
-        "decadence" => random_int(1, 9),
-        "conformity" => random_int(1, 9),
-      ]);
-      $g = $_SESSION["gid"];
-      $t = time();
-
-      $stmt->bind_param("sis", $g, $t, $trends);
-      if ($stmt->execute()) {
-      } else {
-        return [
-          "status" => false,
-          "message" => "An error in execution.",
-          "error" => $connection->error,
-        ];
-      }
-    } else {
+    if (!($stmt = $this->connection->prepare($query))) {
+      mysqli_close($this->connection);
       return [
         "status" => false,
         "message" => "Couldn't prepare query.",
@@ -249,10 +202,27 @@ class Database
       ];
     }
 
-    //Close.
-    //
-    //
-    mysqli_close($connection);
+    $trends = json_encode([
+      "weather" => random_int(1, 9),
+      "love" => random_int(1, 9),
+      "politics" => random_int(1, 9),
+      "decadence" => random_int(1, 9),
+      "conformity" => random_int(1, 9),
+    ]);
+
+    $g = $_SESSION["gid"];
+    $t = time();
+    $stmt->bind_param("sis", $g, $t, $trends);
+
+    if (!$stmt->execute()) {
+      mysqli_close($this->connection);
+      return [
+        "status" => false,
+        "message" => "An error in execution.",
+        "error" => $connection->error,
+      ];
+    }
+    mysqli_close($this->connection);
     return [
       "status" => true,
       "message" => "Successfully started a new game.",

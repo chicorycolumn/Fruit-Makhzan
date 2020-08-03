@@ -20,59 +20,44 @@ class Fruit
   {
     $this->conn = $db;
 
-    // foreach (["inv_table_name", "nst_table_name"] as $table_name) {
-    //   if (isset($_SESSION[$table_name])) {
-    //     $this->$table_name = $_SESSION[$table_name];
-    //   } else {
-    // echo "Error. No inv_table is set.";
-    // exit();
-    //   }
-    // }
-
-    if (isset($_SESSION["inv_table_name"])) {
-      $this->inv_table_name = $_SESSION["inv_table_name"];
-    } else {
-      echo "Error. No inv_table is set.";
-      exit();
-    }
-
-    if (isset($_SESSION["nst_table_name"])) {
-      $this->nst_table_name = $_SESSION["nst_table_name"];
-    } else {
-      echo "Error. No inv_table is set.";
-      exit();
+    foreach (["inv_table_name", "nst_table_name"] as $table_name) {
+      if (isset($_SESSION[$table_name])) {
+        $this->$table_name = $_SESSION[$table_name];
+      } else {
+        echo "Error. " . $table_name . " not set.";
+        exit();
+      }
     }
   }
 
   function read($table_suffix)
   {
     $table_name = $table_suffix . "_table_name";
-
     $query = "SELECT * FROM " . $this->$table_name . " ORDER BY id DESC";
 
-    if ($stmt = $this->conn->prepare($query)) {
-      if ($stmt->execute()) {
-        $result = $stmt->get_result();
-        $stmt->close();
-        $response = [
-          "status" => true,
-          "data" => $result,
-        ];
-      } else {
-        $response = [
-          "status" => false,
-          "message" => "Error in execution.",
-          "error" => $this->conn->error,
-        ];
-      }
-    } else {
+    if (!($stmt = $this->conn->prepare($query))) {
       return [
         "status" => false,
         "message" => "Could not prepare query.",
         "error" => $this->conn->error,
       ];
     }
-    return $response;
+
+    if (!$stmt->execute()) {
+      return [
+        "status" => false,
+        "message" => "Error in execution.",
+        "error" => $this->conn->error,
+      ];
+    }
+
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    return [
+      "status" => true,
+      "data" => $result,
+    ];
   }
 
   function read_single($table_suffix)
@@ -80,81 +65,85 @@ class Fruit
     $table_name = $table_suffix . "_table_name";
     $query = "SELECT * FROM " . $this->$table_name . " WHERE name=?";
 
-    if ($stmt = $this->conn->prepare($query)) {
-      $stmt->bind_param("s", $this->name);
-      if ($stmt->execute()) {
-        $result = $stmt->get_result();
-        $stmt->close();
-
-        $response = [
-          "status" => true,
-          "data" => $result,
-        ];
-      } else {
-        $response = [
-          "status" => false,
-          "message" => "Error in execution.",
-          "error" => $this->conn->error,
-        ];
-      }
-    } else {
-      $response = [
+    if (!($stmt = $this->conn->prepare($query))) {
+      return [
         "status" => false,
         "message" => "Could not prepare query.",
         "error" => $this->conn->error,
       ];
     }
-    return $response;
+
+    $stmt->bind_param("s", $this->name);
+
+    if (!$stmt->execute()) {
+      return [
+        "status" => false,
+        "message" => "Error in execution.",
+        "error" => $this->conn->error,
+      ];
+    }
+
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    return [
+      "status" => true,
+      "data" => $result,
+    ];
   }
 
   function create_self($table_suffix)
   {
     $table_name = $table_suffix . "_table_name";
-    if ($this->does_entry_exist($table_suffix)["status"]) {
-      return [
-        "status" => false,
-        "message" => "Could not create. A fruit of that name already exists.",
-        "error" => $this->conn->error,
-      ];
-    } elseif ($this->does_entry_exist($table_suffix)["status"] == false) {
-      $query =
-        "INSERT INTO  " .
-        $this->$table_name .
-        " ( `name`, `quantity`, `selling_price`) VALUES (?, ?, ?)";
 
-      if ($stmt = $this->conn->prepare($query)) {
-        $stmt->bind_param(
-          "sii",
-          $this->name,
-          $this->quantity,
-          $this->selling_price
-        );
-        if ($stmt->execute()) {
-          return [
-            "status" => true,
-            "message" => "Successfully created fruit!",
-          ];
-        } else {
-          return [
-            "status" => false,
-            "message" => "Error in execution.",
-            "error" => $this->conn->error,
-          ];
-        }
-      } else {
-        return [
-          "status" => false,
-          "message" => "Could not prepare query.",
-          "error" => $this->conn->error,
-        ];
-      }
-    } else {
+    if (!$this->does_entry_exist($table_suffix)) {
       return [
         "status" => false,
         "message" => "Error in does_entry_exist.",
         "error" => $this->conn->error,
       ];
     }
+
+    if ($this->does_entry_exist($table_suffix)["status"]) {
+      return [
+        "status" => false,
+        "message" => "Could not create. A fruit of that name already exists.",
+        "error" => $this->conn->error,
+      ];
+    }
+
+    $query =
+      "INSERT INTO  " .
+      $this->$table_name .
+      " ( `name`, `quantity`, `selling_price`) VALUES (?, ?, ?)";
+
+    if (!($stmt = $this->conn->prepare($query))) {
+      return [
+        "status" => false,
+        "message" => "Could not prepare query.",
+        "error" => $this->conn->error,
+      ];
+    }
+
+    $stmt->bind_param(
+      "sii",
+      $this->name,
+      $this->quantity,
+      $this->selling_price
+    );
+
+    if (!$stmt->execute()) {
+      return [
+        "status" => false,
+        "message" => "Error in execution.",
+        "error" => $this->conn->error,
+      ];
+    }
+
+    return [
+      "status" => true,
+      "message" => "Successfully created fruit!",
+    ];
   }
 
   function does_entry_exist($table_suffix)
@@ -162,24 +151,32 @@ class Fruit
     $table_name = $table_suffix . "_table_name";
     $query = "SELECT * FROM " . $this->$table_name . " WHERE name=?";
 
-    if ($stmt = $this->conn->prepare($query)) {
-      $stmt->bind_param("s", $this->name);
-      if ($stmt->execute()) {
-        $result = $stmt->get_result();
-        $stmt->close();
-
-        if ($result->num_rows) {
-          return ["status" => true, "message" => "Entry exists."];
-        } else {
-          return [
-            "status" => false,
-            "message" => "Entry does not exist.",
-            "error" => $this->conn->error,
-          ];
-        }
-      }
+    if (!($stmt = $this->conn->prepare($query))) {
+      return false;
     }
-    return false;
+
+    $stmt->bind_param("s", $this->name);
+
+    if (!$stmt->execute()) {
+      return [
+        "status" => false,
+        "message" => "Error in execution.",
+        "error" => $this->conn->error,
+      ];
+    }
+
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    if (!$result->num_rows) {
+      return [
+        "status" => false,
+        "message" => "Entry does not exist.",
+        "error" => $this->conn->error,
+      ];
+    }
+
+    return ["status" => true, "message" => "Entry exists."];
   }
 
   function restock_self($table_suffix, $new_quantity)
@@ -187,25 +184,27 @@ class Fruit
     $table_name = $table_suffix . "_table_name";
     $query = "UPDATE " . $this->$table_name . " SET quantity=? WHERE name=?";
 
-    if ($stmt = $this->conn->prepare($query)) {
-      $stmt->bind_param("is", $new_quantity, $this->name);
-      if ($stmt->execute()) {
-        $result = $stmt->get_result();
-        $stmt->close();
-        return ["status" => true, "message" => "Successfully restocked!"];
-      } else {
-        return [
-          "status" => false,
-          "message" => "Error in execution.",
-          "error" => $this->conn->error,
-        ];
-      }
+    if (!($stmt = $this->conn->prepare($query))) {
+      return [
+        "status" => false,
+        "message" => "Could not prepare query.",
+        "error" => $this->conn->error,
+      ];
     }
-    return [
-      "status" => false,
-      "message" => "Could not prepare query.",
-      "error" => $this->conn->error,
-    ];
+
+    $stmt->bind_param("is", $new_quantity, $this->name);
+
+    if (!$stmt->execute()) {
+      return [
+        "status" => false,
+        "message" => "Error in execution.",
+        "error" => $this->conn->error,
+      ];
+    }
+
+    $result = $stmt->get_result();
+    $stmt->close();
+    return ["status" => true, "message" => "Successfully restocked!"];
   }
 
   function delete_self($table_suffix)
@@ -213,35 +212,34 @@ class Fruit
     $table_name = $table_suffix . "_table_name";
     $query = "DELETE FROM " . $this->$table_name . " WHERE id=?";
 
-    if ($stmt = $this->conn->prepare($query)) {
-      $stmt->bind_param("i", $this->id);
-
-      if ($stmt->execute()) {
-        $response = [
-          "status" => true,
-          "message" => "Successfully deleted!",
-        ];
-      } else {
-        $response = [
-          "status" => false,
-          "message" => "Error in execution.",
-          "error" => $this->conn->error,
-        ];
-      }
-    } else {
-      $response = [
+    if (!($stmt = $this->conn->prepare($query))) {
+      return [
         "status" => false,
         "message" => "Could not prepare query.",
         "error" => $this->conn->error,
       ];
     }
+
+    $stmt->bind_param("i", $this->id);
+
+    if (!$stmt->execute()) {
+      $stmt->close();
+      return [
+        "status" => false,
+        "message" => "Error in execution.",
+        "error" => $this->conn->error,
+      ];
+    }
+
     $stmt->close();
-    return $response;
+    return [
+      "status" => true,
+      "message" => "Successfully deleted!",
+    ];
   }
 
   function update_self($table_suffix)
   {
-    // $table_name = $table_suffix . "_table_name";
     // $query =
     //   "UPDATE " .
     //   $this->$table_name .
@@ -256,12 +254,5 @@ class Fruit
     //                 id='" .
     //   $this->id .
     //   "'";
-
-    // $stmt = $this->conn->prepare($query);
-    // if ($stmt->execute()) {
-    //   return $stmt;
-    // }
-
-    // return false;
   }
 }

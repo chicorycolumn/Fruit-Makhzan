@@ -65,10 +65,9 @@ include '../master.php';
             dataType: 'json',
             data: {
               table: "inv",
-                name: $("#name").val(),
-                quantity: $("#quantity").val(),        
-                selling_price: $("#selling_price").val(),
-       
+              name: $("#name").val(),
+              quantity: $("#quantity").val(),        
+              selling_price: $("#selling_price").val(),
             },
             error: function (result) {
               console.log("An error occurred immediately in $.ajax request.", result)
@@ -79,8 +78,7 @@ include '../master.php';
                 if (result['status']) {
                   console.log(result)
                     window.location.href = '../play';
-                }
-                else {
+                } else {
                     console.log(result['message']);
                     console.log(result["error"]);
                 }

@@ -57,8 +57,6 @@ $content =
   '
 </h1>
 
-<button onClick=checkSession()>CHECK SESSION</button>
-
 <div class="mainDiv">
   ' .
   $mainStats .
@@ -133,10 +131,11 @@ function fillInvTable(shouldWipe){
                     "</tr>";
 
                     $(response).appendTo($("#inventory"));
-                })}else{
-                  console.log(result["message"])
-                  console.log(result["error"])
-                }
+                })
+              } else {
+                console.log(result["message"])
+                console.log(result["error"])
+              }
           }})   
 }
 
@@ -161,24 +160,25 @@ function fillNstTable(shouldWipe){
 
               if (result["status"]){ 
               
-              result["data"].forEach((fruit)=>{
-                  let response="";
-                  let formattedName = fruit.name.replace(/\s/g, "%20")
+                result["data"].forEach((fruit)=>{
+                    let response="";
+                    let formattedName = fruit.name.replace(/\s/g, "%20")
 
-                  response += "<tr>"+
-                  "<td>"+fruit.id+"</td>"+
-                  "<td>"+fruit.name+"</td>"+
-                  "<td>"+fruit.stock_price+"</td>"+
-                  "<td>"+fruit.popularity+"</td>"+
-                  "<td>"+fruit.durability+"</td>"+
-                  "<td><button class='button1' onClick=printSingle('"+formattedName+"','nst')>Print single</button> <button class='button1' onClick=buyFromStock('"+formattedName+"')>Buy</button> </td>"+
-                  "</tr>";
+                    response += "<tr>"+
+                    "<td>"+fruit.id+"</td>"+
+                    "<td>"+fruit.name+"</td>"+
+                    "<td>"+fruit.stock_price+"</td>"+
+                    "<td>"+fruit.popularity+"</td>"+
+                    "<td>"+fruit.durability+"</td>"+
+                    "<td><button class='button1' onClick=printSingle('"+formattedName+"','nst')>Print single</button> <button class='button1' onClick=buyFromStock('"+formattedName+"')>Buy</button> </td>"+
+                    "</tr>";
 
-                  $(response).appendTo($("#new_stock"));
-                })}else{
-                  console.log(result["message"])
-                  console.log(result["error"]);
-                }
+                    $(response).appendTo($("#new_stock"));
+                })
+              } else {
+                console.log(result["message"])
+                console.log(result["error"]);
+              }
           }})   
 }
 
@@ -191,20 +191,19 @@ function printSingle(name, table){
           dataType: 'json',
           data: {
             name: name,
-              table: table
+            table: table
           },
           error: function (result) {
             console.log("An error occurred immediately in $.ajax request.", result)
             console.log(result.responseText)
           },
           success: function (result) {
-              if (result["status"]) {
-              console.log(result);
-              }
-              else {
-                console.log(result["message"]);
-                console.log(result["error"]);
-              }
+            if (result["status"]) {
+            console.log(result);
+            } else {
+              console.log(result["message"]);
+              console.log(result["error"]);
+            }
           }
       });
 }
@@ -252,7 +251,7 @@ function buyFromStock(name){
 
   if(el.length){
     restockFruit(name)
-  }else{
+  } else {
     $.ajax(
       {
           type: "GET",
@@ -269,7 +268,7 @@ function buyFromStock(name){
             console.log(result.responseText)
           },
           success: function (result) {
-      console.log("success")
+                console.log("success")
                 if (result["status"]){   
                           
                 let response="";
@@ -286,8 +285,8 @@ function buyFromStock(name){
                     "<td><button class='button1' onClick=printSingle('"+formattedName+"','inv')>Print single</button> <button class='button1' onClick=restockFruit('"+formattedName+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+fruit.id+"','"+formattedName+"')>Throw away</button></td>"+
                     "</tr>";
     
-                $(response).prependTo($("#inventory"));}
-              else {
+                $(response).prependTo($("#inventory"));
+                } else {
                   console.log(result['message']);
                   console.log(result["error"]);
               }
