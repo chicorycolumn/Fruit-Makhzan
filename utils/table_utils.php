@@ -1,6 +1,6 @@
 <?php
 
-function build_array($table, $result)
+function build_inv_nst_arrays($table, $result)
 {
   if (!$result->num_rows) {
     return false;
@@ -90,7 +90,7 @@ function wipe_previous_game($connection)
   }
 }
 
-function cleanUpDB($connection)
+function clean_up_db($connection)
 {
   $query = "SELECT * FROM Games WHERE Last_Accessed < ?";
 

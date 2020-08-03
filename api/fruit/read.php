@@ -23,10 +23,10 @@ function go($db, $fruit, $table_suffix)
     return $result;
   }
 
-  if (!($fruit_arr = build_array($table_suffix, $result["data"]))) {
+  if (!($fruit_arr = build_inv_nst_arrays($table_suffix, $result["data"]))) {
     return [
       "status" => false,
-      "message" => "An error in build_array. 1rea",
+      "message" => "An error in build_inv_nst_arrays. 1rea",
       "error" => $db->error,
     ];
   }

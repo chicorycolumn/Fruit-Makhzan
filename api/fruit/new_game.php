@@ -25,7 +25,7 @@ function go($database, $db)
 }
 
 $response = go($database, $db);
-$response["extra"] = cleanUpDB($db);
+$response["extra"] = clean_up_db($db);
 
 echo json_encode($response);
 return;
