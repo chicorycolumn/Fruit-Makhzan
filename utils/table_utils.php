@@ -298,6 +298,8 @@ function delete_table($connection, $table_name)
     ];
   }
 
+  $stmt->close();
+
   return [
     "status" => true,
     "message" => "Successfully deleted table " . $table_name,

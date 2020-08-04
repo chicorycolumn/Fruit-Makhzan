@@ -222,7 +222,9 @@ class Database
         "error" => $connection->error,
       ];
     }
-    mysqli_close($this->connection);
+
+    $stmt->close();
+    $this->connection->close(); //mysqli_close($this->connection);
     return [
       "status" => true,
       "message" => "Successfully started a new game.",
@@ -250,7 +252,7 @@ class Database
 
   public function closeConnection()
   {
-    mysqli_close($this->connection);
+    $this->connection->close();
   }
 }
 ?>

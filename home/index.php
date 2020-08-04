@@ -31,6 +31,7 @@ if (isset($_COOKIE["makhzan"])) {
       $_SESSION["inv_table_name"] = $_COOKIE["makhzan"] . "__INV";
       $_SESSION["nst_table_name"] = $_COOKIE["makhzan"] . "__NST";
     }
+    $database->closeConnection();
   }
 }
 

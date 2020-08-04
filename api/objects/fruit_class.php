@@ -96,15 +96,15 @@ class Fruit
   {
     $table_name = $table_suffix . "_table_name";
 
-    if (!$this->does_entry_exist($table_suffix)) {
+    if (!$this->is_fruit_in_table($table_suffix)) {
       return [
         "status" => false,
-        "message" => "Error in does_entry_exist.",
+        "message" => "Error in is_fruit_in_table.",
         "error" => $this->conn->error,
       ];
     }
 
-    if ($this->does_entry_exist($table_suffix)["status"]) {
+    if ($this->is_fruit_in_table($table_suffix)["status"]) {
       return [
         "status" => false,
         "message" => "Could not create. A fruit of that name already exists.",
@@ -140,13 +140,14 @@ class Fruit
       ];
     }
 
+    $stmt->close();
     return [
       "status" => true,
       "message" => "Successfully created fruit!",
     ];
   }
 
-  function does_entry_exist($table_suffix)
+  function is_fruit_in_table($table_suffix)
   {
     $table_name = $table_suffix . "_table_name";
     $query = "SELECT * FROM " . $this->$table_name . " WHERE name=?";
@@ -223,7 +224,6 @@ class Fruit
     $stmt->bind_param("i", $this->id);
 
     if (!$stmt->execute()) {
-      $stmt->close();
       return [
         "status" => false,
         "message" => "Error in execution.",
