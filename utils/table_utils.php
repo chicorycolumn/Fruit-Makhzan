@@ -80,7 +80,7 @@ function wipe_previous_game($connection)
     die();
   }
 
-  $result = delete_row($connection, "Game_ID", $_SESSION["gid"], "Games");
+  $result = delete_row($connection, "Game_ID", $_SESSION["gid"], "Games", "s");
 
   if (!$result["status"]) {
     mysqli_close($connection);
@@ -125,53 +125,33 @@ function clean_up_db($connection)
   }
 
   $gid_arr = [];
-
+  $log = [];
   while ($row = $result->fetch_assoc()) {
     array_push($gid_arr, $row["Game_ID"]);
   }
 
   foreach ($gid_arr as $gid) {
-    if (!($result = delete_row($connection, "Game_ID", $gid, "Games"))) {
-      return [
-        "status" => false,
-        "message" => "Error in delete_row.",
-        "error" => $connection->error,
-      ];
+    if (
+      !($result = delete_row($connection, "Game_ID", $gid, "Games", "s")) ||
+      !$result["status"]
+    ) {
+      $log["Undeleted_rows"][] = $gid;
     }
 
-    if (!$result["status"]) {
-      return $result;
+    foreach (["__INV", "__NST"] as $suffix) {
+      if (
+        !($result = delete_table($connection, $gid . $suffix)) ||
+        !$result["status"]
+      ) {
+        $log["Undeleted_tables"][] = $gid;
+      }
     }
-
-    if (!($result = delete_table($connection, $gid . "__INV"))) {
-      return [
-        "status" => false,
-        "message" => "Error in delete_table INV.",
-        "error" => $connection->error,
-      ];
-    }
-
-    if (!$result["status"]) {
-      return $result;
-    }
-
-    if (!($result = delete_table($connection, $gid . "__NST"))) {
-      return [
-        "status" => false,
-        "message" => "Error in delete_table NST.",
-        "error" => $connection->error,
-      ];
-    }
-
-    if (!$result["status"]) {
-      return $result;
-    }
-
-    return [
-      "status" => true,
-      "message" => "Outdated games were deleted.",
-    ];
   }
+
+  return [
+    "status" => true,
+    "message" => "Outdated games were deleted.",
+  ];
 }
 
 function update_row(
@@ -220,7 +200,8 @@ function check_row_exists(
   $column,
   $identifier,
   $table_name,
-  $column_to_return
+  $column_to_return,
+  $acronym
 ) {
   $query = "SELECT * FROM " . $table_name . " WHERE " . $column . " = ?";
 
@@ -232,7 +213,7 @@ function check_row_exists(
     ];
   }
 
-  $stmt->bind_param("s", $identifier);
+  $stmt->bind_param($acronym, $identifier);
 
   if (!$stmt->execute()) {
     return [
@@ -266,7 +247,7 @@ function check_row_exists(
   return $response;
 }
 
-function delete_row($connection, $column, $identifier, $table_name)
+function delete_row($connection, $column, $identifier, $table_name, $acronym)
 {
   $query = "DELETE FROM " . $table_name . " WHERE " . $column . " = ?";
 
@@ -278,7 +259,7 @@ function delete_row($connection, $column, $identifier, $table_name)
     ];
   }
 
-  $stmt->bind_param("s", $identifier);
+  $stmt->bind_param($acronym, $identifier);
 
   if (!$stmt->execute()) {
     return [

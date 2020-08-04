@@ -20,7 +20,8 @@ if (isset($_COOKIE["makhzan"])) {
       "Game_ID",
       $putative_gid,
       "Games",
-      "Last_Accessed"
+      "Last_Accessed",
+      "s"
     );
 
     if (!$result || !$result["status"] || !$result["rows"]) {
