@@ -55,8 +55,8 @@ class Database
     }
 
     $_SESSION["gid"] = $gid;
-    $_SESSION["inv_table_name"] = $_SESSION["gid"] . "__INV";
-    $_SESSION["nst_table_name"] = $_SESSION["gid"] . "__NST";
+    $_SESSION["inv_table_name"] = $_SESSION["gid"] . "__inv";
+    $_SESSION["nst_table_name"] = $_SESSION["gid"] . "__nst";
 
     //Make Inventory table.
     //
@@ -186,11 +186,11 @@ class Database
       $query_array
     );
 
-    //Insert into Games table.
+    //Insert into games table.
     //
     //
     $query =
-      "INSERT INTO Games (`Game_ID`, `Last_Accessed`, `Trend_Calculates`) VALUES (?, ?, ?)";
+      "INSERT INTO games (`Game_ID`, `Last_Accessed`, `Trend_Calculates`) VALUES (?, ?, ?)";
 
     //Very interestingly, inserting a number over 9 as a value in json won't work.
     if (!($stmt = $this->connection->prepare($query))) {

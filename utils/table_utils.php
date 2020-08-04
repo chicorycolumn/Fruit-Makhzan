@@ -80,7 +80,7 @@ function wipe_previous_game($connection)
     die();
   }
 
-  $result = delete_row($connection, "Game_ID", $_SESSION["gid"], "Games", "s");
+  $result = delete_row($connection, "Game_ID", $_SESSION["gid"], "games", "s");
 
   if (!$result["status"]) {
     mysqli_close($connection);
@@ -92,7 +92,7 @@ function wipe_previous_game($connection)
 
 function clean_up_db($connection)
 {
-  $query = "SELECT * FROM Games WHERE Last_Accessed < ?";
+  $query = "SELECT * FROM games WHERE Last_Accessed < ?";
 
   if (!($stmt = $connection->prepare($query))) {
     return [
@@ -132,13 +132,13 @@ function clean_up_db($connection)
 
   foreach ($gid_arr as $gid) {
     if (
-      !($result = delete_row($connection, "Game_ID", $gid, "Games", "s")) ||
+      !($result = delete_row($connection, "Game_ID", $gid, "games", "s")) ||
       !$result["status"]
     ) {
       $log["Undeleted_rows"][] = $gid;
     }
 
-    foreach (["__INV", "__NST"] as $suffix) {
+    foreach (["__inv", "__nst"] as $suffix) {
       if (
         !($result = delete_table($connection, $gid . $suffix)) ||
         !$result["status"]

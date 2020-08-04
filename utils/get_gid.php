@@ -18,10 +18,7 @@ $gid .= make(1, "bcdfgklmnprstvwxyz");
 $gid .= make(1, "bcdfghjklmnpqrstvwyz");
 $gid .= make(1, "aeiou");
 $gid .= make(1, "bcdfgklmnprstvwxyz");
-$gid .= make(
-  9,
-  '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-);
+$gid .= make(9, '0123456789abcdefghijklmnopqrstuvwxyz');
 
 return $gid;
 ?>

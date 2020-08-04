@@ -23,7 +23,7 @@ function update_timestamp()
     time(),
     "Game_ID",
     $_SESSION['gid'],
-    "Games",
+    "games",
     "is"
   );
   $database->closeConnection();

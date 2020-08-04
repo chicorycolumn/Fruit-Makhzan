@@ -19,7 +19,7 @@ if (isset($_COOKIE["makhzan"])) {
       $db,
       "Game_ID",
       $putative_gid,
-      "Games",
+      "games",
       "Last_Accessed",
       "s"
     );
@@ -28,8 +28,8 @@ if (isset($_COOKIE["makhzan"])) {
       setcookie("makhzan", "", time() - 3600);
     } elseif (!isset($_SESSION["gid"])) {
       $_SESSION["gid"] = $_COOKIE["makhzan"];
-      $_SESSION["inv_table_name"] = $_COOKIE["makhzan"] . "__INV";
-      $_SESSION["nst_table_name"] = $_COOKIE["makhzan"] . "__NST";
+      $_SESSION["inv_table_name"] = $_COOKIE["makhzan"] . "__inv";
+      $_SESSION["nst_table_name"] = $_COOKIE["makhzan"] . "__nst";
     }
     $database->closeConnection();
   }
