@@ -5,7 +5,7 @@
 function make($length, $chars)
 {
   $gid = "";
-  $max = mb_strlen($chars, '8bit') - 1;
+  $max = strlen($chars, '8bit') - 1;
   for ($i = 0; $i < $length; ++$i) {
     $gid .= $chars[random_int(0, $max)];
   }
