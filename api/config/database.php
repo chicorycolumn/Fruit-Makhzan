@@ -20,10 +20,10 @@ class Database
   public function __construct()
   {
     if ($this->use_clear_db) {
-      $this->username = "b4709ad1452782";
-      $this->password = "7d6b0f7d";
-      $this->host = "us-cdbr-east-02.cleardb.com";
-      $this->db_name = "heroku_cb0feae1098e18e";
+      $this->username = "b3845dbeabd54b";
+      $this->password = "c8ee23f4";
+      $this->host = "eu-cdbr-west-03.cleardb.net";
+      $this->db_name = "heroku_73f57e9b43b49b3";
     }
   }
 
