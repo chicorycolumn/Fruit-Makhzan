@@ -3,7 +3,7 @@
 <head>
 <link rel="stylesheet" href="../css/master.css" type="text/css">
   <meta charset="utf-8">
-  <title>Fruit-Makhzan</title>
+  <title>Fruit Makhzan</title>
   <link rel="icon" href="../images/favicon.ico" type="image/ico">
 </head>
 <body>

@@ -1,3 +1,3 @@
 Fruit Makhzan
 
-A shop management game built with PHP.
+A shop management game built with PHP and SQL.
