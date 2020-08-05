@@ -203,11 +203,11 @@ class Database
     }
 
     $trends = json_encode([
-      "weather" => random_int(1, 9),
-      "love" => random_int(1, 9),
-      "politics" => random_int(1, 9),
-      "decadence" => random_int(1, 9),
-      "conformity" => random_int(1, 9),
+      "weather" => random_int(0, 9),
+      "love" => random_int(0, 9),
+      "politics" => random_int(0, 9),
+      "decadence" => random_int(0, 9),
+      "conformity" => random_int(0, 9),
     ]);
 
     $g = $_SESSION["gid"];
