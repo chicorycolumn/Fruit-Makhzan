@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 class Database
 {
-  private $use_clear_db = 1;
+  private $use_clear_db = 0;
 
   private $username = "root";
   private $password = "";
@@ -62,6 +62,16 @@ class Database
     //
     //
     $table_name = $_SESSION["inv_table_name"];
+
+    // $create_table_querystring = " (
+    //   `id` int(11) NOT NULL AUTO_INCREMENT NUMERIC(1, 10) PRIMARY KEY,
+    //   `name` varchar(255) NOT NULL,
+    //   `quantity` int(11) NOT NULL,
+    //   `selling_price` int(11) NOT NULL,
+    //   `total_sales` int(11) DEFAULT 0,
+    //   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+    // )";
+
     $create_table_querystring = " (
       `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
       `name` varchar(255) NOT NULL,
@@ -124,58 +134,71 @@ class Database
       `name` varchar(255) NOT NULL,
       `stock_price` int(11) NOT NULL,
       `durability` int(11) NOT NULL,
-      `popularity` int(11) DEFAULT 0
+      `resilience` int(11) NOT NULL,
+      `testaroonie` json DEFAULT '{}'
+      CHECK (JSON_VALID(testaroonie))
     )";
+
+    $json = '{"name": "Jo", "12": 32}';
+    $day = 300;
+    $val = 50;
+
+    $arr = [$day => $val];
+    $json = json_encode($arr);
+
+    // die();
 
     $query_array = [
       "INSERT INTO " .
       $table_name .
-      " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
-      ('Funkalites', 5, 3, 1)",
+      " (`name`, `stock_price`, `resilience`, `durability`, `testaroonie` ) VALUES
+      ('Funkalites', 5, 3, 1, '" .
+      $json .
+      "')",
 
       "INSERT INTO " .
       $table_name .
-      " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
       ('Froobs', 10, 4, 2)",
-
-      "INSERT INTO " .
-      $table_name .
-      " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
-      ('My Old Man The Mango', 1, 5, 3)",
-
-      "INSERT INTO " .
-      $table_name .
-      " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
-      ('Moloko', 1, 5, 4)",
 
       // "INSERT INTO " .
       // $table_name .
-      // " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
+      // ('My Old Man The Mango', 1, 5, 3)",
+
+      // "INSERT INTO " .
+      // $table_name .
+      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
+      // ('Moloko', 1, 5, 4)",
+
+      // "INSERT INTO " .
+      // $table_name .
+      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
       // ('Frangipanis', 1, 5, 5)",
 
       // "INSERT INTO " .
       // $table_name .
-      // " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
       // ('Hunkalites', 5, 3, 6)",
 
       // "INSERT INTO " .
       // $table_name .
-      // " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
       // ('Hoobs', 10, 4, 7)",
 
       // "INSERT INTO " .
       // $table_name .
-      // " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
       // ('Hye Old Man The Mango', 1, 5, 8)",
 
       // "INSERT INTO " .
       // $table_name .
-      // " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
       // ('Holoko', 1, 5, 9)",
 
       // "INSERT INTO " .
       // $table_name .
-      // " (`name`, `stock_price`, `popularity`, `durability` ) VALUES
+      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
       // ('Hangipanis', 1, 5, 10)",
     ];
 
@@ -186,13 +209,22 @@ class Database
       $query_array
     );
 
+    // add_to_json(
+    //   $this->connection,
+    //   $table_name,
+    //   "testaroonie",
+    //   250,
+    //   13,
+    //   "name",
+    //   "Funkalites"
+    // );
+
     //Insert into games table.
     //
     //
     $query =
       "INSERT INTO games (`Game_ID`, `Last_Accessed`, `Trend_Calculates`) VALUES (?, ?, ?)";
 
-    //Very interestingly, inserting a number over 9 as a value in json won't work.
     if (!($stmt = $this->connection->prepare($query))) {
       mysqli_close($this->connection);
       return [
@@ -203,11 +235,11 @@ class Database
     }
 
     $trends = json_encode([
-      "weather" => random_int(0, 9),
-      "love" => random_int(0, 9),
-      "politics" => random_int(0, 9),
-      "decadence" => random_int(0, 9),
-      "conformity" => random_int(0, 9),
+      "weather" => random_int(1, 100),
+      "love" => random_int(1, 100),
+      "politics" => random_int(1, 100),
+      "decadence" => random_int(1, 100),
+      "conformity" => random_int(1, 100),
     ]);
 
     $g = $_SESSION["gid"];

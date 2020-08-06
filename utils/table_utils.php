@@ -1,5 +1,36 @@
 <?php
 
+function add_to_json(
+  $conn,
+  $table_name,
+  $json_column,
+  $key,
+  $value,
+  $identifying_column,
+  $identifying_value
+) {
+  $query =
+    "UPDATE " .
+    $table_name .
+    " " .
+    $json_column .
+    " SET " .
+    $json_column .
+    "=JSON_INSERT(" .
+    $json_column .
+    ", '$." .
+    $key .
+    "', " .
+    $value .
+    ") WHERE " .
+    $identifying_column .
+    "='" .
+    $identifying_value .
+    "'";
+
+  $conn->query($query);
+}
+
 function build_inv_nst_arrays($table, $result)
 {
   if (!$result->num_rows) {
@@ -26,8 +57,9 @@ function build_inv_nst_arrays($table, $result)
         "id" => $row["id"],
         "name" => $row["name"],
         "stock_price" => $row["stock_price"],
-        "popularity" => $row["popularity"] . "%",
+        "resilience" => $row["resilience"] . "%",
         "durability" => $durability_word,
+        // "max_price" => $row["max_price"],
       ];
     } else {
       return false;
@@ -48,6 +80,8 @@ function make_table(
   $query = "CREATE TABLE " . $table_name . $create_table_querystring;
 
   if (mysqli_query($connection, $query)) {
+    // $query = "ALTER TABLE " . $table_name . " AUTO_INCREMENT=127";
+    // mysqli_query($connection, $query);
     foreach ($query_array as $query) {
       mysqli_query($connection, $query);
     }

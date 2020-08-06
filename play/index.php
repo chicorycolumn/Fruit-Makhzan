@@ -168,8 +168,9 @@ function fillNstTable(shouldWipe){
                     "<td>"+fruit.id+"</td>"+
                     "<td>"+fruit.name+"</td>"+
                     "<td>"+fruit.stock_price+"</td>"+
-                    "<td>"+fruit.popularity+"</td>"+
+                    "<td>"+fruit.resilience+"</td>"+
                     "<td>"+fruit.durability+"</td>"+
+                    // "<td>"+fruit.max_price+"</td>"+
                     "<td><button class='button1' onClick=printSingle('"+formattedName+"','nst')>Print single</button> <button class='button1' onClick=buyFromStock('"+formattedName+"')>Buy</button> </td>"+
                     "</tr>";
 

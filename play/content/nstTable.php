@@ -19,7 +19,7 @@ $nstTable = '
                         <th>ID</th>
                         <th>Name</th>
                         <th>Stock price</th>
-                        <th>Popularity</th>
+                        <th>Resilience</th>
                         <th>Durability</th>
                         <th>Action</th>
                       </tr>
