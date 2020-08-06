@@ -72,49 +72,59 @@ class Database
     //   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
     // )";
 
+    // $json = '{"name": "Jo", "12": 32}';
+    // $day = 300;
+    // $val = 50;
+    // $arr = [$day => $val];
+    // $json = json_encode($arr);
+
     $create_table_querystring = " (
       `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      `name` varchar(255) NOT NULL,
+      `name` varchar(100) NOT NULL,
       `quantity` int(11) NOT NULL,
       `selling_price` int(11) NOT NULL,
-      `total_sales` int(11) DEFAULT 0,
-      `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+      `resilience` int(3) DEFAULT 50,
+      `max_price_set` json DEFAULT '{}',
+      `popularity_history` json DEFAULT '{}',
+      `price_history` json DEFAULT '{}',
+      `quantity_sold_history` json DEFAULT '{}',
+      `from_quantity_sold_history` json DEFAULT '{}'
     )";
 
     $query_array = [
       "INSERT INTO " .
       $table_name .
-      " (`name`, `quantity`, `selling_price`, `total_sales`) VALUES
+      " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
       ('Morangines', 50, 5, 20)",
 
       "INSERT INTO " .
       $table_name .
-      " (`name`, `quantity`, `selling_price`) VALUES
+      " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
       ('Miwiwoos', 50, 5)",
 
       "INSERT INTO " .
       $table_name .
-      " (`name`, `quantity`, `selling_price`) VALUES
+      " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
       ('Misty Vistas', 50, 5)",
 
       "INSERT INTO " .
       $table_name .
-      " (`name`, `quantity`, `selling_price`) VALUES
+      " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
       ('My Old Man The Mango', 80, 4)",
 
       "INSERT INTO " .
       $table_name .
-      " (`name`, `quantity`, `selling_price`) VALUES
+      " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
       ('Moloko', 80, 4)",
 
       "INSERT INTO " .
       $table_name .
-      " (`name`, `quantity`, `selling_price`) VALUES
+      " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
       ('Manchurianos', 200, 100)",
 
       "INSERT INTO " .
       $table_name .
-      " (`name`, `quantity`, `selling_price`) VALUES
+      " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
       ('Matey-wateys', 30, 10)",
     ];
 
@@ -124,100 +134,6 @@ class Database
       $this->connection,
       $query_array
     );
-
-    //Make New Stock table.
-    //
-    //
-    $table_name = $_SESSION["nst_table_name"];
-    $create_table_querystring = " (
-      `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      `name` varchar(255) NOT NULL,
-      `stock_price` int(11) NOT NULL,
-      `durability` int(11) NOT NULL,
-      `resilience` int(11) NOT NULL,
-      `testaroonie` json DEFAULT '{}'
-      CHECK (JSON_VALID(testaroonie))
-    )";
-
-    $json = '{"name": "Jo", "12": 32}';
-    $day = 300;
-    $val = 50;
-
-    $arr = [$day => $val];
-    $json = json_encode($arr);
-
-    // die();
-
-    $query_array = [
-      "INSERT INTO " .
-      $table_name .
-      " (`name`, `stock_price`, `resilience`, `durability`, `testaroonie` ) VALUES
-      ('Funkalites', 5, 3, 1, '" .
-      $json .
-      "')",
-
-      "INSERT INTO " .
-      $table_name .
-      " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
-      ('Froobs', 10, 4, 2)",
-
-      // "INSERT INTO " .
-      // $table_name .
-      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
-      // ('My Old Man The Mango', 1, 5, 3)",
-
-      // "INSERT INTO " .
-      // $table_name .
-      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
-      // ('Moloko', 1, 5, 4)",
-
-      // "INSERT INTO " .
-      // $table_name .
-      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
-      // ('Frangipanis', 1, 5, 5)",
-
-      // "INSERT INTO " .
-      // $table_name .
-      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
-      // ('Hunkalites', 5, 3, 6)",
-
-      // "INSERT INTO " .
-      // $table_name .
-      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
-      // ('Hoobs', 10, 4, 7)",
-
-      // "INSERT INTO " .
-      // $table_name .
-      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
-      // ('Hye Old Man The Mango', 1, 5, 8)",
-
-      // "INSERT INTO " .
-      // $table_name .
-      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
-      // ('Holoko', 1, 5, 9)",
-
-      // "INSERT INTO " .
-      // $table_name .
-      // " (`name`, `stock_price`, `resilience`, `durability` ) VALUES
-      // ('Hangipanis', 1, 5, 10)",
-    ];
-
-    make_table(
-      $table_name,
-      $create_table_querystring,
-      $this->connection,
-      $query_array
-    );
-
-    // add_to_json(
-    //   $this->connection,
-    //   $table_name,
-    //   "testaroonie",
-    //   250,
-    //   13,
-    //   "name",
-    //   "Funkalites"
-    // );
 
     //Insert into games table.
     //
