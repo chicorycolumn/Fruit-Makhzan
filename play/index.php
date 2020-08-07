@@ -12,6 +12,9 @@ if (!isset($_SESSION['gid'])) {
 }
 
 setcookie("makhzan", $_SESSION['gid'], time() + 3600 * 24 * 30, "/");
+$gid = $_SESSION['gid'];
+$inv_table_name = $_SESSION['inv_table_name'];
+$animal = "doggy";
 
 function update_timestamp()
 {
@@ -19,9 +22,9 @@ function update_timestamp()
   $db = $database->getConnection();
   $result = update_row(
     $db,
-    "Last_Accessed",
+    "last_accessed",
     time(),
-    "Game_ID",
+    "game_id",
     $_SESSION['gid'],
     "games",
     "is"
@@ -39,21 +42,17 @@ if (!$result) {
 ?>
 
 <?php
-$money = 30;
-$days = 756;
-$version = $_SESSION["gid"];
 echo "<link rel='stylesheet' type='text/css' href='../css/playIndex.css' />";
 include 'content/mainStats.php';
 include 'content/mainBulletin.php';
 include 'content/mainButton.php';
 include 'content/invTable.php';
-include 'content/nstTable.php';
 
 $content =
   '
 <h1> 
   ' .
-  $version .
+  $gid .
   '
 </h1>
 
@@ -80,12 +79,6 @@ $content =
   $invTable .
   '
 </div>
-
-<div class="mainDiv mainDivTable2">
-  ' .
-  $nstTable .
-  '
-</div>
 ';
 
 include '../master.php';
@@ -93,20 +86,29 @@ include '../master.php';
 
 
 <script>
+//' For some reason this is necessary.
+let trend_calculates = null
+getGameStats()
+
 fillInvTable()
-fillNstTable()
+
+function setTrendCalculates(data){
+  trend_calculates = data
+}
+
+function seeTrendCalculates(){
+  console.log(trend_calculates)
+}
 
 function fillInvTable(shouldWipe){
-  
   if (shouldWipe){$('#inventory tbody > tr').remove();}
-
   $.ajax(
         {
             type: "GET",
             url: '../api/fruit/read.php',
             dataType: 'json',
             data: {
-                table: "inv"
+                table_name: "<?php echo $inv_table_name; ?>"
             },
             error: function (result) {
               console.log("An error occurred immediately in $.ajax request.", result)
@@ -119,15 +121,29 @@ function fillInvTable(shouldWipe){
               
                 result["data"].forEach((fruit)=>{
                     let response="";
-                    let formattedName = fruit.name.replace(/\s/g, "%20")
+
+                    let {id, name, quantity, selling_price, resilience} = fruit
+
+                    let formattedName = name.replace(/\s/g, "%20")
+
+
+                    //get TCs and use to calculate the below
+
+                    let trend_calculates = "<?php echo $inv_table_name; ?>"
+                    let animal = "<?php echo $animal; ?>"
+
+                    let popularity = 33
+                    let max_selling_price = 11
+                    let restock_price = 5
 
                     response += "<tr>"+
-                    "<td>"+fruit.id+"</td>"+
-                    "<td>"+fruit.name+"</td>"+
-                    "<td>"+fruit.quantity+"</td>"+
-                    "<td>"+fruit.selling_price+"</td>"+
-                    "<td>"+fruit.total_sales+"</td>"+
-                    "<td><button class='button1' onClick=printSingle('"+formattedName+"','inv')>Print single</button> <button class='button1' onClick=restockFruit('"+formattedName+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+fruit.id+"','"+formattedName+"')>Throw away</button></td>"+
+                    "<td>"+name+" ("+popularity+"%)"+"</td>"+
+                    "<td>"+trend_calculates+"</td>"+
+                    "<td>"+animal+"</td>"+
+                    "<td>"+selling_price+"</td>"+
+                    "<td>"+restock_price+"</td>"+
+                    "<td>"+resilience+"</td>"+
+                    "<td><button class='button1' onClick=printSingle('"+formattedName+"')>Print single</button> <button class='button1' onClick=restockFruit('"+formattedName+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+id+"','"+formattedName+"')>Throw away</button></td>"+
                     "</tr>";
 
                     $(response).appendTo($("#inventory"));
@@ -139,51 +155,89 @@ function fillInvTable(shouldWipe){
           }})   
 }
 
-function fillNstTable(shouldWipe){
-  
-  if (shouldWipe){$('#new_stock tbody > tr').remove();}
-
+function getGameStats(){
   $.ajax(
         {
             type: "GET",
-            url: '../api/fruit/read.php',
+            url: '../api/fruit/read_single.php',
             dataType: 'json',
             data: {
-                table: "nst"
+                table_name: "games",
+                identifying_column: "game_id",
+                identifying_data: "<?php echo $gid; ?>",
+                acronym: "s"
             },
             error: function (result) {
               console.log("An error occurred immediately in $.ajax request.", result)
               console.log(result.responseText)
             },
             success: function (result) {
-              console.log("success")
-
+              console.log("a success")
+           
               if (result["status"]){ 
-              
-                result["data"].forEach((fruit)=>{
-                    let response="";
-                    let formattedName = fruit.name.replace(/\s/g, "%20")
 
-                    response += "<tr>"+
-                    "<td>"+fruit.id+"</td>"+
-                    "<td>"+fruit.name+"</td>"+
-                    "<td>"+fruit.stock_price+"</td>"+
-                    "<td>"+fruit.resilience+"</td>"+
-                    "<td>"+fruit.durability+"</td>"+
-                    // "<td>"+fruit.max_price+"</td>"+
-                    "<td><button class='button1' onClick=printSingle('"+formattedName+"','nst')>Print single</button> <button class='button1' onClick=buyFromStock('"+formattedName+"')>Buy</button> </td>"+
-                    "</tr>";
-
-                    $(response).appendTo($("#new_stock"));
+                let el = $("p").filter(function() {
+                    return $(this).is("#moneyStat");
                 })
+                el.text(result["data"][0]["money_stat"] + " gold dinar")  
+
+                el = $("p").filter(function() {
+                    return $(this).is("#daysStat");
+                })
+                el.text(result["data"][0]["days_stat"] + " days")  
+
+     //Okay, now we've got the trend calculates
+
+    //  let trend_calculates = result["data"][0]["trend_calculates"];
+    // console.log("*", trend_calculates)
+    setTrendCalculates(13)
+     
+     //So waht do we want to do with them?
+     //Well, calculate popularity, and set popularity for inv table. 
+     //Then evolve the TCs, and reupload them to db.
+
+
+                //     //get TCs and use to calculate the below
+
+                //     let trend_calculates = "<?php echo $inv_table_name; ?>"
+                //     let animal = "<?php echo $animal; ?>"
+
+                //     let popularity = 33
+                //     let max_selling_price = 11
+                //     let restock_price = 5
+
+                //     response += "<tr>"+
+                //     "<td>"+name+" ("+popularity+"%)"+"</td>"+
+                //     "<td>"+trend_calculates+"</td>"+
+                //     "<td>"+animal+"</td>"+
+                //     "<td>"+selling_price+"</td>"+
+                //     "<td>"+restock_price+"</td>"+
+                //     "<td>"+resilience+"</td>"+
+                //     "<td><button class='button1' onClick=printSingle('"+formattedName+"','inv')>Print single</button> <button class='button1' onClick=restockFruit('"+formattedName+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+id+"','"+formattedName+"')>Throw away</button></td>"+
+                //     "</tr>";
+
+                //     $(response).appendTo($("#inventory"));
+                // })
               } else {
                 console.log(result["message"])
-                console.log(result["error"]);
+                console.log(result["error"])
               }
           }})   
 }
 
-function printSingle(name, table){
+function newDay(){
+  //Calculate sales for each fruit, based its pop, max_selling_price.
+  //Store the quantity for each fruit, and copy those to the quantity_yest column.
+  
+  //Send off to inv table, the new quantity for each fruit, which is quantity minus sold.
+  //Then download these anew.
+
+  //Run evolveTrendCalculates
+  //Send off to games table, the new TCs, and Money increased by sales, and Days increased by 1.
+  //Then download these three data from games table anew. One source of truth.
+}
+
+function printSingle(name){
   name = name.replace(/%20/g, " ")
     $.ajax(
       {
@@ -191,8 +245,11 @@ function printSingle(name, table){
           url: '../api/fruit/read_single.php',
           dataType: 'json',
           data: {
-            name: name,
-            table: table
+            table_name:  "<?php echo $inv_table_name; ?>",
+            identifying_column: "name",
+            identifying_data: name,
+            acronym: "s"
+
           },
           error: function (result) {
             console.log("An error occurred immediately in $.ajax request.", result)
@@ -218,7 +275,7 @@ function restockFruit(name){
           dataType: 'json',
           data: {
               name: name,
-              table: "inv"
+              table_name: "<?php echo $inv_table_name; ?>"
           },
           error: function (result) {
             console.log("An error occurred immediately in $.ajax request.")
@@ -259,7 +316,7 @@ function buyFromStock(name){
           url: '../api/fruit/create.php',
           dataType: 'json',
           data: {
-            table: "inv",
+            table_name:  "<?php echo $inv_table_name; ?>",
               name: name,
               quantity: 10,
       
@@ -283,7 +340,7 @@ function buyFromStock(name){
                     "<td>"+fruit.quantity+"</td>"+
                     "<td>"+fruit.selling_price+"</td>"+
                     "<td>"+fruit.total_sales+"</td>"+
-                    "<td><button class='button1' onClick=printSingle('"+formattedName+"','inv')>Print single</button> <button class='button1' onClick=restockFruit('"+formattedName+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+fruit.id+"','"+formattedName+"')>Throw away</button></td>"+
+                    "<td><button class='button1' onClick=printSingle('"+formattedName+"')>Print single</button> <button class='button1' onClick=restockFruit('"+formattedName+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+fruit.id+"','"+formattedName+"')>Throw away</button></td>"+
                     "</tr>";
     
                 $(response).prependTo($("#inventory"));
@@ -308,7 +365,7 @@ function deleteFruit(id, name){
           dataType: 'json',
           data: {
               id: id,
-              table: "inv"
+              table_name:  "<?php echo $inv_table_name; ?>"
           },
           error: function (result) {
             console.log("An error occurred immediately in $.ajax request.")

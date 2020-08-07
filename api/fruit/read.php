@@ -7,11 +7,11 @@ include '../../utils/table_utils.php';
 $database = new Database();
 $db = $database->getConnection();
 $fruit = new Fruit($db);
-$table_suffix = $_GET['table'];
+$table_name = $_GET['table_name'];
 
-function go($db, $fruit, $table_suffix)
+function go($db, $fruit, $table_name)
 {
-  if (!($result = $fruit->read($table_suffix))) {
+  if (!($result = $fruit->read($table_name))) {
     return [
       "status" => false,
       "message" => "An error when calling Sfruit->read.",
@@ -23,21 +23,21 @@ function go($db, $fruit, $table_suffix)
     return $result;
   }
 
-  if (!($fruit_arr = build_inv_nst_arrays($table_suffix, $result["data"]))) {
+  if (!($res_array = build_table_array($table_name, $result["data"]))) {
     return [
       "status" => false,
-      "message" => "An error in build_inv_nst_arrays. 1rea",
+      "message" => "An error in build_table_array. 1rea",
       "error" => $db->error,
     ];
   }
 
   return [
     "status" => true,
-    "data" => $fruit_arr,
+    "data" => $res_array,
   ];
 }
 
-$response = go($db, $fruit, $table_suffix);
+$response = go($db, $fruit, $table_name);
 $database->closeConnection();
 echo json_encode($response);
 

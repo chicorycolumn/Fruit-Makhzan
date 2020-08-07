@@ -19,21 +19,11 @@ class Fruit
   public function __construct($db)
   {
     $this->conn = $db;
-
-    foreach (["inv_table_name", "nst_table_name"] as $table_name) {
-      if (isset($_SESSION[$table_name])) {
-        $this->$table_name = $_SESSION[$table_name];
-      } else {
-        echo "Error. " . $table_name . " not set.";
-        exit();
-      }
-    }
   }
 
-  function read($table_suffix)
+  function read($table_name)
   {
-    $table_name = $table_suffix . "_table_name";
-    $query = "SELECT * FROM " . $this->$table_name . " ORDER BY id DESC";
+    $query = "SELECT * FROM " . $table_name . " ORDER BY id DESC";
 
     if (!($stmt = $this->conn->prepare($query))) {
       return [
@@ -60,10 +50,14 @@ class Fruit
     ];
   }
 
-  function read_single($table_suffix)
-  {
-    $table_name = $table_suffix . "_table_name";
-    $query = "SELECT * FROM " . $this->$table_name . " WHERE name=?";
+  function read_single(
+    $table_name,
+    $identifying_column,
+    $identifying_data,
+    $acronym
+  ) {
+    $query =
+      "SELECT * FROM " . $table_name . " WHERE " . $identifying_column . "=?";
 
     if (!($stmt = $this->conn->prepare($query))) {
       return [
@@ -73,7 +67,7 @@ class Fruit
       ];
     }
 
-    $stmt->bind_param("s", $this->name);
+    $stmt->bind_param($acronym, $identifying_data);
 
     if (!$stmt->execute()) {
       return [
@@ -92,11 +86,9 @@ class Fruit
     ];
   }
 
-  function create_self($table_suffix)
+  function create_self($table_name)
   {
-    $table_name = $table_suffix . "_table_name";
-
-    if (!$this->is_fruit_in_table($table_suffix)) {
+    if (!$this->is_fruit_in_table($table_name)) {
       return [
         "status" => false,
         "message" => "Error in is_fruit_in_table.",
@@ -104,7 +96,7 @@ class Fruit
       ];
     }
 
-    if ($this->is_fruit_in_table($table_suffix)["status"]) {
+    if ($this->is_fruit_in_table($table_name)["status"]) {
       return [
         "status" => false,
         "message" => "Could not create. A fruit of that name already exists.",
@@ -114,7 +106,7 @@ class Fruit
 
     $query =
       "INSERT INTO  " .
-      $this->$table_name .
+      $table_name .
       " ( `name`, `quantity`, `selling_price`) VALUES (?, ?, ?)";
 
     if (!($stmt = $this->conn->prepare($query))) {
@@ -147,10 +139,9 @@ class Fruit
     ];
   }
 
-  function is_fruit_in_table($table_suffix)
+  function is_fruit_in_table($table_name)
   {
-    $table_name = $table_suffix . "_table_name";
-    $query = "SELECT * FROM " . $this->$table_name . " WHERE name=?";
+    $query = "SELECT * FROM " . $table_name . " WHERE name=?";
 
     if (!($stmt = $this->conn->prepare($query))) {
       return false;
@@ -180,10 +171,9 @@ class Fruit
     return ["status" => true, "message" => "Entry exists."];
   }
 
-  function restock_self($table_suffix, $new_quantity)
+  function restock_self($table_name, $new_quantity)
   {
-    $table_name = $table_suffix . "_table_name";
-    $query = "UPDATE " . $this->$table_name . " SET quantity=? WHERE name=?";
+    $query = "UPDATE " . $table_name . " SET quantity=? WHERE name=?";
 
     if (!($stmt = $this->conn->prepare($query))) {
       return [
@@ -208,10 +198,9 @@ class Fruit
     return ["status" => true, "message" => "Successfully restocked!"];
   }
 
-  function delete_self($table_suffix)
+  function delete_self($table_name)
   {
-    $table_name = $table_suffix . "_table_name";
-    $query = "DELETE FROM " . $this->$table_name . " WHERE id=?";
+    $query = "DELETE FROM " . $table_name . " WHERE id=?";
 
     if (!($stmt = $this->conn->prepare($query))) {
       return [

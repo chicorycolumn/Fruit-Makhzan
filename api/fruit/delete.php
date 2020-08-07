@@ -8,11 +8,11 @@ $db = $database->getConnection();
 
 $fruit = new Fruit($db);
 $fruit->id = $_GET['id'];
-$table_suffix = $_GET['table'];
+$table_name = $_GET['table_name'];
 
-function go($db, $fruit, $table_suffix)
+function go($db, $fruit, $table_name)
 {
-  if (!($result = $fruit->delete_self($table_suffix))) {
+  if (!($result = $fruit->delete_self($table_name))) {
     return [
       "status" => false,
       "message" => "Error when calling Sfruit->delete_self.",
@@ -22,7 +22,7 @@ function go($db, $fruit, $table_suffix)
   return $result;
 }
 
-$response = go($db, $fruit, $table_suffix);
+$response = go($db, $fruit, $table_name);
 $database->closeConnection();
 print_r(json_encode($response));
 ?>

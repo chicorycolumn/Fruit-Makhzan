@@ -9,11 +9,27 @@ $db = $database->getConnection();
 
 $fruit = new Fruit($db);
 $fruit->name = $_GET['name'];
-$table_suffix = $_GET['table'];
+$table_name = $_GET['table_name'];
+$identifying_column = "name";
+$identifying_data = $_GET['name'];
+$acronym = "s";
 
-function go($db, $fruit, $table_suffix)
-{
-  if (!($result = $fruit->read_single($table_suffix))) {
+function go(
+  $db,
+  $fruit,
+  $table_name,
+  $identifying_column,
+  $identifying_data,
+  $acronym
+) {
+  if (
+    !($result = $fruit->read_single(
+      $table_name,
+      $identifying_column,
+      $identifying_data,
+      $acronym
+    ))
+  ) {
     return [
       "status" => false,
       "message" => "Error when calling Sfruit->read_single.",
@@ -25,17 +41,17 @@ function go($db, $fruit, $table_suffix)
     return $result;
   }
 
-  if (!($single_fruit = build_inv_nst_arrays($table_suffix, $result["data"]))) {
+  if (!($single_fruit = build_table_array($table_name, $result["data"]))) {
     return [
       "status" => false,
-      "message" => "Error in build_inv_nst_arrays. 1re",
+      "message" => "Error in build_table_array. 1re",
       "error" => $db->error,
     ];
   }
 
   if (
     !($result = $fruit->restock_self(
-      $table_suffix,
+      $table_name,
       $single_fruit[0]["quantity"] + 10
     ))
   ) {
@@ -50,7 +66,14 @@ function go($db, $fruit, $table_suffix)
     return $result;
   }
 
-  if (!($result = $fruit->read_single($table_suffix))) {
+  if (
+    !($result = $fruit->read_single(
+      $table_name,
+      $identifying_column,
+      $identifying_data,
+      $acronym
+    ))
+  ) {
     return [
       "status" => false,
       "message" => "Error when calling Sfruit->read_single.",
@@ -62,10 +85,10 @@ function go($db, $fruit, $table_suffix)
     return $result;
   }
 
-  if (!($fruit_arr = build_inv_nst_arrays($table_suffix, $result["data"]))) {
+  if (!($fruit_arr = build_table_array($table_name, $result["data"]))) {
     return [
       "status" => false,
-      "message" => "Error in build_inv_nst_arrays. 2re",
+      "message" => "Error in build_table_array. 2re",
       "error" => $db->error,
     ];
   }
@@ -75,7 +98,14 @@ function go($db, $fruit, $table_suffix)
   ];
 }
 
-$response = go($db, $fruit, $table_suffix);
+$response = go(
+  $db,
+  $fruit,
+  $table_name,
+  $identifying_column,
+  $identifying_data,
+  $acronym
+);
 $database->closeConnection();
 print_r(json_encode($response));
 ?>

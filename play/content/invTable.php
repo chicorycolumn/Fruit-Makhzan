@@ -18,11 +18,12 @@ $invTable = '
     <table id="inventory" class="table">
       <thead>
       <tr>
-        <th>ID</th>
         <th>Name</th>
+        <th>Quantity Yesterday</th>
         <th>Quantity</th>
         <th>Selling price</th>
-        <th>Total sales</th>
+        <th>Restock price</th>
+        <th>Resilience</th>
         <th>Action</th>
       </tr>
       </thead>

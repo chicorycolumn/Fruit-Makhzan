@@ -46,22 +46,12 @@ class Database
       exit();
     }
 
-    if (
-      isset($_SESSION["gid"]) &&
-      isset($_SESSION["inv_table_name"]) &&
-      isset($_SESSION["nst_table_name"])
-    ) {
+    if (isset($_SESSION["gid"]) && isset($_SESSION["inv_table_name"])) {
       wipe_previous_game($this->connection);
     }
 
     $_SESSION["gid"] = $gid;
     $_SESSION["inv_table_name"] = $_SESSION["gid"] . "__inv";
-    $_SESSION["nst_table_name"] = $_SESSION["gid"] . "__nst";
-
-    //Make Inventory table.
-    //
-    //
-    $table_name = $_SESSION["inv_table_name"];
 
     // $create_table_querystring = " (
     //   `id` int(11) NOT NULL AUTO_INCREMENT NUMERIC(1, 10) PRIMARY KEY,
@@ -78,13 +68,25 @@ class Database
     // $arr = [$day => $val];
     // $json = json_encode($arr);
 
-    $create_table_querystring = " (
+    //Make and populate Inventory table./////////////////////////////////////////////////
+    $table_name = $_SESSION["inv_table_name"];
+
+    $max_prices_json = json_encode(["Low" => 1, "Medium" => 2, "High" => 5]);
+    $pop_factors_json = json_encode(["weather" => true, "love" => false]);
+
+    $create_table_querystring =
+      " (
       `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
       `name` varchar(100) NOT NULL,
-      `quantity` int(11) NOT NULL,
-      `selling_price` int(11) NOT NULL,
+      `quantity` int(11) DEFAULT 0,
+      `selling_price` int(11) DEFAULT 0,
       `resilience` int(3) DEFAULT 50,
-      `max_price_set` json DEFAULT '{}',
+      `max_prices` json DEFAULT '" .
+      $max_prices_json .
+      "',
+      `popularity_factors` json DEFAULT '" .
+      $pop_factors_json .
+      "',
       `popularity_history` json DEFAULT '{}',
       `price_history` json DEFAULT '{}',
       `quantity_sold_history` json DEFAULT '{}',
@@ -95,37 +97,37 @@ class Database
       "INSERT INTO " .
       $table_name .
       " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
-      ('Morangines', 50, 5, 20)",
+      ('G1umbos', 50, 5, 20)",
 
       "INSERT INTO " .
       $table_name .
       " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
-      ('Miwiwoos', 50, 5)",
+      ('G2alangals', 50, 5, 28)",
 
       "INSERT INTO " .
       $table_name .
       " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
-      ('Misty Vistas', 50, 5)",
+      ('G3uziks', 50, 5, 70)",
 
       "INSERT INTO " .
       $table_name .
       " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
-      ('My Old Man The Mango', 80, 4)",
+      ('G4anguro Girl Grapes', 80, 4, 44)",
 
       "INSERT INTO " .
       $table_name .
       " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
-      ('Moloko', 80, 4)",
+      ('G5oongans', 80, 4, 11)",
 
       "INSERT INTO " .
       $table_name .
-      " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
-      ('Manchurianos', 200, 100)",
+      " (`name`, `quantity`, `selling_price`) VALUES
+      ('G6elid figs', 200, 100)",
 
       "INSERT INTO " .
       $table_name .
-      " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
-      ('Matey-wateys', 30, 10)",
+      " (`name`) VALUES
+      ('G7ok-Wan')",
     ];
 
     make_table(
@@ -135,11 +137,9 @@ class Database
       $query_array
     );
 
-    //Insert into games table.
-    //
-    //
+    //Populate games table./////////////////////////////////////////////////
     $query =
-      "INSERT INTO games (`Game_ID`, `Last_Accessed`, `Trend_Calculates`) VALUES (?, ?, ?)";
+      "INSERT INTO games (`game_id`, `last_accessed`, `trend_calculates`) VALUES (?, ?, ?)";
 
     if (!($stmt = $this->connection->prepare($query))) {
       mysqli_close($this->connection);

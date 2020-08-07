@@ -8,12 +8,27 @@ $database = new Database();
 $db = $database->getConnection();
 
 $fruit = new Fruit($db);
-$fruit->name = $_GET['name'];
-$table_suffix = $_GET['table'];
+$identifying_column = $_GET['identifying_column'];
+$identifying_data = $_GET['identifying_data'];
+$acronym = $_GET['acronym'];
+$table_name = $_GET['table_name'];
 
-function go($db, $fruit, $table_suffix)
-{
-  if (!($result = $fruit->read_single($table_suffix))) {
+function go(
+  $db,
+  $fruit,
+  $table_name,
+  $identifying_column,
+  $identifying_data,
+  $acronym
+) {
+  if (
+    !($result = $fruit->read_single(
+      $table_name,
+      $identifying_column,
+      $identifying_data,
+      $acronym
+    ))
+  ) {
     return [
       "status" => false,
       "message" => "Error when calling Sfruit->read_single.",
@@ -25,10 +40,10 @@ function go($db, $fruit, $table_suffix)
     return $result;
   }
 
-  if (!($fruit_arr = build_inv_nst_arrays($table_suffix, $result["data"]))) {
+  if (!($fruit_arr = build_table_array($table_name, $result["data"]))) {
     return [
       "status" => false,
-      "message" => "Error in build_inv_nst_arrays. 1res",
+      "message" => "Error in build_table_array. 1res",
       "error" => $db->error,
     ];
   }
@@ -38,7 +53,14 @@ function go($db, $fruit, $table_suffix)
     "data" => $fruit_arr,
   ];
 }
-$response = go($db, $fruit, $table_suffix);
+$response = go(
+  $db,
+  $fruit,
+  $table_name,
+  $identifying_column,
+  $identifying_data,
+  $acronym
+);
 $database->closeConnection();
 echo json_encode($response);
 ?>

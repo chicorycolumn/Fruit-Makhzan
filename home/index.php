@@ -17,10 +17,10 @@ if (isset($_COOKIE["makhzan"])) {
 
     $result = check_row_exists(
       $db,
-      "Game_ID",
+      "game_id",
       $putative_gid,
       "games",
-      "Last_Accessed",
+      "last_accessed",
       "s"
     );
 

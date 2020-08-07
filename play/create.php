@@ -7,6 +7,8 @@ if (!isset($_SESSION['gid'])) {
   header("Location: ../home");
   exit();
 }
+
+$inv_table_name = $_SESSION['inv_table_name'];
 ?>
 
 <?php
@@ -64,7 +66,7 @@ include '../master.php';
             url: '../api/fruit/create.php',
             dataType: 'json',
             data: {
-              table: "inv",
+              table_name: "<?php echo $inv_table_name; ?>",
               name: $("#name").val(),
               quantity: $("#quantity").val(),        
               selling_price: $("#selling_price").val(),

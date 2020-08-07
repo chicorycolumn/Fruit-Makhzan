@@ -31,44 +31,44 @@ function add_to_json(
   $conn->query($query);
 }
 
-function build_inv_nst_arrays($table, $result)
+function build_table_array($table, $result)
 {
   if (!$result->num_rows) {
     return false;
   }
 
-  $fruit_arr = [];
+  $res_array = [];
 
   while ($row = $result->fetch_assoc()) {
-    if ($table == "inv") {
-      $fruit_item = [
+    if ($table != "games") {
+      $item = [
         "id" => $row["id"],
         "name" => $row["name"],
         "quantity" => $row["quantity"],
         "selling_price" => $row["selling_price"],
-        "total_sales" => $row["total_sales"],
-        "created" => $row["created"],
+        "resilience" => $row["resilience"],
+        "max_prices" => $row["max_prices"],
+        "popularity_factors" => $row["popularity_factors"],
       ];
-    } elseif ($table == "nst") {
-      $durability_word = $row["durability"] > 6 ? "High" : "Medium";
-      $durability_word = $row["durability"] < 4 ? "Low" : $durability_word;
 
-      $fruit_item = [
-        "id" => $row["id"],
-        "name" => $row["name"],
-        "stock_price" => $row["stock_price"],
-        "resilience" => $row["resilience"] . "%",
-        "durability" => $durability_word,
-        // "max_price" => $row["max_price"],
+      // $durability_word = $row["durability"] > 6 ? "High" : "Medium";
+      // $durability_word = $row["durability"] < 4 ? "Low" : $durability_word;
+    } elseif ($table == "games") {
+      $item = [
+        "game_id" => $row["game_id"],
+        "last_accessed" => $row["last_accessed"],
+        "money_stat" => $row["money_stat"],
+        "days_stat" => $row["days_stat"],
+        "trend_calculates" => $row["trend_calculates"],
       ];
     } else {
       return false;
     }
 
-    array_push($fruit_arr, $fruit_item);
+    array_push($res_array, $item);
   }
 
-  return $fruit_arr;
+  return $res_array;
 }
 
 function make_table(
@@ -105,15 +105,6 @@ function wipe_previous_game($connection)
     die();
   }
 
-  $result = delete_table($connection, $_SESSION["nst_table_name"]);
-
-  if (!$result["status"]) {
-    mysqli_close($connection);
-    echo $result["message"];
-    echo $result["error"];
-    die();
-  }
-
   $result = delete_row($connection, "Game_ID", $_SESSION["gid"], "games", "s");
 
   if (!$result["status"]) {
@@ -126,7 +117,7 @@ function wipe_previous_game($connection)
 
 function clean_up_db($connection)
 {
-  $query = "SELECT * FROM games WHERE Last_Accessed < ?";
+  $query = "SELECT * FROM games WHERE last_accessed < ?";
 
   if (!($stmt = $connection->prepare($query))) {
     return [
@@ -172,13 +163,11 @@ function clean_up_db($connection)
       $log["Undeleted_rows"][] = $gid;
     }
 
-    foreach (["__inv", "__nst"] as $suffix) {
-      if (
-        !($result = delete_table($connection, $gid . $suffix)) ||
-        !$result["status"]
-      ) {
-        $log["Undeleted_tables"][] = $gid;
-      }
+    if (
+      !($result = delete_table($connection, $gid . "__inv")) ||
+      !$result["status"]
+    ) {
+      $log["Undeleted_tables"][] = $gid;
     }
   }
 

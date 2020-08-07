@@ -2,21 +2,16 @@
 
 echo "<link rel='stylesheet' type='text/css' href='.././css/mainStats.css' />";
 
-$mainStats =
-  '
+$mainStats = '
 <div class="mainDivStats">
 <div class="topHalf">
 <div class="mainStatBox">
   <p class="mainStatTitle">MONEY</p>
-  <p class="mainStatText">' .
-  $money .
-  ' gold dinars</p>
+  <p id="moneyStat" class="mainStatText">-- gold dinars</p>
   </div>
   <div class="mainStatBox">
   <p class="mainStatTitle">TIME</p>
-  <p class="mainStatText">' .
-  $days .
-  ' days</p>
+  <p id="daysStat" class="mainStatText">-- days</p>
   </div>
   </div>
   <p class="mainStatTitle">TABLE SPACE USED</p>
