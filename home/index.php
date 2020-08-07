@@ -29,7 +29,6 @@ if (isset($_COOKIE["makhzan"])) {
     } elseif (!isset($_SESSION["gid"])) {
       $_SESSION["gid"] = $_COOKIE["makhzan"];
       $_SESSION["inv_table_name"] = $_COOKIE["makhzan"] . "__inv";
-      $_SESSION["nst_table_name"] = $_COOKIE["makhzan"] . "__nst";
     }
     $database->closeConnection();
   }
@@ -78,6 +77,78 @@ include '../master.php';
             },
             success: function (result) {
                 if (result["status"]) { 
+
+
+
+
+
+
+        //           $.ajax(
+        // {
+        //     type: "GET",
+        //     url: '../api/fruit/read_single.php',
+        //     dataType: 'json',
+        //     data: {
+        //         table_name: "games",
+        //         identifying_column: "game_id",
+        //         identifying_data: "<?php echo $_SESSION["gid"]; ?>",
+        //         acronym: "s"
+        //     },
+        //     error: function (result) {
+        //       console.log("An error occurred immediately in $.ajax request.", result)
+        //       console.log(result.responseText)
+        //     },
+        //     success: function (result) {
+        //       console.log("a success")
+           
+        //       if (result["status"]){ 
+
+
+
+        //         $.ajax(
+        // {
+        //     type: "GET",
+        //     url: '../utils/set_session.php',
+        //     dataType: 'json',
+        //     data: {
+        //       money_stat: "games",
+        //       days_stat: "game_id",
+        //       trend_calculates: "<?php echo $_SESSION["gid"]; ?>"
+        //     },
+        //     error: function (result) {
+        //       console.log("An error occurred immediately in $.ajax request.", result)
+        //       console.log(result.responseText)
+        //     },
+        //     success: function (result) {
+        //       console.log("a success")
+           
+        //       if (result["status"]){ 
+        //       } else {
+        //         console.log(result["message"])
+        //         console.log(result["error"])
+        //       }
+        //   }}) 
+
+
+        //       } else {
+        //         console.log(result["message"])
+        //         console.log(result["error"])
+        //       }
+        //   }}) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                   window.location = "../play";
                   
                 } else {

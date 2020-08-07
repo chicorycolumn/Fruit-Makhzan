@@ -13,7 +13,6 @@ class Database
   private $host = "localhost";
   private $db_name = "fruit_makhzan_db";
   public $inv_table_name;
-  public $nst_table_name;
   public $connection;
   // $this->conn->exec("set names utf8");
 

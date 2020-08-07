@@ -7,7 +7,6 @@ class Fruit
 {
   private $conn;
   private $inv_table_name;
-  private $nst_table_name;
 
   public $id;
   public $name;

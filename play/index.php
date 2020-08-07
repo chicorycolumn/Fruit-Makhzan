@@ -56,6 +56,8 @@ $content =
   '
 </h1>
 
+<button onClick="checkSession()">Check Session</button>
+
 <div class="mainDiv">
   ' .
   $mainStats .
@@ -195,6 +197,16 @@ function getGameStats(){
      //So waht do we want to do with them?
      //Well, calculate popularity, and set popularity for inv table. 
      //Then evolve the TCs, and reupload them to db.
+
+     //Maybe you only pull the games table data from db once, upon New Game / Continue.
+     //Then you increment money, days, TCs all locally.
+     //And every "day" you upload the modified game stats to db.
+     //But you don't bother pulling down. That's only at start of new session.
+
+     //So we could indeed make this an async request, which if it stalls wyould indeed stall the game.
+     //But I think that's fine because if you can't load the game stats, you can't play the game.
+
+     //Aha! So upon click from home/index, load the game stats and store them on SESSION.
 
 
                 //     //get TCs and use to calculate the below
@@ -386,6 +398,10 @@ function deleteFruit(id, name){
           }
       });
   }
+}
+
+function checkSession(){
+  console.log(`<?php print_r($_SESSION); ?>`)
 }
 </script>
 
