@@ -34,6 +34,8 @@ if (isset($_COOKIE["makhzan"])) {
   }
 }
 
+$gid = $_SESSION['gid'];
+
 $content =
   '
 <br/>
@@ -76,32 +78,32 @@ include '../master.php';
               console.log(result);
             },
             success: function (result) {
+                console.log("a1 success")
                 if (result["status"]) { 
+      console.log("a1 true")
+      window.location = "../play";
 
-
-
-
-
-
-        //           $.ajax(
-        // {
-        //     type: "GET",
-        //     url: '../api/fruit/read_single.php',
-        //     dataType: 'json',
-        //     data: {
-        //         table_name: "games",
-        //         identifying_column: "game_id",
-        //         identifying_data: "<?php echo $_SESSION["gid"]; ?>",
-        //         acronym: "s"
-        //     },
-        //     error: function (result) {
-        //       console.log("An error occurred immediately in $.ajax request.", result)
-        //       console.log(result.responseText)
-        //     },
-        //     success: function (result) {
-        //       console.log("a success")
+  // $.ajax(
+  //       {
+  //           type: "GET",
+  //           url: '../api/fruit/read_single.php',
+  //           dataType: 'json',
+  //           data: {
+  //               table_name: "games",
+  //               identifying_column: "game_id",
+  //               identifying_data: "<?php echo $gid; ?>",
+  //               acronym: "s"
+  //           },
+  //           error: function (result) {
+  //             console.log("An error occurred immediately in $.ajax request.", result)
+  //             console.log(result.responseText)
+  //           },
+  //           success: function (result) {
+  //             console.log("a2 success")
+  //             console.log("a2 res", result)
            
-        //       if (result["status"]){ 
+  //             if (result["status"]){ 
+  //               console.log("a2 true")
 
 
 
@@ -111,16 +113,18 @@ include '../master.php';
         //     url: '../utils/set_session.php',
         //     dataType: 'json',
         //     data: {
-        //       money_stat: "games",
-        //       days_stat: "game_id",
-        //       trend_calculates: "<?php echo $_SESSION["gid"]; ?>"
+        //       money_stat: 0,
+        //       days_stat: 0,
+        //       trend_calculates: '{}'
         //     },
         //     error: function (result) {
-        //       console.log("An error occurred immediately in $.ajax request.", result)
+        //       console.log("An error occurred immediately in this $.ajax request.", result)
         //       console.log(result.responseText)
+        //       // window.location = "../play";
         //     },
         //     success: function (result) {
-        //       console.log("a success")
+        //       console.log("a3 success")
+        //       window.location = "../play";
            
         //       if (result["status"]){ 
         //       } else {
@@ -130,11 +134,11 @@ include '../master.php';
         //   }}) 
 
 
-        //       } else {
-        //         console.log(result["message"])
-        //         console.log(result["error"])
-        //       }
-        //   }}) 
+          //     } else {
+          //       console.log(result["message"])
+          //       console.log(result["error"])
+          //     }
+          // }}) 
 
 
 
@@ -149,7 +153,8 @@ include '../master.php';
 
 
 
-                  window.location = "../play";
+
+                 
                   
                 } else {
                   console.log(result["message"]);

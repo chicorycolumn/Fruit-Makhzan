@@ -26,8 +26,8 @@ function go($database, $db)
 
 $response = go($database, $db);
 $response["extra"] = clean_up_db($db);
-//No need to close conn, as already gets closed at end of startNewGame().
 
+$database->closeConnection(); ///////////////////////////
 echo json_encode($response);
 return;
 ?>

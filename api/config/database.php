@@ -136,16 +136,16 @@ class Database
       $query_array
     );
 
-    //Populate games table./////////////////////////////////////////////////
+    //Add row to games table./////////////////////////////////////////////////
     $query =
-      "INSERT INTO games (`game_id`, `last_accessed`, `trend_calculates`) VALUES (?, ?, ?)";
+      "INSERT INTO games (`game_id`, `last_accessed`, `trend_calculates`, `money_stat`, `days_stat`) VALUES (?, ?, ?, ?, ?)";
 
     if (!($stmt = $this->connection->prepare($query))) {
-      mysqli_close($this->connection);
+      // mysqli_close($this->connection);
       return [
         "status" => false,
         "message" => "Couldn't prepare query.",
-        "error" => $connection->error,
+        "error" => $this->connection->error,
       ];
     }
 
@@ -157,21 +157,29 @@ class Database
       "conformity" => random_int(1, 100),
     ]);
 
+    $money_initial = 13;
+    $days_initial = 14;
+
     $g = $_SESSION["gid"];
     $t = time();
-    $stmt->bind_param("sis", $g, $t, $trends);
+    $stmt->bind_param("sisii", $g, $t, $trends, $money_initial, $days_initial);
 
     if (!$stmt->execute()) {
-      mysqli_close($this->connection);
+      // mysqli_close($this->connection);
       return [
         "status" => false,
         "message" => "An error in execution.",
-        "error" => $connection->error,
+        "error" => $this->connection->error,
       ];
     }
 
     $stmt->close();
-    $this->connection->close(); //mysqli_close($this->connection);
+    // $this->connection->close(); //mysqli_close($this->connection);
+
+    $_SESSION["trend_calculates"] = $trends;
+    $_SESSION["money_stat"] = $money_initial;
+    $_SESSION["days_stat"] = $days_initial;
+
     return [
       "status" => true,
       "message" => "Successfully started a new game.",

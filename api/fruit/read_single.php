@@ -21,6 +21,13 @@ function go(
   $identifying_data,
   $acronym
 ) {
+  // return [
+  //   "tn" => $table_name,
+  //   "idc" => $identifying_column,
+  //   "ida" => $identifying_data,
+  //   "ac" => $acronym,
+  // ];
+
   if (
     !($result = $fruit->read_single(
       $table_name,
@@ -39,7 +46,9 @@ function go(
   if (!$result["status"]) {
     return $result;
   }
-
+  ////////////////////////////
+  // return $result;
+  ////////////////////////////
   if (!($fruit_arr = build_table_array($table_name, $result["data"]))) {
     return [
       "status" => false,

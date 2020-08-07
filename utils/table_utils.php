@@ -37,6 +37,7 @@ function build_table_array($table, $result)
     return false;
   }
 
+  // $res_array = [["test" => "eg"]];
   $res_array = [];
 
   while ($row = $result->fetch_assoc()) {
@@ -54,6 +55,7 @@ function build_table_array($table, $result)
       // $durability_word = $row["durability"] > 6 ? "High" : "Medium";
       // $durability_word = $row["durability"] < 4 ? "Low" : $durability_word;
     } elseif ($table == "games") {
+      // $item = ["greeting" => "smello"];
       $item = [
         "game_id" => $row["game_id"],
         "last_accessed" => $row["last_accessed"],

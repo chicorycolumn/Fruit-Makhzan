@@ -89,8 +89,7 @@ include '../master.php';
 
 <script>
 //' For some reason this is necessary.
-let trend_calculates = null
-getGameStats()
+// let trend_calculates = null
 
 fillInvTable()
 
@@ -158,6 +157,7 @@ function fillInvTable(shouldWipe){
 }
 
 function getGameStats(){
+  return;
   $.ajax(
         {
             type: "GET",
@@ -175,6 +175,7 @@ function getGameStats(){
             },
             success: function (result) {
               console.log("a success")
+              console.log(result)
            
               if (result["status"]){ 
 
@@ -187,6 +188,40 @@ function getGameStats(){
                     return $(this).is("#daysStat");
                 })
                 el.text(result["data"][0]["days_stat"] + " days")  
+
+//Now make ajax to set_session to store these money and days in session.
+
+                $.ajax(
+        {
+            type: "GET",
+            url: '.././utils/set_session.php',
+            dataType: 'json',
+            data: {
+              money_stat: "111",
+              days_stat: "222",
+              trend_calculates: "333"
+            },
+            error: function (result) {
+              console.log("An error occurred immediately in the $.ajax request.", result)
+              console.log(result.responseText)
+            },
+            success: function (result) {
+              console.log("a3 success")
+              // window.location = "../play";
+           
+              if (result["status"]){ 
+              } else {
+                console.log(result["message"])
+                console.log(result["error"])
+              }
+          }}) 
+
+
+
+
+
+
+
 
      //Okay, now we've got the trend calculates
 
