@@ -17,14 +17,17 @@ $identifying_column = $_GET['identifying_column'];
 $identifying_data = $_GET['identifying_data'];
 $acronym = $_GET['acronym'];
 $table_name = $_GET['table_name'];
-$get_full = false;
-$load_session_from_db = false;
 
-if (isset($_GET['get_full'])) {
-  $get_full = $_GET['get_full'];
+$get_full = false;
+if (isset($_GET['get_full']) && json_decode($_GET['get_full'])) {
+  $get_full = true;
 }
-if (isset($_GET['load_session_from_db'])) {
-  $load_session_from_db = $_GET['load_session_from_db'];
+$load_session_from_db = false;
+if (
+  isset($_GET['load_session_from_db']) &&
+  json_decode($_GET['load_session_from_db'])
+) {
+  $load_session_from_db = true;
 }
 
 function go(

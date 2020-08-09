@@ -95,38 +95,30 @@ class Database
     $query_array = [
       "INSERT INTO " .
       $table_name .
-      " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
-      ('G1umbos', 50, 5, 20)",
+      " (`name`, `quantity`, `selling_price`, `resilience`, `max_prices`, `popularity_factors`) VALUES
+      ('Melton-1', 50, 5, 20, '" .
+      json_encode(["Low" => 1, "Medium" => 2, "High" => 5]) .
+      "', '" .
+      json_encode(["weather" => true, "love" => false]) .
+      "')",
 
       "INSERT INTO " .
       $table_name .
-      " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
-      ('G2alangals', 50, 5, 28)",
+      " (`name`, `quantity`, `selling_price`, `resilience`, `max_prices`, `popularity_factors`) VALUES
+      ('Magga-2', 50, 5, 20, '" .
+      json_encode(["Low" => 10, "Medium" => 20, "High" => 50]) .
+      "', '" .
+      json_encode(["weather" => true, "politics" => true]) .
+      "')",
 
       "INSERT INTO " .
       $table_name .
-      " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
-      ('G3uziks', 50, 5, 70)",
-
-      "INSERT INTO " .
-      $table_name .
-      " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
-      ('G4anguro Girl Grapes', 80, 4, 44)",
-
-      "INSERT INTO " .
-      $table_name .
-      " (`name`, `quantity`, `selling_price`, `resilience`) VALUES
-      ('G5oongans', 80, 4, 11)",
-
-      "INSERT INTO " .
-      $table_name .
-      " (`name`, `quantity`, `selling_price`) VALUES
-      ('G6elid figs', 200, 100)",
-
-      "INSERT INTO " .
-      $table_name .
-      " (`name`) VALUES
-      ('G7ok-Wan')",
+      " (`name`, `quantity`, `selling_price`, `resilience`, `max_prices`, `popularity_factors`) VALUES
+      ('Met Mit Motts 3', 50, 5, 20, '" .
+      json_encode(["Low" => 100, "Medium" => 200, "High" => 500]) .
+      "', '" .
+      json_encode(["decadence" => true, "conformity" => false]) .
+      "')",
     ];
 
     make_table(

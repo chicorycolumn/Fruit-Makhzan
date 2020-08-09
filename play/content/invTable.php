@@ -19,7 +19,7 @@ $invTable = '
       <thead>
       <tr>
         <th>Name</th>
-        <th>Quantity Yesterday</th>
+        <th>QY</th>
         <th>Quantity</th>
         <th>Selling price</th>
         <th>Restock price</th>

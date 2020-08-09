@@ -72,16 +72,19 @@ function build_table_array($table, $result, $get_full)
         "quantity" => $row["quantity"],
         "selling_price" => $row["selling_price"],
         "resilience" => $row["resilience"],
-        "max_prices" => $row["max_prices"],
-        "popularity_factors" => $row["popularity_factors"],
+        "max_prices" => json_decode($row["max_prices"]),
+        "popularity_factors" => json_decode($row["popularity_factors"]),
       ];
 
       if ($get_full) {
-        $item['popularity_history'] = $row['popularity_history'];
-        $item['price_history'] = $row['price_history'];
-        $item['quantity_sold_history'] = $row['quantity_sold_history'];
-        $item['from_quantity_sold_history'] =
-          $row['from_quantity_sold_history'];
+        $item['popularity_history'] = json_decode($row['popularity_history']);
+        $item['price_history'] = json_decode($row['price_history']);
+        $item['quantity_sold_history'] = json_decode(
+          $row['quantity_sold_history']
+        );
+        $item['from_quantity_sold_history'] = json_decode(
+          $row['from_quantity_sold_history']
+        );
       }
 
       // $durability_word = $row["durability"] > 6 ? "High" : "Medium";

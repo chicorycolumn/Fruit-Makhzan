@@ -8,10 +8,10 @@ $database = new Database();
 $db = $database->getConnection();
 $fruit = new Fruit($db);
 $table_name = $_GET['table_name'];
-$get_full = false;
 
-if (isset($_GET['get_full'])) {
-  $get_full = $_GET['get_full'];
+$get_full = false;
+if (isset($_GET['get_full']) && json_decode($_GET['get_full'])) {
+  $get_full = true;
 }
 
 function go($db, $fruit, $table_name, $get_full)

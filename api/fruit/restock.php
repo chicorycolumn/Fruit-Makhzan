@@ -9,6 +9,7 @@ $db = $database->getConnection();
 
 $fruit = new Fruit($db);
 $fruit->name = $_GET['name'];
+$quantity = $_GET['quantity'];
 $table_name = $_GET['table_name'];
 $identifying_column = "name";
 $identifying_data = $_GET['name'];
@@ -18,6 +19,7 @@ $get_full = false;
 function go(
   $db,
   $fruit,
+  $quantity,
   $table_name,
   $identifying_column,
   $identifying_data,
@@ -76,7 +78,7 @@ function go(
   if (
     !($result = $fruit->restock_self(
       $table_name,
-      $single_fruit[0]["quantity"] + 10
+      $single_fruit[0]["quantity"] + $quantity
     ))
   ) {
     return [
@@ -143,6 +145,7 @@ function go(
 $response = go(
   $db,
   $fruit,
+  $quantity,
   $table_name,
   $identifying_column,
   $identifying_data,
