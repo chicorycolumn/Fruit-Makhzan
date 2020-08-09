@@ -1,5 +1,34 @@
 <?php
 
+function delete_manipulated_cookie()
+{
+  if (isset($_COOKIE["makhzan"])) {
+    $putative_gid = $_COOKIE["makhzan"];
+
+    if (preg_match("/[^\w]/i", $putative_gid) || strlen($putative_gid) != 15) {
+      setcookie("makhzan", "", time() - 3600);
+    } else {
+      include_once '../api/config/database.php';
+      $database = new Database();
+      $db = $database->getConnection();
+
+      $result = check_row_exists(
+        $db,
+        "game_id",
+        $putative_gid,
+        "games",
+        "last_accessed",
+        "s"
+      );
+
+      if (false || !$result || !$result["status"] || !$result["rows"]) {
+        setcookie("makhzan", "", time() - 3600);
+      }
+      $database->closeConnection();
+    }
+  }
+}
+
 function add_to_json(
   $conn,
   $table_name,
@@ -31,17 +60,12 @@ function add_to_json(
   $conn->query($query);
 }
 
-function build_table_array($table, $result)
+function build_table_array($table, $result, $get_full)
 {
-  if (!$result->num_rows) {
-    return false;
-  }
-
-  // $res_array = [["test" => "eg"]];
   $res_array = [];
 
   while ($row = $result->fetch_assoc()) {
-    if ($table != "games") {
+    if (substr($table, -3) == "inv") {
       $item = [
         "id" => $row["id"],
         "name" => $row["name"],
@@ -51,6 +75,14 @@ function build_table_array($table, $result)
         "max_prices" => $row["max_prices"],
         "popularity_factors" => $row["popularity_factors"],
       ];
+
+      if ($get_full) {
+        $item['popularity_history'] = $row['popularity_history'];
+        $item['price_history'] = $row['price_history'];
+        $item['quantity_sold_history'] = $row['quantity_sold_history'];
+        $item['from_quantity_sold_history'] =
+          $row['from_quantity_sold_history'];
+      }
 
       // $durability_word = $row["durability"] > 6 ? "High" : "Medium";
       // $durability_word = $row["durability"] < 4 ? "Low" : $durability_word;
@@ -154,12 +186,12 @@ function clean_up_db($connection)
   $gid_arr = [];
   $log = [];
   while ($row = $result->fetch_assoc()) {
-    array_push($gid_arr, $row["Game_ID"]);
+    array_push($gid_arr, $row["game_id"]);
   }
 
   foreach ($gid_arr as $gid) {
     if (
-      !($result = delete_row($connection, "Game_ID", $gid, "games", "s")) ||
+      !($result = delete_row($connection, "game_id", $gid, "games", "s")) ||
       !$result["status"]
     ) {
       $log["Undeleted_rows"][] = $gid;

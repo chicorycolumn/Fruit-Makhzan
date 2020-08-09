@@ -1,7 +1,9 @@
 <?php
+include '../utils/table_utils.php';
 if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
+delete_manipulated_cookie();
 
 if (!isset($_SESSION['gid'])) {
   header("Location: ../home");

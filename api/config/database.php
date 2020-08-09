@@ -51,6 +51,7 @@ class Database
 
     $_SESSION["gid"] = $gid;
     $_SESSION["inv_table_name"] = $_SESSION["gid"] . "__inv";
+    $table_name = $_SESSION["inv_table_name"];
 
     // $create_table_querystring = " (
     //   `id` int(11) NOT NULL AUTO_INCREMENT NUMERIC(1, 10) PRIMARY KEY,
@@ -68,7 +69,6 @@ class Database
     // $json = json_encode($arr);
 
     //Make and populate Inventory table./////////////////////////////////////////////////
-    $table_name = $_SESSION["inv_table_name"];
 
     $max_prices_json = json_encode(["Low" => 1, "Medium" => 2, "High" => 5]);
     $pop_factors_json = json_encode(["weather" => true, "love" => false]);
@@ -157,12 +157,19 @@ class Database
       "conformity" => random_int(1, 100),
     ]);
 
-    $money_initial = 13;
-    $days_initial = 14;
+    $money_initial = 0;
+    $days_initial = 0;
 
-    $g = $_SESSION["gid"];
-    $t = time();
-    $stmt->bind_param("sisii", $g, $t, $trends, $money_initial, $days_initial);
+    $gid = $_SESSION["gid"];
+    $timestamp = time();
+    $stmt->bind_param(
+      "sisii",
+      $gid,
+      $timestamp,
+      $trends,
+      $money_initial,
+      $days_initial
+    );
 
     if (!$stmt->execute()) {
       // mysqli_close($this->connection);
@@ -176,9 +183,9 @@ class Database
     $stmt->close();
     // $this->connection->close(); //mysqli_close($this->connection);
 
-    $_SESSION["trend_calculates"] = $trends;
-    $_SESSION["money_stat"] = $money_initial;
-    $_SESSION["days_stat"] = $days_initial;
+    $_SESSION["trend_calculates"] = $trends; ///////////////////////////////////success!
+    $_SESSION["money_stat"] = $money_initial; //////////////////////////////////success!
+    $_SESSION["days_stat"] = $days_initial; ////////////////////////////////////success!
 
     return [
       "status" => true,

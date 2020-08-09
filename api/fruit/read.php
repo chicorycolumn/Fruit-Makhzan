@@ -8,10 +8,15 @@ $database = new Database();
 $db = $database->getConnection();
 $fruit = new Fruit($db);
 $table_name = $_GET['table_name'];
+$get_full = false;
 
-function go($db, $fruit, $table_name)
+if (isset($_GET['get_full'])) {
+  $get_full = $_GET['get_full'];
+}
+
+function go($db, $fruit, $table_name, $get_full)
 {
-  if (!($result = $fruit->read($table_name))) {
+  if (!($result = $fruit->read($table_name, $get_full))) {
     return [
       "status" => false,
       "message" => "An error when calling Sfruit->read.",
@@ -19,11 +24,27 @@ function go($db, $fruit, $table_name)
     ];
   }
 
+  // print_r($result);
+  // die();
+
   if (!$result["status"]) {
     return $result;
   }
 
-  if (!($res_array = build_table_array($table_name, $result["data"]))) {
+  if (!$result['data']->num_rows) {
+    return [
+      "status" => false,
+      "message" =>
+        "There are no rows from reading the db. Apparently no rows at all in table (" .
+        $table_name .
+        ").",
+      "error" => $db->error,
+    ];
+  }
+
+  if (
+    !($res_array = build_table_array($table_name, $result["data"], $get_full))
+  ) {
     return [
       "status" => false,
       "message" => "An error in build_table_array. 1rea",
@@ -37,7 +58,7 @@ function go($db, $fruit, $table_name)
   ];
 }
 
-$response = go($db, $fruit, $table_name);
+$response = go($db, $fruit, $table_name, $get_full);
 $database->closeConnection();
 echo json_encode($response);
 

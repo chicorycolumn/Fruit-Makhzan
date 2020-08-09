@@ -1,10 +1,10 @@
 <?php
 include_once '../api/config/database.php';
 include '../utils/table_utils.php';
-
 if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
+delete_manipulated_cookie();
 
 if (!isset($_SESSION['gid'])) {
   header("Location: ../home");
@@ -89,17 +89,8 @@ include '../master.php';
 
 <script>
 //' For some reason this is necessary.
-// let trend_calculates = null
-
 fillInvTable()
-
-function setTrendCalculates(data){
-  trend_calculates = data
-}
-
-function seeTrendCalculates(){
-  console.log(trend_calculates)
-}
+getGameStats()
 
 function fillInvTable(shouldWipe){
   if (shouldWipe){$('#inventory tbody > tr').remove();}
@@ -109,7 +100,8 @@ function fillInvTable(shouldWipe){
             url: '../api/fruit/read.php',
             dataType: 'json',
             data: {
-                table_name: "<?php echo $inv_table_name; ?>"
+                table_name: "<?php echo $inv_table_name; ?>",
+                get_full: false
             },
             error: function (result) {
               console.log("An error occurred immediately in $.ajax request.", result)
@@ -130,17 +122,14 @@ function fillInvTable(shouldWipe){
 
                     //get TCs and use to calculate the below
 
-                    let trend_calculates = "<?php echo $inv_table_name; ?>"
-                    let animal = "<?php echo $animal; ?>"
-
                     let popularity = 33
                     let max_selling_price = 11
                     let restock_price = 5
 
                     response += "<tr>"+
                     "<td>"+name+" ("+popularity+"%)"+"</td>"+
-                    "<td>"+trend_calculates+"</td>"+
-                    "<td>"+animal+"</td>"+
+                    "<td>"+quantity+"</td>"+
+                    "<td>"+quantity+"</td>"+
                     "<td>"+selling_price+"</td>"+
                     "<td>"+restock_price+"</td>"+
                     "<td>"+resilience+"</td>"+
@@ -157,119 +146,22 @@ function fillInvTable(shouldWipe){
 }
 
 function getGameStats(){
-  return;
-  $.ajax(
-        {
-            type: "GET",
-            url: '../api/fruit/read_single.php',
-            dataType: 'json',
-            data: {
-                table_name: "games",
-                identifying_column: "game_id",
-                identifying_data: "<?php echo $gid; ?>",
-                acronym: "s"
-            },
-            error: function (result) {
-              console.log("An error occurred immediately in $.ajax request.", result)
-              console.log(result.responseText)
-            },
-            success: function (result) {
-              console.log("a success")
-              console.log(result)
-           
-              if (result["status"]){ 
 
-                let el = $("p").filter(function() {
+let money_stat = "<?php echo $_SESSION['money_stat']; ?>"
+let days_stat = "<?php echo $_SESSION['days_stat']; ?>"
+let trend_calculates = `<?php echo $_SESSION['trend_calculates']; ?>`
+
+  let el = $("p").filter(function() {
                     return $(this).is("#moneyStat");
                 })
-                el.text(result["data"][0]["money_stat"] + " gold dinar")  
+  el.text(money_stat + " Gold Dinar")  
 
-                el = $("p").filter(function() {
-                    return $(this).is("#daysStat");
-                })
-                el.text(result["data"][0]["days_stat"] + " days")  
+  el = $("p").filter(function() {
+      return $(this).is("#daysStat");
+  })
+  el.text(days_stat + " Days")  
 
-//Now make ajax to set_session to store these money and days in session.
-
-                $.ajax(
-        {
-            type: "GET",
-            url: '.././utils/set_session.php',
-            dataType: 'json',
-            data: {
-              money_stat: "111",
-              days_stat: "222",
-              trend_calculates: "333"
-            },
-            error: function (result) {
-              console.log("An error occurred immediately in the $.ajax request.", result)
-              console.log(result.responseText)
-            },
-            success: function (result) {
-              console.log("a3 success")
-              // window.location = "../play";
-           
-              if (result["status"]){ 
-              } else {
-                console.log(result["message"])
-                console.log(result["error"])
-              }
-          }}) 
-
-
-
-
-
-
-
-
-     //Okay, now we've got the trend calculates
-
-    //  let trend_calculates = result["data"][0]["trend_calculates"];
-    // console.log("*", trend_calculates)
-    setTrendCalculates(13)
-     
-     //So waht do we want to do with them?
-     //Well, calculate popularity, and set popularity for inv table. 
-     //Then evolve the TCs, and reupload them to db.
-
-     //Maybe you only pull the games table data from db once, upon New Game / Continue.
-     //Then you increment money, days, TCs all locally.
-     //And every "day" you upload the modified game stats to db.
-     //But you don't bother pulling down. That's only at start of new session.
-
-     //So we could indeed make this an async request, which if it stalls wyould indeed stall the game.
-     //But I think that's fine because if you can't load the game stats, you can't play the game.
-
-     //Aha! So upon click from home/index, load the game stats and store them on SESSION.
-
-
-                //     //get TCs and use to calculate the below
-
-                //     let trend_calculates = "<?php echo $inv_table_name; ?>"
-                //     let animal = "<?php echo $animal; ?>"
-
-                //     let popularity = 33
-                //     let max_selling_price = 11
-                //     let restock_price = 5
-
-                //     response += "<tr>"+
-                //     "<td>"+name+" ("+popularity+"%)"+"</td>"+
-                //     "<td>"+trend_calculates+"</td>"+
-                //     "<td>"+animal+"</td>"+
-                //     "<td>"+selling_price+"</td>"+
-                //     "<td>"+restock_price+"</td>"+
-                //     "<td>"+resilience+"</td>"+
-                //     "<td><button class='button1' onClick=printSingle('"+formattedName+"','inv')>Print single</button> <button class='button1' onClick=restockFruit('"+formattedName+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+id+"','"+formattedName+"')>Throw away</button></td>"+
-                //     "</tr>";
-
-                //     $(response).appendTo($("#inventory"));
-                // })
-              } else {
-                console.log(result["message"])
-                console.log(result["error"])
-              }
-          }})   
+  console.log("getGameStats fxn says TCs are:", trend_calculates)
 }
 
 function newDay(){
@@ -295,7 +187,8 @@ function printSingle(name){
             table_name:  "<?php echo $inv_table_name; ?>",
             identifying_column: "name",
             identifying_data: name,
-            acronym: "s"
+            acronym: "s",
+            get_full: false
 
           },
           error: function (result) {

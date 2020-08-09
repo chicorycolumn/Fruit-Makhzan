@@ -13,6 +13,7 @@ $table_name = $_GET['table_name'];
 $identifying_column = "name";
 $identifying_data = $_GET['name'];
 $acronym = "s";
+$get_full = false;
 
 function go(
   $db,
@@ -20,14 +21,16 @@ function go(
   $table_name,
   $identifying_column,
   $identifying_data,
-  $acronym
+  $acronym,
+  $get_full
 ) {
   if (
     !($result = $fruit->read_single(
       $table_name,
       $identifying_column,
       $identifying_data,
-      $acronym
+      $acronym,
+      $get_full
     ))
   ) {
     return [
@@ -41,7 +44,28 @@ function go(
     return $result;
   }
 
-  if (!($single_fruit = build_table_array($table_name, $result["data"]))) {
+  if (!$result['data']->num_rows) {
+    return [
+      "status" => false,
+      "message" =>
+        "There are no rows from reading the db. The identifying data (" .
+        $identifying_data .
+        ") at identifying column (" .
+        $identifying_column .
+        ") does not correspond to anything in the table (" .
+        $table_name .
+        ").",
+      "error" => $db->error,
+    ];
+  }
+
+  if (
+    !($single_fruit = build_table_array(
+      $table_name,
+      $result["data"],
+      $get_full
+    ))
+  ) {
     return [
       "status" => false,
       "message" => "Error in build_table_array. 1re",
@@ -71,7 +95,8 @@ function go(
       $table_name,
       $identifying_column,
       $identifying_data,
-      $acronym
+      $acronym,
+      $get_full
     ))
   ) {
     return [
@@ -85,7 +110,24 @@ function go(
     return $result;
   }
 
-  if (!($fruit_arr = build_table_array($table_name, $result["data"]))) {
+  if (!$result['data']->num_rows) {
+    return [
+      "status" => false,
+      "message" =>
+        "There are no rows from reading the db. The identifying data (" .
+        $identifying_data .
+        ") at identifying column (" .
+        $identifying_column .
+        ") does not correspond to anything in the table (" .
+        $table_name .
+        ").",
+      "error" => $db->error,
+    ];
+  }
+
+  if (
+    !($fruit_arr = build_table_array($table_name, $result["data"], $get_full))
+  ) {
     return [
       "status" => false,
       "message" => "Error in build_table_array. 2re",
@@ -104,7 +146,8 @@ $response = go(
   $table_name,
   $identifying_column,
   $identifying_data,
-  $acronym
+  $acronym,
+  $get_full
 );
 $database->closeConnection();
 print_r(json_encode($response));

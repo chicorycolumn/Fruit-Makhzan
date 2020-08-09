@@ -20,7 +20,7 @@ class Fruit
     $this->conn = $db;
   }
 
-  function read($table_name)
+  function read($table_name, $get_full)
   {
     $query = "SELECT * FROM " . $table_name . " ORDER BY id DESC";
 
@@ -53,10 +53,33 @@ class Fruit
     $table_name,
     $identifying_column,
     $identifying_data,
-    $acronym
+    $acronym,
+    $get_full
   ) {
+    $columns = "*";
+    if (substr($table_name, -3) == "inv" && !$get_full) {
+      $columns =
+        "`id`, `name`, `quantity`, `selling_price`, `resilience`, `max_prices`, `popularity_factors`";
+    }
+
+    // return [
+    //   $table_name,
+    //   $identifying_column,
+    //   $identifying_data,
+    //   $acronym,
+    //   $get_full,
+    // ];
+
     $query =
-      "SELECT * FROM " . $table_name . " WHERE " . $identifying_column . "=?";
+      "SELECT " .
+      $columns .
+      " FROM `" .
+      $table_name .
+      "` WHERE " .
+      $identifying_column .
+      "=?";
+
+    // $query = "SELECT * FROM `zulkiw6ai8w2ddt__inv` WHERE quantity=?";
 
     if (!($stmt = $this->conn->prepare($query))) {
       return [
@@ -65,8 +88,15 @@ class Fruit
         "error" => $this->conn->error,
       ];
     }
-
+    // $acr = "i";
+    // $num = 50;
+    // $stmt->bind_param($acr, $num);
     $stmt->bind_param($acronym, $identifying_data);
+
+    // $giddy = "zulkiw6ai8w2ddt";
+    // $query = "SELECT * FROM games WHERE game_id=?";
+    // $stmt = $this->conn->prepare($query);
+    // $stmt->bind_param("s", $giddy);
 
     if (!$stmt->execute()) {
       return [
