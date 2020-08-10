@@ -57,6 +57,7 @@ $content =
 </h1>
 
 <button onClick="checkSession()">Check Session</button>
+<button onClick="checkTCs()">Check TCs and Seed Data</button>
 
 <div class="mainDiv">
   ' .
@@ -88,9 +89,9 @@ include '../master.php';
 
 
 <script>
-//' For some reason this is necessary.
+//' For some reason this apostrophe is necessary.
 
-console.log("********", `<?php print_r($_SESSION['trend_calculates']); ?>`)
+let seed_data = <?php print_r(json_encode($_SESSION['seed_data'])); ?>
 
 let trend_calculates = {
   "weather": parseInt(`<?php print_r(
@@ -110,8 +111,13 @@ let trend_calculates = {
     ); ?>`),
 }
 
+
 fillInvTable()
-getGameStats()
+updateGameStats(
+  "<?php echo $_SESSION['money_stat']; ?>", 
+  "<?php echo $_SESSION['days_stat']; ?>",
+  null
+)
 
 function fillInvTable(shouldWipe){
   if (shouldWipe){$('#inventory tbody > tr').remove();}
@@ -138,14 +144,9 @@ function fillInvTable(shouldWipe){
                     let {id, name, quantity, selling_price, resilience, max_prices, popularity_factors} = fruit
                     let formattedName = name.replace(/\s/g, "%20")
 
-                    let factor1 = getPopularityFactor(fruit['popularity_factors'], 0)
-                    let factor2 = getPopularityFactor(fruit['popularity_factors'], 1)
-                    let popularity = Math.ceil(( factor1 + factor2  ) / 2);
-
-                    let popularity_word = popularity > 67 ? "High" : popularity < 33 ? "Low" : "Medium"
-                    let max_buying_price = max_prices[popularity_word]
-                    let restock_price = Math.ceil(0.8*max_buying_price)
-
+                    
+                    let {popularity, popularity_word, max_buying_price, restock_price} = getSalesSubstrates(popularity_factors, max_prices)
+                    
                     console.dir({
                       popularity, popularity_word, max_prices, max_buying_price, restock_price
                     })
@@ -169,27 +170,76 @@ function fillInvTable(shouldWipe){
           }})   
 }
 
-function getGameStats(){
-
-let money_stat = "<?php echo $_SESSION['money_stat']; ?>"
-let days_stat = "<?php echo $_SESSION['days_stat']; ?>"
-
-
+function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates){
   let el = $("p").filter(function() {
                     return $(this).is("#moneyStat");
                 })
-  el.text(money_stat + " Gold Dinar")  
+  el.text(new_money_stat + " Gold Dinar")  
 
   el = $("p").filter(function() {
       return $(this).is("#daysStat");
   })
-  el.text(days_stat + " Days")  
+  el.text(new_days_stat + " Days")  
 
-  console.log("getGameStats fxn says TCs are:", trend_calculates)
+  if (new_trend_calculates){  
+    trend_calculates = new_trend_calculates
+  }
+    
+console.log("updateGameStats fxn says TCs are:", trend_calculates)
 }
 
 function newDay(){
-  //Calculate sales for each fruit, based its pop, max_buying_price.
+
+//We will use seed_data - available - which has Price Set and Pop Factors for each fruit.
+//We will also use TC proxy - available.
+//Hmmm? What we need to make available, is the selling_price and quantity for each fruit.
+
+//With those three sets of things, we will calculate the Sales Percentage for each fruit.
+//We will send off a POST with the new data, to update the inventory table.
+
+//And then jquery change all the things.
+
+
+
+
+//Calculate sales for each fruit and console log it.
+//Perhaps ajax to db for fruit data (even though we have it right here, I know, but is hard to access),
+//and then do the sales calculations... and then a second ajax request to update db?
+//Maybe just one api/sales that does both.
+
+
+  $.ajax(
+    {
+          type: "GET",
+          url: '../api/fruit/new_day.php',
+          dataType: 'json',
+          data: {
+            table_name: "games",
+            identifying_column: "game_id",
+            identifying_data: `<?php echo $_SESSION['gid']; ?>`,
+          },
+          error: function (result) {
+            console.log("An error occurred immediately in $.ajax request.", result)
+            console.log(result.responseText)
+          },
+          success: function (result) {
+            console.log("success")
+            if (result["status"]) {
+            console.log(result);
+
+let {money_stat, days_stat, trend_calculates} = result['update_data']
+updateGameStats(money_stat, days_stat, trend_calculates)
+
+            } else {
+              console.log(result["message"]);
+              console.log(result["error"]);
+            }
+          }
+      }
+  )
+
+  //Okay, I will now create an Update api, to update the db (games table with new Days eg) and also session.
+
   //Store the quantity for each fruit, and copy those to the quantity_yest column.
   
   //Send off to inv table, the new quantity for each fruit, which is quantity minus sold.
@@ -240,7 +290,7 @@ function restockFruit(name){
           data: {
               name: name,
               table_name: "<?php echo $inv_table_name; ?>",
-              quantity: 1
+              increment: 1
           },
           error: function (result) {
             console.log("An error occurred immediately in $.ajax request.")
@@ -267,59 +317,6 @@ let fruit = result["data"][0]
               }
           }
       });
-}
-
-function buyFromStock(name){
-  name = name.replace(/%20/g, " ")
-
-  let el = $("table tr td").filter(function() {
-                    return $(this).text() == name && $(this).parent('tr').parent().parent().is("#inventory");
-                })
-
-  if(el.length){
-    restockFruit(name)
-  } else {
-    $.ajax(
-      {
-          type: "GET",
-          url: '../api/fruit/create.php',
-          dataType: 'json',
-          data: {
-            table_name:  "<?php echo $inv_table_name; ?>",
-              name: name,
-              quantity: 777,
-      
-          },
-          error: function (result) {
-            console.log("An error occurred immediately in $.ajax request.", result)
-            console.log(result.responseText)
-          },
-          success: function (result) {
-                console.log("success")
-                if (result["status"]){   
-                          
-                let response="";
-                let fruit = result["data"][0];
-            
-                let formattedName = fruit.name.replace(/\s/g, "%20")
-
-                    response += "<tr>"+
-                    "<td>"+fruit.id+"</td>"+
-                    "<td>"+fruit.name+"</td>"+
-                    "<td>"+fruit.quantity+"</td>"+
-                    "<td>"+fruit.selling_price+"</td>"+
-                    "<td>"+fruit.total_sales+"</td>"+
-                    "<td><button class='button1' onClick=printSingle('"+formattedName+"')>Print single</button> <button class='button1' onClick=restockFruit('"+formattedName+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+fruit.id+"','"+formattedName+"')>Throw away</button></td>"+
-                    "</tr>";
-    
-                $(response).prependTo($("#inventory"));
-                } else {
-                  console.log(result['message']);
-                  console.log(result["error"]);
-              }
-          }
-      });
-  }
 }
 
 function deleteFruit(id, name){
@@ -358,25 +355,31 @@ function deleteFruit(id, name){
 }
 
 function checkSession(){
+  console.log(">>>Old session is:")
   console.log(`<?php print_r($_SESSION); ?>`)
+}
+
+function checkTCs(){
+  console.log(">>>Current TCs are:")
+  console.log(trend_calculates)
+  console.log(">>>Seed data is:")
+  console.log(seed_data)
+}
+
+function getSalesSubstrates(popularity_factors, max_prices){
+  let factor1 = getPopularityFactor(popularity_factors, 0)
+  let factor2 = getPopularityFactor(popularity_factors, 1)
+  let popularity = Math.ceil(( factor1 + factor1 + factor1 + factor2  ) / 4);
+
+  let popularity_word = popularity > 67 ? "High" : popularity < 33 ? "Low" : "Medium"
+  let max_buying_price = max_prices[popularity_word]
+  let restock_price = Math.ceil(0.8*max_buying_price)
+
+  return {popularity: popularity, popularity_word: popularity_word, max_buying_price: max_buying_price, restock_price: restock_price}
 }
 
 function getPopularityFactor(pop_factor_names, i){
   let pop_keys = Object.keys(pop_factor_names)
   return pop_factor_names[pop_keys[i]] ? trend_calculates[pop_keys[i]] : 101-trend_calculates[pop_keys[i]]
 }
-</script>
-
-<script>
-//  woooooooooooooooooooooooooooooooooooo
-  // function exampleGameID(){
-  //   console.log('
-  //<
-  //?php echo include "../utils/get_gid.php"; ?>')
-  // }
-  // function checkSession(){
-  // console.log(`
-  // <
-  // ?php echo json_encode($_SESSION); ?>`);
-  // }
 </script>

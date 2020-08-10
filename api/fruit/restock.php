@@ -9,7 +9,7 @@ $db = $database->getConnection();
 
 $fruit = new Fruit($db);
 $fruit->name = $_GET['name'];
-$quantity = $_GET['quantity'];
+$increment = $_GET['increment'];
 $table_name = $_GET['table_name'];
 $identifying_column = "name";
 $identifying_data = $_GET['name'];
@@ -19,68 +19,14 @@ $get_full = false;
 function go(
   $db,
   $fruit,
-  $quantity,
+  $increment,
   $table_name,
   $identifying_column,
   $identifying_data,
   $acronym,
   $get_full
 ) {
-  if (
-    !($result = $fruit->read_single(
-      $table_name,
-      $identifying_column,
-      $identifying_data,
-      $acronym,
-      $get_full
-    ))
-  ) {
-    return [
-      "status" => false,
-      "message" => "Error when calling Sfruit->read_single.",
-      "error" => $db->error,
-    ];
-  }
-
-  if (!$result["status"]) {
-    return $result;
-  }
-
-  if (!$result['data']->num_rows) {
-    return [
-      "status" => false,
-      "message" =>
-        "There are no rows from reading the db. The identifying data (" .
-        $identifying_data .
-        ") at identifying column (" .
-        $identifying_column .
-        ") does not correspond to anything in the table (" .
-        $table_name .
-        ").",
-      "error" => $db->error,
-    ];
-  }
-
-  if (
-    !($single_fruit = build_table_array(
-      $table_name,
-      $result["data"],
-      $get_full
-    ))
-  ) {
-    return [
-      "status" => false,
-      "message" => "Error in build_table_array. 1re",
-      "error" => $db->error,
-    ];
-  }
-
-  if (
-    !($result = $fruit->restock_self(
-      $table_name,
-      $single_fruit[0]["quantity"] + $quantity
-    ))
-  ) {
+  if (!($result = $fruit->restock_self($table_name, $increment))) {
     return [
       "status" => false,
       "message" => "Error when calling Sfruit->restock_self.",
@@ -145,7 +91,7 @@ function go(
 $response = go(
   $db,
   $fruit,
-  $quantity,
+  $increment,
   $table_name,
   $identifying_column,
   $identifying_data,

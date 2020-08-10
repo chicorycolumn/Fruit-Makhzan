@@ -92,34 +92,61 @@ class Database
       `from_quantity_sold_history` json DEFAULT '{}'
     )";
 
-    $query_array = [
-      "INSERT INTO " .
-      $table_name .
-      " (`name`, `quantity`, `selling_price`, `resilience`, `max_prices`, `popularity_factors`) VALUES
-      ('Melton-1', 50, 5, 20, '" .
-      json_encode(["Low" => 1, "Medium" => 2, "High" => 5]) .
-      "', '" .
-      json_encode(["weather" => true, "love" => false]) .
-      "')",
-
-      "INSERT INTO " .
-      $table_name .
-      " (`name`, `quantity`, `selling_price`, `resilience`, `max_prices`, `popularity_factors`) VALUES
-      ('Magga-2', 50, 5, 20, '" .
-      json_encode(["Low" => 10, "Medium" => 20, "High" => 50]) .
-      "', '" .
-      json_encode(["weather" => true, "politics" => true]) .
-      "')",
-
-      "INSERT INTO " .
-      $table_name .
-      " (`name`, `quantity`, `selling_price`, `resilience`, `max_prices`, `popularity_factors`) VALUES
-      ('Met Mit Motts 3', 50, 5, 20, '" .
-      json_encode(["Low" => 100, "Medium" => 200, "High" => 500]) .
-      "', '" .
-      json_encode(["decadence" => true, "conformity" => false]) .
-      "')",
+    $seed_data = [
+      [
+        "name" => "Melton1",
+        "max_prices" => ["Low" => 1, "Medium" => 2, "High" => 5],
+        "popularity_factors" => [
+          "weather" => true,
+          "love" => false,
+        ],
+        "resilience" => 20,
+      ],
+      [
+        "name" => "Mower2",
+        "max_prices" => [
+          "Low" => 10,
+          "Medium" => 20,
+          "High" => 50,
+        ],
+        "popularity_factors" => [
+          "weather" => true,
+          "politics" => true,
+        ],
+        "resilience" => 40,
+      ],
+      [
+        "name" => "My Magnificent Manse3",
+        "max_prices" => [
+          "Low" => 100,
+          "Medium" => 200,
+          "High" => 500,
+        ],
+        "popularity_factors" => [
+          "decadence" => true,
+          "conformity" => false,
+        ],
+        "resilience" => 60,
+      ],
     ];
+
+    $query_array = [];
+
+    foreach ($seed_data as $seed_item) {
+      $query_array[] =
+        "INSERT INTO " .
+        $table_name .
+        " (`name`, `resilience`, `max_prices`, `popularity_factors`) VALUES
+      ('" .
+        $seed_item['name'] .
+        "', " .
+        $seed_item['resilience'] .
+        ", '" .
+        json_encode($seed_item['max_prices']) .
+        "', '" .
+        json_encode($seed_item['popularity_factors']) .
+        "')";
+    }
 
     make_table(
       $table_name,
@@ -175,9 +202,10 @@ class Database
     $stmt->close();
     // $this->connection->close(); //mysqli_close($this->connection);
 
-    $_SESSION["trend_calculates"] = $trends; ///////////////////////////////////success!
-    $_SESSION["money_stat"] = $money_initial; //////////////////////////////////success!
-    $_SESSION["days_stat"] = $days_initial; ////////////////////////////////////success!
+    $_SESSION["trend_calculates"] = $trends;
+    $_SESSION["money_stat"] = $money_initial;
+    $_SESSION["days_stat"] = $days_initial;
+    $_SESSION["seed_data"] = $seed_data;
 
     return [
       "status" => true,

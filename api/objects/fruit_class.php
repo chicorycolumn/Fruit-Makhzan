@@ -200,9 +200,9 @@ class Fruit
     return ["status" => true, "message" => "Entry exists."];
   }
 
-  function restock_self($table_name, $new_quantity)
+  function restock_self($table_name, $increment)
   {
-    $query = "UPDATE " . $table_name . " SET quantity=? WHERE name=?";
+    $query = "UPDATE " . $table_name . " SET quantity=quantity+? WHERE name=?";
 
     if (!($stmt = $this->conn->prepare($query))) {
       return [
@@ -212,7 +212,7 @@ class Fruit
       ];
     }
 
-    $stmt->bind_param("is", $new_quantity, $this->name);
+    $stmt->bind_param("is", $increment, $this->name);
 
     if (!$stmt->execute()) {
       return [
@@ -256,21 +256,57 @@ class Fruit
     ];
   }
 
-  function update_self($table_suffix)
-  {
-    // $query =
-    //   "UPDATE " .
-    //   $this->$table_name .
-    //   " SET name='" .
-    //   $this->name .
-    //   "', quantity='" .
-    //   $this->quantity .
-    //   "', selling_price='" .
-    //   $this->selling_price .
-    //   "'
-    //             WHERE
-    //                 id='" .
-    //   $this->id .
-    //   "'";
+  function update_self(
+    $table_name,
+    $identifying_column,
+    $identifying_data,
+    $acronym,
+    $update_data
+  ) {
+    $update_string = "";
+    $update_values = [];
+
+    foreach ($update_data as $key => $val) {
+      $update_string .= $key . "=?, ";
+      $update_values[] = $val;
+    }
+
+    $update_values[] = $identifying_data;
+
+    $update_string = substr($update_string, 0, -2);
+
+    $query =
+      "UPDATE " .
+      $table_name .
+      " SET " .
+      $update_string .
+      " WHERE " .
+      $identifying_column .
+      "=?";
+
+    // echo $query;
+    // die();
+
+    if (!($stmt = $this->conn->prepare($query))) {
+      return [
+        "status" => false,
+        "message" => "Could not prepare query.",
+        "error" => $this->conn->error,
+      ];
+    }
+
+    $stmt->bind_param($acronym, ...$update_values);
+
+    if (!$stmt->execute()) {
+      return [
+        "status" => false,
+        "message" => "Error in execution.",
+        "error" => $this->conn->error,
+      ];
+    }
+
+    $result = $stmt->get_result();
+    $stmt->close();
+    return ["status" => true, "message" => "Successfully updated!"];
   }
 }

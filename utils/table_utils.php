@@ -1,5 +1,20 @@
 <?php
 
+function evolve_trend_calculates($session_TCs)
+{
+  $trends = (array) json_decode($session_TCs);
+
+  foreach ($trends as $key => $value) {
+    if ($trends[$key] > 99) {
+      $trends[$key] = 1;
+    } else {
+      $trends[$key]++;
+    }
+  }
+
+  return json_encode($trends);
+}
+
 function delete_manipulated_cookie()
 {
   if (isset($_COOKIE["makhzan"])) {

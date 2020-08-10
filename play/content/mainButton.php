@@ -2,10 +2,11 @@
 
 echo "<link rel='stylesheet' type='text/css' href='.././css/mainButton.css' />";
 
+// <button>Buy special</button>
+
 $mainButton = '
 <div class="mainDivButton">
-<button>Open up shop</button>
-<button>Buy special</button>
+<button onClick=newDay()>NEW DAY</button>
 </div>
 ';
 ?>
