@@ -4,7 +4,7 @@ function evolve_trend_calculates($session_TCs)
 {
   $trends = (array) json_decode($session_TCs);
 
-  foreach ($trends as $key => $value) {
+  foreach (array_keys($trends) as $key) {
     if ($trends[$key] > 99) {
       $trends[$key] = 1;
     } else {

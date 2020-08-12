@@ -11,10 +11,11 @@ $fruit = new Fruit($db);
 $table_name = $_GET['table_name'];
 $identifying_column = $_GET['identifying_column'];
 $identifying_data = $_GET['identifying_data'];
+$profit = $_GET['profit'];
 $get_full = false;
 
 $update_data = [
-  "money_stat" => $_SESSION['money_stat'] + 100,
+  "money_stat" => $_SESSION['money_stat'] + $profit,
   "days_stat" => $_SESSION['days_stat'] + 1,
   "trend_calculates" => evolve_trend_calculates($_SESSION['trend_calculates']),
 ];
@@ -56,6 +57,10 @@ function go(
   $_SESSION['trend_calculates'] = $update_data['trend_calculates'];
 
   $result['update_data'] = $update_data;
+
+  $result['update_data']['trend_calculates'] = json_decode(
+    $result['update_data']['trend_calculates']
+  );
 
   return $result;
 }

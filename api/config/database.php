@@ -94,7 +94,7 @@ class Database
 
     $seed_data = [
       [
-        "name" => "Melton1",
+        "name" => "Mu1berry",
         "max_prices" => ["Low" => 1, "Medium" => 2, "High" => 5],
         "popularity_factors" => [
           "weather" => true,
@@ -103,7 +103,7 @@ class Database
         "resilience" => 20,
       ],
       [
-        "name" => "Mower2",
+        "name" => "Mo2okonut",
         "max_prices" => [
           "Low" => 10,
           "Medium" => 20,
@@ -116,7 +116,7 @@ class Database
         "resilience" => 40,
       ],
       [
-        "name" => "My Magnificent Manse3",
+        "name" => "Black String Moong B3an",
         "max_prices" => [
           "Low" => 100,
           "Medium" => 200,
@@ -133,13 +133,31 @@ class Database
     $query_array = [];
 
     foreach ($seed_data as $seed_item) {
+      // $query_array[] =
+      //   "INSERT INTO " .
+      //   $table_name .
+      //   " (`name`, `resilience`, `max_prices`, `popularity_factors`) VALUES
+      // ('" .
+      //   $seed_item['name'] .
+      //   "', " .
+      //   $seed_item['resilience'] .
+      //   ", '" .
+      //   json_encode($seed_item['max_prices']) .
+      //   "', '" .
+      //   json_encode($seed_item['popularity_factors']) .
+      //   "')";
+
       $query_array[] =
         "INSERT INTO " .
         $table_name .
-        " (`name`, `resilience`, `max_prices`, `popularity_factors`) VALUES
+        " (`name`, `selling_price`, `quantity`, `resilience`, `max_prices`, `popularity_factors`) VALUES
       ('" .
         $seed_item['name'] .
         "', " .
+        random_int(1, 5) .
+        ", " .
+        random_int(1, 100) .
+        ", " .
         $seed_item['resilience'] .
         ", '" .
         json_encode($seed_item['max_prices']) .
@@ -172,8 +190,8 @@ class Database
       "weather" => random_int(1, 100),
       "love" => random_int(1, 100),
       "politics" => random_int(1, 100),
-      "decadence" => random_int(1, 100),
       "conformity" => random_int(1, 100),
+      "decadence" => random_int(1, 100),
     ]);
 
     $money_initial = 0;

@@ -90,7 +90,6 @@ include '../master.php';
 
 <script>
 //' For some reason this apostrophe is necessary.
-
 let seed_data = <?php print_r(json_encode($_SESSION['seed_data'])); ?>
 
 let trend_calculates = {
@@ -119,6 +118,105 @@ updateGameStats(
   null
 )
 
+
+function newDay(){
+  
+  let incipient_sales = calculateSales()
+  let total_profit = Object.values(incipient_sales).reduce((sum, obj) => sum + obj.profit, 0)
+
+  console.log("About to gain " + total_profit + "Ð.")
+
+  updateGamesTable(total_profit)  //Increments Money and Days.
+}
+
+function updateGamesTable(profit){
+  $.ajax(
+    {
+          type: "GET",
+          url: '../api/fruit/new_day.php',
+          dataType: 'json',
+          data: {
+            table_name: "games",
+            identifying_column: "game_id",
+            identifying_data: `<?php echo $_SESSION['gid']; ?>`,
+            profit: profit
+          },
+          error: function (result) {
+            console.log("An error occurred immediately in $.ajax request.", result)
+            console.log(result.responseText)
+          },
+          success: function (result) {
+            // console.log("success")
+            if (result["status"]) {
+            // console.log(result);
+
+            let {money_stat, days_stat, trend_calculates} = result['update_data']
+
+            updateGameStats(money_stat, days_stat, trend_calculates)
+
+            } else {
+              console.log(result["message"]);
+              console.log(result["error"]);
+            }
+          }
+      }
+  )
+}
+
+function updateInventoryTable(){
+  $.ajax(
+    {
+          type: "GET",
+          url: '../api/fruit/new_day.php',
+          dataType: 'json',
+          data: {
+            table_name: `<?php echo $_SESSION['inv_table_name']; ?>`,
+            identifying_column: "game_id",
+            identifying_data: `<?php echo $_SESSION['gid']; ?>`
+          },
+          error: function (result) {
+            console.log("An error occurred immediately in $.ajax request.", result)
+            console.log(result.responseText)
+          },
+          success: function (result) {
+            // console.log("success")
+            if (result["status"]) {
+            // console.log(result);
+
+            let {new_money_stat, new_days_stat, new_trend_calculates} = result['update_data']
+            updateGameStats(new_money_stat, new_days_stat, new_trend_calculates)
+
+            } else {
+              console.log(result["message"]);
+              console.log(result["error"]);
+            }
+          }
+      }
+  )
+}
+
+
+
+
+function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates){
+  let el = $("p").filter(function() {
+                    return $(this).is("#moneyStat");
+                })
+  el.text(new_money_stat + " Gold Dinar")  
+
+  el = $("p").filter(function() {
+      return $(this).is("#daysStat");
+  })
+  el.text(new_days_stat + " Days")  
+
+  if (new_trend_calculates){  
+    console.log("old TCs", trend_calculates)
+    console.log("new TCs", new_trend_calculates)
+    trend_calculates = new_trend_calculates
+  }
+  console.log("updateGameStats fxn says TCs are:", trend_calculates)
+}
+
 function fillInvTable(shouldWipe){
   if (shouldWipe){$('#inventory tbody > tr').remove();}
   $.ajax(
@@ -135,7 +233,7 @@ function fillInvTable(shouldWipe){
               console.log(result.responseText)
             },
             success: function (result) {
-              console.log("success")
+              // console.log("success")
            
               if (result["status"]){ 
               
@@ -145,13 +243,13 @@ function fillInvTable(shouldWipe){
                     let formattedName = name.replace(/\s/g, "%20")
 
                     
-                    let {popularity, popularity_word, max_buying_price, restock_price} = getSalesSubstrates(popularity_factors, max_prices)
+                    let {popularity, popularity_word, max_buying_price, restock_price} = getSalesSubstrates(popularity_factors, max_prices, trend_calculates)
                     
-                    console.dir({
-                      popularity, popularity_word, max_prices, max_buying_price, restock_price
-                    })
+                    // console.dir({
+                    //   popularity, popularity_word, max_prices, max_buying_price, restock_price
+                    // })
 
-                    response += "<tr>"+
+                    response += "<tr id='"+formattedName+"'>"+
                     "<td>"+name+"</td>"+
                     "<td>"+"qy"+"</td>"+
                     "<td>"+quantity+"</td>"+
@@ -170,84 +268,74 @@ function fillInvTable(shouldWipe){
           }})   
 }
 
-function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates){
-  let el = $("p").filter(function() {
-                    return $(this).is("#moneyStat");
-                })
-  el.text(new_money_stat + " Gold Dinar")  
+function calculateSales(){
 
-  el = $("p").filter(function() {
-      return $(this).is("#daysStat");
-  })
-  el.text(new_days_stat + " Days")  
+  let num_rows = $("table tr").filter(function(){
+    return $(this).parent('tbody').parent('table').is("#inventory")
+  }).length
 
-  if (new_trend_calculates){  
-    trend_calculates = new_trend_calculates
-  }
-    
-console.log("updateGameStats fxn says TCs are:", trend_calculates)
-}
+  let quantity_column_index = $("table thead tr th").filter(function(){
+    return $(this).parent('tr').parent('thead').parent('table').is("#inventory") &&
+    $(this).text().toLowerCase()=="quantity"
+  }).index()
 
-function newDay(){
+  let selling_price_column_index = $("table thead tr th").filter(function(){
+    return $(this).parent('tr').parent('thead').parent('table').is("#inventory") &&
+    $(this).text().toLowerCase()=="selling price"
+  }).index()
 
-//We will use seed_data - available - which has Price Set and Pop Factors for each fruit.
-//We will also use TC proxy - available.
-//Hmmm? What we need to make available, is the selling_price and quantity for each fruit.
+  let name_column_index = $("table thead tr th").filter(function(){
+    return $(this).parent('tr').parent('thead').parent('table').is("#inventory") &&
+    $(this).text().toLowerCase()=="name"
+  }).index()
 
-//With those three sets of things, we will calculate the Sales Percentage for each fruit.
-//We will send off a POST with the new data, to update the inventory table.
+  let incipient_sales = {}
 
-//And then jquery change all the things.
+  for (let i = 1; i <= num_rows; i++){
+    let row = $("table tr:eq("+i+")")
+    let name = row.children().eq(name_column_index).text()
+    let quantity = parseInt(row.children().eq(quantity_column_index).text())
+    let selling_price = parseInt(row.children().eq(selling_price_column_index).text())
+
+    let max_prices = seed_data.filter(item => item.name==name)[0].max_prices
+    let popularity_factors = seed_data.filter(item => item.name==name)[0].popularity_factors
+    let {popularity, popularity_word, max_buying_price, restock_price} = getSalesSubstrates(popularity_factors, max_prices, trend_calculates)
+
+    let price_disparity = ( (max_buying_price - selling_price)/max_buying_price )*100
+
+    console.log("calculateSales fxn: Popularity of "+name+" is "+popularity)
+    // console.log("calculateSales fxn, check variables:", {
+    //   name,
+    //   quantity,
+    //   selling_price,
+    //   max_prices,
+    //   popularity_factors,
+    //   popularity, popularity_word, max_buying_price, restock_price,
+    //   price_disparity
+    // })
 
 
 
+    let sales_percentage = (
+      (popularity + (price_disparity*4))/5/100
+      )
 
-//Calculate sales for each fruit and console log it.
-//Perhaps ajax to db for fruit data (even though we have it right here, I know, but is hard to access),
-//and then do the sales calculations... and then a second ajax request to update db?
-//Maybe just one api/sales that does both.
-
-
-  $.ajax(
-    {
-          type: "GET",
-          url: '../api/fruit/new_day.php',
-          dataType: 'json',
-          data: {
-            table_name: "games",
-            identifying_column: "game_id",
-            identifying_data: `<?php echo $_SESSION['gid']; ?>`,
-          },
-          error: function (result) {
-            console.log("An error occurred immediately in $.ajax request.", result)
-            console.log(result.responseText)
-          },
-          success: function (result) {
-            console.log("success")
-            if (result["status"]) {
-            console.log(result);
-
-let {money_stat, days_stat, trend_calculates} = result['update_data']
-updateGameStats(money_stat, days_stat, trend_calculates)
-
-            } else {
-              console.log(result["message"]);
-              console.log(result["error"]);
-            }
-          }
-      }
-  )
-
-  //Okay, I will now create an Update api, to update the db (games table with new Days eg) and also session.
-
-  //Store the quantity for each fruit, and copy those to the quantity_yest column.
+    let sales_quantity = Math.ceil(sales_percentage * quantity)
   
-  //Send off to inv table, the new quantity for each fruit, which is quantity minus sold.
-  //Then download these anew.
+    if (sales_quantity < 0){
+      sales_quantity = 0
+    } else if (sales_quantity > quantity){
+      sales_quantity = quantity
+    }
 
-  //Run evolveTrendCalculates
-  //Send off to games table, the new TCs, and Money increased by sales, and Days increased by 1.
-  //Then download these three data from games table anew. One source of truth.
+    console.log("calculateSales fxn: Sell "+ sales_quantity + " from " + quantity + " of " + name)
+
+    let profit = sales_quantity * selling_price
+
+    incipient_sales[name] = {sales_quantity, profit}
+
+  }
+  return incipient_sales
 }
 
 function printSingle(name){
@@ -298,9 +386,9 @@ function restockFruit(name){
             console.log(result)
           },
           success: function (result) {
-          console.log("success")
+          // console.log("success")
               if (result['status']) {   
-let fruit = result["data"][0]
+          let fruit = result["data"][0]
 
               
                 let el = $("table tr td").filter(function() {
@@ -339,7 +427,7 @@ function deleteFruit(id, name){
             console.log(result)
           },
           success: function (result) {
-            console.log("success")
+            // console.log("success")
               if (result['status']) {
                 let el = $("table tr td").filter(function() {
                     return $(this).text() == name && $(this).parent('tr').parent().parent().is("#inventory");
@@ -360,25 +448,26 @@ function checkSession(){
 }
 
 function checkTCs(){
-  console.log(">>>Current TCs are:")
+  console.log(">>>TC proxy:")
   console.log(trend_calculates)
-  console.log(">>>Seed data is:")
+  console.log(">>>Seed data proxy:")
   console.log(seed_data)
 }
 
-function getSalesSubstrates(popularity_factors, max_prices){
-  let factor1 = getPopularityFactor(popularity_factors, 0)
-  let factor2 = getPopularityFactor(popularity_factors, 1)
-  let popularity = Math.ceil(( factor1 + factor1 + factor1 + factor2  ) / 4);
+function getSalesSubstrates(popularity_factors, max_prices, trend_calculates){
+
+  let factor1 = getPopularityFactor(popularity_factors, 0, trend_calculates)
+  let factor2 = getPopularityFactor(popularity_factors, 1, trend_calculates)
+  let popularity = Math.ceil(( (factor1 * 3) + factor2  ) / 4);
 
   let popularity_word = popularity > 67 ? "High" : popularity < 33 ? "Low" : "Medium"
   let max_buying_price = max_prices[popularity_word]
   let restock_price = Math.ceil(0.8*max_buying_price)
 
-  return {popularity: popularity, popularity_word: popularity_word, max_buying_price: max_buying_price, restock_price: restock_price}
+  return {popularity, popularity_word, max_buying_price, restock_price}
 }
 
-function getPopularityFactor(pop_factor_names, i){
+function getPopularityFactor(pop_factor_names, i, trend_calculates){
   let pop_keys = Object.keys(pop_factor_names)
   return pop_factor_names[pop_keys[i]] ? trend_calculates[pop_keys[i]] : 101-trend_calculates[pop_keys[i]]
 }
