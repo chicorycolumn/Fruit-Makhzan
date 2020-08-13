@@ -41,7 +41,7 @@ function go(
   ) {
     return [
       "status" => false,
-      "message" => "Error when calling Sfruit->read_single.",
+      "message" => "Error when calling Sfruit->update_self.",
       "error" => $db->error,
     ];
   }

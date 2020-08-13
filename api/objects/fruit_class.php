@@ -309,4 +309,85 @@ class Fruit
     $stmt->close();
     return ["status" => true, "message" => "Successfully updated!"];
   }
+
+  function update_multiple(
+    $table_name,
+    $column_to_change,
+    $identifying_column,
+    $operation,
+    $data_obj,
+    $new_data_key,
+    $data_type
+  ) {
+    $identifying_data_set = array_keys($data_obj);
+
+    $query =
+      "UPDATE " .
+      $table_name .
+      "
+      SET " .
+      $column_to_change .
+      " = CASE " .
+      $identifying_column;
+
+    $acronym = "";
+    $new_data_set = [];
+
+    foreach ($identifying_data_set as $identifying_data) {
+      if ($operation == "decrement") {
+        $query .=
+          " WHEN '" .
+          $identifying_data .
+          "' THEN " .
+          $column_to_change .
+          " - ?";
+      } elseif ($operation == "increment") {
+        $query .=
+          " WHEN '" .
+          $identifying_data .
+          "' THEN " .
+          $column_to_change .
+          " + ?";
+      } elseif ($operation == "replace") {
+        $query .= " WHEN '" . $identifying_data . "' THEN ?";
+      }
+
+      $acronym .= $data_type;
+
+      $new_data_set[] = $data_obj[$identifying_data][$new_data_key];
+    }
+
+    $query .=
+      " ELSE " .
+      $column_to_change .
+      " 
+    END
+    WHERE " .
+      $identifying_column .
+      " IN('" .
+      implode("', '", $identifying_data_set) .
+      "')";
+
+    if (!($stmt = $this->conn->prepare($query))) {
+      return [
+        "status" => false,
+        "message" => "Could not prepare query.",
+        "error" => $this->conn->error,
+      ];
+    }
+
+    $stmt->bind_param($acronym, ...$new_data_set);
+
+    if (!$stmt->execute()) {
+      return [
+        "status" => false,
+        "message" => "Error in execution.",
+        "error" => $this->conn->error,
+      ];
+    }
+
+    $result = $stmt->get_result();
+    $stmt->close();
+    return ["status" => true, "message" => "Successfully updated multiple!"];
+  }
 }

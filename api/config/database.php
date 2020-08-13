@@ -94,7 +94,7 @@ class Database
 
     $seed_data = [
       [
-        "name" => "Mu1berry",
+        "name" => "Mango",
         "max_prices" => ["Low" => 1, "Medium" => 2, "High" => 5],
         "popularity_factors" => [
           "weather" => true,
@@ -103,7 +103,7 @@ class Database
         "resilience" => 20,
       ],
       [
-        "name" => "Mo2okonut",
+        "name" => "Mulberry",
         "max_prices" => [
           "Low" => 10,
           "Medium" => 20,
@@ -116,7 +116,7 @@ class Database
         "resilience" => 40,
       ],
       [
-        "name" => "Black String Moong B3an",
+        "name" => "Mung Bean",
         "max_prices" => [
           "Low" => 100,
           "Medium" => 200,

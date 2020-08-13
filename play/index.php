@@ -127,13 +127,17 @@ function newDay(){
   console.log("About to gain " + total_profit + "Ð.")
 
   updateGamesTable(total_profit)  //Increments Money and Days.
+
+  //Now we need to minus the quantities sold from quantities in inv table. 
+  updateInventoryTable(incipient_sales)
+
 }
 
 function updateGamesTable(profit){
   $.ajax(
     {
           type: "GET",
-          url: '../api/fruit/new_day.php',
+          url: '../api/fruit/new_day_supertable.php',
           dataType: 'json',
           data: {
             table_name: "games",
@@ -151,7 +155,6 @@ function updateGamesTable(profit){
             // console.log(result);
 
             let {money_stat, days_stat, trend_calculates} = result['update_data']
-
             updateGameStats(money_stat, days_stat, trend_calculates)
 
             } else {
@@ -163,30 +166,35 @@ function updateGamesTable(profit){
   )
 }
 
-function updateInventoryTable(){
+function updateInventoryTable(incipient_sales){
+  console.log("### updateInventoryTable fxn invoked")
+  console.log(incipient_sales)
+  // return
   $.ajax(
     {
-          type: "GET",
-          url: '../api/fruit/new_day.php',
+          type: "POST",
+          url: '../api/fruit/new_day_subtable.php',
           dataType: 'json',
           data: {
             table_name: `<?php echo $_SESSION['inv_table_name']; ?>`,
-            identifying_column: "game_id",
-            identifying_data: `<?php echo $_SESSION['gid']; ?>`
+            column_to_change: "quantity",
+            new_data_key: "sales_quantity",
+            identifying_column: "name",
+            operation: "decrement",
+            data_obj: incipient_sales,
+            data_type: "i"
           },
           error: function (result) {
-            console.log("An error occurred immediately in $.ajax request.", result)
+            console.log("###An error occurred immediately in $.ajax request.", result)
             console.log(result.responseText)
           },
           success: function (result) {
-            // console.log("success")
+            console.log("###success")
             if (result["status"]) {
-            // console.log(result);
-
-            let {new_money_stat, new_days_stat, new_trend_calculates} = result['update_data']
-            updateGameStats(new_money_stat, new_days_stat, new_trend_calculates)
+            console.log(result);
 
             } else {
+              console.log("###else")
               console.log(result["message"]);
               console.log(result["error"]);
             }
