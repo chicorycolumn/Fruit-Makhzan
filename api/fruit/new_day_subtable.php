@@ -64,6 +64,8 @@ $response = go(
   $data_type
 );
 
+$response["update_data"] = $data_obj;
+
 $database->closeConnection();
 print_r(json_encode($response));
 

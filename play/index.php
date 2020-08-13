@@ -110,6 +110,7 @@ let trend_calculates = {
     ); ?>`),
 }
 
+let {quantity_column_index, selling_price_column_index, name_column_index} = getColumnIndexes()
 
 fillInvTable()
 updateGameStats(
@@ -191,7 +192,17 @@ function updateInventoryTable(incipient_sales){
           success: function (result) {
             console.log("###success")
             if (result["status"]) {
-            console.log(result);
+              let names = Object.keys(result["update_data"]);
+
+              names.forEach(name=>{
+                let row = $("table#inventory tr").filter(function(){
+                  return $(this).children().eq(name_column_index).text() == name;
+                })
+
+                let current_quantity = parseInt(row.children().eq(quantity_column_index).text())
+                let new_quantity = current_quantity - parseInt(result["update_data"][name]["sales_quantity"])
+                row.children().eq(quantity_column_index).text(new_quantity)
+              })
 
             } else {
               console.log("###else")
@@ -278,24 +289,8 @@ function fillInvTable(shouldWipe){
 
 function calculateSales(){
 
-  let num_rows = $("table tr").filter(function(){
-    return $(this).parent('tbody').parent('table').is("#inventory")
-  }).length
-
-  let quantity_column_index = $("table thead tr th").filter(function(){
-    return $(this).parent('tr').parent('thead').parent('table').is("#inventory") &&
-    $(this).text().toLowerCase()=="quantity"
-  }).index()
-
-  let selling_price_column_index = $("table thead tr th").filter(function(){
-    return $(this).parent('tr').parent('thead').parent('table').is("#inventory") &&
-    $(this).text().toLowerCase()=="selling price"
-  }).index()
-
-  let name_column_index = $("table thead tr th").filter(function(){
-    return $(this).parent('tr').parent('thead').parent('table').is("#inventory") &&
-    $(this).text().toLowerCase()=="name"
-  }).index()
+  let num_rows = $("table#inventory tr").length-1
+  console.log(num_rows)
 
   let incipient_sales = {}
 
@@ -399,9 +394,8 @@ function restockFruit(name){
           let fruit = result["data"][0]
 
               
-                let el = $("table tr td").filter(function() {
+                let el = $("table#inventory tr td").filter(function() {
                     return $(this).text() == fruit['name']
-                     && $(this).parent('tr').parent().parent().is("#inventory");
                 })
 
                 // el.parent('tr').remove()  
@@ -437,8 +431,8 @@ function deleteFruit(id, name){
           success: function (result) {
             // console.log("success")
               if (result['status']) {
-                let el = $("table tr td").filter(function() {
-                    return $(this).text() == name && $(this).parent('tr').parent().parent().is("#inventory");
+                let el = $("table#inventory tr td").filter(function() {
+                    return $(this).text() == name
                 })
   el.parent('tr').remove()      
               } else {
@@ -473,6 +467,22 @@ function getSalesSubstrates(popularity_factors, max_prices, trend_calculates){
   let restock_price = Math.ceil(0.8*max_buying_price)
 
   return {popularity, popularity_word, max_buying_price, restock_price}
+}
+
+function getColumnIndexes(){
+  let quantity_column_index = $("table#inventory thead tr th").filter(function(){
+    return $(this).text().toLowerCase()=="quantity"
+  }).index()
+
+  let selling_price_column_index = $("table#inventory thead tr th").filter(function(){
+    return $(this).text().toLowerCase()=="selling price"
+  }).index()
+
+  let name_column_index = $("table#inventory thead tr th").filter(function(){
+    return $(this).text().toLowerCase()=="name"
+  }).index()
+
+  return {quantity_column_index, selling_price_column_index, name_column_index}
 }
 
 function getPopularityFactor(pop_factor_names, i, trend_calculates){
