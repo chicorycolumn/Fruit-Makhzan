@@ -13,8 +13,8 @@ $identifying_column = $_GET['identifying_column'];
 $identifying_data = $_GET['identifying_data'];
 $acronym = $_GET['acronym'];
 $update_data = $_GET['update_data'];
+$should_update_session = $_GET['should_update_session'];
 $get_full = false;
-$should_update_session = json_decode($_GET['should_update_session']);
 
 function go(
   $db,
@@ -39,7 +39,7 @@ function go(
   ) {
     return [
       "status" => false,
-      "message" => "Error when calling Sfruit->read_single.",
+      "message" => "Error when calling Sfruit->update_self.",
       "error" => $db->error,
     ];
   }
@@ -49,9 +49,16 @@ function go(
   }
 
   if ($should_update_session) {
-    $_SESSION['days_stat'] = $_GET['update_data']['days_stat'];
+    $labels = ['days_stat', 'money_stat', 'trend_calculates'];
+
+    foreach ($labels as $label) {
+      if (array_key_exists($label, $update_data)) {
+        $_SESSION[$label] = $update_data[$label];
+      }
+    }
   }
 
+  $result["update_data"] = $update_data;
   return $result;
 }
 

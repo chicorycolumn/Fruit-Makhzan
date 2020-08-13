@@ -7,11 +7,13 @@ $mainStats = '
 <div class="topHalf">
 <div class="mainStatBox">
   <p class="mainStatTitle">MONEY</p>
-  <p id="moneyStat" class="mainStatText">-- gold dinars</p>
+  <span class="mainStatText" id="moneyStat">--</span>
+  <span class="mainStatText">gold dinars</span>
   </div>
   <div class="mainStatBox">
   <p class="mainStatTitle">TIME</p>
-  <p id="daysStat" class="mainStatText">-- days</p>
+  <span class="mainStatText" id="daysStat">--</span>
+  <span class="mainStatText">days</span>
   </div>
   </div>
   <p class="mainStatTitle">TABLE SPACE USED</p>

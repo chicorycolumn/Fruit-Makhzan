@@ -295,6 +295,12 @@ class Fruit
       ];
     }
 
+    // print_r($update_values);
+
+    // if (random_int(0, 2) == 1) {
+    //   return [$acronym, $update_values, count($update_values)];
+    // }
+
     $stmt->bind_param($acronym, ...$update_values);
 
     if (!$stmt->execute()) {

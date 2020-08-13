@@ -110,8 +110,6 @@ let trend_calculates = {
     ); ?>`),
 }
 
-let {quantity_column_index, selling_price_column_index, name_column_index} = getColumnIndexes()
-
 fillInvTable()
 updateGameStats(
   "<?php echo $_SESSION['money_stat']; ?>", 
@@ -119,23 +117,33 @@ updateGameStats(
   null
 )
 
+let columnIndexRef = getColumnIndexes()
+
 
 function newDay(){
-  
+
+  let num_rows = $("table#inventory tbody tr").filter(function(){return (this)}).length
   let incipient_sales = calculateSales()
   let total_profit = Object.values(incipient_sales).reduce((sum, obj) => sum + obj.profit, 0)
-
   console.log("About to gain " + total_profit + "Ð.")
 
-  updateGamesTable(total_profit)  //Increments Money and Days.
-
-  //Now we need to minus the quantities sold from quantities in inv table. 
-  updateInventoryTable(incipient_sales)
+  fillQuantityYesterday()                   //Moves current quantities to the qy column.
+  updateGamesTable(total_profit, "new day") //Increments Money and Days. Also updates displayed table new Pop and Mxb.
+  updateInventoryTable(incipient_sales)     //Reduces quantities by sold amounts.
 
 }
 
-function updateGamesTable(profit){
-  $.ajax(
+function fillQuantityYesterday(){
+  let num_rows = $("table#inventory tbody tr").filter(function(){return (this)}).length
+  for (let i = 0; i < num_rows; i++){
+    let row = $("table#inventory tbody tr:eq("+i+")")
+    row.children().eq(columnIndexRef.qy).text(row.children().eq(columnIndexRef.quantity).text())
+  }
+}
+
+function updateGamesTable(money_crement, operation){
+  if (operation == "new day"){
+    $.ajax(
     {
           type: "GET",
           url: '../api/fruit/new_day_supertable.php',
@@ -144,7 +152,7 @@ function updateGamesTable(profit){
             table_name: "games",
             identifying_column: "game_id",
             identifying_data: `<?php echo $_SESSION['gid']; ?>`,
-            profit: profit
+            profit: money_crement
           },
           error: function (result) {
             console.log("An error occurred immediately in $.ajax request.", result)
@@ -165,6 +173,43 @@ function updateGamesTable(profit){
           }
       }
   )
+  } else if (operation = "decrement"){
+    console.log({money_stat: parseInt($("#moneyStat").text())-money_crement})
+    // return
+    $.ajax(
+    {
+          type: "GET",
+          url: '../api/fruit/update.php',
+          dataType: 'json',
+          data: {
+            table_name: "games",
+            identifying_column: "game_id",
+            identifying_data: `<?php echo $_SESSION['gid']; ?>`,
+            acronym: "is",
+            update_data: {money_stat: parseInt($("#moneyStat").text())-money_crement},
+            should_update_session: true
+          },
+          error: function (result) {
+            console.log("An error occurred immediately in this $.ajax request.", result)
+            console.log(result.responseText)
+          },
+          success: function (result) {
+            console.log("A success")
+            console.log(result)
+            if (result["status"]) {
+            console.log(result);
+
+            let {money_stat} = result['update_data']
+            updateGameStats(money_stat)
+
+            } else {
+              console.log(result["message"]);
+              console.log(result["error"]);
+            }
+          }
+      }
+  )
+  }
 }
 
 function updateInventoryTable(incipient_sales){
@@ -196,12 +241,12 @@ function updateInventoryTable(incipient_sales){
 
               names.forEach(name=>{
                 let row = $("table#inventory tr").filter(function(){
-                  return $(this).children().eq(name_column_index).text() == name;
+                  return $(this).children().eq(columnIndexRef.name).text() == name;
                 })
 
-                let current_quantity = parseInt(row.children().eq(quantity_column_index).text())
+                let current_quantity = parseInt(row.children().eq(columnIndexRef.quantity).text())
                 let new_quantity = current_quantity - parseInt(result["update_data"][name]["sales_quantity"])
-                row.children().eq(quantity_column_index).text(new_quantity)
+                row.children().eq(columnIndexRef.quantity).text(new_quantity)
               })
 
             } else {
@@ -212,28 +257,6 @@ function updateInventoryTable(incipient_sales){
           }
       }
   )
-}
-
-
-
-
-function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates){
-  let el = $("p").filter(function() {
-                    return $(this).is("#moneyStat");
-                })
-  el.text(new_money_stat + " Gold Dinar")  
-
-  el = $("p").filter(function() {
-      return $(this).is("#daysStat");
-  })
-  el.text(new_days_stat + " Days")  
-
-  if (new_trend_calculates){  
-    console.log("old TCs", trend_calculates)
-    console.log("new TCs", new_trend_calculates)
-    trend_calculates = new_trend_calculates
-  }
-  console.log("updateGameStats fxn says TCs are:", trend_calculates)
 }
 
 function fillInvTable(shouldWipe){
@@ -270,12 +293,12 @@ function fillInvTable(shouldWipe){
 
                     response += "<tr id='"+formattedName+"'>"+
                     "<td>"+name+"</td>"+
-                    "<td>"+"qy"+"</td>"+
+                    "<td>"+"-"+"</td>"+
                     "<td>"+quantity+"</td>"+
                     "<td>"+selling_price+"</td>"+
                     "<td>"+restock_price+"</td>"+
-                    "<td>"+resilience+" (pop "+popularity+")"+" (mxb "+max_buying_price+")"+"</td>"+
-                    "<td><button class='button1' onClick=printSingle('"+formattedName+"')>Print single</button> <button class='button1' onClick=restockFruit('"+formattedName+"')>Buy more</button> <button class='button1' onClick=deleteFruit('"+id+"','"+formattedName+"')>Throw away</button></td>"+
+                    "<td>"+resilience+"</td>"+
+                    "<td><p class='devdata1'>P"+popularity+"  M"+max_buying_price+"</p><button class='button1' onClick=restockFruit('"+formattedName+"')>B</button> <button class='button1' onClick=printSingle('"+formattedName+"')>.</button> <button class='button1' onClick=deleteFruit('"+id+"','"+formattedName+"')>X</button></td>"+
                     "</tr>";
 
                     $(response).appendTo($("#inventory"));
@@ -289,16 +312,14 @@ function fillInvTable(shouldWipe){
 
 function calculateSales(){
 
-  let num_rows = $("table#inventory tr").length-1
-  console.log(num_rows)
-
   let incipient_sales = {}
+  let num_rows = $("table#inventory tbody tr").filter(function(){return (this)}).length
 
-  for (let i = 1; i <= num_rows; i++){
-    let row = $("table tr:eq("+i+")")
-    let name = row.children().eq(name_column_index).text()
-    let quantity = parseInt(row.children().eq(quantity_column_index).text())
-    let selling_price = parseInt(row.children().eq(selling_price_column_index).text())
+  for (let i = 0; i < num_rows; i++){
+    let row = $("table#inventory tbody tr:eq("+i+")")
+    let name = row.children().eq(columnIndexRef.name).text()
+    let quantity = parseInt(row.children().eq(columnIndexRef.quantity).text())
+    let selling_price = parseInt(row.children().eq(columnIndexRef["selling price"]).text())
 
     let max_prices = seed_data.filter(item => item.name==name)[0].max_prices
     let popularity_factors = seed_data.filter(item => item.name==name)[0].popularity_factors
@@ -306,19 +327,9 @@ function calculateSales(){
 
     let price_disparity = ( (max_buying_price - selling_price)/max_buying_price )*100
 
-    console.log("calculateSales fxn: Popularity of "+name+" is "+popularity)
-    // console.log("calculateSales fxn, check variables:", {
-    //   name,
-    //   quantity,
-    //   selling_price,
-    //   max_prices,
-    //   popularity_factors,
-    //   popularity, popularity_word, max_buying_price, restock_price,
-    //   price_disparity
-    // })
+    console.log("calculateSales fxn: POP and MXB of " + name + " are " + popularity + " and " + max_buying_price)
 
-
-
+    // console.log("calculateSales fxn: Popularity of "+name+" is "+popularity)
     let sales_percentage = (
       (popularity + (price_disparity*4))/5/100
       )
@@ -331,7 +342,7 @@ function calculateSales(){
       sales_quantity = quantity
     }
 
-    console.log("calculateSales fxn: Sell "+ sales_quantity + " from " + quantity + " of " + name)
+    // console.log("calculateSales fxn: Sell "+ sales_quantity + " from " + quantity + " of " + name)
 
     let profit = sales_quantity * selling_price
 
@@ -371,42 +382,68 @@ function printSingle(name){
       });
 }
 
-function restockFruit(name){
+function restockFruit(name, requested_amount=1){
+
   name = name.replace(/%20/g, " ")
-  $.ajax(
-      {
-          type: "GET",
-          url: '../api/fruit/restock.php',
-          dataType: 'json',
-          data: {
-              name: name,
-              table_name: "<?php echo $inv_table_name; ?>",
-              increment: 1
-          },
-          error: function (result) {
-            console.log("An error occurred immediately in $.ajax request.")
-            console.log(result.responseText)
-            console.log(result)
-          },
-          success: function (result) {
-          // console.log("success")
-              if (result['status']) {   
-          let fruit = result["data"][0]
 
-              
-                let el = $("table#inventory tr td").filter(function() {
+  let columnIndexRef = getColumnIndexes()
+
+  let row = $("table#inventory tbody tr").filter(function(){
+    return $(this).children().eq(columnIndexRef["name"]).text() == name
+  })
+
+  let restock_price = parseInt(row.children().eq(columnIndexRef["restock price"]).text())
+  let putative_cost = requested_amount * restock_price
+  let money = parseInt($("#moneyStat").text())
+
+  console.log(money, putative_cost)  
+  
+  if (false || putative_cost > money){
+    alert("Insufficient funds!")
+  } else {
+    $.ajax(
+        {
+            type: "GET",
+            url: '../api/fruit/restock.php',
+            dataType: 'json',
+            data: {
+                name: name,
+                table_name: "<?php echo $inv_table_name; ?>",
+                increment: 1
+            },
+            error: function (result) {
+              console.log("An error occurred immediately in $.ajax request.")
+              console.log(result.responseText)
+              console.log(result)
+            },
+            success: function (result) {
+            // console.log("success")
+                if (result['status']) {
+
+                  let fruit = result["data"][0]
+
+                  let el = $("table#inventory tr td").filter(function() {
                     return $(this).text() == fruit['name']
-                })
+                  })
+ 
+                  el.parent('tr').children().eq(2).text(fruit['quantity'])
+                
 
-                // el.parent('tr').remove()  
-                el.parent('tr').children().eq(2).text(fruit['quantity'])
-              
-              } else {
-                console.log(result["message"]);
-                console.log(result["error"]);
-              }
-          }
-      });
+                // ***It was successful transaction. So we must send off the db to change money stat now.
+                updateGamesTable(putative_cost, "decrement")
+
+
+                } else {
+                  console.log(result["message"]);
+                  console.log(result["error"]);
+                }
+            }
+        });
+    }
+
+
+
+
 }
 
 function deleteFruit(id, name){
@@ -470,19 +507,63 @@ function getSalesSubstrates(popularity_factors, max_prices, trend_calculates){
 }
 
 function getColumnIndexes(){
-  let quantity_column_index = $("table#inventory thead tr th").filter(function(){
-    return $(this).text().toLowerCase()=="quantity"
-  }).index()
 
-  let selling_price_column_index = $("table#inventory thead tr th").filter(function(){
-    return $(this).text().toLowerCase()=="selling price"
-  }).index()
+  function getIndex(match){
+    return $("table#inventory thead tr th").filter(function(){
+      return $(this).text().toLowerCase()==match
+    }).index()
+  }
 
-  let name_column_index = $("table#inventory thead tr th").filter(function(){
-    return $(this).text().toLowerCase()=="name"
-  }).index()
+  let columnIndexRef = {}
 
-  return {quantity_column_index, selling_price_column_index, name_column_index}
+  let labels = ["quantity", "selling price", "name", "qy", "restock price"]
+  
+  labels.forEach(label => {
+    columnIndexRef[label] = getIndex(label)
+  })
+
+    return columnIndexRef
+}
+
+function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates){
+  let el = $("*").filter(function() {
+                    return $(this).is("#moneyStat");
+                })
+  el.text(new_money_stat)  
+
+  if (new_days_stat){
+    el = $("*").filter(function() {
+      return $(this).is("#daysStat");
+    })
+    el.text(new_days_stat)
+  }
+
+  if (new_trend_calculates){  
+    console.log("old TCs in updateGameStats fxn", trend_calculates)
+    console.log("new TCs in updateGameStats fxn", new_trend_calculates)
+    trend_calculates = new_trend_calculates
+    updateSalesSubstratesInDisplayedTable()
+  }
+  
+}
+
+function updateSalesSubstratesInDisplayedTable(){
+  let num_rows = $("table#inventory tbody tr").filter(function(){return (this)}).length
+  let columnIndexRef = getColumnIndexes()
+
+  for (let i = 0; i < num_rows; i++){
+    let name = $("table#inventory tbody tr").eq(i).children().eq(columnIndexRef.name).text()
+    let formattedName = name
+    // .replace(/\s/g, "%20")
+    // console.log("*", formattedName)
+    let max_prices = seed_data.filter(item => item.name==formattedName)[0].max_prices
+    let popularity_factors = seed_data.filter(item => item.name==formattedName)[0].popularity_factors
+    let {popularity, popularity_word, max_buying_price, restock_price} = getSalesSubstrates(popularity_factors, max_prices, trend_calculates)
+    
+    console.log("NEW", popularity, max_buying_price)
+    $("table#inventory tbody tr").eq(i).find(".devdata1").text("P" + popularity + "  M" + max_buying_price)
+    $("table#inventory tbody tr").eq(i).children().eq(columnIndexRef["restock price"]).text(restock_price)
+  }
 }
 
 function getPopularityFactor(pop_factor_names, i, trend_calculates){
