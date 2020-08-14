@@ -284,15 +284,9 @@ function fillInvTable(shouldWipe){
                 result["data"].forEach((fruit)=>{
                     let response="";
                     let {id, name, quantity, selling_price, resilience, max_prices, popularity_factors} = fruit
-                    let formattedName = name.replace(/\s/g, "%20")
-
-                    
+                    let formattedName = name.replace(/\s/g, "%20") 
                     let {popularity, max_buying_price, restock_price} = getSalesSubstrates(popularity_factors, max_prices, trend_calculates)
-                    
-                    // console.dir({
-                    //   popularity, popularity_word, max_prices, max_buying_price, restock_price
-                    // })
-
+    
                     response += 
                     "<tr id='"+formattedName+"'>"+
                       "<td>"+name+"</td>"+
@@ -538,11 +532,14 @@ function restockFruit(formattedName){
                   })
 
                   el.parent('tr').children().eq(columnIndexRef["quantity"]).text(fruit['quantity'])
-                
+                  
+                  let maxPossibleToBuy = Math.floor((money - putative_cost)/restock_price)
 
+                  if (requested_amount > maxPossibleToBuy){
+                    el.parent('tr').find(".amountInput_restock").val(parseInt(maxPossibleToBuy || 1))
+                  }
                 // ***It was successful transaction. So we must send off the db to change money stat now.
                 updateGamesTable(putative_cost, "decrement")
-
 
                 } else {
                   console.log(result["message"]);
