@@ -1,6 +1,6 @@
 <?php
 
-function evolve_trend_calculates($session_TCs, $days)
+function evolve_trend_calculates($session_TCs, $days, $day_profit, $day_costs)
 {
   $trends = (array) json_decode($session_TCs);
 
@@ -14,16 +14,6 @@ function evolve_trend_calculates($session_TCs, $days)
   $trends['conformity'] = $conf_res['conformity'];
   $trends['conformity_history'] = $conf_res['conformity_history'];
   $trends['decadence'] = decadenceFromData($trends['decadence']);
-
-  // if ($days) {
-  //   foreach (array_keys($trends) as $key) {
-  //     if ($trends[$key] > 99) {
-  //       $trends[$key] = 1;
-  //     } else {
-  //       $trends[$key]++;
-  //     }
-  //   }
-  // }
 
   return json_encode($trends);
 }

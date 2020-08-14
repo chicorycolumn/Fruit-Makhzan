@@ -19,7 +19,9 @@ $update_data = [
   "days_stat" => $_SESSION['days_stat'] + 1,
   "trend_calculates" => evolve_trend_calculates(
     $_SESSION['trend_calculates'],
-    $_SESSION['days_stat']
+    $_SESSION['days_stat'],
+    null,
+    null
   ),
 ];
 $acronym = "iiss";
@@ -55,12 +57,9 @@ function go(
 
   $_SESSION['days_stat'] = $update_data['days_stat'];
   $_SESSION['money_stat'] = $update_data['money_stat'];
-  //Note, just setting these sessions vars here does not update them on page, as page needs refreshing
-  //or jquery with reponse data to visually show, the new values.
   $_SESSION['trend_calculates'] = $update_data['trend_calculates'];
 
   $result['update_data'] = $update_data;
-
   $result['update_data']['trend_calculates'] = json_decode(
     $result['update_data']['trend_calculates']
   );

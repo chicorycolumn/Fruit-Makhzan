@@ -92,7 +92,8 @@ include '../master.php';
 //' For some reason this apostrophe is necessary.
 let seed_data = <?php print_r(json_encode($_SESSION['seed_data'])); ?>
 
-// seed_data.forEach(item => item['restock_amount'] = 1)
+let day_costs = 0;
+let week_record = {}
 
 let trend_calculates = {
   "weather": parseInt(`<?php print_r(
@@ -129,21 +130,40 @@ function newDay() {
     return this;
   }).length;
   let incipient_sales = calculateSales();
-  let total_profit = Object.values(incipient_sales).reduce(
+  let day_profit = Object.values(incipient_sales).reduce(
     (sum, obj) => sum + obj.profit,
     0
   );
-  console.log("About to gain " + total_profit + "Ð.");
+  console.log("About to gain " + day_profit + "Ð.");
+
+  let days = parseInt($("#daysStat").text())
+
+  if (days%7==1){week_record = {}}
+  week_record[days] = {profit: day_profit, costs: day_costs}
 
   fillQuantityYesterday(); //Moves current quantities to the qy column.
-  updateGamesTable(total_profit, "new day"); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
+  updateGamesTable(day_profit, "new day", week_record); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
   updateInventoryTable(incipient_sales); //Reduces quantities by sold amounts.
+  updateOverallSalesHistory(days, day_profit, day_costs) //Sends day_profit and day_costs to games table.
 
-  setTimeout(() => {
-    // console.log(Object.keys(trend_calculates))
-    let keys = Object.keys(trend_calculates)
-    keys.forEach(key => console.log(key, trend_calculates[key]))
-  }, 1000);
+  day_costs = 0
+
+  // setTimeout(() => {
+  //   // console.log(Object.keys(trend_calculates))
+  //   let keys = Object.keys(trend_calculates)
+  //   keys.forEach(key => console.log(key, trend_calculates[key]))
+  // }, 1000);
+}
+
+function updateOverallSalesHistory(days, day_profit, day_costs){
+  //Store these in a set of 7, and when reaches 7, send that through pdateGamesTable to be used as substrate for Decadence.
+  //And separately, every 1 day, you send these figures through pdateGamesTable to update json.
+  
+  //So actually, let's move this fxnality to inside pdateGamesTable conditionally.
+
+  // console.log("days", days)
+  // console.log("day_profit", day_profit)
+  // console.log("day_costs", day_costs)
 }
 
 function fillQuantityYesterday() {
@@ -159,7 +179,8 @@ function fillQuantityYesterday() {
   }
 }
 
-function updateGamesTable(money_crement, operation) {
+function updateGamesTable(money_crement, operation, week_record) {
+  console.log(week_record)
   if (operation == "new day") {
     $.ajax({
       type: "GET",
@@ -170,6 +191,7 @@ function updateGamesTable(money_crement, operation) {
         identifying_column: "game_id",
         identifying_data: `<?php echo $_SESSION['gid']; ?>`,
         profit: money_crement,
+        week_record
       },
       error: function (result) {
         console.log("An error occurred immediately in $.ajax request.", result);
@@ -234,7 +256,7 @@ function updateGamesTable(money_crement, operation) {
 }
 
 function updateInventoryTable(incipient_sales) {
-  console.log("### updateInventoryTable fxn invoked");
+  // console.log("### updateInventoryTable fxn invoked");
   console.log(incipient_sales);
   // return
   $.ajax({
@@ -258,7 +280,7 @@ function updateInventoryTable(incipient_sales) {
       console.log(result.responseText);
     },
     success: function (result) {
-      console.log("###success");
+      // console.log("###success");
       if (result["status"]) {
         let names = Object.keys(result["update_data"]);
 
@@ -551,6 +573,7 @@ function restockFruit(formattedName) {
         console.log(result);
       },
       success: function (result) {
+        day_costs += putative_cost
         // console.log("success")
         if (result["status"]) {
           let fruit = result["data"][0];
@@ -579,7 +602,7 @@ function restockFruit(formattedName) {
             ] = reset_value;
           }
           // ***It was successful transaction. So we must send off the db to change money stat now.
-          updateGamesTable(putative_cost, "decrement");
+          updateGamesTable(putative_cost, "decrement", null);
         } else {
           console.log(result["message"]);
           console.log(result["error"]);
@@ -688,14 +711,14 @@ function calculateSales() {
     let price_disparity =
       ((max_buying_price - selling_price) / max_buying_price) * 100;
 
-    console.log(
-      "calculateSales fxn: POP and MXB of " +
-        name +
-        " are " +
-        popularity +
-        " and " +
-        max_buying_price
-    );
+    // console.log(
+    //   "calculateSales fxn: POP and MXB of " +
+    //     name +
+    //     " are " +
+    //     popularity +
+    //     " and " +
+    //     max_buying_price
+    // );
 
     // console.log("calculateSales fxn: Popularity of "+name+" is "+popularity)
     let sales_percentage = (popularity + price_disparity * 4) / 5 / 100;
@@ -804,8 +827,8 @@ function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates) {
   }
 
   if (new_trend_calculates) {
-    console.log("old TCs in updateGameStats fxn", trend_calculates);
-    console.log("new TCs in updateGameStats fxn", new_trend_calculates);
+    // console.log("old TCs in updateGameStats fxn", trend_calculates);
+    // console.log("new TCs in updateGameStats fxn", new_trend_calculates);
     trend_calculates = new_trend_calculates;
     updateSalesSubstratesInDisplayedTable();
   }
@@ -837,7 +860,7 @@ function updateSalesSubstratesInDisplayedTable() {
       trend_calculates
     );
 
-    console.log("NEW", popularity, max_buying_price);
+    // console.log("NEW", popularity, max_buying_price);
     $("table#inventory tbody tr")
       .eq(i)
       .find(".devdata1")
