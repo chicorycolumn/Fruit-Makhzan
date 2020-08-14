@@ -389,7 +389,7 @@ function setAmount(setIntoSession, formattedName, amount, operation){
   
   else if (operation == "throw" && parseInt(amount) > quantity){
  
-  let reset_value = quantity
+  let reset_value = quantity || 1
 
   seed_data.filter(item => item['name']==name)[0][key] = parseInt(reset_value)
   row.find(class_name).val(reset_value)
@@ -438,10 +438,18 @@ function throwFruit(formattedName){
   let throw_amount = parseInt(row.find(".amountInput_throw").val())
   let quantity = parseInt(row.children().eq(columnIndexRef["quantity"]).text())
 
+  if (!quantity){
+    return
+  }
+
   setAmount(true, formattedName, throw_amount, 'throw')
 
   if (throw_amount <= quantity){
- 
+    
+    if (throw_amount > 0.2*quantity && !confirm("Chuck " + throw_amount + " " + name + " into the street?")){
+      return
+    }
+
     $.ajax(
         {
             type: "GET",
@@ -468,6 +476,11 @@ function throwFruit(formattedName){
                   })
 
                   el.parent('tr').children().eq(columnIndexRef["quantity"]).text(fruit['quantity'])
+                  
+                  if (throw_amount > parseInt(fruit['quantity'])){
+                    el.parent('tr').find(".amountInput_throw").val(parseInt(fruit['quantity'] || 1))
+                  }
+                
 
                 } else {
                   console.log(result["message"]);
