@@ -110,6 +110,9 @@ let trend_calculates = {
     "decadence": parseInt(`<?php print_r(
       ((array) json_decode($_SESSION['trend_calculates']))['decadence']
     ); ?>`),
+    "conformity_history": parseInt(`<?php print_r(
+      ((array) json_decode($_SESSION['trend_calculates']))['conformity_history']
+    ); ?>`),
 }
 
 fillInvTable()
@@ -135,6 +138,12 @@ function newDay() {
   fillQuantityYesterday(); //Moves current quantities to the qy column.
   updateGamesTable(total_profit, "new day"); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
   updateInventoryTable(incipient_sales); //Reduces quantities by sold amounts.
+
+  setTimeout(() => {
+    // console.log(Object.keys(trend_calculates))
+    let keys = Object.keys(trend_calculates)
+    keys.forEach(key => console.log(key, trend_calculates[key]))
+  }, 1000);
 }
 
 function fillQuantityYesterday() {

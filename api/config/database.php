@@ -198,6 +198,7 @@ class Database
       "politics" => random_int(1, 100),
       "conformity" => random_int(1, 100),
       "decadence" => random_int(1, 100),
+      "conformity_history" => "ss",
     ]);
 
     $money_initial = 0;

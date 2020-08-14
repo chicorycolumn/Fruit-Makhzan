@@ -17,7 +17,10 @@ $get_full = false;
 $update_data = [
   "money_stat" => $_SESSION['money_stat'] + $profit,
   "days_stat" => $_SESSION['days_stat'] + 1,
-  "trend_calculates" => evolve_trend_calculates($_SESSION['trend_calculates']),
+  "trend_calculates" => evolve_trend_calculates(
+    $_SESSION['trend_calculates'],
+    $_SESSION['days_stat']
+  ),
 ];
 $acronym = "iiss";
 

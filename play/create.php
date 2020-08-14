@@ -50,7 +50,7 @@ $content =
                       </div>
       
                       <div class="boxFooter">
-                        <input type="button" class="btn" onClick="AddFruit()" value="Submit"></input>
+                        <input type="button" class="btn" onClick="addFruit()" value="Submit"></input>
                       </div>
                     </form>
                   </div>
@@ -60,7 +60,7 @@ $content =
 include '../master.php';
 ?>
 <script>
-function AddFruit() {
+function addFruit() {
   $.ajax({
     type: "GET",
     url: "../api/fruit/create.php",

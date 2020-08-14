@@ -1,18 +1,145 @@
 <?php
 
-function evolve_trend_calculates($session_TCs)
+function evolve_trend_calculates($session_TCs, $days)
 {
   $trends = (array) json_decode($session_TCs);
 
-  foreach (array_keys($trends) as $key) {
-    if ($trends[$key] > 99) {
-      $trends[$key] = 1;
-    } else {
-      $trends[$key]++;
-    }
-  }
+  $trends['weather'] = weatherFromDay($days);
+  $trends['politics'] = politicsFromDay($days, $trends['politics']);
+  $trends['love'] = random_int(1, 100);
+  $conf_res = conformityFromHistory(
+    $trends['conformity'],
+    $trends['conformity_history']
+  );
+  $trends['conformity'] = $conf_res['conformity'];
+  $trends['conformity_history'] = $conf_res['conformity_history'];
+  $trends['decadence'] = decadenceFromData($trends['decadence']);
+
+  // if ($days) {
+  //   foreach (array_keys($trends) as $key) {
+  //     if ($trends[$key] > 99) {
+  //       $trends[$key] = 1;
+  //     } else {
+  //       $trends[$key]++;
+  //     }
+  //   }
+  // }
 
   return json_encode($trends);
+}
+
+function decadenceFromData($current)
+{
+  return $current;
+}
+
+function conformityFromHistory($current, $hist)
+{
+  if (substr($hist, -1) == "s") {
+    $prob = random_int(1, 10);
+    if ($prob == 1) {
+      return [
+        "conformity" => random_int(1, $current),
+        "conformity_history" => substr($hist, -1) . "d",
+      ];
+    } elseif ($prob == 10) {
+      return [
+        "conformity" => random_int($current, 100),
+        "conformity_history" => substr($hist, -1) . "u",
+      ];
+    } else {
+      return [
+        "conformity" => $current,
+        "conformity_history" => substr($hist, -1) . "s",
+      ];
+    }
+  } elseif ($hist == "uu") {
+    $prob = random_int(1, 100);
+    if ($prob >= 60) {
+      return [
+        "conformity" => random_int($current, 100),
+        "conformity_history" => substr($hist, -1) . "u",
+      ];
+    } else {
+      return [
+        "conformity" => $current,
+        "conformity_history" => substr($hist, -1) . "s",
+      ];
+    }
+  } elseif ($hist == "dd") {
+    $prob = random_int(1, 100);
+    if ($prob >= 60) {
+      return [
+        "conformity" => random_int(1, $current),
+        "conformity_history" => substr($hist, -1) . "d",
+      ];
+    } else {
+      return [
+        "conformity" => $current,
+        "conformity_history" => substr($hist, -1) . "s",
+      ];
+    }
+  } elseif (substr($hist, -1) == "u") {
+    $prob = random_int(1, 100);
+    if ($prob <= 5) {
+      return [
+        "conformity" => random_int(1, $current),
+        "conformity_history" => substr($hist, -1) . "d",
+      ];
+    } elseif ($prob >= 65) {
+      return [
+        "conformity" => random_int($current, 100),
+        "conformity_history" => substr($hist, -1) . "u",
+      ];
+    } else {
+      return [
+        "conformity" => $current,
+        "conformity_history" => substr($hist, -1) . "s",
+      ];
+    }
+  } elseif (substr($hist, -1) == "d") {
+    $prob = random_int(1, 100);
+    if ($prob >= 65) {
+      return [
+        "conformity" => random_int(1, $current),
+        "conformity_history" => substr($hist, -1) . "d",
+      ];
+    } elseif ($prob <= 5) {
+      return [
+        "conformity" => random_int($current, 100),
+        "conformity_history" => substr($hist, -1) . "u",
+      ];
+    } else {
+      return [
+        "conformity" => $current,
+        "conformity_history" => substr($hist, -1) . "s",
+      ];
+    }
+  }
+}
+
+function weatherFromDay($days)
+{
+  $days = $days % 365;
+
+  if ($days <= 91) {
+    return random_int(40, 100); //Spring
+  } elseif (91 * 1 < $days && $days <= 91 * 2) {
+    return random_int(80, 100); //Summer
+  } elseif (91 * 2 < $days && $days <= 91 * 3) {
+    return random_int(40, 80); //Autumn
+  } else {
+    return random_int(1, 40); //Winter
+  }
+}
+
+function politicsFromDay($days, $current)
+{
+  if ($days % 7 == 0) {
+    return random_int(1, 100);
+  } else {
+    return $current;
+  }
 }
 
 function delete_manipulated_cookie()
