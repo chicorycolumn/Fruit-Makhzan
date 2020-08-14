@@ -376,7 +376,7 @@ function setAmount(setIntoSession, formattedName, amount, operation){
   
   let reset_value = 1
 
-  seed_data.filter(item => item['name']==name)[0][key] = parseInt(reset_value)
+  seed_data.filter(item => item['name']==name)[0][key] = reset_value
   row.find(class_name).val(reset_value)
 
   }
@@ -385,7 +385,7 @@ function setAmount(setIntoSession, formattedName, amount, operation){
  
   let reset_value = quantity || 1
 
-  seed_data.filter(item => item['name']==name)[0][key] = parseInt(reset_value)
+  seed_data.filter(item => item['name']==name)[0][key] = reset_value
   row.find(class_name).val(reset_value)
   }
   
@@ -472,7 +472,10 @@ function throwFruit(formattedName){
                   el.parent('tr').children().eq(columnIndexRef["quantity"]).text(fruit['quantity'])
                   
                   if (throw_amount > parseInt(fruit['quantity'])){
-                    el.parent('tr').find(".amountInput_throw").val(parseInt(fruit['quantity'] || 1))
+                    let reset_value = parseInt(fruit['quantity']) || 1
+                    el.parent('tr').find(".amountInput_throw").val(reset_value)
+                    seed_data.filter(item => item['name']==name)[0]['restock_amount'] = reset_value
+                 
                   }
                 
 
@@ -536,7 +539,13 @@ function restockFruit(formattedName){
                   let maxPossibleToBuy = Math.floor((money - putative_cost)/restock_price)
 
                   if (requested_amount > maxPossibleToBuy){
-                    el.parent('tr').find(".amountInput_restock").val(parseInt(maxPossibleToBuy || 1))
+                    
+                    let reset_value = maxPossibleToBuy || 1
+
+                    console.log("*******", reset_value)
+
+                    el.parent('tr').find(".amountInput_restock").val(reset_value)
+                    seed_data.filter(item => item['name']==name)[0]['restock_amount'] = reset_value
                   }
                 // ***It was successful transaction. So we must send off the db to change money stat now.
                 updateGamesTable(putative_cost, "decrement")
