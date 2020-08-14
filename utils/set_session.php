@@ -3,10 +3,21 @@ if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
 
-$_SESSION['color'] = "deer";
-$_SESSION['money_stat'] = $_GET['money_stat'];
-$_SESSION['days_stat'] = $_GET['days_stat'];
-$_SESSION['trend_calculates'] = $_GET['trend_calculates'];
+$labels = ['seed_data', 'money_stat', 'days_stat', 'trend_calculates'];
+$response = ["status" => false, "message" => ""];
 
-echo 1;
+foreach ($labels as $label) {
+  if (array_key_exists($label, $_GET)) {
+    $_SESSION[$label] = $_GET[$label];
+    $response['status'] = true;
+    $response['message'] .= "Successfully set " . $label . "   ";
+  }
+}
+
+if ($response['message'] == "") {
+  $response['status'] = true;
+  $response['message'] = "Nothing to set into session.";
+}
+
+echo json_encode($response);
 ?> 

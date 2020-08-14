@@ -100,7 +100,8 @@ class Database
           "weather" => true,
           "love" => false,
         ],
-        "resilience" => 20,
+        "resilience" => 21,
+        "restock_amount" => 1,
       ],
       [
         "name" => "Mulberry",
@@ -114,6 +115,7 @@ class Database
           "politics" => true,
         ],
         "resilience" => 40,
+        "restock_amount" => 1,
       ],
       [
         "name" => "Mung Bean",
@@ -127,6 +129,7 @@ class Database
           "conformity" => false,
         ],
         "resilience" => 60,
+        "restock_amount" => 1,
       ],
     ];
 

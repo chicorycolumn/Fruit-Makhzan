@@ -42,3 +42,31 @@
 .invalidInput {
   background-color: red;
 }
+
+.highlighted {
+  color: blue;
+  font-weight: bold;
+}
+
+.buttonSuperHolder {
+  border: blue dotted 1pt;
+  display: flex;
+  flex-direction: column;
+}
+
+.restockButtonHolder {
+  border: yellow dotted 1pt;
+}
+
+.button2 {
+  width: 75px;
+  height: 25px;
+  background-color: rgb(158, 255, 158);
+}
+
+.restockAmountInput {
+  width: 40px;
+  height: 25px;
+  font-size: 15px;
+  text-align: center;
+}

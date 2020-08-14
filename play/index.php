@@ -92,6 +92,8 @@ include '../master.php';
 //' For some reason this apostrophe is necessary.
 let seed_data = <?php print_r(json_encode($_SESSION['seed_data'])); ?>
 
+// seed_data.forEach(item => item['restock_amount'] = 1)
+
 let trend_calculates = {
   "weather": parseInt(`<?php print_r(
     ((array) json_decode($_SESSION['trend_calculates']))['weather']
@@ -296,19 +298,28 @@ function fillInvTable(shouldWipe){
                       "<td>"+name+"</td>"+
                       "<td>"+"-"+"</td>"+
                       "<td>"+quantity+"</td>"+
-                      "<td class='clickable' onClick=changeSellingPrice('"+formattedName+"')>"+
+                      "<td class='clickable highlighted' onClick=changeSellingPrice('"+formattedName+"')>"+
                         "<span class='shown sellingPriceSpan clickable'>"+selling_price+"</span>"+
                         "<form class='hidden sellingPriceForm'>"+
-                          "<input onkeypress='return /[0-9]/.test(event.key)' class='sellingPriceInput' maxlength=10 type='text'>"+
+                          "<input onkeypress='return /[0-9]/.test(event.key)' maxlength=10 class='sellingPriceInput' maxlength=10 type='text'>"+
                           "<button type='submit' class='sellingPriceButton'>OK</button>"+
                         "</form></td>"+
                       "<td>"+restock_price+"</td>"+
-                      "<td>"+resilience+"</td>"+
+                      "<td style='cursor:help;' onClick=printSingle('"+formattedName+"')>"+resilience+"</td>"+
                       "<td>"+
-                          "<p class='devdata1'>P"+popularity+"  M"+max_buying_price+"</p>"+
-                          "<button class='button1' onClick=restockFruit('"+formattedName+"')>B</button> "+
-                          "<button class='button1' onClick=printSingle('"+formattedName+"')>.</button> "+
-                          "<button class='button1' onClick=deleteFruit('"+id+"','"+formattedName+"')>X</button>"+
+                          "<div class='buttonSuperHolder'>"+
+                            "<p class='devdata1'>P"+popularity+"  M"+max_buying_price+"</p>"+
+                            "<div class='restockButtonHolder'>"+
+                              "<button class='button2' onClick=restockFruit('"+formattedName+"')>Restock</button>"+
+                              "<input value="+seed_data.filter(item => item['name']==name)[0]['restock_amount']+" "+
+                                "class='restockAmountInput' "+
+                                "onkeypress='return /[0-9]/.test(event.key)' "+
+                                "onkeyup=setRestockAmount(false,'"+formattedName+"',this.value) "+
+                                "onblur=setRestockAmount(true,null,null) "+
+                                "maxlength=10>"+
+                            "</div>"+
+                            "<button class='button1' onClick=deleteFruit('"+id+"','"+formattedName+"')>X</button>"+
+                          "</div>"
                       "</td>"+
                     "</tr>";
 
@@ -321,11 +332,37 @@ function fillInvTable(shouldWipe){
           }})   
 }
 
+function setRestockAmount(setIntoSession, name, restock_amount){
+  if (setIntoSession){
+    $.ajax(
+        {
+            type: "GET",
+            url: '../utils/set_session.php',
+            dataType: 'json',
+            data: {
+              seed_data: seed_data
+            },
+            error: function (result) {
+              console.log("An error occurred immediately in this $.ajax request.", result)
+              console.log(result.responseText)
+              // window.location = "../play";
+            },
+            success: function (result) {
+              console.log("a3 success")
+           console.log(result)
+              if (result["status"]){ 
+                console.log("status true")
+              } else {
+                console.log(result["message"])
+                console.log(result["error"])
+              }
+          }}) 
 
-// function checkCharacters(e){
-//   console.log(e.value)
-//   return false
-// }
+  } else {
+    name = name.replace(/%20/g, " ")
+    seed_data.filter(item => item['name']==name)[0]['restock_amount'] = parseInt(restock_amount)
+  }
+}
 
 function changeSellingPrice(name){
 
@@ -490,7 +527,7 @@ function printSingle(name){
       });
 }
 
-function restockFruit(name, requested_amount=1){
+function restockFruit(name){
 
   name = name.replace(/%20/g, " ")
 
@@ -500,6 +537,7 @@ function restockFruit(name, requested_amount=1){
     return $(this).children().eq(columnIndexRef["name"]).text() == name
   })
 
+  let requested_amount = parseInt(row.find(".restockAmountInput").val())
   let restock_price = parseInt(row.children().eq(columnIndexRef["restock price"]).text())
   let putative_cost = requested_amount * restock_price
   let money = parseInt($("#moneyStat").text())
@@ -517,7 +555,7 @@ function restockFruit(name, requested_amount=1){
             data: {
                 name: name,
                 table_name: "<?php echo $inv_table_name; ?>",
-                increment: 1
+                increment: requested_amount
             },
             error: function (result) {
               console.log("An error occurred immediately in $.ajax request.")
