@@ -60,33 +60,31 @@ $content =
 include '../master.php';
 ?>
 <script>
-  function AddFruit(){
-
-        $.ajax(
-        {
-            type: "GET",
-            url: '../api/fruit/create.php',
-            dataType: 'json',
-            data: {
-              table_name: "<?php echo $inv_table_name; ?>",
-              name: $("#name").val(),
-              quantity: $("#quantity").val(),        
-              selling_price: $("#selling_price").val(),
-            },
-            error: function (result) {
-              console.log("An error occurred immediately in $.ajax request.", result)
-              console.log(result.responseText)
-            },
-            success: function (result) {
-              console.log("success")
-                if (result['status']) {
-                  console.log(result)
-                    window.location.href = '../play';
-                } else {
-                    console.log(result['message']);
-                    console.log(result["error"]);
-                }
-            }
-        });
-    }
+function AddFruit() {
+  $.ajax({
+    type: "GET",
+    url: "../api/fruit/create.php",
+    dataType: "json",
+    data: {
+      table_name: "<?php echo $inv_table_name; ?>",
+      name: $("#name").val(),
+      quantity: $("#quantity").val(),
+      selling_price: $("#selling_price").val(),
+    },
+    error: function (result) {
+      console.log("An error occurred immediately in $.ajax request.", result);
+      console.log(result.responseText);
+    },
+    success: function (result) {
+      console.log("success");
+      if (result["status"]) {
+        console.log(result);
+        window.location.href = "../play";
+      } else {
+        console.log(result["message"]);
+        console.log(result["error"]);
+      }
+    },
+  });
+}
 </script>
