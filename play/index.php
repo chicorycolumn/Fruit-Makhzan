@@ -309,17 +309,30 @@ function fillInvTable(shouldWipe){
                       "<td>"+
                           "<div class='buttonSuperHolder'>"+
                             "<p class='devdata1'>P"+popularity+"  M"+max_buying_price+"</p>"+
-                            "<div class='restockButtonHolder'>"+
-                              "<button class='button2' onClick=restockFruit('"+formattedName+"')>Restock</button>"+
+                            "<div class='buttonSubHolder'>"+
+                              "<button class='button2' onClick=restockFruit('"+formattedName+"')>Buy</button>"+
                               "<input value="+seed_data.filter(item => item['name']==name)[0]['restock_amount']+" "+
-                                "class='restockAmountInput' "+
+                                "class='amountInput amountInput_restock' "+
+                                "onclick=this.select() "+
                                 "onkeypress='return /[0-9]/.test(event.key)' "+
-                                "onkeyup=setRestockAmount(false,'"+formattedName+"',this.value) "+
-                                "onblur=setRestockAmount(true,null,null) "+
+                                "onkeyup=setAmount(false,'"+formattedName+"',this.value,'restock') "+
+                                "onblur=setAmount(true,'"+formattedName+"',this.value,'restock') "+
                                 "maxlength=10>"+
                             "</div>"+
-                            "<button class='button1' onClick=deleteFruit('"+id+"','"+formattedName+"')>X</button>"+
-                          "</div>"
+                          "</div>"+
+                      "</td>"+
+                      "<td>"+
+                                              
+                        "<div class='buttonSubHolder'>"+
+                        "<button class='button2' onClick=deleteFruit('"+id+"','"+formattedName+"')>Throw</button>"+
+                          "<input value="+seed_data.filter(item => item['name']==name)[0]['throw_amount']+" "+
+                            "class='amountInput amountInput_throw' "+
+                            "onkeypress='return /[0-9]/.test(event.key)' "+
+                            "onkeyup=setAmount(false,'"+formattedName+"',this.value,'throw') "+
+                            "onblur=setAmount(true,'"+formattedName+"',this.value,'throw') "+
+                            "maxlength=10>"+
+                        "</div>"+
+                                            
                       "</td>"+
                     "</tr>";
 
@@ -332,8 +345,39 @@ function fillInvTable(shouldWipe){
           }})   
 }
 
-function setRestockAmount(setIntoSession, name, restock_amount){
-  if (setIntoSession){
+function setAmount(setIntoSession, name, amount, operation){
+
+  name = name.replace(/%20/g, " ")
+  let key = operation + "_amount"
+
+  if (!setIntoSession){
+
+    if (amount && parseInt(amount)) {
+    
+    
+    seed_data.filter(item => item['name']==name)[0][key] = parseInt(amount)
+  }
+
+  }else
+   { 
+
+    if (!amount || !parseInt(amount)){
+
+
+let columnIndexRef = getColumnIndexes()
+
+let row = $("table#inventory tbody tr").filter(function(){
+  return $(this).children().eq(columnIndexRef['name']).text() == name
+})
+
+let class_name = ".amountInput" + "_" + operation
+let reset_value = 1
+
+seed_data.filter(item => item['name']==name)[0][key] = parseInt(reset_value)
+row.find(class_name).val(reset_value)
+
+}else{
+
     $.ajax(
         {
             type: "GET",
@@ -356,12 +400,110 @@ function setRestockAmount(setIntoSession, name, restock_amount){
                 console.log(result["message"])
                 console.log(result["error"])
               }
-          }}) 
+          }}) }
 
-  } else {
-    name = name.replace(/%20/g, " ")
-    seed_data.filter(item => item['name']==name)[0]['restock_amount'] = parseInt(restock_amount)
   }
+}
+
+function restockFruit(formattedName){
+
+name = formattedName.replace(/%20/g, " ")
+
+let columnIndexRef = getColumnIndexes()
+
+let row = $("table#inventory tbody tr").filter(function(){
+  return $(this).children().eq(columnIndexRef["name"]).text() == name
+})
+
+let requested_amount = parseInt(row.find(".amountInput_restock").val())
+let restock_price = parseInt(row.children().eq(columnIndexRef["restock price"]).text())
+let putative_cost = requested_amount * restock_price
+let money = parseInt($("#moneyStat").text())
+
+setAmount(true,formattedName,requested_amount,'restock')
+console.log(money, putative_cost)  
+
+if (putative_cost > money){
+  alert("Insufficient funds!")
+} else {
+  $.ajax(
+      {
+          type: "GET",
+          url: '../api/fruit/restock.php',
+          dataType: 'json',
+          data: {
+              name: name,
+              table_name: "<?php echo $inv_table_name; ?>",
+              increment: requested_amount
+          },
+          error: function (result) {
+            console.log("An error occurred immediately in $.ajax request.")
+            console.log(result.responseText)
+            console.log(result)
+          },
+          success: function (result) {
+          // console.log("success")
+              if (result['status']) {
+
+                let fruit = result["data"][0]
+
+                let el = $("table#inventory tr td").filter(function() {
+                  return $(this).text() == fruit['name']
+                })
+
+                el.parent('tr').children().eq(2).text(fruit['quantity'])
+              
+
+              // ***It was successful transaction. So we must send off the db to change money stat now.
+              updateGamesTable(putative_cost, "decrement")
+
+
+              } else {
+                console.log(result["message"]);
+                console.log(result["error"]);
+              }
+          }
+      });
+  }
+
+
+
+
+}
+
+function deleteFruit(id, name){
+
+name = name.replace(/%20/g, " ")
+
+if (result = confirm("Chuck all " + name + " into the street?")) { 
+    $.ajax(
+    {
+        type: "GET",
+        url: '../api/fruit/delete.php',
+        dataType: 'json',
+        data: {
+            id: id,
+            table_name:  "<?php echo $inv_table_name; ?>"
+        },
+        error: function (result) {
+          console.log("An error occurred immediately in $.ajax request.")
+          console.log(result.responseText)
+          console.log(result)
+        },
+        success: function (result) {
+          // console.log("success")
+            if (result['status']) {
+              let el = $("table#inventory tr td").filter(function() {
+                  return $(this).text() == name
+              })
+el.parent('tr').remove()      
+            } else {
+                console.log(result["message"])
+                console.log(result["error"]);
+            }
+        }
+    });
+}
 }
 
 function changeSellingPrice(name){
@@ -383,15 +525,6 @@ function changeSellingPrice(name){
     span.addClass("hidden")
     form.removeClass("hidden")
     input.focus()
-
-    // input.on('keyup', function(){
-    //   let putative_price = input.val()
-    //   if (putative_price && !putative_price.match(/^\d+$/)){
-    //     button.prop('disabled', true)
-    //   }else if (putative_price.match(/^\d+$/)){
-    //     button.prop('disabled', false)
-    //   }
-    // })
 
     form.on('submit', function(e){
       e.preventDefault();
@@ -525,106 +658,6 @@ function printSingle(name){
             }
           }
       });
-}
-
-function restockFruit(name){
-
-  name = name.replace(/%20/g, " ")
-
-  let columnIndexRef = getColumnIndexes()
-
-  let row = $("table#inventory tbody tr").filter(function(){
-    return $(this).children().eq(columnIndexRef["name"]).text() == name
-  })
-
-  let requested_amount = parseInt(row.find(".restockAmountInput").val())
-  let restock_price = parseInt(row.children().eq(columnIndexRef["restock price"]).text())
-  let putative_cost = requested_amount * restock_price
-  let money = parseInt($("#moneyStat").text())
-
-  console.log(money, putative_cost)  
-  
-  if (false || putative_cost > money){
-    alert("Insufficient funds!")
-  } else {
-    $.ajax(
-        {
-            type: "GET",
-            url: '../api/fruit/restock.php',
-            dataType: 'json',
-            data: {
-                name: name,
-                table_name: "<?php echo $inv_table_name; ?>",
-                increment: requested_amount
-            },
-            error: function (result) {
-              console.log("An error occurred immediately in $.ajax request.")
-              console.log(result.responseText)
-              console.log(result)
-            },
-            success: function (result) {
-            // console.log("success")
-                if (result['status']) {
-
-                  let fruit = result["data"][0]
-
-                  let el = $("table#inventory tr td").filter(function() {
-                    return $(this).text() == fruit['name']
-                  })
- 
-                  el.parent('tr').children().eq(2).text(fruit['quantity'])
-                
-
-                // ***It was successful transaction. So we must send off the db to change money stat now.
-                updateGamesTable(putative_cost, "decrement")
-
-
-                } else {
-                  console.log(result["message"]);
-                  console.log(result["error"]);
-                }
-            }
-        });
-    }
-
-
-
-
-}
-
-function deleteFruit(id, name){
-
-  name = name.replace(/%20/g, " ")
-  
-  if (result = confirm("Chuck all " + name + " into the street?")) { 
-      $.ajax(
-      {
-          type: "GET",
-          url: '../api/fruit/delete.php',
-          dataType: 'json',
-          data: {
-              id: id,
-              table_name:  "<?php echo $inv_table_name; ?>"
-          },
-          error: function (result) {
-            console.log("An error occurred immediately in $.ajax request.")
-            console.log(result.responseText)
-            console.log(result)
-          },
-          success: function (result) {
-            // console.log("success")
-              if (result['status']) {
-                let el = $("table#inventory tr td").filter(function() {
-                    return $(this).text() == name
-                })
-  el.parent('tr').remove()      
-              } else {
-                  console.log(result["message"])
-                  console.log(result["error"]);
-              }
-          }
-      });
-  }
 }
 
 function checkSession(){

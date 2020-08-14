@@ -24,7 +24,8 @@ $invTable = '
         <th>Selling price</th>
         <th>Restock price</th>
         <th>Resilience</th>
-        <th>Action</th>
+        <th>Restock</th>
+        <th>Throw</th>
       </tr>
       </thead>
       <tbody>

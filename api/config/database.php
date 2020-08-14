@@ -102,6 +102,7 @@ class Database
         ],
         "resilience" => 21,
         "restock_amount" => 1,
+        "throw_amount" => 1,
       ],
       [
         "name" => "Mulberry",
@@ -116,6 +117,7 @@ class Database
         ],
         "resilience" => 40,
         "restock_amount" => 1,
+        "throw_amount" => 1,
       ],
       [
         "name" => "Mung Bean",
@@ -130,6 +132,7 @@ class Database
         ],
         "resilience" => 60,
         "restock_amount" => 1,
+        "throw_amount" => 1,
       ],
     ];
 
