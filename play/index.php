@@ -285,20 +285,31 @@ function fillInvTable(shouldWipe){
                     let formattedName = name.replace(/\s/g, "%20")
 
                     
-                    let {popularity, popularity_word, max_buying_price, restock_price} = getSalesSubstrates(popularity_factors, max_prices, trend_calculates)
+                    let {popularity, max_buying_price, restock_price} = getSalesSubstrates(popularity_factors, max_prices, trend_calculates)
                     
                     // console.dir({
                     //   popularity, popularity_word, max_prices, max_buying_price, restock_price
                     // })
 
-                    response += "<tr id='"+formattedName+"'>"+
-                    "<td>"+name+"</td>"+
-                    "<td>"+"-"+"</td>"+
-                    "<td>"+quantity+"</td>"+
-                    "<td>"+selling_price+"</td>"+
-                    "<td>"+restock_price+"</td>"+
-                    "<td>"+resilience+"</td>"+
-                    "<td><p class='devdata1'>P"+popularity+"  M"+max_buying_price+"</p><button class='button1' onClick=restockFruit('"+formattedName+"')>B</button> <button class='button1' onClick=printSingle('"+formattedName+"')>.</button> <button class='button1' onClick=deleteFruit('"+id+"','"+formattedName+"')>X</button></td>"+
+                    response += 
+                    "<tr id='"+formattedName+"'>"+
+                      "<td>"+name+"</td>"+
+                      "<td>"+"-"+"</td>"+
+                      "<td>"+quantity+"</td>"+
+                      "<td class='clickable' onClick=changeSellingPrice('"+formattedName+"')>"+
+                        "<span class='shown sellingPriceSpan clickable'>"+selling_price+"</span>"+
+                        "<form class='hidden sellingPriceForm'>"+
+                          "<input onkeypress='return /[0-9]/.test(event.key)' class='sellingPriceInput' maxlength=10 type='text'>"+
+                          "<button type='submit' class='sellingPriceButton'>OK</button>"+
+                        "</form></td>"+
+                      "<td>"+restock_price+"</td>"+
+                      "<td>"+resilience+"</td>"+
+                      "<td>"+
+                          "<p class='devdata1'>P"+popularity+"  M"+max_buying_price+"</p>"+
+                          "<button class='button1' onClick=restockFruit('"+formattedName+"')>B</button> "+
+                          "<button class='button1' onClick=printSingle('"+formattedName+"')>.</button> "+
+                          "<button class='button1' onClick=deleteFruit('"+id+"','"+formattedName+"')>X</button>"+
+                      "</td>"+
                     "</tr>";
 
                     $(response).appendTo($("#inventory"));
@@ -308,6 +319,103 @@ function fillInvTable(shouldWipe){
                 console.log(result["error"])
               }
           }})   
+}
+
+
+// function checkCharacters(e){
+//   console.log(e.value)
+//   return false
+// }
+
+function changeSellingPrice(name){
+
+  name = name.replace(/%20/g, " ")
+  let columnIndexRef = getColumnIndexes()
+
+  let row = $("table#inventory tbody tr").filter(function(){
+    return $(this).children().eq(columnIndexRef['name']).text() == name
+  })
+
+  let span = row.find(".sellingPriceSpan")
+  let form = row.find(".sellingPriceForm")
+  let input = row.find(".sellingPriceInput")
+  let button = row.find(".sellingPriceButton")
+
+  if (form.hasClass("hidden")){
+  
+    span.addClass("hidden")
+    form.removeClass("hidden")
+    input.focus()
+
+    // input.on('keyup', function(){
+    //   let putative_price = input.val()
+    //   if (putative_price && !putative_price.match(/^\d+$/)){
+    //     button.prop('disabled', true)
+    //   }else if (putative_price.match(/^\d+$/)){
+    //     button.prop('disabled', false)
+    //   }
+    // })
+
+    form.on('submit', function(e){
+      e.preventDefault();
+
+      let putative_price = input.val()
+
+      if(!putative_price || !parseInt(putative_price)){
+        input.val("")
+        form.addClass("hidden")
+        span.removeClass("hidden")
+        return
+      }
+
+      if (putative_price.match(/^\d+$/)){
+        $.ajax(
+        {
+            type: "GET",
+            url: '../api/fruit/update.php',
+            dataType: 'json',
+            data: {
+                name: name,
+                table_name: "<?php echo $inv_table_name; ?>",
+                identifying_column: "name",
+                identifying_data: name,
+                update_data: {
+                  selling_price: putative_price
+                },
+                acronym: "is",
+                should_update_session: 0
+            },
+            error: function (result) {
+              console.log("An error occurred immediately in $.ajax request.")
+              console.log(result.responseText)
+              console.log(result)
+            },
+            success: function (result) {
+                if (result['status']) {
+
+                  input.val("")
+                  form.addClass("hidden")
+                  span.removeClass("hidden")
+
+                  span.text(result['update_data']['selling_price'])
+
+                } else {
+                  console.log(result["message"]);
+                  console.log(result["error"]);
+                }
+            }
+        });
+      }
+
+  
+
+
+      })
+
+  }
+
+  //Change this to input box?
+  // row.children().eq(columnIndexRef['selling price']).text("oh yeah")
 }
 
 function calculateSales(){
@@ -323,7 +431,7 @@ function calculateSales(){
 
     let max_prices = seed_data.filter(item => item.name==name)[0].max_prices
     let popularity_factors = seed_data.filter(item => item.name==name)[0].popularity_factors
-    let {popularity, popularity_word, max_buying_price, restock_price} = getSalesSubstrates(popularity_factors, max_prices, trend_calculates)
+    let {popularity, max_buying_price, restock_price} = getSalesSubstrates(popularity_factors, max_prices, trend_calculates)
 
     let price_disparity = ( (max_buying_price - selling_price)/max_buying_price )*100
 
@@ -503,7 +611,7 @@ function getSalesSubstrates(popularity_factors, max_prices, trend_calculates){
   let max_buying_price = max_prices[popularity_word]
   let restock_price = Math.ceil(0.8*max_buying_price)
 
-  return {popularity, popularity_word, max_buying_price, restock_price}
+  return {popularity, max_buying_price, restock_price}
 }
 
 function getColumnIndexes(){
@@ -558,7 +666,7 @@ function updateSalesSubstratesInDisplayedTable(){
     // console.log("*", formattedName)
     let max_prices = seed_data.filter(item => item.name==formattedName)[0].max_prices
     let popularity_factors = seed_data.filter(item => item.name==formattedName)[0].popularity_factors
-    let {popularity, popularity_word, max_buying_price, restock_price} = getSalesSubstrates(popularity_factors, max_prices, trend_calculates)
+    let {popularity, max_buying_price, restock_price} = getSalesSubstrates(popularity_factors, max_prices, trend_calculates)
     
     console.log("NEW", popularity, max_buying_price)
     $("table#inventory tbody tr").eq(i).find(".devdata1").text("P" + popularity + "  M" + max_buying_price)
