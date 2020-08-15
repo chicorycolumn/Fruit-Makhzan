@@ -22,15 +22,6 @@ body {
   justify-content: center;
 }
 
-.table {
-  border-collapse: separate;
-  border-spacing: 50px 0;
-}
-
-td {
-  padding: 5px 0px 5px 0px;
-}
-
 .wrapper {
   background-color: rgba(0, 255, 0, 0.1);
   height: 95vh;
@@ -39,4 +30,5 @@ td {
 .mainDiv {
   border: black dashed 2pt;
   margin: 20px 0px 20px 0px;
+  width: 800px;
 }

@@ -1,0 +1,124 @@
+.button1 {
+  width: 25px;
+  height: 25px;
+  background-color: red;
+}
+
+.th_inventory {
+  /* border: fuchsia dotted 1pt; */
+  min-width: 100px;
+}
+
+.table {
+  border-collapse: separate;
+  border-spacing: 20px 0;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 15px;
+  /* border: fuchsia dotted 5pt; */
+}
+
+#inventory td {
+  padding-top: 20px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+}
+
+.regularTD {
+  padding-left: 5px;
+}
+
+.buttonTD {
+  padding-left: 0px;
+}
+
+.sellingTD {
+  padding-left: 0px;
+}
+
+.quantityTD {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.qy {
+  /* margin-left: 20px; */
+  color: lightgray;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.shown {
+  /* display: none; */
+}
+
+.sellingPriceInput {
+  width: 45px;
+  height: 20px;
+  font-size: 15px;
+  border: red dotted 1pt;
+}
+
+.sellingPriceSpan {
+  border: fuchsia solid 1pt;
+  min-width: 80px;
+  min-height: 20px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.sellingPriceForm {
+  /* border: black dotted 1pt; */
+  margin: 0px;
+  /* margin-top: 15px; */
+  width: 80px;
+}
+
+.sellingPriceButton {
+  width: 35px;
+  height: 20px;
+  background-color: lightgreen;
+}
+
+.sellingPriceButton:disabled {
+  background-color: lightgray;
+}
+
+.invalidInput {
+  background-color: red;
+}
+
+.highlighted {
+  color: blue;
+  font-weight: bold;
+}
+
+.buttonSuperHolder {
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonSubHolder {
+  /* border: purple dotted 1pt; */
+  min-width: 100px;
+}
+
+.button2 {
+  width: 60px;
+  height: 25px;
+  background-color: rgb(158, 255, 158);
+}
+
+.amountInput {
+  width: 40px;
+  height: 25px;
+  font-size: 15px;
+  text-align: center;
+}

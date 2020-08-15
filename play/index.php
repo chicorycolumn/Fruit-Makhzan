@@ -11,6 +11,8 @@ if (!isset($_SESSION['gid'])) {
   exit();
 }
 
+$show_dev_data = false;
+
 setcookie("makhzan", $_SESSION['gid'], time() + 3600 * 24 * 30, "/");
 $gid = $_SESSION['gid'];
 $inv_table_name = $_SESSION['inv_table_name'];
@@ -48,41 +50,48 @@ include 'content/mainBulletin.php';
 include 'content/mainButton.php';
 include 'content/invTable.php';
 
-$content =
-  '
-<h1> 
+if ($show_dev_data) {
+  $_SESSION['show_dev_data'] = 1;
+  $content =
+    '<h1> 
   ' .
-  $gid .
+    $gid .
+    '
+  </h1>   
+
+  <button onClick="checkSession()">Check Session</button>
+  <button onClick="checkTCs()">Check TCs and Seed Data</button>';
+} else {
+  $_SESSION['show_dev_data'] = 0;
+  $content = "";
+}
+
+$content .=
   '
-</h1>
-
-<button onClick="checkSession()">Check Session</button>
-<button onClick="checkTCs()">Check TCs and Seed Data</button>
-
-<div class="mainDiv">
-  ' .
+  <div class="mainDiv">
+    ' .
   $mainStats .
   '
-</div>
+  </div>
 
-<div class="mainDiv">
-  ' .
+  <div class="mainDiv">
+    ' .
   $mainBulletin .
   '
-</div>
+  </div>
 
-<div class="mainDiv">
-  ' .
+  <div class="mainDiv">
+    ' .
   $mainButton .
   '
-</div>
-  
-<div class="mainDiv mainDivTable1">
-  ' .
+  </div>
+    
+  <div class="mainDiv mainDivTable1">
+    ' .
   $invTable .
   '
-</div>
-';
+  </div>
+  ';
 
 include '../master.php';
 ?>
@@ -144,7 +153,6 @@ function newDay() {
   fillQuantityYesterday(); //Moves current quantities to the qy column.
   updateGamesTable(day_profit, "new day", week_record); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
   updateInventoryTable(incipient_sales); //Reduces quantities by sold amounts.
-  updateOverallSalesHistory(days, day_profit, day_costs) //Sends day_profit and day_costs to games table.
 
   day_costs = 0
 
@@ -159,17 +167,6 @@ function newDay() {
   }, 500);
 }
 
-function updateOverallSalesHistory(days, day_profit, day_costs){
-  //Store these in a set of 7, and when reaches 7, send that through pdateGamesTable to be used as substrate for Decadence.
-  //And separately, every 1 day, you send these figures through pdateGamesTable to update json.
-  
-  //So actually, let's move this fxnality to inside pdateGamesTable conditionally.
-
-  // console.log("days", days)
-  // console.log("day_profit", day_profit)
-  // console.log("day_costs", day_costs)
-}
-
 function fillQuantityYesterday() {
   let num_rows = $("table#inventory tbody tr").filter(function () {
     return this;
@@ -177,9 +174,8 @@ function fillQuantityYesterday() {
   for (let i = 0; i < num_rows; i++) {
     let row = $("table#inventory tbody tr:eq(" + i + ")");
     row
-      .children()
-      .eq(columnIndexRef.qy)
-      .text(row.children().eq(columnIndexRef.quantity).text());
+      .find(".qy")
+      .text(row.find(".quantity").text());
   }
 }
 
@@ -296,12 +292,12 @@ function updateInventoryTable(incipient_sales) {
           });
 
           let current_quantity = parseInt(
-            row.children().eq(columnIndexRef.quantity).text()
+            row.find(".quantity").text()
           );
           let new_quantity =
             current_quantity -
             parseInt(result["update_data"][name]["sales_quantity"]);
-          row.children().eq(columnIndexRef.quantity).text(new_quantity);
+          row.find(".quantity").text(new_quantity);
         });
       } else {
         console.log("###else");
@@ -355,48 +351,46 @@ function fillInvTable(shouldWipe) {
           );
                     response += 
                     "<tr id='"+formattedName+"'>"+
-                      "<td>"+name+"</td>"+
-                      "<td>"+"-"+"</td>"+
-                      "<td>"+quantity+"</td>"+
-                      "<td class='clickable highlighted' onClick=changeSellingPrice('"+formattedName+"')>"+
-                        "<span class='shown sellingPriceSpan clickable'>"+selling_price+"</span>"+
+                      "<td class='regularTD'>"+name+"</td>"+
+                      "<td class='regularTD quantityTD'><span class='quantity'>"+quantity+"</span><span class='qy'>~</span></td>"+
+                      "<td class='clickable highlighted regularTD sellingTD' onClick=changeSellingPrice('"+formattedName+"')>"+
+                        "<p class='shown sellingPriceSpan clickable'>"+selling_price+"</pb>"+
                         "<form class='hidden sellingPriceForm'>"+
-                          "<input onkeypress='return /[0-9]/.test(event.key)' maxlength=10 class='sellingPriceInput' maxlength=10 type='text'>"+
-                          "<button type='submit' class='sellingPriceButton'>OK</button>"+
+                          "<input class='sellingPriceInput' onkeypress='return /[0-9]/.test(event.key)' maxlength=10 maxlength=10 type='text'>"+
+                          "<button class='sellingPriceButton' type='submit'>OK</button>"+
                         "</form></td>"+
-                      "<td>"+restock_price+"</td>"+
-                      "<td style='cursor:help;' onClick=printSingle('"+formattedName+"')>"+resilience+"</td>"+
-                      "<td>"+
-                          "<div class='buttonSuperHolder'>"+
-                            "<p class='devdata1'>P"+popularity+"  M"+max_buying_price+"</p>"+
-                            "<div class='buttonSubHolder'>"+
-                              "<button class='button2' onClick=restockFruit('"+formattedName+"')>Buy</button>"+
-                              "<input value="+seed_data.filter(item => item['name']==name)[0]['restock_amount']+" "+
-                                "class='amountInput amountInput_restock' "+
-                                "onclick=this.select() "+
-                                "onkeypress='return /[0-9]/.test(event.key)' "+
-                                "onkeyup=setAmount(false,'"+formattedName+"',this.value,'restock') "+
-                                "onblur=setAmount(true,'"+formattedName+"',this.value,'restock') "+
-                                "maxlength=10>"+
-                            "</div>"+
+                      "<td class='regularTD'>"+restock_price+"</td>"+
+                      "<td class='regularTD' style='cursor:help;' onClick=printSingle('"+formattedName+"')>"+resilience+"</td>"+
+                      "<td class='buttonTD'>"+
+                          "<div class='buttonSubHolder'>"+
+                          dev_data_html(popularity, max_buying_price)+
+                            "<button class='button2' onClick=restockFruit('"+formattedName+"')>Buy</button>"+
+                            "<input value="+seed_data.filter(item => item['name']==name)[0]['restock_amount']+" "+
+                              "class='amountInput amountInput_restock' "+
+                              "onclick=this.select() "+
+                              "onkeypress='return /[0-9]/.test(event.key)' "+
+                              "onkeyup=setAmount(false,'"+formattedName+"',this.value,'restock') "+
+                              "onblur=setAmount(true,'"+formattedName+"',this.value,'restock') "+
+                              "maxlength=10>"+
                           "</div>"+
                       "</td>"+
-                      "<td>"+
-                                              
-                        "<div class='buttonSubHolder'>"+
-                        "<button class='button2' onClick=throwFruit('"+formattedName+"')>Throw</button>"+
-                          "<input value="+seed_data.filter(item => item['name']==name)[0]['throw_amount']+" "+
-                            "class='amountInput amountInput_throw' "+
-                            "onclick=this.select() "+
-                            "onkeypress='return /[0-9]/.test(event.key)' "+
-                            "onkeyup=setAmount(false,'"+formattedName+"',this.value,'throw') "+
-                            "onblur=setAmount(true,'"+formattedName+"',this.value,'throw') "+
-                            "maxlength=10>"+
-                        "</div>"+
-                                            
-                      "</td>"+
+                      // "<td>"+             
+                      //   "<div class='buttonSubHolder'>"+
+                      //   "<button class='button2' onClick=throwFruit('"+formattedName+"')>Throw</button>"+
+                      //     "<input value="+seed_data.filter(item => item['name']==name)[0]['throw_amount']+" "+
+                      //       "class='amountInput amountInput_throw' "+
+                      //       "onclick=this.select() "+
+                      //       "onkeypress='return /[0-9]/.test(event.key)' "+
+                      //       "onkeyup=setAmount(false,'"+formattedName+"',this.value,'throw') "+
+                      //       "onblur=setAmount(true,'"+formattedName+"',this.value,'throw') "+
+                      //       "maxlength=10>"+
+                      //   "</div>"+               
+                      // "</td>"+
                     "</tr>";
                     $(response).appendTo($("#inventory"));
+                    setTimeout(() => {
+                      bindUsefulJqueriesAfterLoadingDataIntoTable()
+                    }, 500);
         });
       } else {
         console.log(result["message"]);
@@ -404,6 +398,33 @@ function fillInvTable(shouldWipe) {
       }
     },
   });
+}
+
+function bindUsefulJqueriesAfterLoadingDataIntoTable(){
+  $('.buttonSubHolder').bind('mousewheel', function(e){
+        
+        console.log($(this).parents("tr").children().eq(getColumnIndexes()['name']).text())
+        let current_val = parseInt($(this).find("input").val())
+        let max_buyable_quantity = Math.floor(parseInt($("#moneyStat").text()) / parseInt($(this).parents("tr").children().eq(getColumnIndexes()['restock price']).text()))
+
+        if(e.originalEvent.wheelDelta/120 > 0) {
+          current_val < max_buyable_quantity && $(this).find("input").val(current_val+1)
+        }
+        else{
+          current_val > 1 && $(this).find("input").val(current_val-1)
+        }
+  });
+}
+
+function dev_data_html(popularity, max_buying_price){
+
+  let show = <?php echo $_SESSION['show_dev_data']; ?>
+
+  if (show){
+    return "<p class='devdata1'>P"+popularity+"  M"+max_buying_price+"</p>"
+  }else{
+    return ""
+  }
 }
 
 function setAmount(setIntoSession, formattedName, amount, operation) {
@@ -414,7 +435,7 @@ function setAmount(setIntoSession, formattedName, amount, operation) {
   let row = $("table#inventory tbody tr").filter(function () {
     return $(this).children().eq(columnIndexRef["name"]).text() == name;
   });
-  let quantity = parseInt(row.children().eq(columnIndexRef["quantity"]).text());
+  let quantity = parseInt(row.find(".quantity").text());
   let class_name = ".amountInput" + "_" + operation;
   let key = operation + "_amount";
 
@@ -482,7 +503,7 @@ function throwFruit(formattedName) {
   });
 
   let throw_amount = parseInt(row.find(".amountInput_throw").val());
-  let quantity = parseInt(row.children().eq(columnIndexRef["quantity"]).text());
+  let quantity = parseInt(row.find(".quantity").text());
 
   if (!quantity) {
     return;
@@ -521,10 +542,7 @@ function throwFruit(formattedName) {
             return $(this).text() == fruit["name"];
           });
 
-          el.parent("tr")
-            .children()
-            .eq(columnIndexRef["quantity"])
-            .text(fruit["quantity"]);
+          el.parent("tr").find(".quantity").text(fruit["quantity"]);
 
           if (throw_amount > parseInt(fruit["quantity"])) {
             let reset_value = parseInt(fruit["quantity"]) || 1;
@@ -588,10 +606,7 @@ function restockFruit(formattedName) {
             return $(this).text() == fruit["name"];
           });
 
-          el.parent("tr")
-            .children()
-            .eq(columnIndexRef["quantity"])
-            .text(fruit["quantity"]);
+          el.parent("tr").find(".quantity").text(fruit["quantity"]);
 
           let maxPossibleToBuy = Math.floor(
             (money - putative_cost) / restock_price
@@ -699,7 +714,7 @@ function calculateSales() {
   for (let i = 0; i < num_rows; i++) {
     let row = $("table#inventory tbody tr:eq(" + i + ")");
     let name = row.children().eq(columnIndexRef.name).text();
-    let quantity = parseInt(row.children().eq(columnIndexRef.quantity).text());
+    let quantity = parseInt(row.find(".quantity").text());
     let selling_price = parseInt(
       row.children().eq(columnIndexRef["selling price"]).text()
     );
@@ -810,7 +825,7 @@ function getColumnIndexes() {
 
   let columnIndexRef = {};
 
-  let labels = ["quantity", "selling price", "name", "qy", "restock price"];
+  let labels = ["quantity", "selling price", "name", "restock price"];
 
   labels.forEach((label) => {
     columnIndexRef[label] = getIndex(label);
