@@ -143,7 +143,6 @@ function newDay() {
     (sum, obj) => sum + obj.profit,
     0
   );
-  console.log("About to gain " + day_profit + "Ð.");
 
   let days = parseInt($("#daysStat").text())
 
@@ -156,21 +155,12 @@ function newDay() {
 
   day_costs = 0
 
-  // setTimeout(() => {
-  //   // console.log(Object.keys(trend_calculates))
-  //   let keys = Object.keys(trend_calculates)
-  //   keys.forEach(key => console.log(key, trend_calculates[key]))
-  // }, 1000);
-
   setTimeout(() => {
     checkTCs()
   }, 500);
 }
 
 function fillQuantityYesterday(incipient_sales) {
-  console.log("************************")
-  console.dir(incipient_sales)
-  console.log("************************")
   let num_rows = $("table#inventory tbody tr").filter(function () {
     return this;
   }).length;
@@ -187,7 +177,7 @@ function fillQuantityYesterday(incipient_sales) {
 function updateGamesTable(money_crement, operation, week_record) {
   
   if (operation == "new day") {
-    console.log("***********************", "week_record", week_record)
+    console.log("week_record", week_record)
     $.ajax({
       type: "GET",
       url: "../api/fruit/new_day_supertable.php",
@@ -205,25 +195,20 @@ function updateGamesTable(money_crement, operation, week_record) {
         console.log(result.responseText);
       },
       success: function (result) {
-        // console.log("success")
+
         if (result["status"]) {
-          // console.log(result);
 
           let { money_stat, days_stat, trend_calculates } = result[
             "update_data"
           ];
           updateGameStats(money_stat, days_stat, trend_calculates);
         } else {
-          console.log(result["message"]);
-          console.log(result["error"]);
+          console.log(result["message"], result["error"]);
         }
       },
     });
   } else if ((operation = "restock" || operation == "decrement")) {
-    console.log({
-      money_stat: parseInt($("#moneyStat").text()) - money_crement,
-    });
-    // return
+
     $.ajax({
       type: "GET",
       url: "../api/fruit/update.php",
@@ -246,16 +231,13 @@ function updateGamesTable(money_crement, operation, week_record) {
         console.log(result.responseText);
       },
       success: function (result) {
-        console.log("A success");
         console.log(result);
         if (result["status"]) {
-          console.log(result);
 
           let { money_stat } = result["update_data"];
           updateGameStats(money_stat);
         } else {
-          console.log(result["message"]);
-          console.log(result["error"]);
+          console.log(result["message"], result["error"]);
         }
       },
     });
@@ -263,9 +245,7 @@ function updateGamesTable(money_crement, operation, week_record) {
 }
 
 function updateInventoryTable(incipient_sales) {
-  // console.log("### updateInventoryTable fxn invoked");
-  console.log(incipient_sales);
-  // return
+
   $.ajax({
     type: "POST",
     url: "../api/fruit/new_day_subtable.php",
@@ -287,7 +267,7 @@ function updateInventoryTable(incipient_sales) {
       console.log(result.responseText);
     },
     success: function (result) {
-      // console.log("###success");
+
       if (result["status"]) {
         let names = Object.keys(result["update_data"]);
 
@@ -305,9 +285,7 @@ function updateInventoryTable(incipient_sales) {
           row.find(".quantity").text(new_quantity);
         });
       } else {
-        console.log("###else");
-        console.log(result["message"]);
-        console.log(result["error"]);
+        console.log(result["message"], result["error"]);
       }
     },
   });
@@ -330,7 +308,6 @@ function fillInvTable(shouldWipe) {
       console.log(result.responseText);
     },
     success: function (result) {
-      // console.log("success")
 
       if (result["status"]) {
         result["data"].forEach((fruit) => {
@@ -361,15 +338,31 @@ function fillInvTable(shouldWipe) {
                       "<td class='regularTD'>"+name+"</td>"+
 
 
-                      "<td class='regularTD quantityTD'><span class='quantity'>"+quantity+"</span><span class='qy'>~</span></td>"+
+                      "<td class='regularTD quantityTD'>"+
+                        "<span class='quantity'>"+quantity+"</span>"+
+                        "<span class='qy'>~</span>"+
+                      "</td>"+
                       
                       
-                      "<td class='clickable highlighted regularTD sellingTD' onClick=changeSellingPrice(true,'"+formattedName+"')>"+
+                      "<td class='clickable highlighted regularTD sellingTD' "+
+                      
+                      "onClick=changeSellingPrice(true,'"+formattedName+"')>"+
+                        
                         "<p class='shown sellingPriceSpan clickable'>"+selling_price+"</pb>"+
-                        "<form class='hidden sellingPriceForm' onsubmit=submitSellingPrice(`"+formattedName+"`) onfocusout=changeSellingPrice(false,'"+formattedName+"')>"+
-                          "<input class='sellingPriceInput' onkeypress='return validateSellingPriceInput(event)' maxlength=10 maxlength=10 type='text'>"+
-                          "<button type='submit' class='sellingPriceButton' onclick=submitSellingPrice(`"+formattedName+"`)>OK</button>"+
+                        
+                        "<form class='hidden sellingPriceForm' "+
+                        "onsubmit=submitSellingPrice(`"+formattedName+"`) "+
+                        "onfocusout=changeSellingPrice(false,'"+formattedName+"')>"+
+                          
+                          "<input class='sellingPriceInput' "+
+                          "onkeypress='return validateSellingPriceInput(event)' "+
+                          "maxlength=10 maxlength=10 type='text'>"+
+                          
+                          "<button type='submit' class='sellingPriceButton' "+
+                          "onclick=submitSellingPrice(`"+formattedName+"`)>OK</button>"+
+                        
                         "</form>"+
+                      
                       "</td>"+
                       
 
@@ -379,13 +372,18 @@ function fillInvTable(shouldWipe) {
                       "</td>"+
                       
 
-                      "<td class='regularTD' style='cursor:help;' onClick=printSingle('"+formattedName+"')>"+resilience+"</td>"+
+                      "<td class='regularTD' style='cursor:help;' "+
+                      "onClick=printSingle('"+formattedName+"')>"+resilience+
+                      "</td>"+
                       
 
                       "<td class='buttonTD'>"+
+                          
                           "<div class='buttonSubHolder'>"+
                           dev_data_html(popularity, max_buying_price)+
+                            
                             "<button class='button2' onClick=restockFruit('"+formattedName+"')>Buy</button>"+
+                            
                             "<input value="+seed_data.filter(item => item['name']==name)[0]['restock_amount']+" "+
                               "class='amountInput amountInput_restock' "+
                               "onclick=this.select() "+
@@ -393,30 +391,23 @@ function fillInvTable(shouldWipe) {
                               "onkeyup=setAmount(false,'"+formattedName+"',this.value,'restock') "+
                               "onblur=setAmount(true,'"+formattedName+"',this.value,'restock') "+
                               "maxlength=10>"+
+                          
                           "</div>"+
+                      
                       "</td>"+
-                      // "<td>"+             
-                      //   "<div class='buttonSubHolder'>"+
-                      //   "<button class='button2' onClick=throwFruit('"+formattedName+"')>Throw</button>"+
-                      //     "<input value="+seed_data.filter(item => item['name']==name)[0]['throw_amount']+" "+
-                      //       "class='amountInput amountInput_throw' "+
-                      //       "onclick=this.select() "+
-                      //       "onkeypress='return /[0-9]/.test(event.key)' "+
-                      //       "onkeyup=setAmount(false,'"+formattedName+"',this.value,'throw') "+
-                      //       "onblur=setAmount(true,'"+formattedName+"',this.value,'throw') "+
-                      //       "maxlength=10>"+
-                      //   "</div>"+               
-                      // "</td>"+
+                    
                     "</tr>";
+                    
                     $(response).appendTo($("#inventory"));
+                    
                     setTimeout(() => {
                       bindUsefulJqueriesAfterLoadingDataIntoTable()
                     }, 500);
+                    
                     updateSalesSubstratesInDisplayedTable()
         });
       } else {
-        console.log(result["message"]);
-        console.log(result["error"]);
+        console.log(result["message"], result["error"]);
       }
     },
   });
@@ -433,15 +424,8 @@ function validateSellingPriceInput(e){
   return checkKey(k) || checkKey(w) 
 }
 
-function sayOi(){
-  console.log("oi oiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
-}
-
 function submitSellingPrice(name){
-  // return false
 
-    // console.log(e)
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     event.preventDefault()
 
     name = name.replace(/%20/g, " ");
@@ -459,15 +443,11 @@ function submitSellingPrice(name){
 
   if (!
   putative_price || !parseInt(putative_price)) {
-    console.log("ERROR")
     input.val("");
     form.addClass("hidden");
     span.removeClass("hidden");
     return;
   }
-
-  console.log(111)
-  console.log(putative_price)
 
   if (putative_price.match(/^\d+$/)) {
     $.ajax({
@@ -487,8 +467,7 @@ function submitSellingPrice(name){
       },
       error: function (result) {
         console.log("An error occurred immediately in $.ajax request.");
-        console.log(result.responseText);
-        console.log(result);
+        console.log(result.responseText, result);
       },
       success: function (result) {
         if (result["status"]) {
@@ -498,8 +477,7 @@ function submitSellingPrice(name){
 
           span.text(result["update_data"]["selling_price"]);
         } else {
-          console.log(result["message"]);
-          console.log(result["error"]);
+          console.log(result["message"], result["error"]);
         }
       },
     });
@@ -518,37 +496,26 @@ function changeSellingPrice(showInput, name) {
   let input = row.find(".sellingPriceInput");
   let button = row.find(".sellingPriceButton");
 
-  console.log("changeSellingPrice", showInput)
-
   if (!showInput){
-    // if (!form.hasClass("hidden")) {
       setTimeout(() => {
         console.log("!show")
     span.removeClass("hidden");
     form.addClass("hidden");
       }, 200);
-  // }
   }
 
   if (showInput && !form.children(":focus").length){
-    console.log("showwwwwwwwwwwwwwwwwwwwwwwwwww")
-    // if (form.hasClass("hidden")) {
     span.addClass("hidden");
     form.removeClass("hidden");
     input.val(span_text)
     input.focus();
     input.select();
-  // }
   }
-
-  //Change this to input box?
-  // row.children().eq(columnIndexRef['selling price']).text("oh yeah")
 }
 
 function bindUsefulJqueriesAfterLoadingDataIntoTable(){
   $('.buttonSubHolder').bind('mousewheel', function(e){
         
-        console.log($(this).parents("tr").children().eq(getColumnIndexes()['name']).text())
         let current_val = parseInt($(this).find("input").val())
         let max_buyable_quantity = Math.floor(parseInt($("#moneyStat").text()) / parseInt($(this).parents("tr").find(".restockPriceSpan").text()))
 
@@ -573,7 +540,6 @@ function dev_data_html(popularity, max_buying_price){
 }
 
 function setAmount(setIntoSession, formattedName, amount, operation) {
-  console.log(setIntoSession, formattedName, amount, operation);
 
   name = formattedName.replace(/%20/g, " ");
   let columnIndexRef = getColumnIndexes();
@@ -621,16 +587,12 @@ function setAmount(setIntoSession, formattedName, amount, operation) {
             result
           );
           console.log(result.responseText);
-          // window.location = "../play";
         },
         success: function (result) {
-          console.log("a3 success");
-          console.log(result);
           if (result["status"]) {
             console.log("status true");
           } else {
-            console.log(result["message"]);
-            console.log(result["error"]);
+            console.log(result["message"], result["error"]);
           }
         },
       });
@@ -675,11 +637,9 @@ function throwFruit(formattedName) {
       },
       error: function (result) {
         console.log("An error occurred immediately in $.ajax request.");
-        console.log(result.responseText);
-        console.log(result);
+        console.log(result.responseText, result);
       },
       success: function (result) {
-        // console.log("success")
         if (result["status"]) {
           let fruit = result["data"][0];
 
@@ -697,8 +657,7 @@ function throwFruit(formattedName) {
             ] = reset_value;
           }
         } else {
-          console.log(result["message"]);
-          console.log(result["error"]);
+          console.log(result["message"], result["error"]);
         }
       },
     });
@@ -722,7 +681,6 @@ function restockFruit(formattedName) {
   let money = parseInt($("#moneyStat").text());
 
   setAmount(true, formattedName, requested_amount, "restock");
-  console.log(money, putative_cost);
 
   if (putative_cost > money) {
     alert("Insufficient funds!");
@@ -738,12 +696,10 @@ function restockFruit(formattedName) {
       },
       error: function (result) {
         console.log("An error occurred immediately in $.ajax request.");
-        console.log(result.responseText);
-        console.log(result);
+        console.log(result.responseText, result);
       },
       success: function (result) {
         day_costs += putative_cost
-        // console.log("success")
         if (result["status"]) {
           let fruit = result["data"][0];
 
@@ -760,8 +716,6 @@ function restockFruit(formattedName) {
           if (requested_amount > maxPossibleToBuy) {
             let reset_value = maxPossibleToBuy || 1;
 
-            console.log("*******", reset_value);
-
             el.parent("tr").find(".amountInput_restock").val(reset_value);
             seed_data.filter((item) => item["name"] == name)[0][
               "restock_amount"
@@ -770,8 +724,7 @@ function restockFruit(formattedName) {
           // ***It was successful transaction. So we must send off the db to change money stat now.
           updateGamesTable(putative_cost, "decrement", null);
         } else {
-          console.log(result["message"]);
-          console.log(result["error"]);
+          console.log(result["message"], result["error"]);
         }
       },
     });
@@ -805,16 +758,6 @@ function calculateSales() {
     let price_disparity =
       ((max_buying_price - selling_price) / max_buying_price) * 100;
 
-    // console.log(
-    //   "calculateSales fxn: POP and MXB of " +
-    //     name +
-    //     " are " +
-    //     popularity +
-    //     " and " +
-    //     max_buying_price
-    // );
-
-    // console.log("calculateSales fxn: Popularity of "+name+" is "+popularity)
     let sales_percentage = (popularity + price_disparity * 4) / 5 / 100;
 
     let sales_quantity = Math.ceil(sales_percentage * quantity);
@@ -824,8 +767,6 @@ function calculateSales() {
     } else if (sales_quantity > quantity) {
       sales_quantity = quantity;
     }
-
-    // console.log("calculateSales fxn: Sell "+ sales_quantity + " from " + quantity + " of " + name)
 
     let profit = sales_quantity * selling_price;
 
@@ -855,8 +796,7 @@ function printSingle(name) {
       if (result["status"]) {
         console.log(result);
       } else {
-        console.log(result["message"]);
-        console.log(result["error"]);
+        console.log(result["message"], result["error"]);
       }
     },
   });
@@ -868,10 +808,8 @@ function checkSession() {
 }
 
 function checkTCs() {
-  console.log(">>>TC proxy:");
-  console.log(trend_calculates);
-  console.log(">>>Seed data proxy:");
-  console.log(seed_data);
+  console.log(">>>TC proxy:", trend_calculates);
+  console.log(">>>Seed data proxy:", seed_data);
 }
 
 function getSalesSubstrates(popularity_factors, max_prices, trend_calculates) {
@@ -921,15 +859,12 @@ function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates) {
   }
 
   if (new_trend_calculates) {
-    // console.log("old TCs in updateGameStats fxn", trend_calculates);
-    // console.log("new TCs in updateGameStats fxn", new_trend_calculates);
     trend_calculates = new_trend_calculates;
     updateSalesSubstratesInDisplayedTable();
   }
 }
 
 function updateSalesSubstratesInDisplayedTable() {
-  console.log("updateSalesSubstratesInDisplayedTable")
   let num_rows = $("table#inventory tbody tr").filter(function () {
     return this;
   }).length;
@@ -942,8 +877,7 @@ function updateSalesSubstratesInDisplayedTable() {
       .eq(columnIndexRef.name)
       .text();
     let formattedName = name;
-    // .replace(/\s/g, "%20")
-    // console.log("*", formattedName)
+
     let max_prices = seed_data.filter((item) => item.name == formattedName)[0]
       .max_prices;
     let popularity_factors = seed_data.filter(
@@ -955,7 +889,6 @@ function updateSalesSubstratesInDisplayedTable() {
       trend_calculates
     );
 
-    // console.log("NEW", popularity, max_buying_price);
     $("table#inventory tbody tr")
       .eq(i)
       .find(".devdata1")
