@@ -150,7 +150,7 @@ function newDay() {
   if (days % 7 == 0){week_record = {}}
   week_record[days+1] = {profit: day_profit, costs: day_costs}
 
-  fillQuantityYesterday(); //Moves current quantities to the qy column.
+  fillQuantityYesterday(incipient_sales); //Moves current quantities to the qy column.
   updateGamesTable(day_profit, "new day", week_record); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
   updateInventoryTable(incipient_sales); //Reduces quantities by sold amounts.
 
@@ -167,15 +167,20 @@ function newDay() {
   }, 500);
 }
 
-function fillQuantityYesterday() {
+function fillQuantityYesterday(incipient_sales) {
+  console.log("************************")
+  console.dir(incipient_sales)
+  console.log("************************")
   let num_rows = $("table#inventory tbody tr").filter(function () {
     return this;
   }).length;
   for (let i = 0; i < num_rows; i++) {
     let row = $("table#inventory tbody tr:eq(" + i + ")");
+    let name = row.children().eq(getColumnIndexes()['name']).text()
+    
     row
       .find(".qy")
-      .text(row.find(".quantity").text());
+      .text(incipient_sales[name]['sales_quantity'] || 0);
   }
 }
 
@@ -351,16 +356,32 @@ function fillInvTable(shouldWipe) {
           );
                     response += 
                     "<tr id='"+formattedName+"'>"+
+
+
                       "<td class='regularTD'>"+name+"</td>"+
+
+
                       "<td class='regularTD quantityTD'><span class='quantity'>"+quantity+"</span><span class='qy'>~</span></td>"+
-                      "<td class='clickable highlighted regularTD sellingTD' onClick=changeSellingPrice('"+formattedName+"')>"+
+                      
+                      
+                      "<td class='clickable highlighted regularTD sellingTD' onClick=changeSellingPrice(true,'"+formattedName+"')>"+
                         "<p class='shown sellingPriceSpan clickable'>"+selling_price+"</pb>"+
-                        "<form class='hidden sellingPriceForm'>"+
-                          "<input class='sellingPriceInput' onkeypress='return /[0-9]/.test(event.key)' maxlength=10 maxlength=10 type='text'>"+
-                          "<button class='sellingPriceButton' type='submit'>OK</button>"+
-                        "</form></td>"+
-                      "<td class='regularTD'>"+restock_price+"</td>"+
+                        "<form class='hidden sellingPriceForm' onsubmit=submitSellingPrice(`"+formattedName+"`) onfocusout=changeSellingPrice(false,'"+formattedName+"')>"+
+                          "<input class='sellingPriceInput' onkeypress='return validateSellingPriceInput(event)' maxlength=10 maxlength=10 type='text'>"+
+                          "<button type='submit' class='sellingPriceButton' onclick=submitSellingPrice(`"+formattedName+"`)>OK</button>"+
+                        "</form>"+
+                      "</td>"+
+                      
+
+                      "<td class='regularTD restockPriceTD'>"+
+                        "<div class='popularityCircleSpan'></div>"+
+                        "<span class='restockPriceSpan'>"+restock_price+"</span>"+
+                      "</td>"+
+                      
+
                       "<td class='regularTD' style='cursor:help;' onClick=printSingle('"+formattedName+"')>"+resilience+"</td>"+
+                      
+
                       "<td class='buttonTD'>"+
                           "<div class='buttonSubHolder'>"+
                           dev_data_html(popularity, max_buying_price)+
@@ -391,6 +412,7 @@ function fillInvTable(shouldWipe) {
                     setTimeout(() => {
                       bindUsefulJqueriesAfterLoadingDataIntoTable()
                     }, 500);
+                    updateSalesSubstratesInDisplayedTable()
         });
       } else {
         console.log(result["message"]);
@@ -400,12 +422,135 @@ function fillInvTable(shouldWipe) {
   });
 }
 
+function validateSellingPriceInput(e){
+  let k = e.keyCode
+  let w = e.which
+
+  function checkKey(key){
+    return key == 13 || (key >= 48 && key <= 57)
+  }
+
+  return checkKey(k) || checkKey(w) 
+}
+
+function sayOi(){
+  console.log("oi oiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
+}
+
+function submitSellingPrice(name){
+  // return false
+
+    // console.log(e)
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    event.preventDefault()
+
+    name = name.replace(/%20/g, " ");
+    let columnIndexRef = getColumnIndexes();
+    let row = $("table#inventory tbody tr").filter(function () {
+      return $(this).children().eq(columnIndexRef["name"]).text() == name;
+    });
+    let span = row.find(".sellingPriceSpan");
+    let span_text = span.text();
+    let form = row.find(".sellingPriceForm");
+    let input = row.find(".sellingPriceInput");
+    let button = row.find(".sellingPriceButton");
+
+    let putative_price = input.val();
+
+  if (!
+  putative_price || !parseInt(putative_price)) {
+    console.log("ERROR")
+    input.val("");
+    form.addClass("hidden");
+    span.removeClass("hidden");
+    return;
+  }
+
+  console.log(111)
+  console.log(putative_price)
+
+  if (putative_price.match(/^\d+$/)) {
+    $.ajax({
+      type: "GET",
+      url: "../api/fruit/update.php",
+      dataType: "json",
+      data: {
+        name: name,
+        table_name: "<?php echo $inv_table_name; ?>",
+        identifying_column: "name",
+        identifying_data: name,
+        update_data: {
+          selling_price: putative_price,
+        },
+        acronym: "is",
+        should_update_session: 0,
+      },
+      error: function (result) {
+        console.log("An error occurred immediately in $.ajax request.");
+        console.log(result.responseText);
+        console.log(result);
+      },
+      success: function (result) {
+        if (result["status"]) {
+          input.val("");
+          form.addClass("hidden");
+          span.removeClass("hidden");
+
+          span.text(result["update_data"]["selling_price"]);
+        } else {
+          console.log(result["message"]);
+          console.log(result["error"]);
+        }
+      },
+    });
+  }
+}
+
+function changeSellingPrice(showInput, name) {
+  name = name.replace(/%20/g, " ");
+  let columnIndexRef = getColumnIndexes();
+  let row = $("table#inventory tbody tr").filter(function () {
+    return $(this).children().eq(columnIndexRef["name"]).text() == name;
+  });
+  let span = row.find(".sellingPriceSpan");
+  let span_text = span.text();
+  let form = row.find(".sellingPriceForm");
+  let input = row.find(".sellingPriceInput");
+  let button = row.find(".sellingPriceButton");
+
+  console.log("changeSellingPrice", showInput)
+
+  if (!showInput){
+    // if (!form.hasClass("hidden")) {
+      setTimeout(() => {
+        console.log("!show")
+    span.removeClass("hidden");
+    form.addClass("hidden");
+      }, 200);
+  // }
+  }
+
+  if (showInput && !form.children(":focus").length){
+    console.log("showwwwwwwwwwwwwwwwwwwwwwwwwww")
+    // if (form.hasClass("hidden")) {
+    span.addClass("hidden");
+    form.removeClass("hidden");
+    input.val(span_text)
+    input.focus();
+    input.select();
+  // }
+  }
+
+  //Change this to input box?
+  // row.children().eq(columnIndexRef['selling price']).text("oh yeah")
+}
+
 function bindUsefulJqueriesAfterLoadingDataIntoTable(){
   $('.buttonSubHolder').bind('mousewheel', function(e){
         
         console.log($(this).parents("tr").children().eq(getColumnIndexes()['name']).text())
         let current_val = parseInt($(this).find("input").val())
-        let max_buyable_quantity = Math.floor(parseInt($("#moneyStat").text()) / parseInt($(this).parents("tr").children().eq(getColumnIndexes()['restock price']).text()))
+        let max_buyable_quantity = Math.floor(parseInt($("#moneyStat").text()) / parseInt($(this).parents("tr").find(".restockPriceSpan").text()))
 
         if(e.originalEvent.wheelDelta/120 > 0) {
           current_val < max_buyable_quantity && $(this).find("input").val(current_val+1)
@@ -571,7 +716,7 @@ function restockFruit(formattedName) {
 
   let requested_amount = parseInt(row.find(".amountInput_restock").val());
   let restock_price = parseInt(
-    row.children().eq(columnIndexRef["restock price"]).text()
+    row.find(".restockPriceSpan").text()
   );
   let putative_cost = requested_amount * restock_price;
   let money = parseInt($("#moneyStat").text());
@@ -631,78 +776,6 @@ function restockFruit(formattedName) {
       },
     });
   }
-}
-
-function changeSellingPrice(name) {
-  name = name.replace(/%20/g, " ");
-  let columnIndexRef = getColumnIndexes();
-
-  let row = $("table#inventory tbody tr").filter(function () {
-    return $(this).children().eq(columnIndexRef["name"]).text() == name;
-  });
-
-  let span = row.find(".sellingPriceSpan");
-  let form = row.find(".sellingPriceForm");
-  let input = row.find(".sellingPriceInput");
-  let button = row.find(".sellingPriceButton");
-
-  if (form.hasClass("hidden")) {
-    span.addClass("hidden");
-    form.removeClass("hidden");
-    input.focus();
-
-    form.on("submit", function (e) {
-      e.preventDefault();
-
-      let putative_price = input.val();
-
-      if (!putative_price || !parseInt(putative_price)) {
-        input.val("");
-        form.addClass("hidden");
-        span.removeClass("hidden");
-        return;
-      }
-
-      if (putative_price.match(/^\d+$/)) {
-        $.ajax({
-          type: "GET",
-          url: "../api/fruit/update.php",
-          dataType: "json",
-          data: {
-            name: name,
-            table_name: "<?php echo $inv_table_name; ?>",
-            identifying_column: "name",
-            identifying_data: name,
-            update_data: {
-              selling_price: putative_price,
-            },
-            acronym: "is",
-            should_update_session: 0,
-          },
-          error: function (result) {
-            console.log("An error occurred immediately in $.ajax request.");
-            console.log(result.responseText);
-            console.log(result);
-          },
-          success: function (result) {
-            if (result["status"]) {
-              input.val("");
-              form.addClass("hidden");
-              span.removeClass("hidden");
-
-              span.text(result["update_data"]["selling_price"]);
-            } else {
-              console.log(result["message"]);
-              console.log(result["error"]);
-            }
-          },
-        });
-      }
-    });
-  }
-
-  //Change this to input box?
-  // row.children().eq(columnIndexRef['selling price']).text("oh yeah")
 }
 
 function calculateSales() {
@@ -856,6 +929,7 @@ function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates) {
 }
 
 function updateSalesSubstratesInDisplayedTable() {
+  console.log("updateSalesSubstratesInDisplayedTable")
   let num_rows = $("table#inventory tbody tr").filter(function () {
     return this;
   }).length;
@@ -886,10 +960,30 @@ function updateSalesSubstratesInDisplayedTable() {
       .eq(i)
       .find(".devdata1")
       .text("P" + popularity + "  M" + max_buying_price);
+
     $("table#inventory tbody tr")
       .eq(i)
-      .children()
-      .eq(columnIndexRef["restock price"])
+      .find(".popularityCircleSpan")
+      .text(getPopularityColor(popularity).text)
+      .css({"background-color": getPopularityColor(popularity).color})
+
+      function getPopularityColor(pop){
+        if (pop < 20){
+          return {text: "⇊", color: "red"}
+        } else if (pop < 40){
+          return {text: "↓", color: "orange"}
+        }  else if (pop < 60){
+          return {text: "·", color: "yellow"}
+        }  else if (pop < 80){
+          return {text: "↑", color: "greenyellow"}
+        }  else if (pop >= 80){
+          return {text: "⇈", color: "cyan"}
+        } 
+      }
+
+    $("table#inventory tbody tr")
+      .eq(i)
+      .find(".restockPriceSpan")
       .text(restock_price);
   }
 }
