@@ -1,6 +1,6 @@
 <?php
 
-function evolve_trend_calculates($session_TCs, $days, $day_profit, $day_costs)
+function evolve_trend_calculates($session_TCs, $days, $week_record)
 {
   $trends = (array) json_decode($session_TCs);
 
@@ -13,14 +13,66 @@ function evolve_trend_calculates($session_TCs, $days, $day_profit, $day_costs)
   );
   $trends['conformity'] = $conf_res['conformity'];
   $trends['conformity_history'] = $conf_res['conformity_history'];
-  $trends['decadence'] = decadenceFromData($trends['decadence']);
+
+  if ($days % 7 == 6) {
+    $trends['decadence'] = decadenceFromData($week_record);
+  } else {
+    $trends['decadence'] = $trends['decadence'];
+  }
 
   return json_encode($trends);
 }
 
-function decadenceFromData($current)
+function decadenceFromData($week_record)
 {
-  return $current;
+  $total_profit = 0;
+  $total_costs = 0;
+  foreach ($week_record as $day => $values) {
+    $total_profit += $week_record[$day]['profit'];
+    $total_costs += $week_record[$day]['costs'];
+  }
+
+  $net = $total_profit - $total_costs;
+  $abs = abs($net);
+  $inc = 0;
+
+  if (0 < $abs && $abs < 50) {
+    $inc = 5;
+  } elseif (50 <= $abs && $abs < 100) {
+    $inc = 10;
+  } elseif (100 <= $abs && $abs < 500) {
+    $inc = 15;
+  } elseif (500 <= $abs && $abs < 2500) {
+    $inc = 20;
+  } elseif (2500 <= $abs && $abs < 10000) {
+    $inc = 25;
+  } elseif (10000 <= $abs && $abs < 50000) {
+    $inc = 30;
+  } elseif (50000 <= $abs && $abs < 500000) {
+    $inc = 35;
+  } elseif (500000 <= $abs && $abs < 10000000) {
+    $inc = 40;
+  } elseif (10000000 <= $abs && $abs < 200000000) {
+    $inc = 45;
+  } elseif (200000000 <= $abs) {
+    $inc = 50;
+  }
+
+  if ($net >= 0) {
+    $res = 50 + $inc;
+  } else {
+    $res = 50 - $inc;
+  }
+
+  // return json_encode([
+  //   "total_profit" => $total_profit,
+  //   "total_costs" => $total_costs,
+  //   "net" => $net,
+  //   "abs" => $abs,
+  //   "inc" => $inc,
+  //   "res" => $res,
+  // ]);
+  return $res;
 }
 
 function conformityFromHistory($current, $hist)
@@ -125,7 +177,7 @@ function weatherFromDay($days)
 
 function politicsFromDay($days, $current)
 {
-  if ($days % 7 == 0) {
+  if ($days % 7 == 6) {
     return random_int(1, 100);
   } else {
     return $current;

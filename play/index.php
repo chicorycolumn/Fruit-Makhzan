@@ -138,8 +138,8 @@ function newDay() {
 
   let days = parseInt($("#daysStat").text())
 
-  if (days%7==1){week_record = {}}
-  week_record[days] = {profit: day_profit, costs: day_costs}
+  if (days % 7 == 0){week_record = {}}
+  week_record[days+1] = {profit: day_profit, costs: day_costs}
 
   fillQuantityYesterday(); //Moves current quantities to the qy column.
   updateGamesTable(day_profit, "new day", week_record); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
@@ -153,6 +153,10 @@ function newDay() {
   //   let keys = Object.keys(trend_calculates)
   //   keys.forEach(key => console.log(key, trend_calculates[key]))
   // }, 1000);
+
+  setTimeout(() => {
+    checkTCs()
+  }, 500);
 }
 
 function updateOverallSalesHistory(days, day_profit, day_costs){
@@ -180,8 +184,9 @@ function fillQuantityYesterday() {
 }
 
 function updateGamesTable(money_crement, operation, week_record) {
-  console.log(week_record)
+  
   if (operation == "new day") {
+    console.log("***********************", "week_record", week_record)
     $.ajax({
       type: "GET",
       url: "../api/fruit/new_day_supertable.php",
@@ -191,7 +196,8 @@ function updateGamesTable(money_crement, operation, week_record) {
         identifying_column: "game_id",
         identifying_data: `<?php echo $_SESSION['gid']; ?>`,
         profit: money_crement,
-        week_record
+        week_record: week_record,
+        json_column: "overall_sales_history"
       },
       error: function (result) {
         console.log("An error occurred immediately in $.ajax request.", result);
@@ -212,7 +218,7 @@ function updateGamesTable(money_crement, operation, week_record) {
         }
       },
     });
-  } else if ((operation = "decrement")) {
+  } else if ((operation = "restock" || operation == "decrement")) {
     console.log({
       money_stat: parseInt($("#moneyStat").text()) - money_crement,
     });

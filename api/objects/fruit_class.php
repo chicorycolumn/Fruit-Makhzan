@@ -256,6 +256,57 @@ class Fruit
     ];
   }
 
+  function update_json($table_name, $json_column, $json_data)
+  {
+    if ($json_column == "overall_sales_history") {
+      $day = array_key_last($json_data);
+
+      $query =
+        "UPDATE " .
+        $table_name .
+        " " .
+        $json_column .
+        " SET " .
+        $json_column .
+        "=JSON_INSERT(" .
+        $json_column .
+        ", '$." .
+        $day .
+        "', ?)";
+
+      if (!($stmt = $this->conn->prepare($query))) {
+        return [
+          "status" => false,
+          "message" => "Could not prepare query.",
+          "error" => $this->conn->error,
+        ];
+      }
+
+      $acronym = "s";
+      // $datum = json_encode($json_data[$day]);
+      $datum =
+        "['profit':" .
+        $json_data[$day]['profit'] .
+        ",'costs':" .
+        $json_data[$day]['costs'] .
+        "]";
+
+      $stmt->bind_param($acronym, $datum);
+
+      if (!$stmt->execute()) {
+        return [
+          "status" => false,
+          "message" => "Error in execution.",
+          "error" => $this->conn->error,
+        ];
+      }
+
+      $result = $stmt->get_result();
+      $stmt->close();
+      return ["status" => true, "message" => "Successfully updated json!"];
+    }
+  }
+
   function update_self(
     $table_name,
     $identifying_column,
