@@ -1,34 +1,49 @@
+.smallButtonKind {
+  height: 35px;
+}
+
 .button1 {
   width: 25px;
-  height: 25px;
   background-color: red;
 }
 
 .button2 {
-  width: 60px;
-  height: 25px;
+  width: 40px;
   background-color: rgb(158, 255, 158);
 }
 
 .button3 {
-  width: 60px;
-  height: 25px;
+  width: 40px;
   background-color: rgb(255, 245, 203);
   font-size: 11px;
   font-weight: bold;
 }
 
 .button4 {
-  width: 20px;
-  height: 25px;
+  width: 30px;
   background-color: rgb(255, 245, 203);
   text-align: center;
   padding: 0px;
+  position: relative;
+  top: 1px;
   /* font-weight: bold; */
 }
 
 button:disabled {
   background-color: lightgrey;
+}
+
+.amountInput {
+  width: 60px;
+  height: 35.5px;
+  font-size: 15px;
+  text-align: center;
+  border-top: lightgray solid 1.5pt;
+  border-left: lightgray solid 1.5pt;
+  border-right: grey solid 1.5pt;
+  border-bottom: grey solid 1.5pt;
+  position: relative;
+  top: 0.5px;
 }
 
 .th_inventory {
@@ -130,18 +145,12 @@ button:disabled {
 .buttonSuperHolder {
   display: flex;
   flex-direction: column;
+  min-width: 105px;
 }
 
 .buttonSubHolder {
-  /* border: purple dotted 1pt; */
-  min-width: 100px;
-}
-
-.amountInput {
-  width: 40px;
-  height: 25px;
-  font-size: 15px;
-  text-align: center;
+  margin-top: -1px;
+  min-width: 105px;
 }
 
 .popularityCircleSpan {

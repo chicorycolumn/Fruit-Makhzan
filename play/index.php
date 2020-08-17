@@ -381,28 +381,31 @@ function fillInvTable(shouldWipe) {
 
                       "<td class='buttonTD'>"+
                           
-                          "<div class='buttonSubHolder'>"+
+                          "<div class='buttonSuperHolder'>"+
                           printDevDataHTML(popularity, max_buying_price)+
                             
-                            "<button class='button2 buyButton' onClick=restockFruit('"+formattedName+"')>Buy</button>"+            
-                            "<input value="+seed_data.filter(item => item['name']==name)[0]['restock_amount']+" "+
-                              "class='amountInput amountInput_restock' "+
-                              "onclick=this.select() "+
-                              "onkeypress='return /[0-9]/.test(event.key)' "+
-                              "onkeyup=setAmount('"+formattedName+"','restock') "+
-                              "onblur=setAmount('"+formattedName+"','restock') "+
-                              "maxlength=10>"+
+                            "<div class='buttonSubHolder'>"+
+                              "<button class='smallButtonKind button2 buyButton' onClick=restockFruit('"+formattedName+"')>Buy</button>"+            
+                              "<input value="+seed_data.filter(item => item['name']==name)[0]['restock_amount']+" "+
+                                "class='amountInput amountInput_restock' "+
+                                "onclick=this.select() "+
+                                "onkeypress='return /[0-9]/.test(event.key)' "+
+                                "onkeyup=setAmount('"+formattedName+"','restock') "+
+                                "onblur=setAmount('"+formattedName+"','restock') "+
+                                "maxlength=10>"+
+                            "</div>"+ 
                             
-                            "<br/>"+
-                            "<button class='button3' "+
-                              "onclick=setAmount('"+formattedName+"','restock','max') "+
-                            ">MAX</button>"+
-                            "<button class='button4' "+
-                              "onclick=setAmount('"+formattedName+"','restock','increment') "+
-                            ">⇧</button>"+
-                            "<button class='button4' "+
-                              "onclick=setAmount('"+formattedName+"','restock','decrement') "+
-                            ">⇩</button>"+                            
+                            "<div class='buttonSubHolder'>"+
+                              "<button class='smallButtonKind button3' "+
+                                "onclick=setAmount('"+formattedName+"','restock','max') "+
+                              ">MAX</button>"+
+                              "<button class='smallButtonKind button4' "+
+                                "onclick=setAmount('"+formattedName+"','restock','increment') "+
+                              ">⇧</button>"+
+                              "<button class='smallButtonKind button4' "+
+                                "onclick=setAmount('"+formattedName+"','restock','decrement') "+
+                              ">⇩</button>"+
+                            "</div>"+                            
                           
                           "</div>"+
                       
