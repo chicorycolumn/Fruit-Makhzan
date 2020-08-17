@@ -135,6 +135,7 @@ updateGameStats(
 let columnIndexRef = getColumnIndexes()
 
 function newDay() {
+
   let num_rows = $("table#inventory tbody tr").filter(function () {
     return this;
   }).length;
@@ -284,6 +285,7 @@ function updateInventoryTable(incipient_sales) {
             parseInt(result["update_data"][name]["sales_quantity"]);
           row.find(".quantity").text(new_quantity);
         });
+        verifyBuyButtons()
       } else {
         console.log(result["message"], result["error"]);
       }
@@ -380,17 +382,27 @@ function fillInvTable(shouldWipe) {
                       "<td class='buttonTD'>"+
                           
                           "<div class='buttonSubHolder'>"+
-                          dev_data_html(popularity, max_buying_price)+
+                          printDevDataHTML(popularity, max_buying_price)+
                             
-                            "<button class='button2' onClick=restockFruit('"+formattedName+"')>Buy</button>"+
-                            
+                            "<button class='button2 buyButton' onClick=restockFruit('"+formattedName+"')>Buy</button>"+            
                             "<input value="+seed_data.filter(item => item['name']==name)[0]['restock_amount']+" "+
                               "class='amountInput amountInput_restock' "+
                               "onclick=this.select() "+
                               "onkeypress='return /[0-9]/.test(event.key)' "+
-                              "onkeyup=setAmount(false,'"+formattedName+"',this.value,'restock') "+
-                              "onblur=setAmount(true,'"+formattedName+"',this.value,'restock') "+
+                              "onkeyup=setAmount('"+formattedName+"','restock') "+
+                              "onblur=setAmount('"+formattedName+"','restock') "+
                               "maxlength=10>"+
+                            
+                            "<br/>"+
+                            "<button class='button3' "+
+                              "onclick=setAmount('"+formattedName+"','restock','max') "+
+                            ">MAX</button>"+
+                            "<button class='button4' "+
+                              "onclick=setAmount('"+formattedName+"','restock','increment') "+
+                            ">⇧</button>"+
+                            "<button class='button4' "+
+                              "onclick=setAmount('"+formattedName+"','restock','decrement') "+
+                            ">⇩</button>"+                            
                           
                           "</div>"+
                       
@@ -400,17 +412,114 @@ function fillInvTable(shouldWipe) {
                     
                     $(response).appendTo($("#inventory"));
                     
+                  
+        });
                     setTimeout(() => {
                       bindUsefulJqueriesAfterLoadingDataIntoTable()
                     }, 500);
                     
                     updateSalesSubstratesInDisplayedTable()
-        });
+
+                    verifyBuyButtons()
+
+
+
       } else {
         console.log(result["message"], result["error"]);
       }
     },
   });
+}
+
+function verifyBuyButtons(){
+  console.log("Money", parseInt($("#moneyStat").text()))
+  
+  $(".buyButton").each(function(){
+
+    let name = $(this).parents("tr").children().eq(getColumnIndexes()['name']).text()
+    let restockPrice = parseInt($(this).parents("tr").find(".restockPriceSpan").text())
+    let restockQuantity = parseInt($(this).parents("tr").find(".amountInput_restock").val())
+    let maxBuyableQuantity = Math.floor(parseInt($("#moneyStat").text()) / restockPrice)
+
+    console.log({name, restockPrice, restockQuantity, maxBuyableQuantity})
+  
+    $(this).prop("disabled", restockQuantity > maxBuyableQuantity)
+  })
+}
+
+function setAmount(formattedName, operation, modifier, forced_amount) {
+
+  name = formattedName.replace(/%20/g, " ");
+
+  let row = $("table#inventory tbody tr").filter(function () {
+    return $(this).children().eq(getColumnIndexes()["name"]).text() == name;
+  });
+
+  let class_name = ".amountInput" + "_" + operation;
+  let quantity = parseInt(row.find(".quantity").text());
+  let restock_amount = parseInt(row.find(".amountInput_restock").val())
+  let restock_price = parseInt(row.find(".restockPriceSpan").text())
+  let throw_amount = parseInt(row.find(".amountInput_throw").val())
+  let max_buyable_quantity = Math.floor(parseInt($("#moneyStat").text()) / restock_price)
+  let key = operation + "_amount";
+  let reset_value = restock_amount
+
+  // console.log({name, class_name, quantity, restock_amount, restock_price, throw_amount, max_buyable_quantity, key})
+  
+  console.log("+++", restock_amount)
+
+  if (forced_amount && operation == "restock"){
+    console.log(111)
+    restock_amount = forced_amount
+  } if (forced_amount && operation == "throw"){
+    console.log(222)
+    restock_amount = throw_amount
+  } if (operation == "restock" && (!restock_amount || !parseInt(restock_amount)) || operation == "throw" && (!throw_amount || !parseInt(throw_amount))) {
+    console.log(333)
+    reset_value = 1;
+  } if (operation == "throw" && parseInt(throw_amount) > quantity) {
+    console.log(444)
+    reset_value = quantity || 1;
+  } if (operation == "restock" && modifier && modifier == "max") {
+    console.log(555)
+    reset_value = max_buyable_quantity || 1
+  } if (operation == "restock" && modifier && modifier == "increment") {
+    console.log(666)
+    reset_value = restock_amount < max_buyable_quantity ? restock_amount + 1 || 1 : restock_amount
+  } if (operation == "restock" && modifier && modifier == "decrement") {
+    console.log(777)
+    reset_value = restock_amount - 1 || 1
+  }
+  seed_data.filter((item) => item["name"] == name)[0][key] = reset_value;
+  row.find(class_name).val(reset_value);
+
+  verifyBuyButtons()
+    
+    // } else {
+      // $.ajax({
+      //   type: "GET",
+      //   url: "../utils/set_session.php",
+      //   dataType: "json",
+      //   data: {
+      //     seed_data: seed_data,
+      //   },
+      //   error: function (result) {
+      //     console.log(
+      //       "An error occurred immediately in this $.ajax request.",
+      //       result
+      //     );
+      //     console.log(result.responseText);
+      //   },
+      //   success: function (result) {
+      //     if (result["status"]) {
+      //       console.log("status true");
+      //     } else {
+      //       console.log(result["message"], result["error"]);
+      //     }
+      //   },
+      // });
+    // }
+  
 }
 
 function validateSellingPriceInput(e){
@@ -528,7 +637,7 @@ function bindUsefulJqueriesAfterLoadingDataIntoTable(){
   });
 }
 
-function dev_data_html(popularity, max_buying_price){
+function printDevDataHTML(popularity, max_buying_price){
 
   let show = <?php echo $_SESSION['show_dev_data']; ?>
 
@@ -536,131 +645,6 @@ function dev_data_html(popularity, max_buying_price){
     return "<p class='devdata1'>P"+popularity+"  M"+max_buying_price+"</p>"
   }else{
     return ""
-  }
-}
-
-function setAmount(setIntoSession, formattedName, amount, operation) {
-
-  name = formattedName.replace(/%20/g, " ");
-  let columnIndexRef = getColumnIndexes();
-  let row = $("table#inventory tbody tr").filter(function () {
-    return $(this).children().eq(columnIndexRef["name"]).text() == name;
-  });
-  let quantity = parseInt(row.find(".quantity").text());
-  let class_name = ".amountInput" + "_" + operation;
-  let key = operation + "_amount";
-
-  if (!setIntoSession) {
-    if (amount && parseInt(amount)) {
-      seed_data.filter((item) => item["name"] == name)[0][key] = parseInt(
-        amount
-      );
-    }
-  } else {
-    if (!amount || !parseInt(amount)) {
-      let columnIndexRef = getColumnIndexes();
-
-      let row = $("table#inventory tbody tr").filter(function () {
-        return $(this).children().eq(columnIndexRef["name"]).text() == name;
-      });
-
-      let reset_value = 1;
-
-      seed_data.filter((item) => item["name"] == name)[0][key] = reset_value;
-      row.find(class_name).val(reset_value);
-    } else if (operation == "throw" && parseInt(amount) > quantity) {
-      let reset_value = quantity || 1;
-
-      seed_data.filter((item) => item["name"] == name)[0][key] = reset_value;
-      row.find(class_name).val(reset_value);
-    } else {
-      $.ajax({
-        type: "GET",
-        url: "../utils/set_session.php",
-        dataType: "json",
-        data: {
-          seed_data: seed_data,
-        },
-        error: function (result) {
-          console.log(
-            "An error occurred immediately in this $.ajax request.",
-            result
-          );
-          console.log(result.responseText);
-        },
-        success: function (result) {
-          if (result["status"]) {
-            console.log("status true");
-          } else {
-            console.log(result["message"], result["error"]);
-          }
-        },
-      });
-    }
-  }
-}
-
-function throwFruit(formattedName) {
-  name = formattedName.replace(/%20/g, " ");
-
-  let columnIndexRef = getColumnIndexes();
-
-  let row = $("table#inventory tbody tr").filter(function () {
-    return $(this).children().eq(columnIndexRef["name"]).text() == name;
-  });
-
-  let throw_amount = parseInt(row.find(".amountInput_throw").val());
-  let quantity = parseInt(row.find(".quantity").text());
-
-  if (!quantity) {
-    return;
-  }
-
-  setAmount(true, formattedName, throw_amount, "throw");
-
-  if (throw_amount <= quantity) {
-    if (
-      throw_amount > 0.2 * quantity &&
-      !confirm("Chuck " + throw_amount + " " + name + " into the street?")
-    ) {
-      return;
-    }
-
-    $.ajax({
-      type: "GET",
-      url: "../api/fruit/restock.php",
-      dataType: "json",
-      data: {
-        name: name,
-        table_name: "<?php echo $inv_table_name; ?>",
-        increment: "-" + throw_amount.toString(),
-      },
-      error: function (result) {
-        console.log("An error occurred immediately in $.ajax request.");
-        console.log(result.responseText, result);
-      },
-      success: function (result) {
-        if (result["status"]) {
-          let fruit = result["data"][0];
-
-          let el = $("table#inventory tr td").filter(function () {
-            return $(this).text() == fruit["name"];
-          });
-
-          el.parent("tr").find(".quantity").text(fruit["quantity"]);
-
-          if (throw_amount > parseInt(fruit["quantity"])) {
-            let reset_value = parseInt(fruit["quantity"]) || 1;
-            el.parent("tr").find(".amountInput_throw").val(reset_value);
-            seed_data.filter((item) => item["name"] == name)[0][
-              "restock_amount"
-            ] = reset_value;
-          }
-        } else {
-          console.log(result["message"], result["error"]);
-        }
-      },
-    });
   }
 }
 
@@ -680,7 +664,7 @@ function restockFruit(formattedName) {
   let putative_cost = requested_amount * restock_price;
   let money = parseInt($("#moneyStat").text());
 
-  setAmount(true, formattedName, requested_amount, "restock");
+  setAmount(formattedName, "restock", "", requested_amount);
 
   if (putative_cost > money) {
     alert("Insufficient funds!");
@@ -723,6 +707,7 @@ function restockFruit(formattedName) {
           }
           // ***It was successful transaction. So we must send off the db to change money stat now.
           updateGamesTable(putative_cost, "decrement", null);
+          
         } else {
           console.log(result["message"], result["error"]);
         }
@@ -858,6 +843,8 @@ function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates) {
     el.text(new_days_stat);
   }
 
+  verifyBuyButtons()
+
   if (new_trend_calculates) {
     trend_calculates = new_trend_calculates;
     updateSalesSubstratesInDisplayedTable();
@@ -926,5 +913,69 @@ function getPopularityFactor(pop_factor_names, i, trend_calculates) {
   return pop_factor_names[pop_keys[i]]
     ? trend_calculates[pop_keys[i]]
     : 101 - trend_calculates[pop_keys[i]];
+}
+
+function throwFruit(formattedName) {
+  name = formattedName.replace(/%20/g, " ");
+
+  let columnIndexRef = getColumnIndexes();
+
+  let row = $("table#inventory tbody tr").filter(function () {
+    return $(this).children().eq(columnIndexRef["name"]).text() == name;
+  });
+
+  let throw_amount = parseInt(row.find(".amountInput_throw").val());
+  let quantity = parseInt(row.find(".quantity").text());
+
+  if (!quantity) {
+    return;
+  }
+
+  setAmount(formattedName, "throw", "", throw_amount);
+
+  if (throw_amount <= quantity) {
+    if (
+      throw_amount > 0.2 * quantity &&
+      !confirm("Chuck " + throw_amount + " " + name + " into the street?")
+    ) {
+      return;
+    }
+
+    $.ajax({
+      type: "GET",
+      url: "../api/fruit/restock.php",
+      dataType: "json",
+      data: {
+        name: name,
+        table_name: "<?php echo $inv_table_name; ?>",
+        increment: "-" + throw_amount.toString(),
+      },
+      error: function (result) {
+        console.log("An error occurred immediately in $.ajax request.");
+        console.log(result.responseText, result);
+      },
+      success: function (result) {
+        if (result["status"]) {
+          let fruit = result["data"][0];
+
+          let el = $("table#inventory tr td").filter(function () {
+            return $(this).text() == fruit["name"];
+          });
+
+          el.parent("tr").find(".quantity").text(fruit["quantity"]);
+
+          if (throw_amount > parseInt(fruit["quantity"])) {
+            let reset_value = parseInt(fruit["quantity"]) || 1;
+            el.parent("tr").find(".amountInput_throw").val(reset_value);
+            seed_data.filter((item) => item["name"] == name)[0][
+              "restock_amount"
+            ] = reset_value;
+          }
+        } else {
+          console.log(result["message"], result["error"]);
+        }
+      },
+    });
+  }
 }
 </script>

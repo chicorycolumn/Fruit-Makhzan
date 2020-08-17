@@ -4,6 +4,33 @@
   background-color: red;
 }
 
+.button2 {
+  width: 60px;
+  height: 25px;
+  background-color: rgb(158, 255, 158);
+}
+
+.button3 {
+  width: 60px;
+  height: 25px;
+  background-color: rgb(255, 245, 203);
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.button4 {
+  width: 20px;
+  height: 25px;
+  background-color: rgb(255, 245, 203);
+  text-align: center;
+  padding: 0px;
+  /* font-weight: bold; */
+}
+
+button:disabled {
+  background-color: lightgrey;
+}
+
 .th_inventory {
   /* border: fuchsia dotted 1pt; */
   min-width: 100px;
@@ -108,12 +135,6 @@
 .buttonSubHolder {
   /* border: purple dotted 1pt; */
   min-width: 100px;
-}
-
-.button2 {
-  width: 60px;
-  height: 25px;
-  background-color: rgb(158, 255, 158);
 }
 
 .amountInput {
