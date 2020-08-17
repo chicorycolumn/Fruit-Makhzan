@@ -33,7 +33,9 @@ $content =
                           <label>Name</label>
                           <input type="text" value=' .
   $temp_name .
-  ' class="formControl" id="name" placeholder="Enter name">
+  ' class="formControl" id="name" placeholder="Enter name"' .
+  'onkeypress="return /[0-9a-zA-Z]/.test(event.key)" ' .
+  '>
                         </div>
                         <div class="formGroup">
                           <label>Quantity</label>

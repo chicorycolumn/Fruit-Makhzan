@@ -120,11 +120,11 @@ class Database
         "throw_amount" => 1,
       ],
       [
-        "name" => "Mung Bean",
+        "name" => "Mystical Mythical Mung Bean",
         "max_prices" => [
-          "Low" => 100,
-          "Medium" => 200,
-          "High" => 500,
+          "Low" => 4000,
+          "Medium" => 7000,
+          "High" => 10000,
         ],
         "popularity_factors" => [
           "decadence" => true,

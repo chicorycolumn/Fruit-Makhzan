@@ -1,0 +1,25 @@
+.clickable {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.shown {
+  /* display: none; */
+}
+
+.noMarginPadding {
+  margin: 0px;
+  padding: 0px;
+}
+
+.invalidInput {
+  background-color: red;
+}
+
+.highlighted {
+  color: blue;
+  font-weight: bold;
+}
