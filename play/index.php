@@ -341,8 +341,13 @@ function fillInvTable(shouldWipe) {
 
 
                       "<td class='regularTD quantityTD'>"+
-                        "<span class='quantity'>"+quantity+"</span>"+
-                        "<span class='qy'>~</span>"+
+                      "<div class='invData'>"+
+                        "<p class='quantity noMarginPadding'>"+quantity+"</p>"+
+                        "<div style='margin-top: 10px;'>"+
+                        "<span class='noMarginPadding qyText'>SALES: </span>"+
+                        "<span class='noMarginPadding qy'>~</span>"+
+                        "</div>"+
+                      "</div>"+
                       "</td>"+
                       
                       
@@ -375,7 +380,8 @@ function fillInvTable(shouldWipe) {
                       
 
                       "<td class='regularTD' style='cursor:help;' "+
-                      "onClick=printSingle('"+formattedName+"')>"+resilience+
+                      "onClick=printSingle('"+formattedName+"')>"+
+                        "<p class='invData resilienceData'>"+resilience+"</p>"+
                       "</td>"+
                       
 

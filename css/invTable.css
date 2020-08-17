@@ -50,6 +50,13 @@ button:disabled {
   min-width: 120px;
 }
 
+.invData {
+  border: blue dashed 1pt;
+  margin: 0px;
+  margin-left: 10px;
+  height: 60px;
+}
+
 .table {
   border-collapse: separate;
   border-spacing: 0px 20px;
@@ -62,6 +69,11 @@ button:disabled {
 #inventory tr {
   border: blue dotted 1pt;
   /* background-color: lightpink; */
+}
+
+.noMarginPadding {
+  margin: 0px;
+  padding: 0px;
 }
 
 #inventory td {
@@ -78,8 +90,8 @@ button:disabled {
   /* display: flex;
   flex-direction: column;
   justify-content: center; */
-  /* padding-top: auto;
-  padding-bottom: auto; */
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 .regularTD {
@@ -101,7 +113,14 @@ button:disabled {
 }
 
 .qy {
-  /* margin-left: 20px; */
+  font-size: 12px;
+  font-weight: bold;
+  color: grey;
+}
+
+.qyText {
+  font-size: 12px;
+  font-weight: bold;
   color: lightgray;
 }
 
