@@ -1,5 +1,5 @@
 .smallButtonKind {
-  height: 35px;
+  height: 40px;
 }
 
 .button1 {
@@ -20,13 +20,12 @@
 }
 
 .button4 {
-  width: 30px;
+  width: 40px;
   background-color: rgb(255, 245, 203);
   text-align: center;
   padding: 0px;
-  position: relative;
-  top: 1px;
-  /* font-weight: bold; */
+  /* position: relative;
+  top: 1px; */
 }
 
 button:disabled {
@@ -34,36 +33,53 @@ button:disabled {
 }
 
 .amountInput {
-  width: 60px;
-  height: 35.5px;
+  width: 80px;
+  height: 40px;
   font-size: 15px;
   text-align: center;
   border-top: lightgray solid 1.5pt;
   border-left: lightgray solid 1.5pt;
   border-right: grey solid 1.5pt;
   border-bottom: grey solid 1.5pt;
-  position: relative;
-  top: 0.5px;
+  /* position: relative;
+  top: 0.5px; */
 }
 
 .th_inventory {
   /* border: fuchsia dotted 1pt; */
-  min-width: 100px;
+  min-width: 120px;
 }
 
 .table {
   border-collapse: separate;
-  border-spacing: 20px 0;
+  border-spacing: 0px 20px;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
   /* border: fuchsia dotted 5pt; */
 }
 
+#inventory tr {
+  border: blue dotted 1pt;
+  /* background-color: lightpink; */
+}
+
 #inventory td {
-  padding-top: 20px;
+  padding-top: 2.5px;
   padding-right: 0px;
   padding-bottom: 0px;
+  border: black dashed 0.5pt;
+  margin-top: 50px;
+  margin-bottom: 50px;
+
+  height: 0px;
+  width: 0px;
+
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center; */
+  /* padding-top: auto;
+  padding-bottom: auto; */
 }
 
 .regularTD {
@@ -79,9 +95,9 @@ button:disabled {
 }
 
 .quantityTD {
-  display: flex;
+  /* display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-around; */
 }
 
 .qy {
@@ -145,19 +161,19 @@ button:disabled {
 .buttonSuperHolder {
   display: flex;
   flex-direction: column;
-  min-width: 105px;
+  min-width: 100%;
 }
 
 .buttonSubHolder {
   margin-top: -1px;
-  min-width: 105px;
+  min-width: 100%;
 }
 
 .popularityCircleSpan {
   display: inline-block;
   margin: 0px;
   margin-right: 10px;
-  position: relative;
+  /* position: relative; */
   /* bottom: -4px; */
   background-color: white;
   border-radius: 50px;
@@ -168,9 +184,9 @@ button:disabled {
 
 .restockPriceTD {
   /* border: red dotted 1pt; */
-  margin: 0px;
-  padding: 0px;
-  display: flex;
-  flex-direction: row;
-  height: fit-content;
+  /* margin: 0px;
+  padding: 0px; */
+  /* display: flex;
+  flex-direction: row; */
+  /* height: fit-content; */
 }
