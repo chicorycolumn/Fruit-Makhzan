@@ -8,50 +8,59 @@
 }
 
 #inventory tr {
-  border: blue dotted 1pt;
+  /* border: blue dotted 1pt; */
   /* background-color: lightpink; */
 }
 
 .th_inventory {
   /* border: fuchsia dotted 1pt; */
   min-width: 120px;
+  max-width: 120px;
 }
 
 #inventory td {
-  padding-top: 2.5px;
-  padding-right: 0px;
-  padding-bottom: 0px;
   border: black dashed 0.5pt;
-  margin-top: 50px;
-  margin-bottom: 50px;
-  height: 0px;
-  width: 0px;
-  padding-top: 0px;
-  padding-bottom: 0px;
-}
 
-.restockPriceTD {
+  /* border: rgba(0, 0, 0, 0.1) solid 0.5pt; */
+  border-right: none;
+
+  /* margin-top: 50px;
+  margin-bottom: 50px; */
+  /* padding-top: 0px;
+  padding-bottom: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px; */
 }
 
 .regularTD {
-  padding-left: 5px;
+  padding-left: 25px;
 }
 
 .buttonTD {
   padding-left: 0px;
 }
 
+.nameTD {
+  padding-left: 0px;
+}
+
 .invSubtd {
-  border: blue dashed 1pt;
+  /* border: blue dashed 1pt; */
   margin: 0px;
   margin-left: 10px;
   height: 60px;
+  width: 93px;
+}
+
+.nameSubtd {
+  width: 120px;
+  margin-left: 0px;
 }
 
 .invData {
   margin: 0px;
   padding: 0px;
-  background-color: rgba(1, 1, 1, 0.1);
+  /* background-color: rgba(1, 1, 1, 0.1); */
 }
 
 .popularityCircleSpan {
@@ -75,7 +84,7 @@
 }
 
 .restockPriceSubtd {
-  background-color: lightpink;
+  /* background-color: lightpink; */
   margin-left: 10px;
   height: 60px;
 }
@@ -93,14 +102,21 @@
 }
 
 .sellingPriceInput {
-  width: 45px;
-  height: 20px;
+  resize: none;
+  width: 53px;
+  height: 40px;
+  /* line-height: 20px; */
   font-size: 15px;
-  border: red dotted 1pt;
+  text-justify: top;
+  /* border: red dotted 1pt; */
+  color: fuchsia;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: none;
 }
 
 .sellingPriceData {
-  border: fuchsia solid 1pt;
+  /* border: fuchsia solid 1pt; */
   min-width: 80px;
   min-height: 20px;
   margin: 0px;
@@ -108,10 +124,11 @@
 }
 
 .sellingPriceForm {
+  background-color: rgba(255, 0, 255, 0.1);
   /* border: black dotted 1pt; */
   margin: 0px;
   /* margin-top: 15px; */
-  width: 80px;
+  width: 100%;
 }
 
 .buttonSuperHolder {
@@ -130,10 +147,10 @@
   height: 40px;
   font-size: 15px;
   text-align: center;
-  border-top: lightgray solid 1.5pt;
-  border-left: lightgray solid 1.5pt;
-  border-right: grey solid 1.5pt;
-  border-bottom: grey solid 1.5pt;
+  border-right: lightgray solid 1.5pt;
+  border-bottom: lightgray solid 1.5pt;
+  border-top: grey solid 1.5pt;
+  /* border-left: grey solid 1.5pt; */
   /* position: relative;
   top: 0.5px; */
 }

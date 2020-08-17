@@ -13,6 +13,7 @@
 .noMarginPadding {
   margin: 0px;
   padding: 0px;
+  /* border: yellow dotted 5px; */
 }
 
 .invalidInput {

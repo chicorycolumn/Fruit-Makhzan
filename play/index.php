@@ -332,7 +332,7 @@ function fillInvTable(shouldWipe) {
                     "<tr id='"+formattedName+"'>"+
 
 
-                      "<td class='regularTD'>"+
+                      "<td class='regularTD nameTD'>"+
                         "<div class='invSubtd nameSubtd'>"+
                           "<p class='invData nameData'>"+name+"</p>"+
                         "</div>"+
@@ -358,16 +358,15 @@ function fillInvTable(shouldWipe) {
                           
                             "<p class='invData sellingPriceData clickable shown'>"+selling_price+"</p>"+
                             
-                            "<form class='hidden sellingPriceForm' "+
-                              
+                            "<form class='sellingPriceForm hidden noMarginPadding' "+
                               "onsubmit=submitSellingPrice(`"+formattedName+"`) "+
                               "onfocusout=changeSellingPrice(false,'"+formattedName+"')>"+
                                 
-                              "<input class='sellingPriceInput' "+
+                              "<textarea class='sellingPriceInput noMarginPadding' "+
                               "onkeypress='return validateSellingPriceInput(event)' "+
-                              "maxlength=10 maxlength=10 type='text'>"+
+                              "maxlength=10 maxlength=10 type='text'>"+"</textarea>"+
                               
-                              "<button type='submit' class='sellingPriceButton' "+
+                              "<button type='submit' class='mediumButtonKind sellingPriceButton noMarginPadding' "+
                               "onclick=submitSellingPrice(`"+formattedName+"`)>OK"+
                               "</button>"+
                             
@@ -405,7 +404,7 @@ function fillInvTable(shouldWipe) {
                             
                             "<div class='buttonSubHolder'>"+
                               
-                              "<button class='smallButtonKind button2 buyButton' onClick=restockFruit('"+formattedName+"')>Buy</button>"+            
+                              "<button class='mediumButtonKind button2 buyButton' onClick=restockFruit('"+formattedName+"')>Buy</button>"+            
                               
                               "<input value="+seed_data.filter(item => item['name']==name)[0]['restock_amount']+" "+
                                 "class='amountInput amountInput_restock' "+
@@ -418,13 +417,13 @@ function fillInvTable(shouldWipe) {
                             "</div>"+ 
                             
                             "<div class='buttonSubHolder'>"+
-                              "<button class='smallButtonKind button3' "+
+                              "<button class='mediumButtonKind button3' "+
                                 "onclick=setAmount('"+formattedName+"','restock','max') "+
                               ">MAX</button>"+
-                              "<button class='smallButtonKind button4' "+
+                              "<button class='mediumButtonKind button4' "+
                                 "onclick=setAmount('"+formattedName+"','restock','increment') "+
                               ">⇧</button>"+
-                              "<button class='smallButtonKind button4' "+
+                              "<button class='mediumButtonKind button4' "+
                                 "onclick=setAmount('"+formattedName+"','restock','decrement') "+
                               ">⇩</button>"+
                               
