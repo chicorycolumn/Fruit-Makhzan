@@ -160,11 +160,15 @@ function newDay() {
 
 function fillQuantityYesterday(incipient_sales) {
   $("table#inventory tbody tr").each(function () {
-    let name = $(this).find(".nameData").text()
+    let row = $(this)
     
-    $(this)
-      .find(".qy")
-      .text(incipient_sales[name]['sales_quantity'] || 0);
+    let qy1 = row.find(".qy1")
+    let qy2 = row.find(".qy2")
+    let qy3 = row.find(".qy3")
+
+    qy3.text(qy2.text())
+    qy2.text(qy1.text())
+    qy1.text(incipient_sales[row.find(".nameData").text()]['sales_quantity'] || 0)
   });
 }
 
@@ -328,6 +332,20 @@ function fillInvTable(shouldWipe) {
             max_prices,
             trend_calculates
           );
+                                      // invSubtd nameSubtd
+                                      // invSubtd sellingPriceSubtd...
+                                      
+                                      // These are always the first inside the td.
+                                      // These are what you CSS to align right.
+
+
+
+                                      // invData nameData
+                                      // invData sellingPriceData...
+                                      
+                                      // These are where you jquery the data from.
+                                      // They are normally p tags.
+
                     response += 
                     "<tr id='"+formattedName+"'>"+
 
@@ -342,9 +360,10 @@ function fillInvTable(shouldWipe) {
                       "<td class='regularTD'>"+
                         "<div class='invSubtd quantitySubtd'>"+
                           "<p class='invData quantityData noMarginPadding'>"+quantity+"</p>"+
-                          "<div style='margin-top: 10px;'>"+
-                            "<span class='qyText noMarginPadding'>SALES: </span>"+
-                            "<span class='qy noMarginPadding'>~</span>"+
+                          "<div class='qyHolder'>"+
+                            "<div class='qySubHolder qyColor1'><p class='noMarginPadding'>SALES: </p>"+"<p class='qy1 noMarginPadding'> </p></div>"+
+                            "<div class='qySubHolder qyColor2'><p class='noMarginPadding'>SALES: </p>"+"<p class='qy2 noMarginPadding'> </p></div>"+
+                            "<div class='qySubHolder qyColor3'><p class='noMarginPadding'>SALES: </p>"+"<p class='qy3 noMarginPadding'> </p></div>"+
                           "</div>"+
                         "</div>"+
                       "</td>"+
@@ -358,7 +377,7 @@ function fillInvTable(shouldWipe) {
                           
                             "<p class='invData sellingPriceData clickable shown'>"+selling_price+"</p>"+
                             
-                            "<form class='sellingPriceForm hidden noMarginPadding' "+
+                            "<form class='sellingPriceForm noMarginPadding sellingPriceFormHidden' "+
                               "onsubmit=submitSellingPrice(`"+formattedName+"`) "+
                               "onfocusout=changeSellingPrice(false,'"+formattedName+"')>"+
                                 
@@ -434,17 +453,14 @@ function fillInvTable(shouldWipe) {
                       "</td>"+
                     
                     "</tr>";
-                    
-                    $(response).appendTo($("#inventory"));
-                    
                   
+                    $(response).appendTo($("#inventory"));              
         });
                     setTimeout(() => {
                       bindUsefulJqueriesAfterLoadingDataIntoTable()
                     }, 500);
                     
                     updateSalesSubstratesInDisplayedTable()
-
                     verifyBuyButtons()
 
 
@@ -542,7 +558,7 @@ function submitSellingPrice(formattedName){
   if (!
   putative_price || !parseInt(putative_price)) {
     input.val("");
-    form.addClass("hidden");
+    form.addClass("sellingPriceFormHidden");
     span.removeClass("hidden");
     return;
   }
@@ -570,7 +586,7 @@ function submitSellingPrice(formattedName){
       success: function (result) {
         if (result["status"]) {
           input.val("");
-          form.addClass("hidden");
+          form.addClass("sellingPriceFormHidden");
           span.removeClass("hidden");
           span.text(result["update_data"]["selling_price"]);
         } else {
@@ -594,14 +610,14 @@ function changeSellingPrice(showInput, formattedName) {
   if (!showInput){
       setTimeout(() => {
     span.removeClass("hidden");
-    form.addClass("hidden");
+    form.addClass("sellingPriceFormHidden");
       }, 200);
   }
 
   if (showInput && !form.children(":focus").length){
   // if (showInput && !form.find(":focus").length){
     span.addClass("hidden");
-    form.removeClass("hidden");
+    form.removeClass("sellingPriceFormHidden");
     input.val(span_text)
     input.focus();
     input.select();

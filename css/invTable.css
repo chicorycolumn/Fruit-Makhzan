@@ -20,10 +20,8 @@
 
 #inventory td {
   border: black dashed 0.5pt;
-
-  /* border: rgba(0, 0, 0, 0.1) solid 0.5pt; */
   border-right: none;
-
+  /* border: rgba(0, 0, 0, 0.1) solid 0.5pt; */
   /* margin-top: 50px;
   margin-bottom: 50px; */
   /* padding-top: 0px;
@@ -33,7 +31,8 @@
 }
 
 .regularTD {
-  padding-left: 25px;
+  /* padding-left: 25px; */
+  padding-left: 0px;
 }
 
 .buttonTD {
@@ -42,19 +41,38 @@
 
 .nameTD {
   padding-left: 0px;
+  /* align-content: top;
+  text-align: top; */
+  /* justify-text: top; */
 }
 
 .invSubtd {
-  /* border: blue dashed 1pt; */
+  border: blue dashed 1pt;
   margin: 0px;
-  margin-left: 10px;
-  height: 60px;
-  width: 93px;
+  /* margin-left: 10px; */
+  margin-left: 0px;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  top: -11.5px;
 }
 
 .nameSubtd {
   width: 120px;
   margin-left: 0px;
+  position: relative;
+  /* align-self: top; */
+  /* top: 0px; */
+  /* margin-top: 22px; */
+  /* height: 70px; */
+}
+
+.quantitySubtd {
+  /* background-color: rgba(10, 10, 10, 0.1); */
+  position: relative;
+  top: 9px;
+  /* height: 70px; */
 }
 
 .invData {
@@ -85,20 +103,32 @@
 
 .restockPriceSubtd {
   /* background-color: lightpink; */
-  margin-left: 10px;
-  height: 60px;
+  margin-left: 32.5px;
+  height: fit-content;
+  text-align: left;
+  width: 75%;
 }
 
-.qy {
+.qyHolder {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
   font-size: 12px;
   font-weight: bold;
+  display: inline-block;
+}
+
+.qyColor1 {
   color: grey;
 }
 
-.qyText {
-  font-size: 12px;
-  font-weight: bold;
-  color: lightgray;
+.qyColor2 {
+  color: rgb(180, 180, 180);
+}
+
+.qyColor3 {
+  color: lightgrey;
 }
 
 .sellingPriceInput {
@@ -124,11 +154,17 @@
 }
 
 .sellingPriceForm {
-  background-color: rgba(255, 0, 255, 0.1);
+  /* background-color: rgba(255, 0, 255, 0.1); */
   /* border: black dotted 1pt; */
   margin: 0px;
   /* margin-top: 15px; */
   width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.sellingPriceFormHidden {
+  display: none;
 }
 
 .buttonSuperHolder {
