@@ -24,8 +24,6 @@
   background-color: rgb(255, 245, 203);
   text-align: center;
   padding: 0px;
-  /* position: relative;
-    top: 1px; */
 }
 
 button:disabled {
@@ -46,7 +44,7 @@ button:disabled {
 #maxBuyButton {
   border-radius: 0 0 0 var(--bradius1);
   position: relative;
-  top: -1px;
+  top: -1.5px;
 }
 
 #incBuyButton {

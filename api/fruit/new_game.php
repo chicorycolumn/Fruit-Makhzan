@@ -21,7 +21,7 @@ function go($database, $db)
 $response = go($database, $db);
 $response["extra"] = clean_up_db($db);
 
-$database->closeConnection(); ///////////////////////////
+$database->closeConnection(); //possible screwpoint
 echo json_encode($response);
 return;
 ?>

@@ -129,7 +129,7 @@ let trend_calculates = {
 }
 
 fillInvTable()
-updateGameStats(
+updateGameStats( //**************** */
   "<?php echo $_SESSION['money_stat']; ?>", 
   "<?php echo $_SESSION['days_stat']; ?>",
   null
@@ -153,10 +153,6 @@ function newDay() {
   updateInventoryTable(incipient_sales); //Reduces quantities by sold amounts.
 
   day_costs = 0
-
-  setTimeout(() => {
-    checkTCs()
-  }, 500);
 }
 
 function fillQuantityYesterday(incipient_sales) {
@@ -190,8 +186,7 @@ function updateGamesTable(money_crement, operation, week_record) {
         json_column: "overall_sales_history"
       },
       error: function (result) {
-        console.log("An error occurred immediately in $.ajax request.", result);
-        console.log(result.responseText);
+        console.log("An error occurred immediately in $.ajax request.", result, result.responseText);
       },
       success: function (result) {
 
@@ -225,9 +220,8 @@ function updateGamesTable(money_crement, operation, week_record) {
       error: function (result) {
         console.log(
           "An error occurred immediately in this $.ajax request.",
-          result
+          result, result.responseText
         );
-        console.log(result.responseText);
       },
       success: function (result) {
         console.log(result);
@@ -260,10 +254,9 @@ function updateInventoryTable(incipient_sales) {
     },
     error: function (result) {
       console.log(
-        "###An error occurred immediately in $.ajax request.",
-        result
+        "An error occurred immediately in $.ajax request.",
+        result, result.responseText
       );
-      console.log(result.responseText);
     },
     success: function (result) {
 
@@ -273,10 +266,6 @@ function updateInventoryTable(incipient_sales) {
         names.forEach((name) => {
           let formattedName = name.replace(/\s/g, "_");
           let row = $("table#inventory tbody tr#"+formattedName)
-
-          console.log(777)
-          console.log(row)
-
           let current_quantity = parseInt(
             row.find(".quantityData").text()
           );
@@ -306,8 +295,7 @@ function fillInvTable(shouldWipe) {
       get_full: false,
     },
     error: function (result) {
-      console.log("An error occurred immediately in $.ajax request.", result);
-      console.log(result.responseText);
+      console.log("An error occurred immediately in $.ajax request.", result, result.responseText);
     },
     success: function (result) {
 
@@ -333,20 +321,6 @@ function fillInvTable(shouldWipe) {
             max_prices,
             trend_calculates
           );
-                                      // invSubtd nameSubtd
-                                      // invSubtd sellingPriceSubtd...
-                                      
-                                      // These are always the first inside the td.
-                                      // These are what you CSS to align right.
-
-
-
-                                      // invData nameData
-                                      // invData sellingPriceData...
-                                      
-                                      // These are where you jquery the data from.
-                                      // They are normally p tags.
-
                     response += 
                     "<tr id='"+formattedName+"'>"+
 
@@ -383,7 +357,7 @@ function fillInvTable(shouldWipe) {
                               "onfocusout=changeSellingPrice(false,'"+formattedName+"')>"+
                                 
                               "<textarea class='sellingPriceInput noMarginPadding' "+
-                              "onkeypress='return validateSellingPriceInput(event)' "+
+                              "onkeypress='return validateNumbersAndSubmit(event,`"+formattedName+"`,`selling`)' "+
                               "maxlength=10 maxlength=10 type='text'>"+"</textarea>"+
                               
                               "<button type='submit' class='mediumButtonKind sellingPriceButton noMarginPadding' "+
@@ -424,13 +398,15 @@ function fillInvTable(shouldWipe) {
                             
                             "<div class='buttonSubHolder'>"+
                               
-                              "<button id='buyButton' class='mediumButtonKind button2 buyButton' onClick=restockFruit('"+formattedName+"')>Buy</button>"+            
+                              "<button "+
+                              "id='buyButton' class='mediumButtonKind button2 buyButton'"+
+                              "onClick=restockFruit('"+formattedName+"')>Buy"+
+                              "</button>"+            
                               
                               "<input value="+seed_data.filter(item => item['name']==name)[0]['restock_amount']+" "+
                                 "class='amountInput amountInput_restock' "+
                                 "onclick=this.select() "+
-                                "onkeypress='return /[0-9]/.test(event.key)' "+
-                                "onkeyup=setAmount('"+formattedName+"','restock') "+
+                                "onkeyup='return validateNumbersAndSubmit(event,`"+formattedName+"`,`restock`)' "+
                                 "onblur=setAmount('"+formattedName+"','restock') "+
                                 "maxlength=10>"+
                             
@@ -474,8 +450,7 @@ function fillInvTable(shouldWipe) {
 }
 
 function verifyBuyButtons(){
-  console.log("Money", parseInt($("#moneyStat").text()))
-  
+
   $(".buyButton").each(function(){
 
     let row = $(this).parents("tr")
@@ -483,8 +458,7 @@ function verifyBuyButtons(){
     let restockPrice = parseInt(row.find(".restockPriceData").text())
     let restockQuantity = parseInt(row.find(".amountInput_restock").val())
     let maxBuyableQuantity = Math.floor(parseInt($("#moneyStat").text()) / restockPrice)
-    // console.log({name, restockPrice, restockQuantity, maxBuyableQuantity})
-    $(this).prop("disabled", restockQuantity > maxBuyableQuantity)
+    $(this).prop("disabled", restockQuantity > maxBuyableQuantity || !restockQuantity)
   })
 }
 
@@ -502,28 +476,19 @@ function setAmount(formattedName, operation, modifier, forced_amount) {
   let max_buyable_quantity = Math.floor(parseInt($("#moneyStat").text()) / restock_price)
   let key = operation + "_amount";
   let reset_value = restock_amount
-  // console.log({name, class_name, quantity, restock_amount, restock_price, throw_amount, max_buyable_quantity, key})
-  // console.log("+++", restock_amount)
   if (forced_amount && operation == "restock"){
-    console.log(111)
     restock_amount = forced_amount
   } if (forced_amount && operation == "throw"){
-    console.log(222)
     restock_amount = throw_amount
   } if (operation == "restock" && (!restock_amount || !parseInt(restock_amount)) || operation == "throw" && (!throw_amount || !parseInt(throw_amount))) {
-    console.log(333)
     reset_value = 1;
   } if (operation == "throw" && parseInt(throw_amount) > quantity) {
-    console.log(444)
     reset_value = quantity || 1;
   } if (operation == "restock" && modifier && modifier == "max") {
-    console.log(555)
     reset_value = max_buyable_quantity || 1
   } if (operation == "restock" && modifier && modifier == "increment") {
-    console.log(666)
     reset_value = restock_amount < max_buyable_quantity ? restock_amount + 1 || 1 : restock_amount
   } if (operation == "restock" && modifier && modifier == "decrement") {
-    console.log(777)
     reset_value = restock_amount - 1 || 1
   }
   seed_data.filter((item) => item["name"] == name)[0][key] = reset_value;
@@ -532,9 +497,22 @@ function setAmount(formattedName, operation, modifier, forced_amount) {
   verifyBuyButtons() 
 }
 
-function validateSellingPriceInput(e){
+function validateNumbersAndSubmit(e, formattedName, operation){
+
+  verifyBuyButtons()
+
   let k = e.keyCode
   let w = e.which
+
+  if (k == 13 || w == 13){
+    
+    if (operation == "restock"){
+      restockFruit(formattedName)
+  } else if (operation == "selling"){
+    submitSellingPrice(formattedName)
+  }
+  
+  }
 
   function checkKey(key){
     return key == 13 || (key >= 48 && key <= 57)
@@ -581,8 +559,7 @@ function submitSellingPrice(formattedName){
         should_update_session: 0,
       },
       error: function (result) {
-        console.log("An error occurred immediately in $.ajax request.");
-        console.log(result.responseText, result);
+        console.log("An error occurred immediately in $.ajax request.", result.responseText, result);
       },
       success: function (result) {
         if (result["status"]) {
@@ -615,8 +592,7 @@ function changeSellingPrice(showInput, formattedName) {
       }, 200);
   }
 
-  if (showInput && !form.children(":focus").length){
-  // if (showInput && !form.find(":focus").length){
+  if (showInput && !form.find(":focus").length){
     span.addClass("hidden");
     form.removeClass("sellingPriceFormHidden");
     input.val(span_text)
@@ -657,6 +633,9 @@ function restockFruit(formattedName) {
   let row = $("table#inventory tbody tr#"+formattedName)
 
   let requested_amount = parseInt(row.find(".amountInput_restock").val());
+
+  if (!requested_amount){return}
+
   let restock_price = parseInt(
     row.find(".restockPriceData").text()
   );
@@ -666,7 +645,8 @@ function restockFruit(formattedName) {
   setAmount(formattedName, "restock", "", requested_amount);
 
   if (putative_cost > money) {
-    alert("Insufficient funds!");
+    console.log("insuff funds")
+    return
   } else {
     $.ajax({
       type: "GET",
@@ -678,8 +658,7 @@ function restockFruit(formattedName) {
         increment: requested_amount,
       },
       error: function (result) {
-        console.log("An error occurred immediately in $.ajax request.");
-        console.log(result.responseText, result);
+        console.log("An error occurred immediately in $.ajax request.", result.responseText, result);
       },
       success: function (result) {
         day_costs += putative_cost
@@ -701,8 +680,7 @@ function restockFruit(formattedName) {
               "restock_amount"
             ] = reset_value;
           }
-          // ***It was successful transaction. So we must send off the db to change money stat now.
-          updateGamesTable(putative_cost, "decrement", null);
+          updateGamesTable(putative_cost, "decrement", null); //Send off the db to change money stat.
           
         } else {
           console.log(result["message"], result["error"]);
@@ -768,16 +746,14 @@ function printSingle(name) {
       get_full: false,
     },
     error: function (result) {
-      console.log("An error occurred immediately in $.ajax request.", result);
-      console.log(result.responseText);
+      console.log("An error occurred immediately in $.ajax request.", result, result.responseText);
     },
     success: function (result) {
       if (result["status"]) {
         console.log(result);
       } else {
-        console.log(result["message"], result["error"]);
-      }
-    },
+        console.log(result, result["message"], result["error"]);
+    }},
   });
 }
 
@@ -923,19 +899,13 @@ function throwFruit(formattedName) {
         increment: "-" + throw_amount.toString(),
       },
       error: function (result) {
-        console.log("An error occurred immediately in $.ajax request.");
-        console.log(result.responseText, result);
+        console.log("An error occurred immediately in $.ajax request.", result.responseText, result);
       },
       success: function (result) {
         if (result["status"]) {
+
           let fruit = result["data"][0];
-
-          // let el = $("table#inventory tr td").filter(function () {
-          //   return $(this).text() == fruit["name"];
-          // });
-
           let row = $("table#inventory tbody tr#"+formattedName)
-
           row.find(".quantityData").text(fruit["quantity"]);
 
           if (throw_amount > parseInt(fruit["quantity"])) {

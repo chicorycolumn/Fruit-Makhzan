@@ -4,10 +4,7 @@ include_once '../config/database.php';
 include_once '../objects/fruit_class.php';
 include '../../utils/table_utils.php';
 
-//REMINDER! When you want to get history for graphs, make a request to inv table, and
-//          give parameter $get_full = true. This way both fruit->read_single and also
-//          build_array will put the history columns on your data. I'm excluding the
-//          history columns from normal requests to read_single inventory as they can be big.
+//When want history graphs, request invtable parameter $get_full = true. So fruit->read_single and build_array add history columns.
 
 $database = new Database();
 $db = $database->getConnection();
@@ -39,13 +36,6 @@ function go(
   $acronym,
   $get_full
 ) {
-  // return [
-  //   "tn" => $table_name,
-  //   "idc" => $identifying_column,
-  //   "ida" => $identifying_data,
-  //   "ac" => $acronym,
-  // ];
-
   if (
     !($result = $fruit->read_single(
       $table_name,
@@ -62,13 +52,9 @@ function go(
     ];
   }
 
-  // return $result;
-
   if (!$result["status"]) {
     return $result;
   }
-
-  // return $result;
 
   if (!$result['data']->num_rows) {
     return [

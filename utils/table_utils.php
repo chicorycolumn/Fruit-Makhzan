@@ -64,14 +64,6 @@ function decadenceFromData($week_record)
     $res = 50 - $inc;
   }
 
-  // return json_encode([
-  //   "total_profit" => $total_profit,
-  //   "total_costs" => $total_costs,
-  //   "net" => $net,
-  //   "abs" => $abs,
-  //   "inc" => $inc,
-  //   "res" => $res,
-  // ]);
   return $res;
 }
 
@@ -270,11 +262,7 @@ function build_table_array($table, $result, $get_full)
           $row['from_quantity_sold_history']
         );
       }
-
-      // $durability_word = $row["durability"] > 6 ? "High" : "Medium";
-      // $durability_word = $row["durability"] < 4 ? "Low" : $durability_word;
     } elseif ($table == "games") {
-      // $item = ["greeting" => "smello"];
       $item = [
         "game_id" => $row["game_id"],
         "last_accessed" => $row["last_accessed"],
@@ -301,8 +289,6 @@ function make_table(
   $query = "CREATE TABLE " . $table_name . $create_table_querystring;
 
   if (mysqli_query($connection, $query)) {
-    // $query = "ALTER TABLE " . $table_name . " AUTO_INCREMENT=127";
-    // mysqli_query($connection, $query);
     foreach ($query_array as $query) {
       mysqli_query($connection, $query);
     }

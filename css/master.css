@@ -12,7 +12,6 @@ body {
   margin-left: auto;
   margin-right: auto;
   width: 30%;
-  /* border: red solid 1pt; */
   text-align: center;
   display: flex;
   flex-direction: row;
@@ -20,7 +19,6 @@ body {
 }
 
 .contentWrapper {
-  /* border: blue solid 0.5pt; */
   text-align: center;
   display: flex;
   flex-direction: row;

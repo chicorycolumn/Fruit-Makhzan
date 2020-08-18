@@ -7,38 +7,21 @@
   border-spacing: 15px 20px;
   margin-left: auto;
   margin-right: auto;
-  /* margin-bottom: 15px; */
-  /* border: fuchsia dotted 5pt; */
 }
 
 #inventory td {
   background-color: rgba(200, 200, 200, 0.1);
   border-radius: var(--bradius1);
-  /* border-right: none; */
   min-width: 120px;
   max-width: 120px;
-  /* border: rgba(0, 0, 0, 0.1) solid 0.5pt; */
-  /* margin-top: 50px;
-  margin-bottom: 50px; */
-  /* padding-top: 0px;
-  padding-bottom: 0px;
-  padding-right: 0px;
-  padding-bottom: 0px; */
-}
-
-#inventory tr {
-  /* border: blue dotted 1pt; */
-  /* background-color: lightpink; */
 }
 
 .th_inventory {
-  /* border: fuchsia dotted 1pt; */
   min-width: 120px;
   max-width: 120px;
 }
 
 .regularTD {
-  /* padding-left: 25px; */
   padding-left: 0px;
 }
 
@@ -48,22 +31,13 @@
 
 .nameTD {
   padding-left: 0px;
-  /* padding-top: 17.5px; */
-  /* padding-bottom: 0px; */
-  /* padding-top: 0px; */
   font-family: "Long Cang", cursive !important;
   font-size: 16pt;
   font-weight: bold;
-  /* font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif; */
-  /* align-content: top;
-  text-align: top; */
-  /* justify-text: top; */
 }
 
 .sellingPriceTD {
   padding-left: 0px;
-  /* padding-top: 17.5px;
-  padding-bottom: 0px; */
 }
 
 /*********************************/
@@ -71,15 +45,11 @@
 /*********************************/
 
 .invSubtd {
-  /* border: blue dashed 1pt; */
   margin: 0px;
-  /* margin-left: 10px; */
   margin-left: 0px;
   height: 70px;
   width: 100%;
   text-align: center;
-  /* position: relative; */
-  /* top: 5px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -89,42 +59,16 @@
   width: 120px;
   margin-left: 0px;
   position: relative;
-  /* border: red dotted 1pt; */
-  /* height: 57.5px; */
-  /* top: 0px; */
-  /* font-family: Impact, Haettenschweiler, sans-serif; */
-  /* margin-top: 22px; */
-  /* height: 70px; */
-}
-
-.nameData {
-  /* background-color: rgba(1, 1, 1, 0.1); */
 }
 
 .quantitySubtd {
-  /* background-color: rgba(10, 10, 10, 0.1); */
-  /* position: relative;
-  top: 9px; */
-  /* height: 70px; */
 }
 
 .restockPriceSubtd {
-  /* background-color: lightpink; */
-  /* display: flex;
-  flex-direction: column;
-  align-content: center;
-  justify-content: center; */
-  /* padding-left: 32.5px; */
-  /* height: fit-content; */
-  /* text-align: left; */
-  /* width: inherit; */
 }
 
 .sellingPriceSubtd {
   margin-left: 0px;
-  /* position: relative;
-  height: 60px;
-  top: 0px; */
 }
 
 /*********************************/
@@ -134,39 +78,22 @@
 .invData {
   margin: 0px;
   padding: 0px;
-  /* background-color: rgba(1, 1, 1, 0.1); */
 }
 
 .popularityCircleSpan {
-  /* display: inline; */
-  /* display: inline-block; */
   margin: 0px;
-  /* margin-right: 15px; */
-  /* position: relative; */
-  /* bottom: -4px; */
   background-color: white;
   border-radius: 50px;
   height: 20px;
   width: 20px;
   margin-left: 5px;
-  /* margin-left: auto;
-  margin-right: auto; */
-  /* margin-top: 2.5px; */
   text-align: center;
 }
 
 .popHolder {
-  /* border: green solid 1pt; */
   display: flex;
   flex-direction: row;
   justify-content: center;
-}
-
-.restockPriceData {
-  /* margin-top: 20px; */
-  /* background-color: magenta; */
-  /* display: inline-block; */
-  /* width: 40px; */
 }
 
 .qyHolder {
@@ -192,10 +119,10 @@
 }
 
 .sellingPriceInput {
+  border-radius: var(--bradius1) var(--bradius1) 0 0;
   resize: none;
   width: 100%;
   height: 20px;
-  /* line-height: 20px; */
   font-size: 15px;
   text-justify: top;
   overflow-wrap: break-word;
@@ -205,7 +132,6 @@
 }
 
 .sellingPriceData {
-  /* border: fuchsia solid 1pt; */
   min-width: 80px;
   min-height: 20px;
   margin: 0px;
@@ -213,10 +139,7 @@
 }
 
 .sellingPriceForm {
-  /* background-color: rgba(255, 0, 255, 0.1); */
-  /* border: black dotted 1pt; */
   margin: 0px;
-  /* margin-top: 15px; */
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -235,7 +158,6 @@
 }
 
 .buttonSubHolder {
-  /* margin-top: -1px; */
   min-width: 100%;
 }
 
@@ -248,7 +170,4 @@
   border-right: lightgray solid 1.5pt;
   border-bottom: lightgray solid 1.5pt;
   border-top: grey solid 1.5pt;
-  /* border-left: grey solid 1.5pt; */
-  /* position: relative;
-  top: 0.5px; */
 }

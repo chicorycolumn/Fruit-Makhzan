@@ -14,7 +14,6 @@ class Database
   private $db_name = "fruit_makhzan_db";
   public $inv_table_name;
   public $connection;
-  // $this->conn->exec("set names utf8");
 
   public function __construct()
   {
@@ -53,22 +52,7 @@ class Database
     $_SESSION["inv_table_name"] = $_SESSION["gid"] . "__inv";
     $table_name = $_SESSION["inv_table_name"];
 
-    // $create_table_querystring = " (
-    //   `id` int(11) NOT NULL AUTO_INCREMENT NUMERIC(1, 10) PRIMARY KEY,
-    //   `name` varchar(255) NOT NULL,
-    //   `quantity` int(11) NOT NULL,
-    //   `selling_price` int(11) NOT NULL,
-    //   `total_sales` int(11) DEFAULT 0,
-    //   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-    // )";
-
-    // $json = '{"name": "Jo", "12": 32}';
-    // $day = 300;
-    // $val = 50;
-    // $arr = [$day => $val];
-    // $json = json_encode($arr);
-
-    //Make and populate Inventory table./////////////////////////////////////////////////
+    //                                                            Make and populate Inventory table.
 
     $max_prices_json = json_encode(["Low" => 1, "Medium" => 2, "High" => 5]);
     $pop_factors_json = json_encode(["weather" => true, "love" => false]);
@@ -139,20 +123,6 @@ class Database
     $query_array = [];
 
     foreach ($seed_data as $seed_item) {
-      // $query_array[] =
-      //   "INSERT INTO " .
-      //   $table_name .
-      //   " (`name`, `resilience`, `max_prices`, `popularity_factors`) VALUES
-      // ('" .
-      //   $seed_item['name'] .
-      //   "', " .
-      //   $seed_item['resilience'] .
-      //   ", '" .
-      //   json_encode($seed_item['max_prices']) .
-      //   "', '" .
-      //   json_encode($seed_item['popularity_factors']) .
-      //   "')";
-
       $query_array[] =
         "INSERT INTO " .
         $table_name .
@@ -179,12 +149,11 @@ class Database
       $query_array
     );
 
-    //Add row to games table./////////////////////////////////////////////////
+    //                                                            Add row to games table.
     $query =
       "INSERT INTO games (`game_id`, `last_accessed`, `trend_calculates`, `money_stat`, `days_stat`) VALUES (?, ?, ?, ?, ?)";
 
     if (!($stmt = $this->connection->prepare($query))) {
-      // mysqli_close($this->connection);
       return [
         "status" => false,
         "message" => "Couldn't prepare query.",
@@ -216,7 +185,6 @@ class Database
     );
 
     if (!$stmt->execute()) {
-      // mysqli_close($this->connection);
       return [
         "status" => false,
         "message" => "An error in execution.",
@@ -225,7 +193,6 @@ class Database
     }
 
     $stmt->close();
-    // $this->connection->close(); //mysqli_close($this->connection);
 
     $_SESSION["trend_calculates"] = $trends;
     $_SESSION["money_stat"] = $money_initial;

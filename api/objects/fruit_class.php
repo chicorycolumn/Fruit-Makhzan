@@ -62,14 +62,6 @@ class Fruit
         "`id`, `name`, `quantity`, `selling_price`, `resilience`, `max_prices`, `popularity_factors`";
     }
 
-    // return [
-    //   $table_name,
-    //   $identifying_column,
-    //   $identifying_data,
-    //   $acronym,
-    //   $get_full,
-    // ];
-
     $query =
       "SELECT " .
       $columns .
@@ -79,8 +71,6 @@ class Fruit
       $identifying_column .
       "=?";
 
-    // $query = "SELECT * FROM `zulkiw6ai8w2ddt__inv` WHERE quantity=?";
-
     if (!($stmt = $this->conn->prepare($query))) {
       return [
         "status" => false,
@@ -88,15 +78,8 @@ class Fruit
         "error" => $this->conn->error,
       ];
     }
-    // $acr = "i";
-    // $num = 50;
-    // $stmt->bind_param($acr, $num);
-    $stmt->bind_param($acronym, $identifying_data);
 
-    // $giddy = "zulkiw6ai8w2ddt";
-    // $query = "SELECT * FROM games WHERE game_id=?";
-    // $stmt = $this->conn->prepare($query);
-    // $stmt->bind_param("s", $giddy);
+    $stmt->bind_param($acronym, $identifying_data);
 
     if (!$stmt->execute()) {
       return [
@@ -283,7 +266,6 @@ class Fruit
       }
 
       $acronym = "s";
-      // $datum = json_encode($json_data[$day]);
       $datum =
         "['profit':" .
         $json_data[$day]['profit'] .
@@ -335,9 +317,6 @@ class Fruit
       $identifying_column .
       "=?";
 
-    // echo $query;
-    // die();
-
     if (!($stmt = $this->conn->prepare($query))) {
       return [
         "status" => false,
@@ -345,12 +324,6 @@ class Fruit
         "error" => $this->conn->error,
       ];
     }
-
-    // print_r($update_values);
-
-    // if (random_int(0, 2) == 1) {
-    //   return [$acronym, $update_values, count($update_values)];
-    // }
 
     $stmt->bind_param($acronym, ...$update_values);
 

@@ -41,30 +41,21 @@ function loadPrevious() {
         echo $_COOKIE['makhzan'];
       } else {
         echo "NO GID ON COOKIE";
-      } ?>",
+      } ?>", //******************** */
       acronym: "s",
       get_full: false,
       load_session_from_db: true,
     },
     error: function (result) {
       console.log(
-        "Immediate error from request to read_single. Try clicking New Game button again.",
-        result
+        "Immediate error from request to read_single. Try clicking New Game button again.", result, result["responseText"]
       );
-      console.log(result["responseText"]);
-      console.log(result);
     },
     success: function (result) {
-      console.log("b1 success");
       if (result["status"]) {
-        console.log("b1 true");
-        // console.log(result)
         window.location = "../play";
       } else {
-        console.log(result);
-        console.log(result["message"]);
-        console.log(result["error"]);
-        console.log(result["error"]["responseText"]);
+        console.log(result, result["message"], result["error"]);
       }
     },
   });
@@ -81,20 +72,14 @@ function startNewGame() {
     error: function (result) {
       console.log(
         "Immediate error from request to new_game. Try clicking New Game button again.",
-        result
+        result, result["responseText"]
       );
-      console.log(result["responseText"]);
-      console.log(result);
     },
     success: function (result) {
-      console.log("a1 success");
       if (result["status"]) {
-        console.log("a1 true");
         window.location = "../play";
       } else {
-        console.log(result["message"]);
-        console.log(result["error"]);
-        console.log(result["error"]["responseText"]);
+        console.log(result["message"], result["error"]);
       }
     },
   });

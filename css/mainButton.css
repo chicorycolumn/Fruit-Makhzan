@@ -1,5 +1,4 @@
 .mainDivButton {
-  /* border: fuchsia dotted 3pt; */
   display: flex;
   flex-direction: row;
   justify-content: space-around;

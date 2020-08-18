@@ -24,9 +24,6 @@ function go($db, $fruit, $table_name, $get_full)
     ];
   }
 
-  // print_r($result);
-  // die();
-
   if (!$result["status"]) {
     return $result;
   }
