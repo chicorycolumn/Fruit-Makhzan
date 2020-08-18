@@ -1,10 +1,28 @@
+/*********************************/
+/************* TABLE *************/
+/*********************************/
+
 .table {
   border-collapse: separate;
-  border-spacing: 0px 20px;
+  border-spacing: 15px 20px;
   margin-left: auto;
   margin-right: auto;
   /* margin-bottom: 15px; */
   /* border: fuchsia dotted 5pt; */
+}
+
+#inventory td {
+  border: rgba(0, 0, 0, 0.1) solid 0.5pt;
+  /* border-right: none; */
+  min-width: 120px;
+  max-width: 120px;
+  /* border: rgba(0, 0, 0, 0.1) solid 0.5pt; */
+  /* margin-top: 50px;
+  margin-bottom: 50px; */
+  /* padding-top: 0px;
+  padding-bottom: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px; */
 }
 
 #inventory tr {
@@ -18,18 +36,6 @@
   max-width: 120px;
 }
 
-#inventory td {
-  border: black dashed 0.5pt;
-  border-right: none;
-  /* border: rgba(0, 0, 0, 0.1) solid 0.5pt; */
-  /* margin-top: 50px;
-  margin-bottom: 50px; */
-  /* padding-top: 0px;
-  padding-bottom: 0px;
-  padding-right: 0px;
-  padding-bottom: 0px; */
-}
-
 .regularTD {
   /* padding-left: 25px; */
   padding-left: 0px;
@@ -41,13 +47,29 @@
 
 .nameTD {
   padding-left: 0px;
+  padding-top: 17.5px;
+  padding-bottom: 0px;
+  font-family: "Long Cang", cursive !important;
+  font-size: 16pt;
+  font-weight: bold;
+  /* font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif; */
   /* align-content: top;
   text-align: top; */
   /* justify-text: top; */
 }
 
+.sellingPriceTD {
+  padding-left: 0px;
+  padding-top: 17.5px;
+  padding-bottom: 0px;
+}
+
+/*********************************/
+/************* SUBTD *************/
+/*********************************/
+
 .invSubtd {
-  border: blue dashed 1pt;
+  /* border: blue dashed 1pt; */
   margin: 0px;
   /* margin-left: 10px; */
   margin-left: 0px;
@@ -62,8 +84,9 @@
   width: 120px;
   margin-left: 0px;
   position: relative;
-  /* align-self: top; */
-  /* top: 0px; */
+  height: 57.5px;
+  top: 0px;
+  /* font-family: Impact, Haettenschweiler, sans-serif; */
   /* margin-top: 22px; */
   /* height: 70px; */
 }
@@ -75,10 +98,33 @@
   /* height: 70px; */
 }
 
+.restockPriceSubtd {
+  /* background-color: lightpink; */
+  margin-left: 32.5px;
+  height: fit-content;
+  text-align: left;
+  width: 75%;
+}
+
+.sellingPriceSubtd {
+  margin-left: 0px;
+  position: relative;
+  height: 60px;
+  top: 0px;
+}
+
+/*********************************/
+/*                               */
+/*********************************/
+
 .invData {
   margin: 0px;
   padding: 0px;
   /* background-color: rgba(1, 1, 1, 0.1); */
+}
+
+.nameData {
+  /* font-family: Impact, Haettenschweiler, sans-serif; */
 }
 
 .popularityCircleSpan {
@@ -99,14 +145,6 @@
   /* background-color: magenta; */
   display: inline-block;
   width: 40px;
-}
-
-.restockPriceSubtd {
-  /* background-color: lightpink; */
-  margin-left: 32.5px;
-  height: fit-content;
-  text-align: left;
-  width: 75%;
 }
 
 .qyHolder {
@@ -133,7 +171,7 @@
 
 .sellingPriceInput {
   resize: none;
-  width: 53px;
+  width: 80px;
   height: 40px;
   /* line-height: 20px; */
   font-size: 15px;
@@ -143,6 +181,7 @@
   overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: none;
+  text-align: center;
 }
 
 .sellingPriceData {

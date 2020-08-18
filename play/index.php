@@ -47,6 +47,7 @@ if (!$result) {
 echo "<link rel='stylesheet' type='text/css' href='../css/playIndex.css' />";
 echo "<link rel='stylesheet' type='text/css' href='../css/buttons.css' />";
 echo "<link rel='stylesheet' type='text/css' href='../css/global.css' />";
+echo "<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Long+Cang&display=swap'>";
 include 'content/mainStats.php';
 include 'content/mainBulletin.php';
 include 'content/mainButton.php';
@@ -369,13 +370,13 @@ function fillInvTable(shouldWipe) {
                       "</td>"+
                       
                       
-                      "<td class='regularTD clickable highlighted' "+
+                      "<td class='regularTD sellingPriceTD clickable highlighted' "+
                       
                         "onClick=changeSellingPrice(true,'"+formattedName+"')>"+
 
                           "<div class='invSubtd sellingPriceSubtd'>"+
                           
-                            "<p class='invData sellingPriceData clickable shown'>"+selling_price+"</p>"+
+                            "<p class='invData sellingPriceData clickable'>"+selling_price+"</p>"+
                             
                             "<form class='sellingPriceForm noMarginPadding sellingPriceFormHidden' "+
                               "onsubmit=submitSellingPrice(`"+formattedName+"`) "+
