@@ -12,7 +12,8 @@
 }
 
 #inventory td {
-  border: rgba(0, 0, 0, 0.1) solid 0.5pt;
+  background-color: rgba(200, 200, 200, 0.1);
+  border-radius: var(--bradius1);
   /* border-right: none; */
   min-width: 120px;
   max-width: 120px;
@@ -47,8 +48,9 @@
 
 .nameTD {
   padding-left: 0px;
-  padding-top: 17.5px;
-  padding-bottom: 0px;
+  /* padding-top: 17.5px; */
+  /* padding-bottom: 0px; */
+  /* padding-top: 0px; */
   font-family: "Long Cang", cursive !important;
   font-size: 16pt;
   font-weight: bold;
@@ -60,8 +62,8 @@
 
 .sellingPriceTD {
   padding-left: 0px;
-  padding-top: 17.5px;
-  padding-bottom: 0px;
+  /* padding-top: 17.5px;
+  padding-bottom: 0px; */
 }
 
 /*********************************/
@@ -73,44 +75,56 @@
   margin: 0px;
   /* margin-left: 10px; */
   margin-left: 0px;
-  height: 100%;
+  height: 70px;
   width: 100%;
   text-align: center;
-  position: relative;
-  top: -11.5px;
+  /* position: relative; */
+  /* top: 5px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .nameSubtd {
   width: 120px;
   margin-left: 0px;
   position: relative;
-  height: 57.5px;
-  top: 0px;
+  /* border: red dotted 1pt; */
+  /* height: 57.5px; */
+  /* top: 0px; */
   /* font-family: Impact, Haettenschweiler, sans-serif; */
   /* margin-top: 22px; */
   /* height: 70px; */
 }
 
+.nameData {
+  /* background-color: rgba(1, 1, 1, 0.1); */
+}
+
 .quantitySubtd {
   /* background-color: rgba(10, 10, 10, 0.1); */
-  position: relative;
-  top: 9px;
+  /* position: relative;
+  top: 9px; */
   /* height: 70px; */
 }
 
 .restockPriceSubtd {
   /* background-color: lightpink; */
-  margin-left: 32.5px;
-  height: fit-content;
-  text-align: left;
-  width: 75%;
+  /* display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center; */
+  /* padding-left: 32.5px; */
+  /* height: fit-content; */
+  /* text-align: left; */
+  /* width: inherit; */
 }
 
 .sellingPriceSubtd {
   margin-left: 0px;
-  position: relative;
+  /* position: relative;
   height: 60px;
-  top: 0px;
+  top: 0px; */
 }
 
 /*********************************/
@@ -123,33 +137,41 @@
   /* background-color: rgba(1, 1, 1, 0.1); */
 }
 
-.nameData {
-  /* font-family: Impact, Haettenschweiler, sans-serif; */
-}
-
 .popularityCircleSpan {
   /* display: inline; */
-  display: inline-block;
+  /* display: inline-block; */
   margin: 0px;
-  margin-right: 15px;
+  /* margin-right: 15px; */
   /* position: relative; */
   /* bottom: -4px; */
   background-color: white;
   border-radius: 50px;
   height: 20px;
   width: 20px;
+  margin-left: 5px;
+  /* margin-left: auto;
+  margin-right: auto; */
+  /* margin-top: 2.5px; */
   text-align: center;
 }
 
+.popHolder {
+  /* border: green solid 1pt; */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
 .restockPriceData {
+  /* margin-top: 20px; */
   /* background-color: magenta; */
-  display: inline-block;
-  width: 40px;
+  /* display: inline-block; */
+  /* width: 40px; */
 }
 
 .qyHolder {
   width: 100%;
-  text-align: left;
+  text-align: center;
   display: flex;
   flex-direction: column;
   font-size: 12px;
@@ -171,13 +193,11 @@
 
 .sellingPriceInput {
   resize: none;
-  width: 80px;
-  height: 40px;
+  width: 100%;
+  height: 20px;
   /* line-height: 20px; */
   font-size: 15px;
   text-justify: top;
-  /* border: red dotted 1pt; */
-  color: fuchsia;
   overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: none;
@@ -199,7 +219,9 @@
   /* margin-top: 15px; */
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  position: relative;
+  top: 15px;
 }
 
 .sellingPriceFormHidden {
@@ -213,11 +235,12 @@
 }
 
 .buttonSubHolder {
-  margin-top: -1px;
+  /* margin-top: -1px; */
   min-width: 100%;
 }
 
 .amountInput {
+  border-radius: 0 var(--bradius1) 0 0;
   width: 80px;
   height: 40px;
   font-size: 15px;

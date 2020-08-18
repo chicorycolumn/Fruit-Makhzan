@@ -16,11 +16,6 @@ $mainStats = "
   <span class='mainStatText'>days</span>
   </div>
   </div>
-  <p class='mainStatTitle'>TABLE SPACE USED</p>
-<div class='statusBar'>
-<div class='statusBarFill'>
-</div>
-</div>
 </div>
 ";
 

@@ -2,10 +2,6 @@
   cursor: pointer;
 }
 
-.hidden {
-  display: none;
-}
-
 .noMarginPadding {
   margin: 0px;
   padding: 0px;
@@ -19,4 +15,12 @@
 .highlighted {
   color: blue;
   /* font-weight: bold; */
+}
+
+.hidden {
+  display: none;
+}
+
+.shown {
+  /* display: none; */
 }

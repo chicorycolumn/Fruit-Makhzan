@@ -361,11 +361,11 @@ function fillInvTable(shouldWipe) {
                       "<td class='regularTD'>"+
                         "<div class='invSubtd quantitySubtd'>"+
                           "<p class='invData quantityData noMarginPadding'>"+quantity+"</p>"+
-                          "<div class='qyHolder'>"+
-                            "<div class='qySubHolder qyColor1'><p class='noMarginPadding'>SALES: </p>"+"<p class='qy1 noMarginPadding'> </p></div>"+
-                            "<div class='qySubHolder qyColor2'><p class='noMarginPadding'>SALES: </p>"+"<p class='qy2 noMarginPadding'> </p></div>"+
-                            "<div class='qySubHolder qyColor3'><p class='noMarginPadding'>SALES: </p>"+"<p class='qy3 noMarginPadding'> </p></div>"+
-                          "</div>"+
+                          // "<div class='qyHolder'>"+
+                          //   "<div class='qySubHolder qyColor1'><p class='qy qy1 noMarginPadding'> · </p></div>"+
+                          //   "<div class='qySubHolder qyColor2'><p class='qy qy2 noMarginPadding'> · </p></div>"+
+                          //   "<div class='qySubHolder qyColor3'><p class='qy qy3 noMarginPadding'> · </p></div>"+
+                          // "</div>"+
                         "</div>"+
                       "</td>"+
                       
@@ -376,7 +376,7 @@ function fillInvTable(shouldWipe) {
 
                           "<div class='invSubtd sellingPriceSubtd'>"+
                           
-                            "<p class='invData sellingPriceData clickable'>"+selling_price+"</p>"+
+                            "<p class='invData sellingPriceData clickable shown'>"+selling_price+"</p>"+
                             
                             "<form class='sellingPriceForm noMarginPadding sellingPriceFormHidden' "+
                               "onsubmit=submitSellingPrice(`"+formattedName+"`) "+
@@ -399,10 +399,10 @@ function fillInvTable(shouldWipe) {
 
                       "<td class='regularTD'>"+
                         "<div class='invSubtd restockPriceSubtd'>"+
-
-                          "<p class='invData restockPriceData'>"+restock_price+"</p>"+
-                          "<div class='popularityCircleSpan'></div>"+
-                          
+                          "<div class='popHolder'>"+
+                            "<p class='invData restockPriceData'>"+restock_price+"</p>"+
+                            "<div class='popularityCircleSpan'></div>"+
+                          "</div>"+
                         "</div>"+
                       "</td>"+
                       
@@ -424,7 +424,7 @@ function fillInvTable(shouldWipe) {
                             
                             "<div class='buttonSubHolder'>"+
                               
-                              "<button class='mediumButtonKind button2 buyButton' onClick=restockFruit('"+formattedName+"')>Buy</button>"+            
+                              "<button id='buyButton' class='mediumButtonKind button2 buyButton' onClick=restockFruit('"+formattedName+"')>Buy</button>"+            
                               
                               "<input value="+seed_data.filter(item => item['name']==name)[0]['restock_amount']+" "+
                                 "class='amountInput amountInput_restock' "+
@@ -437,13 +437,13 @@ function fillInvTable(shouldWipe) {
                             "</div>"+ 
                             
                             "<div class='buttonSubHolder'>"+
-                              "<button class='mediumButtonKind button3' "+
+                              "<button id='maxBuyButton' class='mediumButtonKind button3' "+
                                 "onclick=setAmount('"+formattedName+"','restock','max') "+
                               ">MAX</button>"+
-                              "<button class='mediumButtonKind button4' "+
+                              "<button id='incBuyButton' class='mediumButtonKind button4' "+
                                 "onclick=setAmount('"+formattedName+"','restock','increment') "+
                               ">⇧</button>"+
-                              "<button class='mediumButtonKind button4' "+
+                              "<button id='decBuyButton' class='mediumButtonKind button4' "+
                                 "onclick=setAmount('"+formattedName+"','restock','decrement') "+
                               ">⇩</button>"+
                               

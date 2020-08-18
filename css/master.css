@@ -1,3 +1,7 @@
+:root {
+  --bradius1: 15px;
+}
+
 body {
   background-color: lightyellow;
   font-family: Arial, Helvetica, sans-serif;
@@ -31,5 +35,5 @@ body {
 .mainDiv {
   border: black dashed 2pt;
   margin: 20px 0px 20px 0px;
-  width: 800px;
+  width: 850px;
 }

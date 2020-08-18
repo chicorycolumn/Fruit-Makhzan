@@ -33,10 +33,29 @@ button:disabled {
 }
 
 .sellingPriceButton {
-  width: 40px;
+  height: 31px;
+  width: 100%;
   background-color: lightgreen;
+  border-radius: 0 0 var(--bradius1) var(--bradius1);
 }
 
 .sellingPriceButton:disabled {
   background-color: lightgray;
+}
+
+#maxBuyButton {
+  border-radius: 0 0 0 var(--bradius1);
+  position: relative;
+  top: -1px;
+}
+
+#incBuyButton {
+}
+
+#decBuyButton {
+  border-radius: 0 0 var(--bradius1) 0;
+}
+
+#buyButton {
+  border-radius: var(--bradius1) 0 0 0;
 }
