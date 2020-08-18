@@ -31,7 +31,7 @@ button:disabled {
 }
 
 .sellingPriceButton {
-  height: 31px;
+  height: 26px;
   width: 100%;
   background-color: lightgreen;
   border-radius: 0 0 var(--bradius1) var(--bradius1);
