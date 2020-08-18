@@ -1,18 +1,21 @@
-.mainDivStats {
+.mainSubDivStats {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-bottom: 40px;
+  border: none;
 }
 
 .topHalf {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 
 .mainStatBox {
-  /* border: yellow dotted 0.5pt; */
   width: 20%;
+  display: flex;
+  flex-direction: column;
 }
 
 .mainStatTitle {
@@ -20,4 +23,23 @@
 }
 
 .mainStatText {
+  /* border: fuchsia solid 2pt; */
+  position: relative;
+  top: 67.5px;
+  left: 5px;
+}
+
+.coin {
+  height: 180px;
+  width: 180px;
+  position: absolute;
+}
+
+.mainStatTextFaded {
+  color: rgba(0, 0, 0);
+  opacity: 0.2;
+}
+
+.mainStatTextNumber {
+  font-size: 20px;
 }

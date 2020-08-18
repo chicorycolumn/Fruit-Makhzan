@@ -44,7 +44,7 @@ button:disabled {
 #maxBuyButton {
   border-radius: 0 0 0 var(--bradius1);
   position: relative;
-  top: -1.5px;
+  top: -1px;
 }
 
 #incBuyButton {
@@ -56,4 +56,17 @@ button:disabled {
 
 #buyButton {
   border-radius: var(--bradius1) 0 0 0;
+}
+
+.newDayButton {
+  background-color: white;
+  height: 145px;
+  width: 145px;
+  position: relative;
+  top: 17.5px;
+  left: 17.5px;
+  border-radius: 100px;
+  /* border: none;
+  box-shadow: none; */
+  font-size: 18px;
 }

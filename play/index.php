@@ -44,14 +44,13 @@ if (!$result) {
 ?>
 
 <?php
-echo "<link rel='stylesheet' type='text/css' href='../css/playIndex.css' />";
 echo "<link rel='stylesheet' type='text/css' href='../css/buttons.css' />";
 echo "<link rel='stylesheet' type='text/css' href='../css/global.css' />";
 echo "<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Long+Cang&display=swap'>";
 include 'content/mainStats.php';
 include 'content/mainBulletin.php';
-include 'content/mainButton.php';
 include 'content/invTable.php';
+include 'content/mainGraphs.php';
 
 if ($show_dev_data) {
   $_SESSION['show_dev_data'] = 1;
@@ -71,25 +70,29 @@ if ($show_dev_data) {
 
 $content .=
   '
-  <div class="mainDiv">
+  <div class="mainDiv mainDivStats">
     ' .
   $mainStats .
   '
   </div>
 
-  <div class="mainDiv">
+  <div class="holderForHorizontalMainDivs">
+
+    <div class="mainDiv mainDivGraphs">
     ' .
+  $mainGraphs .
+  '
+    </div>
+
+    <div class="mainDiv mainDivBulletin">
+      ' .
   $mainBulletin .
   '
-  </div>
+    </div>
 
-  <div class="mainDiv">
-    ' .
-  $mainButton .
-  '
   </div>
     
-  <div class="mainDiv mainDivTable1">
+  <div class="mainDiv mainDivTable">
     ' .
   $invTable .
   '
@@ -321,6 +324,21 @@ function fillInvTable(shouldWipe) {
             max_prices,
             trend_calculates
           );
+
+          let pop_factors = seed_data.filter(item=>item.name == name)[0].popularity_factors
+          let pop_factor_keys = Object.keys(pop_factors)
+
+          //The first pf should be bigger, the second smaller.
+          //If positive, then blue, if neg then red.
+          //Accessibility means ↶↷ surrounds negative value.
+
+          let pf1 = pop_factor_keys[0]
+          let pf2 = pop_factor_keys[1]
+
+          pf1 = "<p class='popFactor1 noMarginPadding"+(pop_factors[pf1]?" popFactorPositive":" popFactorNegative")+"'>"+(pop_factors[pf1]?"":"↻")+pf1+"</p>"
+          pf2 = "<p class='popFactor2 noMarginPadding"+(pop_factors[pf2]?" popFactorPositive":" popFactorNegative")+"'>"+(pop_factors[pf2]?"":"↻")+pf2+"</p>"
+
+
                     response += 
                     "<tr id='"+formattedName+"'>"+
 
@@ -385,7 +403,7 @@ function fillInvTable(shouldWipe) {
                       "onClick=printSingle('"+formattedName+"')>"+
                         
                         "<div class='invSubtd resilienceSubtd'>"+
-                          "<p class='invData resilienceData'>"+resilience+"</p>"+
+                          pf1+pf2+
                         "</div>"+
                       
                       "</td>"+
@@ -602,17 +620,26 @@ function changeSellingPrice(showInput, formattedName) {
 }
 
 function bindUsefulJqueriesAfterLoadingDataIntoTable(){
-  $('.buttonSubHolder').bind('mousewheel', function(e){
-        
-        let current_val = parseInt($(this).find("input").val())
-        let max_buyable_quantity = Math.floor(parseInt($("#moneyStat").text()) / parseInt($(this).parents("tr").find(".restockPriceData").text()))
+  $('.buttonTD').bind('mousewheel', function(e){
 
-        if(e.originalEvent.wheelDelta/120 > 0) {
-          current_val < max_buyable_quantity && $(this).find("input").val(current_val+1)
-        }
-        else{
-          current_val > 1 && $(this).find("input").val(current_val-1)
-        }
+    let delta = e.originalEvent.wheelDelta
+
+    let scrollingOverTheTop = (delta > 0 && this.scrollTop == 0);
+    let scrollingOverTheBottom = (delta < 0 && (this.scrollTop >= this.scrollHeight - this.offsetHeight));
+    if (scrollingOverTheBottom || scrollingOverTheTop) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    let current_val = parseInt($(this).find("input").val())
+    let max_buyable_quantity = Math.floor(parseInt($("#moneyStat").text()) / parseInt($(this).parents("tr").find(".restockPriceData").text()))
+
+    if(delta/120 > 0) {
+      current_val < max_buyable_quantity && $(this).find("input").val(current_val+1)
+    }
+    else{
+      current_val > 1 && $(this).find("input").val(current_val-1)
+    }
   });
 }
 
@@ -770,6 +797,10 @@ function checkTCs() {
 function getSalesSubstrates(popularity_factors, max_prices, trend_calculates) {
   let factor1 = getPopularityFactor(popularity_factors, 0, trend_calculates);
   let factor2 = getPopularityFactor(popularity_factors, 1, trend_calculates);
+
+  console.log("MAJOR factor is ", factor1)
+  console.log("minor factor is ", factor2)
+
   let popularity = Math.ceil((factor1 * 3 + factor2) / 4);
 
   let popularity_word =

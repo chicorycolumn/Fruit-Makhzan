@@ -171,3 +171,19 @@
   border-bottom: lightgray solid 1.5pt;
   border-top: grey solid 1.5pt;
 }
+
+.popFactor1 {
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+.popFactor2 {
+  font-size: 12px;
+}
+.popFactorPositive {
+  color: black;
+}
+
+.popFactorNegative {
+  color: red;
+}

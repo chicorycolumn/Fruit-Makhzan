@@ -31,7 +31,23 @@ body {
 }
 
 .mainDiv {
+  border-radius: var(--bradius1);
   border: black dashed 2pt;
   margin: 20px 0px 20px 0px;
   width: 850px;
+}
+
+.holderForHorizontalMainDivs {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* border: blue solid 1pt; */
+}
+
+.mainDivBulletin {
+  width: 400px;
+}
+
+.mainDivGraphs {
+  width: 400px;
 }

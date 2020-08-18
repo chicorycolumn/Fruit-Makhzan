@@ -7,9 +7,6 @@ $invTable = "
 <div class='row'>
 <div class='col'>
 <div class='box'>
-  <div class='boxHeader'>
-    <h3 class='boxTitle'>Your Inventory</h3>
-  </div>
   <div class='boxBody'>
     <table id='inventory' class='table'>
       <thead>
@@ -18,7 +15,7 @@ $invTable = "
         <th class='th_inventory'>Quantity</th>
         <th class='th_inventory'>Selling price</th>
         <th class='th_inventory'>Restock price</th>
-        <th class='th_inventory'>Resilience</th>
+        <th class='th_inventory'>Factors</th>
         <th class='th_inventory'>Restock</th>
       </tr>
       </thead>

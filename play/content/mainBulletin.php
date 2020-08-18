@@ -5,7 +5,7 @@ echo "<link rel='stylesheet' type='text/css' href='.././css/mainBulletin.css' />
 $mainBulletin = "
 
 
-<div class='mainDivBulletin'>
+<div class='mainSubDivBulletin'>
 <ul>
 <li>Wow, you've sold out of oranges!</li>
 <li>Your neighbour Ali bin Makki passes by for a chat. He reckons dates are going out of fashion.</li>
