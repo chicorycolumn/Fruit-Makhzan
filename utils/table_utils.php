@@ -247,7 +247,6 @@ function build_table_array($table, $result, $get_full)
         "name" => $row["name"],
         "quantity" => $row["quantity"],
         "selling_price" => $row["selling_price"],
-        "resilience" => $row["resilience"],
         "max_prices" => json_decode($row["max_prices"]),
         "popularity_factors" => json_decode($row["popularity_factors"]),
       ];

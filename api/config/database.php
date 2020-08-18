@@ -63,7 +63,6 @@ class Database
       `name` varchar(100) NOT NULL,
       `quantity` int(11) DEFAULT 0,
       `selling_price` int(11) DEFAULT 0,
-      `resilience` int(3) DEFAULT 50,
       `max_prices` json DEFAULT '" .
       $max_prices_json .
       "',
@@ -78,45 +77,94 @@ class Database
 
     $seed_data = [
       [
-        "name" => "Mango",
+        "name" => "The Perfect Date",
+        "max_prices" => ["Low" => 200, "Medium" => 1000, "High" => 5000],
+        "popularity_factors" => [
+          "love" => false,
+          "weather" => true,
+        ],
+        "restock_amount" => 1,
+      ],
+      [
+        "name" => "Enchanted Pomegranate",
+        "max_prices" => ["Low" => 150, "Medium" => 600, "High" => 2500],
+        "popularity_factors" => [
+          "decadence" => true,
+          "love" => true,
+        ],
+        "restock_amount" => 1,
+      ],
+      [
+        "name" => "Flammable Walnut",
+        "max_prices" => ["Low" => 100, "Medium" => 300, "High" => 1100],
+        "popularity_factors" => [
+          "politics" => false,
+          "conformity" => true,
+        ],
+        "restock_amount" => 1,
+      ],
+      [
+        "name" => "Albino Almond",
+        "max_prices" => ["Low" => 60, "Medium" => 150, "High" => 500],
+        "popularity_factors" => [
+          "conformity" => true,
+          "weather" => true,
+        ],
+        "restock_amount" => 1,
+      ],
+      [
+        "name" => "Rare Melon",
+        "max_prices" => ["Low" => 30, "Medium" => 70, "High" => 200],
+        "popularity_factors" => [
+          "politics" => true,
+          "decadence" => true,
+        ],
+        "restock_amount" => 1,
+      ],
+      [
+        "name" => "Pistachio",
+        "max_prices" => ["Low" => 20, "Medium" => 40, "High" => 100],
+        "popularity_factors" => [
+          "weather" => false,
+          "politics" => true,
+        ],
+        "restock_amount" => 1,
+      ],
+      [
+        "name" => "Orange",
+        "max_prices" => ["Low" => 10, "Medium" => 20, "High" => 50],
+        "popularity_factors" => [
+          "conformity" => true,
+          "love" => true,
+        ],
+        "restock_amount" => 1,
+      ],
+      [
+        "name" => "Peach",
+        "max_prices" => ["Low" => 4, "Medium" => 8, "High" => 20],
+        "popularity_factors" => [
+          "decadence" => true,
+          "conformity" => true,
+        ],
+        "restock_amount" => 1,
+      ],
+      [
+        "name" => "Fig",
+        "max_prices" => ["Low" => 2, "Medium" => 4, "High" => 10],
+        "popularity_factors" => [
+          "politics" => true,
+          "conformity" => true,
+        ],
+        "restock_amount" => 1,
+      ],
+      [
+        "name" => "Grapes",
         "max_prices" => ["Low" => 1, "Medium" => 2, "High" => 5],
         "popularity_factors" => [
           "weather" => true,
-          "love" => false,
+          "love" => true,
         ],
-        "resilience" => 21,
         "restock_amount" => 1,
-        "throw_amount" => 1,
-      ],
-      [
-        "name" => "Mulberry",
-        "max_prices" => [
-          "Low" => 10,
-          "Medium" => 20,
-          "High" => 50,
-        ],
-        "popularity_factors" => [
-          "weather" => true,
-          "politics" => true,
-        ],
-        "resilience" => 40,
-        "restock_amount" => 1,
-        "throw_amount" => 1,
-      ],
-      [
-        "name" => "Mystical Mythical Mung Bean",
-        "max_prices" => [
-          "Low" => 4000,
-          "Medium" => 7000,
-          "High" => 10000,
-        ],
-        "popularity_factors" => [
-          "decadence" => true,
-          "conformity" => false,
-        ],
-        "resilience" => 60,
-        "restock_amount" => 1,
-        "throw_amount" => 1,
       ],
     ];
 
@@ -126,15 +174,13 @@ class Database
       $query_array[] =
         "INSERT INTO " .
         $table_name .
-        " (`name`, `selling_price`, `quantity`, `resilience`, `max_prices`, `popularity_factors`) VALUES
+        " (`name`, `selling_price`, `quantity`, `max_prices`, `popularity_factors`) VALUES
       ('" .
         $seed_item['name'] .
         "', " .
         random_int(1, 5) .
         ", " .
         random_int(1, 100) .
-        ", " .
-        $seed_item['resilience'] .
         ", '" .
         json_encode($seed_item['max_prices']) .
         "', '" .

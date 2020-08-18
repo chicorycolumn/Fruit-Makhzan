@@ -46,7 +46,7 @@ if (!$result) {
 <?php
 echo "<link rel='stylesheet' type='text/css' href='../css/buttons.css' />";
 echo "<link rel='stylesheet' type='text/css' href='../css/global.css' />";
-echo "<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Long+Cang&display=swap'>";
+echo "<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Merienda&display=swap'>";
 include 'content/mainStats.php';
 include 'content/mainBulletin.php';
 include 'content/invTable.php';
@@ -104,7 +104,6 @@ include '../master.php';
 
 
 <script>
-//' For some reason this apostrophe is necessary.
 let seed_data = <?php print_r(json_encode($_SESSION['seed_data'])); ?>
 
 let day_costs = 0;
@@ -310,7 +309,6 @@ function fillInvTable(shouldWipe) {
             name,
             quantity,
             selling_price,
-            resilience,
             max_prices,
             popularity_factors,
           } = fruit;
@@ -402,7 +400,7 @@ function fillInvTable(shouldWipe) {
                       "<td class='regularTD' style='cursor:help;' "+                       
                       "onClick=printSingle('"+formattedName+"')>"+
                         
-                        "<div class='invSubtd resilienceSubtd'>"+
+                        "<div class='invSubtd factorsSubtd'>"+
                           pf1+pf2+
                         "</div>"+
                       
@@ -490,18 +488,13 @@ function setAmount(formattedName, operation, modifier, forced_amount) {
   let quantity = parseInt(row.find(".quantityData").text());
   let restock_amount = parseInt(row.find(".amountInput_restock").val())
   let restock_price = parseInt(row.find(".restockPriceData").text())
-  let throw_amount = parseInt(row.find(".amountInput_throw").val())
   let max_buyable_quantity = Math.floor(parseInt($("#moneyStat").text()) / restock_price)
   let key = operation + "_amount";
   let reset_value = restock_amount
   if (forced_amount && operation == "restock"){
     restock_amount = forced_amount
-  } if (forced_amount && operation == "throw"){
-    restock_amount = throw_amount
-  } if (operation == "restock" && (!restock_amount || !parseInt(restock_amount)) || operation == "throw" && (!throw_amount || !parseInt(throw_amount))) {
+  } if (operation == "restock" && (!restock_amount || !parseInt(restock_amount))) {
     reset_value = 1;
-  } if (operation == "throw" && parseInt(throw_amount) > quantity) {
-    reset_value = quantity || 1;
   } if (operation == "restock" && modifier && modifier == "max") {
     reset_value = max_buyable_quantity || 1
   } if (operation == "restock" && modifier && modifier == "increment") {
@@ -797,10 +790,6 @@ function checkTCs() {
 function getSalesSubstrates(popularity_factors, max_prices, trend_calculates) {
   let factor1 = getPopularityFactor(popularity_factors, 0, trend_calculates);
   let factor2 = getPopularityFactor(popularity_factors, 1, trend_calculates);
-
-  console.log("MAJOR factor is ", factor1)
-  console.log("minor factor is ", factor2)
-
   let popularity = Math.ceil((factor1 * 3 + factor2) / 4);
 
   let popularity_word =
@@ -892,65 +881,5 @@ function getPopularityFactor(pop_factor_names, i, trend_calculates) {
   return pop_factor_names[pop_keys[i]]
     ? trend_calculates[pop_keys[i]]
     : 101 - trend_calculates[pop_keys[i]];
-}
-
-function throwFruit(formattedName) {
-  name = formattedName.replace(/_/g, " ");
-
-  let columnIndexRef = getColumnIndexes();
-
-  let row = $("table#inventory tbody tr").filter(function () {
-    return $(this).find(".nameData").text() == name;
-  });
-
-  let throw_amount = parseInt(row.find(".amountInput_throw").val());
-  let quantity = parseInt(row.find(".quantityData").text());
-
-  if (!quantity) {
-    return;
-  }
-
-  setAmount(formattedName, "throw", "", throw_amount);
-
-  if (throw_amount <= quantity) {
-    if (
-      throw_amount > 0.2 * quantity &&
-      !confirm("Chuck " + throw_amount + " " + name + " into the street?")
-    ) {
-      return;
-    }
-
-    $.ajax({
-      type: "GET",
-      url: "../api/fruit/restock.php",
-      dataType: "json",
-      data: {
-        name: name,
-        table_name: "<?php echo $inv_table_name; ?>",
-        increment: "-" + throw_amount.toString(),
-      },
-      error: function (result) {
-        console.log("An error occurred immediately in $.ajax request.", result.responseText, result);
-      },
-      success: function (result) {
-        if (result["status"]) {
-
-          let fruit = result["data"][0];
-          let row = $("table#inventory tbody tr#"+formattedName)
-          row.find(".quantityData").text(fruit["quantity"]);
-
-          if (throw_amount > parseInt(fruit["quantity"])) {
-            let reset_value = parseInt(fruit["quantity"]) || 1;
-            row.find(".amountInput_throw").val(reset_value);
-            seed_data.filter((item) => item["name"] == name)[0][
-              "restock_amount"
-            ] = reset_value;
-          }
-        } else {
-          console.log(result["message"], result["error"]);
-        }
-      },
-    });
-  }
 }
 </script>
