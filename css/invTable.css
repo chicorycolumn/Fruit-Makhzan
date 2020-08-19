@@ -190,3 +190,7 @@
 .popFactorNegative {
   color: red;
 }
+
+.hiddenData {
+  display: none;
+}

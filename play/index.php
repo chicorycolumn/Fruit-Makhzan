@@ -12,11 +12,11 @@ if (!isset($_SESSION['gid'])) {
 }
 
 $show_dev_data = false;
+$level_reached_record = 0;
 
 setcookie("makhzan", $_SESSION['gid'], time() + 3600 * 24 * 30, "/");
 $gid = $_SESSION['gid'];
 $inv_table_name = $_SESSION['inv_table_name'];
-$animal = "doggy";
 
 function update_timestamp()
 {
@@ -104,7 +104,6 @@ include '../master.php';
 
 
 <script>
-let seed_data = <?php print_r(json_encode($_SESSION['seed_data'])); ?>
 
 let day_costs = 0;
 let week_record = {}
@@ -322,9 +321,8 @@ function fillInvTable(shouldWipe) {
             max_prices,
             trend_calculates
           );
-
-          let pop_factors = seed_data.filter(item=>item.name == name)[0].popularity_factors
-          let pop_factor_keys = Object.keys(pop_factors)
+          
+          let pop_factor_keys = Object.keys(popularity_factors)
 
           //The first pf should be bigger, the second smaller.
           //If positive, then blue, if neg then red.
@@ -333,8 +331,8 @@ function fillInvTable(shouldWipe) {
           let pf1 = pop_factor_keys[0]
           let pf2 = pop_factor_keys[1]
 
-          pf1 = "<p class='popFactor1 noMarginPadding"+(pop_factors[pf1]?" popFactorPositive":" popFactorNegative")+"'>"+(pop_factors[pf1]?"":"↻")+pf1+"</p>"
-          pf2 = "<p class='popFactor2 noMarginPadding"+(pop_factors[pf2]?" popFactorPositive":" popFactorNegative")+"'>"+(pop_factors[pf2]?"":"↻")+pf2+"</p>"
+          pf1 = "<p class='popFactor1 noMarginPadding"+(popularity_factors[pf1]?" popFactorPositive":" popFactorNegative")+"'>"+(popularity_factors[pf1]?"":"↻")+pf1+"</p>"
+          pf2 = "<p class='popFactor2 noMarginPadding"+(popularity_factors[pf2]?" popFactorPositive":" popFactorNegative")+"'>"+(popularity_factors[pf2]?"":"↻")+pf2+"</p>"
 
 
                     response += 
@@ -344,6 +342,8 @@ function fillInvTable(shouldWipe) {
                       "<td class='regularTD nameTD'>"+
                         "<div class='invSubtd nameSubtd'>"+
                           "<p class='invData nameData'>"+name+"</p>"+
+                          "<p class='invData hiddenData popFactorsData'>"+JSON.stringify(popularity_factors)+"</p>"+
+                          "<p class='invData hiddenData maxPricesData'>"+JSON.stringify(max_prices)+"</p>"+
                         "</div>"+
                       "</td>"+
 
@@ -419,7 +419,7 @@ function fillInvTable(shouldWipe) {
                               "onClick=restockFruit('"+formattedName+"')>Buy"+
                               "</button>"+            
                               
-                              "<input value="+seed_data.filter(item => item['name']==name)[0]['restock_amount']+" "+
+                              "<input value=1 "+
                                 "class='amountInput amountInput_restock' "+
                                 "onclick=this.select() "+
                                 "onkeyup='return validateNumbersAndSubmit(event,`"+formattedName+"`,`restock`)' "+
@@ -502,7 +502,7 @@ function setAmount(formattedName, operation, modifier, forced_amount) {
   } if (operation == "restock" && modifier && modifier == "decrement") {
     reset_value = restock_amount - 1 || 1
   }
-  seed_data.filter((item) => item["name"] == name)[0][key] = reset_value;
+
   row.find(class_name).val(reset_value);
 
   verifyBuyButtons() 
@@ -696,9 +696,6 @@ function restockFruit(formattedName) {
             let reset_value = maxPossibleToBuy || 1;
 
             row.find(".amountInput_restock").val(reset_value);
-            seed_data.filter((item) => item["name"] == name)[0][
-              "restock_amount"
-            ] = reset_value;
           }
           updateGamesTable(putative_cost, "decrement", null); //Send off the db to change money stat.
           
@@ -721,10 +718,8 @@ function calculateSales() {
       row.find(".sellingPriceData").text()
     );
 
-    let max_prices = seed_data.filter((item) => item.name == name)[0]
-      .max_prices;
-    let popularity_factors = seed_data.filter((item) => item.name == name)[0]
-      .popularity_factors;
+    let max_prices = JSON.parse(row.find(".maxPricesData").text())
+    let popularity_factors = JSON.parse(row.find(".popFactorsData").text())
     let { popularity, max_buying_price, restock_price } = getSalesSubstrates(
       popularity_factors,
       max_prices,
@@ -770,7 +765,17 @@ function printSingle(name) {
     },
     success: function (result) {
       if (result["status"]) {
+        console.log("************************")
         console.log(result);
+        console.log("*")
+        console.log("*")
+        console.log("*")
+        checkSession()
+        console.log("*")
+        console.log("*")
+        console.log("*")
+        checkTCs()
+        console.log("************************")
       } else {
         console.log(result, result["message"], result["error"]);
     }},
@@ -784,7 +789,6 @@ function checkSession() {
 
 function checkTCs() {
   console.log(">>>TC proxy:", trend_calculates);
-  console.log(">>>Seed data proxy:", seed_data);
 }
 
 function getSalesSubstrates(popularity_factors, max_prices, trend_calculates) {
@@ -840,10 +844,9 @@ function updateSalesSubstratesInDisplayedTable() {
     let row = $(this)
     let name = row.find(".nameData").text();
 
-    let max_prices = seed_data.filter((item) => item.name == name)[0].max_prices;
-    let popularity_factors = seed_data.filter(
-      (item) => item.name == name
-    )[0].popularity_factors;
+    let max_prices = JSON.parse(row.find(".maxPricesData").text())
+    let popularity_factors = JSON.parse(row.find(".popFactorsData").text())
+
     let { popularity, max_buying_price, restock_price } = getSalesSubstrates(
       popularity_factors,
       max_prices,

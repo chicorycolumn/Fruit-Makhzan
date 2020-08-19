@@ -1,7 +1,7 @@
 <?php
 
 include_once '../config/database.php';
-include_once '../objects/fruit_class.php';
+include_once '../objects/fruit_class.php'; //deleteable?
 
 $database = new Database();
 $db = $database->getConnection();

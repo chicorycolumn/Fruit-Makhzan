@@ -29,6 +29,7 @@ include '../master.php';
 ?>
 
 <script>
+
 function loadPrevious() {
   $.ajax({
     type: "GET",
@@ -60,9 +61,6 @@ function loadPrevious() {
     },
   });
 }
-
-</script>
-<script>
 
 function startNewGame() {
   $.ajax({

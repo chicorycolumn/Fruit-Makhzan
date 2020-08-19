@@ -83,7 +83,6 @@ class Database
           "love" => false,
           "weather" => true,
         ],
-        "restock_amount" => 1,
       ],
       [
         "name" => "Enchanted Pomegranate",
@@ -92,7 +91,6 @@ class Database
           "decadence" => true,
           "love" => true,
         ],
-        "restock_amount" => 1,
       ],
       [
         "name" => "Flammable Walnut",
@@ -101,7 +99,6 @@ class Database
           "politics" => false,
           "conformity" => true,
         ],
-        "restock_amount" => 1,
       ],
       [
         "name" => "Albino Almond",
@@ -110,7 +107,6 @@ class Database
           "conformity" => true,
           "weather" => true,
         ],
-        "restock_amount" => 1,
       ],
       [
         "name" => "Rare Melon",
@@ -119,7 +115,6 @@ class Database
           "politics" => true,
           "decadence" => true,
         ],
-        "restock_amount" => 1,
       ],
       [
         "name" => "Pistachio",
@@ -128,7 +123,6 @@ class Database
           "weather" => false,
           "politics" => true,
         ],
-        "restock_amount" => 1,
       ],
       [
         "name" => "Orange",
@@ -137,7 +131,6 @@ class Database
           "conformity" => true,
           "love" => true,
         ],
-        "restock_amount" => 1,
       ],
       [
         "name" => "Peach",
@@ -146,7 +139,6 @@ class Database
           "decadence" => true,
           "conformity" => true,
         ],
-        "restock_amount" => 1,
       ],
       [
         "name" => "Fig",
@@ -155,7 +147,6 @@ class Database
           "politics" => true,
           "conformity" => true,
         ],
-        "restock_amount" => 1,
       ],
       [
         "name" => "Grapes",
@@ -164,7 +155,6 @@ class Database
           "weather" => true,
           "love" => true,
         ],
-        "restock_amount" => 1,
       ],
     ];
 
@@ -243,7 +233,6 @@ class Database
     $_SESSION["trend_calculates"] = $trends;
     $_SESSION["money_stat"] = $money_initial;
     $_SESSION["days_stat"] = $days_initial;
-    $_SESSION["seed_data"] = $seed_data;
 
     return [
       "status" => true,

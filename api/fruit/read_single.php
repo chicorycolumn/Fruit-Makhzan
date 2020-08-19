@@ -118,6 +118,7 @@ if ($load_session_from_db) {
   $_SESSION['money_stat'] = $response['data'][0]['money_stat'];
   $_SESSION['days_stat'] = $response['data'][0]['days_stat'];
   $_SESSION['trend_calculates'] = $response['data'][0]['trend_calculates'];
+  $_SESSION['show_dev_data'] = 0;
 }
 
 echo json_encode($response);

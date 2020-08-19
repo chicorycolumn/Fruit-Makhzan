@@ -3,7 +3,7 @@ if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
 
-$labels = ['seed_data', 'money_stat', 'days_stat', 'trend_calculates'];
+$labels = ['money_stat', 'days_stat', 'trend_calculates'];
 $response = ["status" => false, "message" => ""];
 
 foreach ($labels as $label) {

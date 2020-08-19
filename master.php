@@ -4,6 +4,11 @@
 <link rel="stylesheet" href="../css/master.css" type="text/css">
   <meta charset="utf-8">
   <title>Fruit Makhzan</title>
+
+
+<script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+<script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+
   <link rel="icon" href="../images/favicon.ico" type="image/ico">
 </head>
 <body>
