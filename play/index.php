@@ -151,48 +151,66 @@ function newDay() {
   week_record[days+1] = {profit: day_profit, costs: day_costs}
 
   let new_money_stat = money + day_profit
-  let reset_money_stat = false;
+  let reset_to_new_round = false;
+  let alert_code = 0
 
   // let rubicon1 = 1000
   // let rubicon2 = 1000000
-  // let rubicon3 = 2000000100
+  // let rubicon3 = 1000000100
 
-  let rubicon1 = 200
+  let rubicon1 = 500
   let rubicon2 = 1000
-  let rubicon3 = 5000
+  let rubicon3 = 1500
 
   if (level_record['round'] < 4){
     if (new_money_stat >= rubicon3){
-        alert("You reached 2 billion gold dinar! You decide to buy an island (your dream is five), and also commission a magical genetic creation lab to generate a brand new fruit. You get to choose the name, of course, as well as the chemical constitution (ie, which factors will affect its popularity). The island and the magical lab cost 1 billion gold dinar each, which is no bother for you. In celebration of your achievement, you give away your remaining fruit stock to the poor, and start over with 100 gold dinar!")
+        alert_code = 3
         level_record['round']++ 
         level_record['sublevel'] = 0
-        reset_money_stat = true
+        reset_to_new_round = true
     } else if (level_record['sublevel'] == 0){
       
       if (new_money_stat >= rubicon2){
         level_record['sublevel'] = 2
-        alert("You reached sublevel 2!")
+        alert_code = 2
       } else if (new_money_stat >= rubicon1){
         level_record['sublevel'] = 1
-        alert("You reached sublevel 1!")
+        alert_code = 1
       }
     } else if (level_record['sublevel'] == 1){
       if (new_money_stat >= rubicon2){
         level_record['sublevel'] = 2
-        alert("You reached sublevel 2!")
+        alert_code = 2
       }
     }
   } else if (level_record['round'] >= 4 && new_money_stat >= 2000000100){
-    alert("You won the whole game! You own five islands and are now king.")
+    alert_code = 4
   }
 
-  let data_object = {"overall_sales_history": week_record, "level_record": level_record}
+  let data_object = {"overall_sales_history": week_record}
 
   fillQuantityYesterday(incipient_sales); //Moves current quantities to the qy column.
-  updateGamesTableNewDay(day_profit, reset_money_stat, data_object); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
+  updateGamesTableNewDay(day_profit, reset_to_new_round, data_object); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
   updateInventoryTable(incipient_sales); //Reduces quantities by sold amounts.
+  
+  setTimeout(() => {
+    level_alerts(alert_code)
+  }, 100); ;
+
 
   day_costs = 0
+}
+
+function level_alerts(code){
+  if (code == 0){}
+  else if (code == 1){        alert("You reached sublevel 1!")
+}
+  else if (code == 2){alert("You reached sublevel 2!")}
+  else if (code == 3){        alert("You reached one billion gold dinar! You decide to buy an island (your dream is five), and also pay a magical genetic creation lab to generate a brand new fruit. You get to choose the name, of course, as well as the chemical constitution (ie, which factors will affect its popularity). In celebration of your achievement, you give away your remaining fruit stock to the poor, and start over with 100 gold dinar!")
+}
+else if (code == 4){
+  alert("You won the whole game! You own five islands and are now king.")
+}
 }
 
 function fillQuantityYesterday(incipient_sales) {
@@ -209,7 +227,7 @@ function fillQuantityYesterday(incipient_sales) {
   });
 }
 
-function updateGamesTableNewDay(profit, reset_money_stat, data_object) {
+function updateGamesTableNewDay(profit, reset_to_new_round, data_object) {
   
   //Update the level_record proxy and then send to db. Also set in session somehow I think.
     console.log(data_object)
@@ -224,7 +242,9 @@ function updateGamesTableNewDay(profit, reset_money_stat, data_object) {
         identifying_column: "game_id",
         identifying_data: `<?php echo $_SESSION['gid']; ?>`,
         profit: profit,
-        json_data_object: data_object
+        json_data_object: data_object, 
+        level_record: level_record,
+        reset_to_new_round: reset_to_new_round
       },
       error: function (result) {
         console.log("An error occurred immediately in $.ajax request.", result, result.responseText);
@@ -850,7 +870,7 @@ function getPopularityFactor(pop_factor_names, i, trend_calculates) {
 function printSingle(name) {
 
 console.log("Level record from php:")
-console.log(JSON.parse(level_record)['round'])
+console.log(level_record)
 console.log(" ")
 
 console.log("Old session from php:");

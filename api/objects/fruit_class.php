@@ -246,55 +246,8 @@ class Fruit
     $identifying_data,
     $json_data_object
   ) {
-    // echo "WEEEEEEEEEEEEEEEEEEEEEEEEEE" . $identifying_data;
-    // return;
-
     foreach ($json_data_object as $json_column => $json_data) {
-      if ($json_column == "level_record") {
-        $json_data = json_encode($json_data);
-
-        $query =
-          "UPDATE " .
-          $table_name .
-          " SET " .
-          $json_column .
-          " =? " .
-          "WHERE " .
-          $identifying_column .
-          " =?";
-
-        if (!($stmt = $this->conn->prepare($query))) {
-          return [
-            "status" => false,
-            "message" =>
-              "Could not prepare query of column `" .
-              $json_column .
-              "` on table `" .
-              $table_name .
-              "`.",
-            "error" => $this->conn->error,
-          ];
-        }
-
-        $acronym = "ss";
-
-        $stmt->bind_param($acronym, $json_data, $identifying_data);
-
-        if (!$stmt->execute()) {
-          return [
-            "status" => false,
-            "message" =>
-              "Error in execution with column `" .
-              $json_column .
-              "` on table `" .
-              $table_name .
-              "`.",
-            "error" => $this->conn->error,
-          ];
-        }
-        // $result = $stmt->get_result();
-        $stmt->close();
-      } elseif ($json_column == "overall_sales_history") {
+      if ($json_column == "overall_sales_history") {
         $day = array_key_last($json_data);
 
         $query =
@@ -351,7 +304,6 @@ class Fruit
         $stmt->close();
       }
     }
-
     return ["status" => true, "message" => "Successfully updated json!"];
   }
 

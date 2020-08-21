@@ -13,19 +13,21 @@ $identifying_column = $_GET['identifying_column'];
 $identifying_data = $_GET['identifying_data'];
 $profit = $_GET['profit'];
 $json_data_object = $_GET['json_data_object'];
+$level_record = $_GET['level_record'];
 
 $get_full = false;
 
 $update_data = [
   "money_stat" => $_SESSION['money_stat'] + $profit,
   "days_stat" => $_SESSION['days_stat'] + 1,
+  "level_record" => json_encode($level_record),
   "trend_calculates" => evolve_trend_calculates(
     $_SESSION['trend_calculates'],
     $_SESSION['days_stat'],
     $json_data_object['overall_sales_history']
   ),
 ];
-$acronym = "iiss";
+$acronym = "iisss";
 
 function go(
   $db,
@@ -35,7 +37,8 @@ function go(
   $identifying_data,
   $acronym,
   $update_data,
-  $json_data_object
+  $json_data_object,
+  $level_record
 ) {
   if (
     !($result = $fruit->update_self(
@@ -79,10 +82,15 @@ function go(
   $_SESSION['days_stat'] = $update_data['days_stat'];
   $_SESSION['money_stat'] = $update_data['money_stat'];
   $_SESSION['trend_calculates'] = $update_data['trend_calculates'];
+  $_SESSION['level_record'] = $level_record;
 
   $result['update_data'] = $update_data;
+
   $result['update_data']['trend_calculates'] = json_decode(
     $result['update_data']['trend_calculates']
+  );
+  $result['update_data']['level_record'] = json_decode(
+    $result['update_data']['level_record']
   );
 
   return $result;
@@ -96,7 +104,8 @@ $response = go(
   $identifying_data,
   $acronym,
   $update_data,
-  $json_data_object
+  $json_data_object,
+  $level_record
 );
 
 $database->closeConnection();
