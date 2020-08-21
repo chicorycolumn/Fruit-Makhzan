@@ -268,6 +268,7 @@ function build_table_array($table, $result, $get_full)
         "money_stat" => $row["money_stat"],
         "days_stat" => $row["days_stat"],
         "trend_calculates" => $row["trend_calculates"],
+        "level_record" => $row["level_record"],
       ];
     } else {
       return false;
@@ -333,7 +334,7 @@ function clean_up_db($connection)
     ];
   }
 
-  $t = time() - 30; /////////////// 3600 * 24 * 30
+  $t = time() - 3600; /////////////// 3600 * 24 * 30
   $stmt->bind_param("i", $t);
 
   if (!$stmt->execute()) {

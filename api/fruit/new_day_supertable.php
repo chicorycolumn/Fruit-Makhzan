@@ -12,8 +12,7 @@ $table_name = $_GET['table_name'];
 $identifying_column = $_GET['identifying_column'];
 $identifying_data = $_GET['identifying_data'];
 $profit = $_GET['profit'];
-$week_record = $_GET['week_record'];
-$json_column = $_GET['json_column'];
+$json_data_object = $_GET['json_data_object'];
 
 $get_full = false;
 
@@ -23,7 +22,7 @@ $update_data = [
   "trend_calculates" => evolve_trend_calculates(
     $_SESSION['trend_calculates'],
     $_SESSION['days_stat'],
-    $week_record
+    $json_data_object['overall_sales_history']
   ),
 ];
 $acronym = "iiss";
@@ -36,8 +35,7 @@ function go(
   $identifying_data,
   $acronym,
   $update_data,
-  $week_record,
-  $json_column
+  $json_data_object
 ) {
   if (
     !($result = $fruit->update_self(
@@ -60,7 +58,12 @@ function go(
   }
 
   if (
-    !($result = $fruit->update_json($table_name, $json_column, $week_record))
+    !($result = $fruit->update_json(
+      $table_name,
+      $identifying_column,
+      $identifying_data,
+      $json_data_object
+    ))
   ) {
     return [
       "status" => false,
@@ -93,8 +96,7 @@ $response = go(
   $identifying_data,
   $acronym,
   $update_data,
-  $week_record,
-  $json_column
+  $json_data_object
 );
 
 $database->closeConnection();

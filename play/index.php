@@ -12,7 +12,6 @@ if (!isset($_SESSION['gid'])) {
 }
 
 $show_dev_data = false;
-$level_reached_record = 0;
 
 setcookie("makhzan", $_SESSION['gid'], time() + 3600 * 24 * 30, "/");
 $gid = $_SESSION['gid'];
@@ -61,8 +60,7 @@ if ($show_dev_data) {
     '
   </h1>   
 
-  <button onClick="checkSession()">Check Session</button>
-  <button onClick="checkTCs()">Check TCs and Seed Data</button>';
+  <button onClick="printSingle(null)">Check Game Data</button>';
 } else {
   $_SESSION['show_dev_data'] = 0;
   $content = "";
@@ -108,6 +106,8 @@ include '../master.php';
 let day_costs = 0;
 let week_record = {}
 
+let level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`)
+
 let trend_calculates = {
   "weather": parseInt(`<?php print_r(
     ((array) json_decode($_SESSION['trend_calculates']))['weather']
@@ -145,12 +145,51 @@ function newDay() {
   );
 
   let days = parseInt($("#daysStat").text())
+  let money = parseInt($("#moneyStat").text())
 
   if (days % 7 == 0){week_record = {}}
   week_record[days+1] = {profit: day_profit, costs: day_costs}
 
+  let new_money_stat = money + day_profit
+  let reset_money_stat = false;
+
+  // let rubicon1 = 1000
+  // let rubicon2 = 1000000
+  // let rubicon3 = 2000000100
+
+  let rubicon1 = 200
+  let rubicon2 = 1000
+  let rubicon3 = 5000
+
+  if (level_record['round'] < 4){
+    if (new_money_stat >= rubicon3){
+        alert("You reached 2 billion gold dinar! You decide to buy an island (your dream is five), and also commission a magical genetic creation lab to generate a brand new fruit. You get to choose the name, of course, as well as the chemical constitution (ie, which factors will affect its popularity). The island and the magical lab cost 1 billion gold dinar each, which is no bother for you. In celebration of your achievement, you give away your remaining fruit stock to the poor, and start over with 100 gold dinar!")
+        level_record['round']++ 
+        level_record['sublevel'] = 0
+        reset_money_stat = true
+    } else if (level_record['sublevel'] == 0){
+      
+      if (new_money_stat >= rubicon2){
+        level_record['sublevel'] = 2
+        alert("You reached sublevel 2!")
+      } else if (new_money_stat >= rubicon1){
+        level_record['sublevel'] = 1
+        alert("You reached sublevel 1!")
+      }
+    } else if (level_record['sublevel'] == 1){
+      if (new_money_stat >= rubicon2){
+        level_record['sublevel'] = 2
+        alert("You reached sublevel 2!")
+      }
+    }
+  } else if (level_record['round'] >= 4 && new_money_stat >= 2000000100){
+    alert("You won the whole game! You own five islands and are now king.")
+  }
+
+  let data_object = {"overall_sales_history": week_record, "level_record": level_record}
+
   fillQuantityYesterday(incipient_sales); //Moves current quantities to the qy column.
-  updateGamesTable(day_profit, "new day", week_record); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
+  updateGamesTableNewDay(day_profit, reset_money_stat, data_object); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
   updateInventoryTable(incipient_sales); //Reduces quantities by sold amounts.
 
   day_costs = 0
@@ -170,10 +209,12 @@ function fillQuantityYesterday(incipient_sales) {
   });
 }
 
-function updateGamesTable(money_crement, operation, week_record) {
+function updateGamesTableNewDay(profit, reset_money_stat, data_object) {
   
-  if (operation == "new day") {
-    console.log("week_record", week_record)
+  //Update the level_record proxy and then send to db. Also set in session somehow I think.
+    console.log(data_object)
+    // return
+
     $.ajax({
       type: "GET",
       url: "../api/fruit/new_day_supertable.php",
@@ -182,9 +223,8 @@ function updateGamesTable(money_crement, operation, week_record) {
         table_name: "games",
         identifying_column: "game_id",
         identifying_data: `<?php echo $_SESSION['gid']; ?>`,
-        profit: money_crement,
-        week_record: week_record,
-        json_column: "overall_sales_history"
+        profit: profit,
+        json_data_object: data_object
       },
       error: function (result) {
         console.log("An error occurred immediately in $.ajax request.", result, result.responseText);
@@ -202,7 +242,9 @@ function updateGamesTable(money_crement, operation, week_record) {
         }
       },
     });
-  } else if ((operation = "restock" || operation == "decrement")) {
+}
+  
+function updateGamesTable(money_crement) {
 
     $.ajax({
       type: "GET",
@@ -235,7 +277,7 @@ function updateGamesTable(money_crement, operation, week_record) {
         }
       },
     });
-  }
+  
 }
 
 function updateInventoryTable(incipient_sales) {
@@ -398,7 +440,7 @@ function fillInvTable(shouldWipe) {
                       
 
                       "<td class='regularTD' style='cursor:help;' "+                       
-                      "onClick=printSingle('"+formattedName+"')>"+
+                      "onclick=printSingle('"+formattedName+"')>"+
                         
                         "<div class='invSubtd factorsSubtd'>"+
                           pf1+pf2+
@@ -455,8 +497,6 @@ function fillInvTable(shouldWipe) {
                     
                     updateSalesSubstratesInDisplayedTable()
                     verifyBuyButtons()
-
-
 
       } else {
         console.log(result["message"], result["error"]);
@@ -612,41 +652,6 @@ function changeSellingPrice(showInput, formattedName) {
   }
 }
 
-function bindUsefulJqueriesAfterLoadingDataIntoTable(){
-  $('.buttonTD').bind('mousewheel', function(e){
-
-    let delta = e.originalEvent.wheelDelta
-
-    let scrollingOverTheTop = (delta > 0 && this.scrollTop == 0);
-    let scrollingOverTheBottom = (delta < 0 && (this.scrollTop >= this.scrollHeight - this.offsetHeight));
-    if (scrollingOverTheBottom || scrollingOverTheTop) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    let current_val = parseInt($(this).find("input").val())
-    let max_buyable_quantity = Math.floor(parseInt($("#moneyStat").text()) / parseInt($(this).parents("tr").find(".restockPriceData").text()))
-
-    if(delta/120 > 0) {
-      current_val < max_buyable_quantity && $(this).find("input").val(current_val+1)
-    }
-    else{
-      current_val > 1 && $(this).find("input").val(current_val-1)
-    }
-  });
-}
-
-function printDevDataHTML(popularity, max_buying_price){
-
-  let show = <?php echo $_SESSION['show_dev_data']; ?>
-
-  if (show){
-    return "<p class='devdata1'>P"+popularity+"  M"+max_buying_price+"</p>"
-  }else{
-    return ""
-  }
-}
-
 function restockFruit(formattedName) {
   name = formattedName.replace(/_/g, " ");
 
@@ -697,7 +702,7 @@ function restockFruit(formattedName) {
 
             row.find(".amountInput_restock").val(reset_value);
           }
-          updateGamesTable(putative_cost, "decrement", null); //Send off the db to change money stat.
+          updateGamesTable(putative_cost); //Send off the db to change money stat.
           
         } else {
           console.log(result["message"], result["error"]);
@@ -745,50 +750,6 @@ function calculateSales() {
   });
 
   return incipient_sales;
-}
-
-function printSingle(name) {
-  name = name.replace(/_/g, " ");
-  $.ajax({
-    type: "GET",
-    url: "../api/fruit/read_single.php",
-    dataType: "json",
-    data: {
-      table_name: "<?php echo $inv_table_name; ?>",
-      identifying_column: "name",
-      identifying_data: name,
-      acronym: "s",
-      get_full: false,
-    },
-    error: function (result) {
-      console.log("An error occurred immediately in $.ajax request.", result, result.responseText);
-    },
-    success: function (result) {
-      if (result["status"]) {
-        console.log("************************")
-        console.log(result);
-        console.log("*")
-        console.log("*")
-        console.log("*")
-        checkSession()
-        console.log("*")
-        console.log("*")
-        console.log("*")
-        checkTCs()
-        console.log("************************")
-      } else {
-        console.log(result, result["message"], result["error"]);
-    }},
-  });
-}
-
-function checkSession() {
-  console.log(">>>Old session is:");
-  console.log(`<?php print_r($_SESSION); ?>`);
-}
-
-function checkTCs() {
-  console.log(">>>TC proxy:", trend_calculates);
 }
 
 function getSalesSubstrates(popularity_factors, max_prices, trend_calculates) {
@@ -885,4 +846,79 @@ function getPopularityFactor(pop_factor_names, i, trend_calculates) {
     ? trend_calculates[pop_keys[i]]
     : 101 - trend_calculates[pop_keys[i]];
 }
+
+function printSingle(name) {
+
+console.log("Level record from php:")
+console.log(JSON.parse(level_record)['round'])
+console.log(" ")
+
+console.log("Old session from php:");
+console.log(`<?php print_r($_SESSION); ?>`);
+console.log(" ")
+
+console.log("Trend calculates proxy:")
+console.log(trend_calculates);
+console.log(" ")
+
+name = name.replace(/_/g, " ");
+$.ajax({
+  type: "GET",
+  url: "../api/fruit/read_single.php",
+  dataType: "json",
+  data: {
+    table_name: "<?php echo $inv_table_name; ?>",
+    identifying_column: "name",
+    identifying_data: name,
+    acronym: "s",
+    get_full: false,
+  },
+  error: function (result) {
+    console.log("An error occurred immediately in $.ajax request.", result, result.responseText);
+  },
+  success: function (result) {
+    if (result["status"]) {
+      console.log("Result from fruit->read_single:")
+      console.log(result);
+    } else {
+      console.log(result, result["message"], result["error"]);
+  }},
+});
+}
+
+function bindUsefulJqueriesAfterLoadingDataIntoTable(){
+  $('.buttonTD').bind('mousewheel', function(e){
+
+    let delta = e.originalEvent.wheelDelta
+
+    let scrollingOverTheTop = (delta > 0 && this.scrollTop == 0);
+    let scrollingOverTheBottom = (delta < 0 && (this.scrollTop >= this.scrollHeight - this.offsetHeight));
+    if (scrollingOverTheBottom || scrollingOverTheTop) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    let current_val = parseInt($(this).find("input").val())
+    let max_buyable_quantity = Math.floor(parseInt($("#moneyStat").text()) / parseInt($(this).parents("tr").find(".restockPriceData").text()))
+
+    if(delta/120 > 0) {
+      current_val < max_buyable_quantity && $(this).find("input").val(current_val+1)
+    }
+    else{
+      current_val > 1 && $(this).find("input").val(current_val-1)
+    }
+  });
+}
+
+function printDevDataHTML(popularity, max_buying_price){
+
+  let show = <?php echo $_SESSION['show_dev_data']; ?>
+
+  if (show){
+    return "<p class='devdata1'>P"+popularity+"  M"+max_buying_price+"</p>"
+  }else{
+    return ""
+  }
+}
+
 </script>

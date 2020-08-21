@@ -187,7 +187,7 @@ class Database
 
     //                                                            Add row to games table.
     $query =
-      "INSERT INTO games (`game_id`, `last_accessed`, `trend_calculates`, `money_stat`, `days_stat`) VALUES (?, ?, ?, ?, ?)";
+      "INSERT INTO games (`game_id`, `last_accessed`, `trend_calculates`, `money_stat`, `days_stat`, `level_record`) VALUES (?, ?, ?, ?, ?, ?)";
 
     if (!($stmt = $this->connection->prepare($query))) {
       return [
@@ -208,16 +208,18 @@ class Database
 
     $money_initial = 0;
     $days_initial = 0;
+    $level_record_initial = json_encode(["round" => 0, "sublevel" => 0]);
 
     $gid = $_SESSION["gid"];
     $timestamp = time();
     $stmt->bind_param(
-      "sisii",
+      "sisiis",
       $gid,
       $timestamp,
       $trends,
       $money_initial,
-      $days_initial
+      $days_initial,
+      $level_record_initial
     );
 
     if (!$stmt->execute()) {
@@ -233,6 +235,7 @@ class Database
     $_SESSION["trend_calculates"] = $trends;
     $_SESSION["money_stat"] = $money_initial;
     $_SESSION["days_stat"] = $days_initial;
+    $_SESSION["level_record"] = $level_record_initial;
 
     return [
       "status" => true,

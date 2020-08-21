@@ -56,10 +56,11 @@ class Fruit
     $acronym,
     $get_full
   ) {
-    $columns = "*";
     if (substr($table_name, -3) == "inv" && !$get_full) {
       $columns =
         "`id`, `name`, `quantity`, `selling_price`, `max_prices`, `popularity_factors`";
+    } else {
+      $columns = "*";
     }
 
     $query =
@@ -239,54 +240,119 @@ class Fruit
     ];
   }
 
-  function update_json($table_name, $json_column, $json_data)
-  {
-    if ($json_column == "overall_sales_history") {
-      $day = array_key_last($json_data);
+  function update_json(
+    $table_name,
+    $identifying_column,
+    $identifying_data,
+    $json_data_object
+  ) {
+    // echo "WEEEEEEEEEEEEEEEEEEEEEEEEEE" . $identifying_data;
+    // return;
 
-      $query =
-        "UPDATE " .
-        $table_name .
-        " " .
-        $json_column .
-        " SET " .
-        $json_column .
-        "=JSON_INSERT(" .
-        $json_column .
-        ", '$." .
-        $day .
-        "', ?)";
+    foreach ($json_data_object as $json_column => $json_data) {
+      if ($json_column == "level_record") {
+        $json_data = json_encode($json_data);
 
-      if (!($stmt = $this->conn->prepare($query))) {
-        return [
-          "status" => false,
-          "message" => "Could not prepare query.",
-          "error" => $this->conn->error,
-        ];
+        $query =
+          "UPDATE " .
+          $table_name .
+          " SET " .
+          $json_column .
+          " =? " .
+          "WHERE " .
+          $identifying_column .
+          " =?";
+
+        if (!($stmt = $this->conn->prepare($query))) {
+          return [
+            "status" => false,
+            "message" =>
+              "Could not prepare query of column `" .
+              $json_column .
+              "` on table `" .
+              $table_name .
+              "`.",
+            "error" => $this->conn->error,
+          ];
+        }
+
+        $acronym = "ss";
+
+        $stmt->bind_param($acronym, $json_data, $identifying_data);
+
+        if (!$stmt->execute()) {
+          return [
+            "status" => false,
+            "message" =>
+              "Error in execution with column `" .
+              $json_column .
+              "` on table `" .
+              $table_name .
+              "`.",
+            "error" => $this->conn->error,
+          ];
+        }
+        // $result = $stmt->get_result();
+        $stmt->close();
+      } elseif ($json_column == "overall_sales_history") {
+        $day = array_key_last($json_data);
+
+        $query =
+          "UPDATE " .
+          $table_name .
+          " " .
+          $json_column .
+          " SET " .
+          $json_column .
+          "=JSON_INSERT(" .
+          $json_column .
+          ", '$." .
+          $day .
+          "', ?) " .
+          "WHERE " .
+          $identifying_column .
+          " =?";
+
+        if (!($stmt = $this->conn->prepare($query))) {
+          return [
+            "status" => false,
+            "message" =>
+              "Could not prepare query of column `" .
+              $json_column .
+              "` on table `" .
+              $table_name .
+              "`.",
+            "error" => $this->conn->error,
+          ];
+        }
+
+        $acronym = "ss";
+        $datum =
+          "['profit':" .
+          $json_data[$day]['profit'] .
+          ",'costs':" .
+          $json_data[$day]['costs'] .
+          "]";
+
+        $stmt->bind_param($acronym, $datum, $identifying_data);
+
+        if (!$stmt->execute()) {
+          return [
+            "status" => false,
+            "Error in execution with column `" .
+            $json_column .
+            "` on table `" .
+            $table_name .
+            "`.",
+            "error" => $this->conn->error,
+          ];
+        }
+        // $result = $stmt->get_result();
+        $stmt->close();
       }
-
-      $acronym = "s";
-      $datum =
-        "['profit':" .
-        $json_data[$day]['profit'] .
-        ",'costs':" .
-        $json_data[$day]['costs'] .
-        "]";
-
-      $stmt->bind_param($acronym, $datum);
-
-      if (!$stmt->execute()) {
-        return [
-          "status" => false,
-          "message" => "Error in execution.",
-          "error" => $this->conn->error,
-        ];
-      }
-
-      $result = $stmt->get_result();
-      $stmt->close();
-      return ["status" => true, "message" => "Successfully updated json!"];
     }
+
+    return ["status" => true, "message" => "Successfully updated json!"];
   }
 
   function update_self(
