@@ -358,6 +358,40 @@ class Fruit
     return ["status" => true, "message" => "Successfully updated!"];
   }
 
+  function set_to_default(
+    $table_name,
+    $column_to_change,
+    $new_value,
+    $data_type
+  ) {
+    $query =
+      "UPDATE " . $table_name . " SET " . $column_to_change . " =DEFAULT";
+
+    if (!($stmt = $this->conn->prepare($query))) {
+      return [
+        "status" => false,
+        "message" => "Could not prepare query.",
+        "error" => $this->conn->error,
+      ];
+    }
+
+    if (!$stmt->execute()) {
+      return [
+        "status" => false,
+        "message" => "Error in execution.",
+        "error" => $this->conn->error,
+      ];
+    }
+
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    return [
+      "status" => true,
+      "data" => $result,
+    ];
+  }
+
   function update_multiple(
     $table_name,
     $column_to_change,

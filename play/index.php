@@ -151,23 +151,21 @@ function newDay() {
   week_record[days+1] = {profit: day_profit, costs: day_costs}
 
   let new_money_stat = money + day_profit
-  let reset_to_new_round = false;
   let alert_code = 0
 
   // let rubicon1 = 1000
   // let rubicon2 = 1000000
   // let rubicon3 = 1000000100
 
-  let rubicon1 = 500
-  let rubicon2 = 1000
-  let rubicon3 = 1500
+  let rubicon1 = 100
+  let rubicon2 = 500
+  let rubicon3 = 1000
 
   if (level_record['round'] < 4){
     if (new_money_stat >= rubicon3){
         alert_code = 3
         level_record['round']++ 
         level_record['sublevel'] = 0
-        reset_to_new_round = true
     } else if (level_record['sublevel'] == 0){
       
       if (new_money_stat >= rubicon2){
@@ -190,27 +188,70 @@ function newDay() {
   let data_object = {"overall_sales_history": week_record}
 
   fillQuantityYesterday(incipient_sales); //Moves current quantities to the qy column.
-  updateGamesTableNewDay(day_profit, reset_to_new_round, data_object); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
+  updateGamesTableNewDay(day_profit, data_object); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
   updateInventoryTable(incipient_sales); //Reduces quantities by sold amounts.
   
   setTimeout(() => {
     level_alerts(alert_code)
   }, 100); ;
 
-
   day_costs = 0
+
 }
 
 function level_alerts(code){
   if (code == 0){}
   else if (code == 1){        alert("You reached sublevel 1!")
+  }
+    else if (code == 2){alert("You reached sublevel 2!")}
+    else if (code == 3){        
+      
+      allButtonsDisabled(true)
+      
+      let response = confirm("You reached one billion gold dinar! You decide to buy an island (your dream is five), and also pay a magical genetic creation lab to generate a brand new fruit. You get to choose the name, of course, as well as the chemical constitution (ie, which factors will affect its popularity). In celebration of your achievement, you give away your remaining fruit stock to the poor, and start over with 100 gold dinar!")
+
+      if (response){
+        allButtonsDisabled(false)
+        resetToNewRound()
+      }
+  }
+  else if (code == 4){
+    alert("You won the whole game! You own five islands and are now king.")
+  }
 }
-  else if (code == 2){alert("You reached sublevel 2!")}
-  else if (code == 3){        alert("You reached one billion gold dinar! You decide to buy an island (your dream is five), and also pay a magical genetic creation lab to generate a brand new fruit. You get to choose the name, of course, as well as the chemical constitution (ie, which factors will affect its popularity). In celebration of your achievement, you give away your remaining fruit stock to the poor, and start over with 100 gold dinar!")
-}
-else if (code == 4){
-  alert("You won the whole game! You own five islands and are now king.")
-}
+
+function resetToNewRound(){
+  //Reset money_stat to 100, in db and session
+  updateGamesTable(null, 100)
+
+  //Reset all quantities to 0, in db, and load table again from that
+  $.ajax({
+    type: "GET",
+    url: "../api/fruit/new_round.php",
+    dataType: "json",
+    data: {
+      table_name: `<?php echo $_SESSION['inv_table_name']; ?>`,
+      column_to_change: "quantity",
+      new_value: 0,
+      data_type: "i",
+    },
+    error: function (result) {
+      console.log(
+        "An error occurred immediately in $.ajax request.",
+        result, result.responseText
+      );
+    },
+    success: function (result) {
+      if (result["status"]) {
+        $(".quantityData").text(0) //Maybe you should grab this all again from db? But... I think it's okay like this. Provided the db default value for `quantity` column remains the same during development.
+        $(".amountInput_restock").val(1)
+      } else {
+        console.log(result["message"], result["error"]);
+      }
+    },
+  });
+
+  //Reset all .amountInput_restock to 0
 }
 
 function fillQuantityYesterday(incipient_sales) {
@@ -227,12 +268,8 @@ function fillQuantityYesterday(incipient_sales) {
   });
 }
 
-function updateGamesTableNewDay(profit, reset_to_new_round, data_object) {
+function updateGamesTableNewDay(profit, data_object) {
   
-  //Update the level_record proxy and then send to db. Also set in session somehow I think.
-    console.log(data_object)
-    // return
-
     $.ajax({
       type: "GET",
       url: "../api/fruit/new_day_supertable.php",
@@ -243,8 +280,7 @@ function updateGamesTableNewDay(profit, reset_to_new_round, data_object) {
         identifying_data: `<?php echo $_SESSION['gid']; ?>`,
         profit: profit,
         json_data_object: data_object, 
-        level_record: level_record,
-        reset_to_new_round: reset_to_new_round
+        level_record: level_record
       },
       error: function (result) {
         console.log("An error occurred immediately in $.ajax request.", result, result.responseText);
@@ -264,7 +300,12 @@ function updateGamesTableNewDay(profit, reset_to_new_round, data_object) {
     });
 }
   
-function updateGamesTable(money_crement) {
+function updateGamesTable(money_crement, money_absolute) {
+
+  let new_money_stat = 666
+
+  if (money_absolute){new_money_stat = money_absolute}else
+  {new_money_stat = parseInt($("#moneyStat").text()) - money_crement}
 
     $.ajax({
       type: "GET",
@@ -276,7 +317,7 @@ function updateGamesTable(money_crement) {
         identifying_data: `<?php echo $_SESSION['gid']; ?>`,
         acronym: "is",
         update_data: {
-          money_stat: parseInt($("#moneyStat").text()) - money_crement,
+          money_stat: new_money_stat,
         },
         should_update_session: true,
       },
@@ -297,7 +338,6 @@ function updateGamesTable(money_crement) {
         }
       },
     });
-  
 }
 
 function updateInventoryTable(incipient_sales) {
@@ -939,6 +979,10 @@ function printDevDataHTML(popularity, max_buying_price){
   }else{
     return ""
   }
+}
+
+function allButtonsDisabled(toggle){
+  if (toggle){$("button").attr("disabled", true)}else{$("button").removeAttr("disabled")}
 }
 
 </script>
