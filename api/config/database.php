@@ -54,7 +54,7 @@ class Database
 
     //                                                            Make and populate Inventory table.
 
-    $max_prices_json = json_encode(["Low" => 1, "Medium" => 2, "High" => 5]);
+    $max_prices_json = json_encode(["Low" => 1, "High" => 5]);
     $pop_factors_json = json_encode(["weather" => true, "love" => false]);
 
     $create_table_querystring =
@@ -77,80 +77,80 @@ class Database
 
     $seed_data = [
       [
-        "name" => "The Perfect Date",
-        "max_prices" => ["Low" => 200, "Medium" => 1000, "High" => 5000],
+        "name" => "The Perfect Date", //x25
+        "max_prices" => ["Low" => 200, "High" => 5000],
         "popularity_factors" => [
           "love" => false,
           "weather" => true,
         ],
       ],
       [
-        "name" => "Enchanted Pomegranate",
-        "max_prices" => ["Low" => 150, "Medium" => 600, "High" => 2500],
+        "name" => "Enchanted Pomegranate", //x20
+        "max_prices" => ["Low" => 150, "High" => 3000],
         "popularity_factors" => [
           "decadence" => true,
           "love" => true,
         ],
       ],
       [
-        "name" => "Flammable Walnut",
-        "max_prices" => ["Low" => 100, "Medium" => 300, "High" => 1100],
+        "name" => "Flammable Walnut", //x15
+        "max_prices" => ["Low" => 100, "High" => 1500],
         "popularity_factors" => [
           "politics" => false,
           "conformity" => true,
         ],
       ],
       [
-        "name" => "Albino Almond",
-        "max_prices" => ["Low" => 60, "Medium" => 150, "High" => 500],
+        "name" => "Albino Almond", //x11
+        "max_prices" => ["Low" => 60, "High" => 660],
         "popularity_factors" => [
           "conformity" => true,
           "weather" => true,
         ],
       ],
       [
-        "name" => "Rare Melon",
-        "max_prices" => ["Low" => 30, "Medium" => 70, "High" => 200],
+        "name" => "Rare Melon", //x8
+        "max_prices" => ["Low" => 30, "High" => 240],
         "popularity_factors" => [
           "politics" => true,
           "decadence" => true,
         ],
       ],
       [
-        "name" => "Pistachio",
-        "max_prices" => ["Low" => 20, "Medium" => 40, "High" => 100],
+        "name" => "Pistachio", //x6.1
+        "max_prices" => ["Low" => 20, "High" => 122],
         "popularity_factors" => [
           "weather" => false,
           "politics" => true,
         ],
       ],
       [
-        "name" => "Orange",
-        "max_prices" => ["Low" => 10, "Medium" => 20, "High" => 50],
+        "name" => "Orange", //x5.9
+        "max_prices" => ["Low" => 10, "High" => 59],
         "popularity_factors" => [
           "conformity" => true,
           "love" => true,
         ],
       ],
       [
-        "name" => "Peach",
-        "max_prices" => ["Low" => 4, "Medium" => 8, "High" => 20],
+        "name" => "Peach", //x5.75
+        "max_prices" => ["Low" => 4, "High" => 23],
         "popularity_factors" => [
           "decadence" => true,
           "conformity" => true,
         ],
       ],
       [
-        "name" => "Fig",
-        "max_prices" => ["Low" => 2, "Medium" => 4, "High" => 10],
+        "name" => "Fig", //x5.3
+        "max_prices" => ["Low" => 3, "High" => 16],
         "popularity_factors" => [
           "politics" => true,
           "conformity" => true,
         ],
       ],
       [
-        "name" => "Grapes",
-        "max_prices" => ["Low" => 1, "Medium" => 2, "High" => 5],
+        "name" => "Grapes", //x5.0
+        "max_prices" => ["Low" => 1, "High" => 5],
         "popularity_factors" => [
           "weather" => true,
           "love" => true,

@@ -156,35 +156,45 @@ function newDay() {
   let new_money_stat = money + day_profit
   let alert_code = 0
 
-  // let rubicon1 = 1000
-  // let rubicon2 = 1000000
-  // let rubicon3 = 1000000100
+  let rubicon1 = 1000
+  let rubicon2 = 1000000
+  let rubicon3 = 1000000100
 
-  let rubicon1 = 500
-  let rubicon2 = 1000
-  let rubicon3 = 2000
+  // let rubicon1 = 101
+  // let rubicon2 = 201
+  // let rubicon3 = 301
 
   if (level_record['round'] < 4){
     if (new_money_stat >= rubicon3){
+      allButtonsDisabled(true)
         alert_code = 3
         level_record['round']++ 
-        level_record['sublevel'] = 0
+        $("#island" + level_record['round']).removeClass("hidden")
+
     } else if (level_record['sublevel'] == 0){
       
       if (new_money_stat >= rubicon2){
+        allButtonsDisabled(true)
         level_record['sublevel'] = 2
         alert_code = 2
       } else if (new_money_stat >= rubicon1){
+        allButtonsDisabled(true)
         level_record['sublevel'] = 1
         alert_code = 1
       }
     } else if (level_record['sublevel'] == 1){
       if (new_money_stat >= rubicon2){
+        allButtonsDisabled(true)
         level_record['sublevel'] = 2
         alert_code = 2
       }
     }
-  } else if (level_record['round'] >= 4 && new_money_stat >= 2000000100){
+  } else if (level_record['round'] >= 4 && new_money_stat >= rubicon3){
+    allButtonsDisabled(true)
+    level_record['round']++ 
+    $("#island" + level_record['round']).removeClass("hidden")
+    $(".newDayButton").addClass("hidden")
+    $(".crown").removeClass("hidden")
     alert_code = 4
   }
 
@@ -205,11 +215,17 @@ function newDay() {
 }
 
 function level_alerts(code){
-  if (code == 0){}
-  else if (code == 1){        alert("You reached sublevel 1!")
+
+  if (code == 4){
+    alert("You won the whole game! You own five islands and are now king.")
+  } else
+
+{  if (code == 1){        
+    alert("You reached sublevel 1!")
   }
-    else if (code == 2){alert("You reached sublevel 2!")}
-    else if (code == 3){        
+  
+  else if (code == 2){alert("You reached sublevel 2!")}
+  else if (code == 3){        
       
       allButtonsDisabled(true)
       $(".newDayButton").text("Advance to next round")
@@ -223,9 +239,8 @@ function level_alerts(code){
         advanceToNextRound()
       }
   }
-  else if (code == 4){
-    alert("You won the whole game! You own five islands and are now king.")
-  }
+  allButtonsDisabled(false)}
+  
 }
 
 function advanceToNextRound(){
@@ -835,9 +850,10 @@ function getSalesSubstrates(popularity_factors, max_prices, trend_calculates) {
   let factor2 = getPopularityFactor(popularity_factors, 1, trend_calculates);
   let popularity = Math.ceil((factor1 * 3 + factor2) / 4);
 
-  let popularity_word =
-    popularity > 67 ? "High" : popularity < 33 ? "Low" : "Medium";
-  let max_buying_price = max_prices[popularity_word];
+
+  let range = max_prices['High'] - max_prices['Low']
+  let fraction_of_price_range = (Math.floor((popularity-1)/20)/4)*range
+  let max_buying_price = max_prices['Low'] + fraction_of_price_range
   let restock_price = Math.ceil(0.8 * max_buying_price);
 
   return { popularity, max_buying_price, restock_price };

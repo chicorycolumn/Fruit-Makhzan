@@ -4,19 +4,33 @@
   justify-content: center;
   margin-bottom: 40px;
   border: none;
+  height: 150px;
 }
 
 .topHalf {
+  /* background-color: rgba(255, 0, 0, 0.1); */
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  background-color: rgba(255, 0, 0, 0.1);
+  width: var(--bigBoxWidth);
+}
+
+.bottomHalf {
+  /* background-color: rgba(0, 0, 255, 0.1); */
+  width: var(--bigBoxWidth);
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  top: 55px;
 }
 
 .mainStatBox {
   width: 20%;
   display: flex;
   flex-direction: column;
+  position: relative;
+  top: -48px;
 }
 
 .mainStatTitle {
@@ -46,7 +60,7 @@
 }
 
 .islandHolder {
-  position: absolute;
+  /* position: absolute; */
   /* background-color: yellow; */
   /* left: 900px; */
   width: 27.5px;
@@ -55,6 +69,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  margin-right: 2.5px;
 }
 
 .island {
@@ -62,4 +77,12 @@
   margin-bottom: 4.5px;
   width: 25px;
   height: 28px;
+}
+
+.crown {
+  height: 100px;
+  width: 120px;
+  position: absolute;
+  top: 32.5px;
+  left: 31px;
 }

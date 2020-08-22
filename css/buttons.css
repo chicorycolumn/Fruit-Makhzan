@@ -62,11 +62,11 @@ button:disabled {
   background-color: white;
   height: 145px;
   width: 145px;
-  position: relative;
+  position: absolute;
   top: 17.5px;
   left: 17.5px;
   border-radius: 100px;
-  /* border: none;
-  box-shadow: none; */
   font-size: 18px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
