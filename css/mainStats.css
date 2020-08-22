@@ -10,6 +10,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  background-color: rgba(255, 0, 0, 0.1);
 }
 
 .mainStatBox {
@@ -36,10 +37,29 @@
 }
 
 .mainStatTextFaded {
-  color: rgba(0, 0, 0);
+  color: #000000;
   opacity: 0.2;
 }
 
 .mainStatTextNumber {
   font-size: 20px;
+}
+
+.islandHolder {
+  position: absolute;
+  /* background-color: yellow; */
+  /* left: 900px; */
+  width: 27.5px;
+  height: 185px;
+  border-radius: 0px var(--bradius1) var(--bradius1) 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.island {
+  margin-top: 4.5px;
+  margin-bottom: 4.5px;
+  width: 25px;
+  height: 28px;
 }

@@ -15,8 +15,8 @@ $invTable = "
         <th class='th_inventory'>Quantity</th>
         <th class='th_inventory'>Selling price</th>
         <th class='th_inventory'>Restock price</th>
-        <th class='th_inventory'>Factors</th>
-        <th class='th_inventory'>Restock</th>
+        <th class='th_inventory' style='cursor: help;' onClick=printDevData1()>Factors</th>
+        <th class='th_inventory' style='cursor: help;' onClick=printDevData2()>Restock</th>
       </tr>
       </thead>
       <tbody>

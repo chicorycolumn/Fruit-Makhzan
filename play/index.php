@@ -103,6 +103,7 @@ include '../master.php';
 
 <script>
 
+$(document).ready(function(){$(".newDayButton").click(function(){newDay()})})
 let day_costs = 0;
 let week_record = {}
 
@@ -137,6 +138,8 @@ updateGameStats( //**************** */
 )
 
 function newDay() {
+  console.log("FXN newDay says level_record is")
+  console.log(level_record)
 
   let incipient_sales = calculateSales();
   let day_profit = Object.values(incipient_sales).reduce(
@@ -157,9 +160,9 @@ function newDay() {
   // let rubicon2 = 1000000
   // let rubicon3 = 1000000100
 
-  let rubicon1 = 100
-  let rubicon2 = 500
-  let rubicon3 = 1000
+  let rubicon1 = 500
+  let rubicon2 = 1000
+  let rubicon3 = 2000
 
   if (level_record['round'] < 4){
     if (new_money_stat >= rubicon3){
@@ -187,6 +190,8 @@ function newDay() {
 
   let data_object = {"overall_sales_history": week_record}
 
+  console.log({days, money, new_money_stat, incipient_sales, day_profit, data_object })
+
   fillQuantityYesterday(incipient_sales); //Moves current quantities to the qy column.
   updateGamesTableNewDay(day_profit, data_object); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
   updateInventoryTable(incipient_sales); //Reduces quantities by sold amounts.
@@ -207,12 +212,15 @@ function level_alerts(code){
     else if (code == 3){        
       
       allButtonsDisabled(true)
+      $(".newDayButton").text("Advance to next round")
+      $(".newDayButton").removeAttr("disabled")
+      $(".newDayButton").off("click")
+      $(".newDayButton").click(function(){advanceToNextRound()})
       
       let response = confirm("You reached one billion gold dinar! You decide to buy an island (your dream is five), and also pay a magical genetic creation lab to generate a brand new fruit. You get to choose the name, of course, as well as the chemical constitution (ie, which factors will affect its popularity). In celebration of your achievement, you give away your remaining fruit stock to the poor, and start over with 100 gold dinar!")
 
       if (response){
-        allButtonsDisabled(false)
-        resetToNewRound()
+        advanceToNextRound()
       }
   }
   else if (code == 4){
@@ -220,7 +228,17 @@ function level_alerts(code){
   }
 }
 
+function advanceToNextRound(){
+  console.log("FXN advanceToNextRound")
+  allButtonsDisabled(false)
+  $(".newDayButton").text("New day")
+  $(".newDayButton").off("click")
+  $(".newDayButton").click(function(){newDay()})
+  resetToNewRound()
+}
+
 function resetToNewRound(){
+  console.log("FXN resetToNewRound")
   //Reset money_stat to 100, in db and session
   updateGamesTable(null, 100)
 
@@ -907,19 +925,25 @@ function getPopularityFactor(pop_factor_names, i, trend_calculates) {
     : 101 - trend_calculates[pop_keys[i]];
 }
 
+function printDevData1(){
+  console.log("LEVEL RECORD FROM PHP:")
+  console.log(JSON.parse(`<?php echo $_SESSION['level_record']; ?>`))
+  console.log(" ")
+
+  console.log("OLD SESSION FROM PHP:");
+  console.log(`<?php print_r($_SESSION); ?>`);
+  console.log(" ")
+
+  console.log("TC PROXY:")
+  console.log(trend_calculates);
+  console.log(" ")
+}
+
+function printDevData2(){
+  console.log("*")
+}
+
 function printSingle(name) {
-
-console.log("Level record from php:")
-console.log(level_record)
-console.log(" ")
-
-console.log("Old session from php:");
-console.log(`<?php print_r($_SESSION); ?>`);
-console.log(" ")
-
-console.log("Trend calculates proxy:")
-console.log(trend_calculates);
-console.log(" ")
 
 name = name.replace(/_/g, " ");
 $.ajax({
@@ -939,7 +963,7 @@ $.ajax({
   success: function (result) {
     if (result["status"]) {
       console.log("Result from fruit->read_single:")
-      console.log(result);
+      console.log(result['data'][0]);
     } else {
       console.log(result, result["message"], result["error"]);
   }},
