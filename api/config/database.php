@@ -164,13 +164,11 @@ class Database
       $query_array[] =
         "INSERT INTO " .
         $table_name .
-        " (`name`, `selling_price`, `quantity`, `max_prices`, `popularity_factors`) VALUES
+        " (`name`, `selling_price`, `max_prices`, `popularity_factors`) VALUES
       ('" .
         $seed_item['name'] .
         "', " .
         random_int(1, 5) .
-        ", " .
-        random_int(1, 100) .
         ", '" .
         json_encode($seed_item['max_prices']) .
         "', '" .
@@ -206,7 +204,7 @@ class Database
       "conformity_history" => "ss",
     ]);
 
-    $money_initial = 0;
+    $money_initial = 100;
     $days_initial = 0;
     $level_record_initial = json_encode(["round" => 0, "sublevel" => 0]);
 

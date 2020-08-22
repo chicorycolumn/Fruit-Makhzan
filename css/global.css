@@ -22,3 +22,40 @@
 .shown {
   /* display: none; */
 }
+
+.dialogBox {
+  text-align: center;
+  height: 290px;
+  width: 330px;
+  max-width: 330px;
+  left: 50%;
+  margin-left: -160px;
+  top: 20%;
+  position: fixed;
+  background-color: hotpink;
+  z-index: 2;
+  border-radius: var(--bradius1);
+}
+
+.dialogBoxInner {
+  text-align: left;
+  border: black solid 2pt;
+  padding: 40px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  height: 65%;
+  overflow: auto;
+  display: flex;
+  /* font-size: 8px; */
+}
+
+.dialogBoxInnerInner {
+  margin: auto;
+}
+
+.dialogBoxButton {
+  margin-top: 15px;
+  bottom: 25px;
+}

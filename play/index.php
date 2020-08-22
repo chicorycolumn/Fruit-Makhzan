@@ -68,6 +68,23 @@ if ($show_dev_data) {
 
 $content .=
   '
+  <div class="dialogBox">
+    <div class="dialogBoxInner">
+    <div class="dialogBoxInnerInner">
+     <p class=dialogBoxText>
+     
+     You reached one billion gold dinar! You decide to buy an island (your dream is five), and also pay a magical genetic creation lab to generate a brand new fruit. You get to choose the name, of course, as well as the chemical constitution (ie, which factors will affect its popularity). In celebration of your achievement, you give away your remaining fruit stock to the poor, and start over with 100 gold dinar!
+
+     
+     
+     </p>
+     </div>
+     </div>
+
+     <button class="dialogBoxButton">OK</button>
+    
+  </div>
+
   <div class="mainDiv mainDivStats">
     ' .
   $mainStats .
@@ -138,8 +155,8 @@ updateGameStats( //**************** */
 )
 
 function newDay() {
-  console.log("FXN newDay says level_record is")
-  console.log(level_record)
+  // console.log("FXN newDay says level_record is")
+  // console.log(level_record)
 
   let incipient_sales = calculateSales();
   let day_profit = Object.values(incipient_sales).reduce(
@@ -156,23 +173,22 @@ function newDay() {
   let new_money_stat = money + day_profit
   let alert_code = 0
 
-  let rubicon1 = 1000
-  let rubicon2 = 1000000
-  let rubicon3 = 1000000100
+  // let rubicon1 = 1000
+  // let rubicon2 = 1000000
+  // let rubicon3 = 1000000100
 
-  // let rubicon1 = 101
-  // let rubicon2 = 201
-  // let rubicon3 = 301
+  let rubicon1 = 101
+  let rubicon2 = 201
+  let rubicon3 = 301
 
   if (level_record['round'] < 4){
     if (new_money_stat >= rubicon3){
       allButtonsDisabled(true)
         alert_code = 3
         level_record['round']++ 
+        level_record['sublevel'] = 0 
         $("#island" + level_record['round']).removeClass("hidden")
-
     } else if (level_record['sublevel'] == 0){
-      
       if (new_money_stat >= rubicon2){
         allButtonsDisabled(true)
         level_record['sublevel'] = 2
@@ -200,7 +216,7 @@ function newDay() {
 
   let data_object = {"overall_sales_history": week_record}
 
-  console.log({days, money, new_money_stat, incipient_sales, day_profit, data_object })
+  // console.log({days, money, new_money_stat, incipient_sales, day_profit, data_object })
 
   fillQuantityYesterday(incipient_sales); //Moves current quantities to the qy column.
   updateGamesTableNewDay(day_profit, data_object); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
@@ -216,16 +232,21 @@ function newDay() {
 
 function level_alerts(code){
 
+  console.log("***************************** LEVEL ALERT CODE " + code)
+
   if (code == 4){
     alert("You won the whole game! You own five islands and are now king.")
-  } else
+  } else { 
+    
+    if (code == 1){
+      
+      //Make side-thing visible
 
-{  if (code == 1){        
-    alert("You reached sublevel 1!")
-  }
-  
-  else if (code == 2){alert("You reached sublevel 2!")}
-  else if (code == 3){        
+
+
+    }
+    else if (code == 2){alert("You reached sublevel 2!")}
+    else if (code == 3){        
       
       allButtonsDisabled(true)
       $(".newDayButton").text("Advance to next round")
@@ -238,9 +259,9 @@ function level_alerts(code){
       if (response){
         advanceToNextRound()
       }
+    }
+    allButtonsDisabled(false)
   }
-  allButtonsDisabled(false)}
-  
 }
 
 function advanceToNextRound(){
@@ -361,7 +382,7 @@ function updateGamesTable(money_crement, money_absolute) {
         );
       },
       success: function (result) {
-        console.log(result);
+        // console.log(result);
         if (result["status"]) {
 
           let { money_stat } = result["update_data"];
@@ -942,6 +963,10 @@ function getPopularityFactor(pop_factor_names, i, trend_calculates) {
 }
 
 function printDevData1(){
+  console.log("LEVEL RECORD FROM JS:")
+  console.log(level_record)
+  console.log(" ")
+
   console.log("LEVEL RECORD FROM PHP:")
   console.log(JSON.parse(`<?php echo $_SESSION['level_record']; ?>`))
   console.log(" ")
