@@ -41,20 +41,20 @@ button:disabled {
   background-color: lightgray;
 }
 
-#maxBuyButton {
+.maxBuyButton {
   border-radius: 0 0 0 var(--bradius1);
   position: relative;
   top: -1px;
 }
 
-#incBuyButton {
+.incBuyButton {
 }
 
-#decBuyButton {
+.decBuyButton {
   border-radius: 0 0 var(--bradius1) 0;
 }
 
-#buyButton {
+.buyButton {
   border-radius: var(--bradius1) 0 0 0;
 }
 

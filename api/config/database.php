@@ -168,7 +168,7 @@ class Database
       ('" .
         $seed_item['name'] .
         "', " .
-        random_int(1, 5) .
+        16 .
         ", '" .
         json_encode($seed_item['max_prices']) .
         "', '" .

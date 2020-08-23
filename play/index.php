@@ -185,7 +185,6 @@ function newDay() {
 
   if (level_record['round'] < level_record['final_round_number']){
     if (new_money_stat >= rubicon[3]){
-      level_record['round']++
       incrementSublevel(messageRef, 0)
     } else if (level_record['sublevel'] == 0){
       if (new_money_stat >= rubicon[2]){
@@ -199,22 +198,25 @@ function newDay() {
       }
     }
   } else if (level_record['round'] >= level_record['final_round_number'] && new_money_stat >= rubicon[3]){
-    allButtonsDisabled(true)
-    level_record['round']++
-    level_record['sublevel'] = 0
-    showIsland()
-    $(".dialogHolder").removeClass("hidden")
-    $(".dialogHolder").find(".dialogBoxText").text(messageRef[4])
-    $(".newDayButton").addClass("hidden")
-    $(".crown").removeClass("hidden")  
+    incrementSublevel(messageRef, 0, true)
   }
   console.log(level_record)
 
-  function incrementSublevel(messageRef, sublevel){
+  function incrementSublevel(messageRef, sublevel, end){
+
+    if (sublevel == 0){level_record['round']++}
+
     allButtonsDisabled(true)
+
     level_record['sublevel'] = sublevel
     $(".dialogHolder").removeClass("hidden")
     $(".dialogHolder").find(".dialogBoxText").text(messageRef[sublevel])
+
+    if (end){
+      showIsland()
+      $(".newDayButton").addClass("hidden")
+      $(".crown").removeClass("hidden")  
+    }
   }
 }
 
@@ -535,7 +537,7 @@ function fillInvTable(shouldWipe) {
                             "<div class='buttonSubHolder'>"+
                               
                               "<button "+
-                              "id='buyButton' class='mediumButtonKind button2 buyButton'"+
+                              "class='mediumButtonKind button2 buyButton'"+
                               "onClick=restockFruit('"+formattedName+"')>Buy"+
                               "</button>"+            
                               
@@ -549,13 +551,13 @@ function fillInvTable(shouldWipe) {
                             "</div>"+ 
                             
                             "<div class='buttonSubHolder'>"+
-                              "<button id='maxBuyButton' class='mediumButtonKind button3' "+
+                              "<button class='mediumButtonKind button3 maxBuyButton' "+
                                 "onclick=setAmount('"+formattedName+"','restock','max') "+
                               ">MAX</button>"+
-                              "<button id='incBuyButton' class='mediumButtonKind button4' "+
+                              "<button class='mediumButtonKind button4 incBuyButton' "+
                                 "onclick=setAmount('"+formattedName+"','restock','increment') "+
                               ">⇧</button>"+
-                              "<button id='decBuyButton' class='mediumButtonKind button4' "+
+                              "<button class='mediumButtonKind button4 decBuyButton' "+
                                 "onclick=setAmount('"+formattedName+"','restock','decrement') "+
                               ">⇩</button>"+
                               
@@ -584,6 +586,9 @@ function fillInvTable(shouldWipe) {
 }
 
 function verifyBuyButtons(){
+  console.log("verifyBuyButtons fxn")
+
+  if($(".dialogHolder").hasClass("hidden")){
 
   $(".buyButton").each(function(){
 
@@ -594,6 +599,9 @@ function verifyBuyButtons(){
     let maxBuyableQuantity = Math.floor(parseInt($("#moneyStat").text()) / restockPrice)
     $(this).prop("disabled", restockQuantity > maxBuyableQuantity || !restockQuantity)
   })
+  }else{
+    console.log("Ordinarily I would run verifyBuyButtons, but I won't this time, as the scroll dialog is showing.")
+  }
 }
 
 function setAmount(formattedName, operation, modifier, forced_amount) {
@@ -927,6 +935,8 @@ function getPopularityFactor(pop_factor_names, i, trend_calculates) {
 }
 
 function printDevData1(){
+  allButtonsDisabled(true)
+
   console.log("LEVEL RECORD FROM JS:")
   console.log(level_record)
   console.log(" ")
@@ -1011,7 +1021,11 @@ function printDevDataHTML(popularity, max_buying_price){
 }
 
 function allButtonsDisabled(toggle){
-  if (toggle){$("button").attr("disabled", true)}else{$("button").removeAttr("disabled")}
+  if (toggle){
+    console.log("GONNA DISABLE ALL BUTTONS")
+    $("button").attr("disabled", true)}else{
+      console.log("GONNA enable ALL BUTTONS")
+      $("button").removeAttr("disabled")}
 }
 
 </script>
