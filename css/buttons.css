@@ -69,4 +69,26 @@ button:disabled {
   font-size: 18px;
   padding-left: 15px;
   padding-right: 15px;
+  z-index: 1;
+}
+
+.dialogBoxButton {
+  /* margin-top: 25px; */
+  /* bottom: 25px; */
+  /* height: 52px; */
+  /* width: 120px; */
+  background-color: rgba(0, 255, 0, 0.1);
+  box-shadow: rgba(0, 255, 0, 0.2) 0px 0px 50px;
+  border-radius: var(--bradius1);
+  /* margin-left: -10px; */
+  padding: 0px;
+  margin: 0px;
+  font-family: "Merienda", cursive !important;
+  font-size: 22.5px;
+  cursor: pointer;
+  position: relative;
+  left: 70px;
+  width: 135px;
+  text-align: left;
+  /* margin-left: -5px; */
 }

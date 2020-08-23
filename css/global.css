@@ -24,28 +24,31 @@
 }
 
 .dialogBox {
+  z-index: 4;
   text-align: center;
   height: 290px;
-  width: 330px;
-  max-width: 330px;
+  width: 275px;
+  max-width: 300px;
   left: 50%;
-  margin-left: -160px;
-  top: 20%;
+  margin-left: -132.5px;
+  top: 140px;
   position: fixed;
-  background-color: hotpink;
-  z-index: 2;
+  /* background-color: rgba(0, 0, 0, 0.5); */
   border-radius: var(--bradius1);
+  text-align: center;
 }
 
 .dialogBoxInner {
   text-align: left;
-  border: black solid 2pt;
-  padding: 40px;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  /* border: black solid 2pt; */
+  /* padding: 40px; */
+  /* padding-top: 15px; */
+  /* padding-bottom: 15px; */
+  padding-left: 30px;
+  padding-right: 30px;
   overflow-wrap: break-word;
   word-wrap: break-word;
-  height: 65%;
+  height: 60%;
   overflow: auto;
   display: flex;
   /* font-size: 8px; */
@@ -55,7 +58,14 @@
   margin: auto;
 }
 
-.dialogBoxButton {
-  margin-top: 15px;
-  bottom: 25px;
+.scroll1 {
+  text-align: center;
+  height: 340px;
+  width: 430px;
+  /* max-width: 330px; */
+  left: 50%;
+  margin-left: -220px;
+  top: 80px;
+  position: fixed;
+  z-index: 3;
 }
