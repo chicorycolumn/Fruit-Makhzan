@@ -69,3 +69,52 @@
   position: fixed;
   z-index: 3;
 }
+
+.factorsHolder {
+  border: red solid 2pt;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 200px;
+  max-width: 200px;
+  height: 90px;
+}
+
+.factorSelect {
+  margin-top: 2.5px;
+  margin-bottom: 2.5px;
+  text-align: center;
+  color: blue;
+  background-color: aqua;
+  font-size: 13px;
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.factorSelectDimensions {
+  width: 80px;
+  height: 25px;
+}
+
+.createFruitInputName {
+  border: blue solid 2pt;
+}
+
+.factorMajor {
+  width: 73px;
+  height: 17px;
+  border: black solid 3pt;
+}
+
+.factorMinor {
+  width: 77px;
+  height: 22px;
+  border: black solid 1pt;
+}
+
+.factorNegated {
+  background-color: red;
+}

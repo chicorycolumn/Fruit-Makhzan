@@ -73,9 +73,7 @@ $content .=
     <div class="dialogBox">
       <div class="dialogBoxInner">
         <div class="dialogBoxInnerInner">
-          <p class=dialogBoxText>
-            You reached one billion gold dinar! You decide to buy an island (your dream is five), and also pay a magical genetic creation lab to generate a brand new fruit. You get to choose the name.
-          </p>
+          <p class=dialogBoxText></p>
         </div>
       </div>
       <p class="dialogBoxButton" onClick=advance()>☞Very well</p>
@@ -116,9 +114,72 @@ include '../master.php';
 
 <script>
 
+let createFruitForm ='<form class="createFruitForm">' +
+    
+    '<div class="boxBody">' +
+      
+      '<div class="formGroup">' +
+      '<label class="noMarginPadding">Name of brand new fruit</label>'+
+        '<span><input type="text" class="formControl createFruitInputName" id="name" placeholder="Enter name"' +
+        'onkeypress="return /[0-9a-zA-Z]/.test(event.key)" ></span>' +
+      "</div>" +
+    
+      '<div class="formGroup">' +
+        "<label>What will affect popularity?</label>" +
+        '<div class="formControl factorsHolder">' +
+          '<span id="factorLove" onMouseUp="return selectFactor(event,`Love`)" class="factorSelect factorSelectDimensions">Love</span>'+
+          '<span id="factorPolitics" onClick=selectFactor("Politics") class="factorSelect factorSelectDimensions">Politics</span>'+
+          '<span id="factorWeather" onClick=selectFactor("Weather") class="factorSelect factorSelectDimensions">Weather</span>'+
+          '<span id="factorConformity" onClick=selectFactor("Conformity") class="factorSelect factorSelectDimensions">Conformity</span>'+
+          '<span id="factorDecadence" onClick=selectFactor("Decadence") class="factorSelect factorSelectDimensions">Decadence</span>'+
+        '</div>'+
+      "</div>" +
+    
+    "</div>" +
+  
+"</form>";
+
+function selectFactor(e, label){
+
+  let factor = $("#factor"+label)
+
+  if (e.which == 3 || e.button == 2){
+    if(factor.hasClass("factorNegated")){
+      factor.removeClass("factorNegated")
+      factor.text(label)
+    }else{
+      factor.addClass("factorNegated")
+      factor.text("↻" + label)
+    }
+  return
+  }
+  
+
+    
+    if (!factor.hasClass("factorMajor") && !factor.hasClass("factorMinor")){
+
+      factor.removeClass("factorSelectDimensions")
+      factor.addClass("factorMinor")
+
+    } else   if (factor.hasClass("factorMinor")){
+
+      factor.removeClass("factorSelectDimensions")
+      factor.removeClass("factorMinor")
+      factor.addClass("factorMajor")
+
+  } else   if (factor.hasClass("factorMajor")){
+
+      factor.removeClass("factorMajor")
+      factor.removeClass("factorMinor")
+      factor.addClass("factorSelectDimensions")
+
+  } 
+}
+
+
 let day_costs = 0;
 let week_record = {}
-const messageRef = {1: "Wahad! You reached sublevel 1!", 2: "Nayn! You reached sublevel 2!", 0: "You reached one billion gold dinar! You buy yourself an island for all your hard work, and then pay a magical fruit laboratory to create a brand new fruit!", 4: "You won the whole game! You own five islands and are now king."}
+const messageRef = {1: "Wahad! You reached sublevel 1!", 2: "Nayn! You reached sublevel 2!", 0: "You're a billionaire! As a reward for all your hard work, you buy an 500 million dinar island to relax on.", 4: "You won the whole game! You own five islands and are now king."}
 let level_record
 
 level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`)
@@ -128,15 +189,13 @@ for (let i = 1; i <= level_record['round']; i++){
 }
 
 $(document).ready(function(){
+
   for (let key in level_record){
     let days = parseInt($("#daysStat").text())
     console.log({key, days})
     if (parseInt(key) == days){
       console.log("I see we are on day " + key + " which was a rubicon day! It was where we entered " + level_record[key]['round'] + "." + level_record[key]['sublevel'] + " so we should load that somehow.")
       allButtonsDisabled(true)
-      // setTimeout(() => {
-      //   allButtonsDisabled(true)
-      // }, 1000);
       $(".dialogHolder").removeClass("hidden")
       $(".dialogHolder").find(".dialogBoxText").text(messageRef[level_record[key]['sublevel']])
       console.log("I should be showing the dialog now?")
@@ -146,9 +205,18 @@ $(document).ready(function(){
         $(".newDayButton").addClass("hidden")
         $(".crown").removeClass("hidden")  
       }
+
+      showCreateFruitForm()
     }
   }
 })
+
+function showCreateFruitForm(){
+  $(".dialogHolder").find(".dialogBoxText").html(createFruitForm) ///////////////////////////temp
+      $(".factorSelect").each(function(){$(this).bind("contextmenu",function(e){
+        return false;
+      })})
+}
 
 let trend_calculates = {
   "weather": parseInt(`<?php print_r(
@@ -269,6 +337,19 @@ function showIsland(num){
 }
 
 function advance(){ 
+  
+  if (level_record['round'] < (level_record['final_round']+1) && level_record['sublevel'] == 0){
+    $(".dialogHolder").find(".dialogBoxText").text("With the remaining half billion dinar, you pay a magical fruit laboratory to create a brand new fruit of your choosing!")
+    level_record['sublevel'] = 0.1
+    showIsland()
+    return
+  }
+
+  if (level_record['round'] < (level_record['final_round']+1) && level_record['sublevel'] == 0.1){
+    $(".dialogHolder").find(".dialogBoxText").html(createFruitForm)         
+    level_record['sublevel'] = 0.2
+    return
+  }
 
   $(".dialogHolder").addClass("hidden")
   

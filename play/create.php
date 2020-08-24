@@ -27,7 +27,7 @@ $content =
                       <h3 class="boxTitle">Add Fruit</h3>
                     </div>
 
-                    <form role="form">
+                    <form class="createFruitForm">
                       <div class="boxBody">
                         <div class="formGroup">
                           <label>Name</label>
