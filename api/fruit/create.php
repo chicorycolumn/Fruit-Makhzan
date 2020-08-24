@@ -9,10 +9,7 @@ $db = $database->getConnection();
 
 $fruit = new Fruit($db);
 $fruit->name = $_GET['name'];
-$fruit->quantity = $_GET['quantity'];
-$fruit->selling_price = array_key_exists('selling_price', $_GET)
-  ? $_GET['selling_price']
-  : 0;
+$name = $_GET['name'];
 $table_name = $_GET['table_name'];
 $identifying_column = "name";
 $identifying_data = $_GET['name'];
@@ -23,12 +20,13 @@ function go(
   $db,
   $fruit,
   $table_name,
+  $name,
   $identifying_column,
   $identifying_data,
   $acronym,
   $get_full
 ) {
-  if (!($result = $fruit->create_self($table_name))) {
+  if (!($result = $fruit->create_self($table_name, $name))) {
     return [
       "status" => false,
       "message" => "Error when calling Sfruit->create_self.",
@@ -95,6 +93,7 @@ $response = go(
   $db,
   $fruit,
   $table_name,
+  $name,
   $identifying_column,
   $identifying_data,
   $acronym,

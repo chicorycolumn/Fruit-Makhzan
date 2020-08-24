@@ -31,7 +31,7 @@
   max-width: 300px;
   left: 50%;
   margin-left: -132.5px;
-  top: 140px;
+  top: 120px;
   position: fixed;
   /* background-color: rgba(0, 0, 0, 0.5); */
   border-radius: var(--bradius1);
@@ -48,8 +48,8 @@
   padding-right: 30px;
   overflow-wrap: break-word;
   word-wrap: break-word;
-  height: 60%;
-  overflow: auto;
+  height: 200px;
+  /* overflow: auto; */
   display: flex;
   /* font-size: 8px; */
 }
@@ -70,8 +70,33 @@
   z-index: 3;
 }
 
+.createFruitInputName {
+  margin-top: 5px;
+  margin-bottom: 15px;
+  height: 30px;
+  background-color: rgba(255, 255, 255, 0.5);
+  font-size: 16px;
+  width: 170px;
+  /* border-radius: var(--bradius1); */
+}
+
+.createFruitLabel {
+  font-size: 14px;
+}
+
+.createFruitFormGroup {
+  width: 220px;
+  /* border: blue dotted 1pt; */
+  margin-left: -10px;
+  text-align: center;
+}
+
+#weather {
+  margin-right: 30px;
+}
+
 .factorsHolder {
-  border: red solid 2pt;
+  /* border: red solid 2pt; */
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -79,28 +104,27 @@
   width: 200px;
   max-width: 200px;
   height: 90px;
+  margin-top: 2.5px;
 }
 
 .factorSelect {
+  user-select: none;
   margin-top: 2.5px;
   margin-bottom: 2.5px;
   text-align: center;
-  color: blue;
-  background-color: aqua;
-  font-size: 13px;
+  color: black;
+  font-size: 12px;
   border-radius: 100px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  background-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 2.5px rgba(255, 255, 255, 0.25);
 }
 
-.factorSelectDimensions {
+.factorDimensions {
   width: 80px;
   height: 25px;
-}
-
-.createFruitInputName {
-  border: blue solid 2pt;
 }
 
 .factorMajor {
@@ -116,5 +140,6 @@
 }
 
 .factorNegated {
-  background-color: red;
+  background-color: rgba(255, 34, 34, 0.25);
+  box-shadow: 0 0 2.5px rgba(255, 34, 34, 0.25);
 }

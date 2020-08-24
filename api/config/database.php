@@ -209,7 +209,6 @@ class Database
     $level_record_initial = json_encode([
       "round" => 0,
       "sublevel" => 0,
-      "history" => "blah",
     ]);
 
     $gid = $_SESSION["gid"];

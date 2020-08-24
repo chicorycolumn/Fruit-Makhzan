@@ -99,43 +99,36 @@ class Fruit
     ];
   }
 
-  function create_self($table_name)
+  function create_self($table_name, $name)
   {
-    if (!$this->is_fruit_in_table($table_name)) {
+    if (!$this->is_fruit_in_table($table_name, $name)) {
       return [
         "status" => false,
-        "message" => "Error in is_fruit_in_table.",
+        "message" => "Error in is_fruit_in_table for name " . $name,
         "error" => $this->conn->error,
       ];
     }
 
-    if ($this->is_fruit_in_table($table_name)["status"]) {
+    if ($this->is_fruit_in_table($table_name, $name)["status"]) {
       return [
         "status" => false,
-        "message" => "Could not create. A fruit of that name already exists.",
+        "message" =>
+          "Could not create. A fruit of name " . $name . " already exists.",
         "error" => $this->conn->error,
       ];
     }
 
-    $query =
-      "INSERT INTO  " .
-      $table_name .
-      " ( `name`, `quantity`, `selling_price`) VALUES (?, ?, ?)";
+    $query = "INSERT INTO  " . $table_name . " ( `name` ) VALUES (?)";
 
     if (!($stmt = $this->conn->prepare($query))) {
       return [
         "status" => false,
-        "message" => "Could not prepare query.",
+        "message" => "Could not prepare query with name " . $name,
         "error" => $this->conn->error,
       ];
     }
 
-    $stmt->bind_param(
-      "sii",
-      $this->name,
-      $this->quantity,
-      $this->selling_price
-    );
+    $stmt->bind_param("s", $name);
 
     if (!$stmt->execute()) {
       return [
@@ -152,7 +145,7 @@ class Fruit
     ];
   }
 
-  function is_fruit_in_table($table_name)
+  function is_fruit_in_table($table_name, $name)
   {
     $query = "SELECT * FROM " . $table_name . " WHERE name=?";
 
@@ -160,12 +153,13 @@ class Fruit
       return false;
     }
 
-    $stmt->bind_param("s", $this->name);
+    $stmt->bind_param("s", $name);
 
     if (!$stmt->execute()) {
       return [
         "status" => false,
-        "message" => "Error in execution.",
+        "message" =>
+          "Error in execution at is_fruit_in_table for name " . $name,
         "error" => $this->conn->error,
       ];
     }
@@ -176,7 +170,7 @@ class Fruit
     if (!$result->num_rows) {
       return [
         "status" => false,
-        "message" => "Entry does not exist.",
+        "message" => "Entry with name " . $name . " does not exist.",
         "error" => $this->conn->error,
       ];
     }

@@ -118,64 +118,42 @@ let createFruitForm ='<form class="createFruitForm">' +
     
     '<div class="boxBody">' +
       
-      '<div class="formGroup">' +
-      '<label class="noMarginPadding">Name of brand new fruit</label>'+
-        '<span><input type="text" class="formControl createFruitInputName" id="name" placeholder="Enter name"' +
-        'onkeypress="return /[0-9a-zA-Z]/.test(event.key)" ></span>' +
+      '<div class="formGroup createFruitFormGroup">' +
+      '<label class="createFruitLabel noMarginPadding">Name of brand new fruit:</label>'+
+        '<span><input type="text" class="formControl createFruitInputName" id="name" maxlength=20' +
+        'onkeypress="return /[0-9a-zA-Z ]/.test(event.key)" ></span>' +
       "</div>" +
     
-      '<div class="formGroup">' +
-        "<label>What will affect popularity?</label>" +
+      '<div class="formGroup createFruitFormGroup">' +
+        "<label class='createFruitLabel'>Which two will affect its popularity?</label>" +
         '<div class="formControl factorsHolder">' +
-          '<span id="factorLove" onMouseUp="return selectFactor(event,`Love`)" class="factorSelect factorSelectDimensions">Love</span>'+
-          '<span id="factorPolitics" onClick=selectFactor("Politics") class="factorSelect factorSelectDimensions">Politics</span>'+
-          '<span id="factorWeather" onClick=selectFactor("Weather") class="factorSelect factorSelectDimensions">Weather</span>'+
-          '<span id="factorConformity" onClick=selectFactor("Conformity") class="factorSelect factorSelectDimensions">Conformity</span>'+
-          '<span id="factorDecadence" onClick=selectFactor("Decadence") class="factorSelect factorSelectDimensions">Decadence</span>'+
+          
+          '<span id="love" class="factorSelect factorDimensions" '+
+            'onMouseUp="return selectFactor(event,`Love`)" '+
+          '>Love</span>'+
+
+          '<span id="politics" class="factorSelect factorDimensions" '+
+            'onMouseUp="return selectFactor(event,`Politics`)" '+
+          '>Politics</span>'+
+
+          '<span id="weather" class="factorSelect factorDimensions" '+
+            'onMouseUp="return selectFactor(event,`Weather`)" '+
+          '>Weather</span>'+
+
+          '<span id="conformity" class="factorSelect factorDimensions" '+
+            'onMouseUp="return selectFactor(event,`Conformity`)" '+
+          '>Conformity</span>'+
+
+          '<span id="decadence" class="factorSelect factorDimensions" '+
+            'onMouseUp="return selectFactor(event,`Decadence`)" '+
+          '>Decadence</span>'+
+          
         '</div>'+
       "</div>" +
     
     "</div>" +
   
 "</form>";
-
-function selectFactor(e, label){
-
-  let factor = $("#factor"+label)
-
-  if (e.which == 3 || e.button == 2){
-    if(factor.hasClass("factorNegated")){
-      factor.removeClass("factorNegated")
-      factor.text(label)
-    }else{
-      factor.addClass("factorNegated")
-      factor.text("↻" + label)
-    }
-  return
-  }
-  
-
-    
-    if (!factor.hasClass("factorMajor") && !factor.hasClass("factorMinor")){
-
-      factor.removeClass("factorSelectDimensions")
-      factor.addClass("factorMinor")
-
-    } else   if (factor.hasClass("factorMinor")){
-
-      factor.removeClass("factorSelectDimensions")
-      factor.removeClass("factorMinor")
-      factor.addClass("factorMajor")
-
-  } else   if (factor.hasClass("factorMajor")){
-
-      factor.removeClass("factorMajor")
-      factor.removeClass("factorMinor")
-      factor.addClass("factorSelectDimensions")
-
-  } 
-}
-
 
 let day_costs = 0;
 let week_record = {}
@@ -184,16 +162,18 @@ let level_record
 
 level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`)
 
+//'
+
 for (let i = 1; i <= level_record['round']; i++){
   showIsland(i)
 }
 
 $(document).ready(function(){
-
+  console.log("doc ready")
+  console.log(level_record)
   for (let key in level_record){
     let days = parseInt($("#daysStat").text())
-    console.log({key, days})
-    if (parseInt(key) == days){
+    if (parseInt(key) == days && parseFloat(level_record['sublevel']) !== 0.3){
       console.log("I see we are on day " + key + " which was a rubicon day! It was where we entered " + level_record[key]['round'] + "." + level_record[key]['sublevel'] + " so we should load that somehow.")
       allButtonsDisabled(true)
       $(".dialogHolder").removeClass("hidden")
@@ -206,16 +186,85 @@ $(document).ready(function(){
         $(".crown").removeClass("hidden")  
       }
 
-      showCreateFruitForm()
+     
     }
   }
+  // showCreateFruitForm()///////////////////temp
 })
 
 function showCreateFruitForm(){
-  $(".dialogHolder").find(".dialogBoxText").html(createFruitForm) ///////////////////////////temp
+  console.log("showCreateFruitForm fxn")
+  $(".dialogHolder").removeClass("hidden")
+  $(".dialogHolder").find(".dialogBoxText").html(createFruitForm) 
       $(".factorSelect").each(function(){$(this).bind("contextmenu",function(e){
         return false;
       })})
+}
+
+function selectFactor(e, label){
+
+  function toggleNegation(item, negate){
+    if (negate){
+      console.log("Make " + item.attr("id") + " negated.")
+      item.addClass("factorNegated")
+      item.text("↻" + item.text())
+    }else{
+      console.log("Make " + item.attr("id") + " un-negated.")
+      item.removeClass("factorNegated")
+      item.text(item.text().replace("↻", ""))
+    }
+  }
+
+  let factor = $("#"+label.toLowerCase())
+ 
+    if (e.which == 3 || e.button == 2){
+      if (factor.hasClass("factorMajor") || factor.hasClass("factorMinor")){
+    if(factor.hasClass("factorNegated")){
+      toggleNegation(factor, false)
+    }else{
+      toggleNegation(factor, true)
+    }
+  return
+
+  }
+  return
+  }
+    
+    if (!factor.hasClass("factorMajor") && !factor.hasClass("factorMinor")){
+
+      $(".factorSelect").each(function(){
+        if ($(this).hasClass("factorMinor")){
+          $(this).removeClass("factorMinor")
+          $(this).addClass("factorDimensions")
+          toggleNegation($(this), false)
+        }
+      })
+
+      factor.removeClass("factorDimensions")
+      factor.addClass("factorMinor")
+
+    } else   if (factor.hasClass("factorMinor")){
+
+      $(".factorSelect").each(function(){
+        if ($(this).hasClass("factorMajor")){
+          $(this).removeClass("factorMajor")
+          toggleNegation($(this), false)
+          $(this).addClass("factorDimensions")
+        }
+      })
+
+      factor.removeClass("factorDimensions")
+      factor.removeClass("factorMinor")
+      factor.addClass("factorMajor")
+
+  } else   if (factor.hasClass("factorMajor")){
+
+      factor.removeClass("factorMajor")
+      factor.removeClass("factorMinor")
+      toggleNegation(factor, false)
+      factor.addClass("factorDimensions")
+
+  } 
 }
 
 let trend_calculates = {
@@ -277,15 +326,10 @@ function newDay() {
 
   day_costs = 0
 
-  console.log("gonna check 197")
-  console.log(level_record)
-  console.log(typeof level_record)
-  console.log(level_record['round'])
-
   if (level_record['round'] < level_record['final_round']){
     if (new_money_stat >= rubicon[3]){
       incrementSublevel(messageRef, 0)
-    } else if (level_record['sublevel'] == 0){
+    } else if (parseFloat(level_record['sublevel']) < 0.9){
       if (new_money_stat >= rubicon[2]){
         incrementSublevel(messageRef, 2)
       } else if (new_money_stat >= rubicon[1]){
@@ -308,7 +352,7 @@ function incrementSublevel(messageRef, sublevel, end){
 
   console.log("incrementSublevel fxn with params:", {messageRef, sublevel, end})
 
-  if (sublevel == 0){level_record['round']++}
+  if (sublevel < 0.9){level_record['round']++}
   level_record['sublevel'] = sublevel
   allButtonsDisabled(true)
 
@@ -337,6 +381,9 @@ function showIsland(num){
 }
 
 function advance(){ 
+
+  console.log("advance")
+  console.log(level_record['sublevel'])
   
   if (level_record['round'] < (level_record['final_round']+1) && level_record['sublevel'] == 0){
     $(".dialogHolder").find(".dialogBoxText").text("With the remaining half billion dinar, you pay a magical fruit laboratory to create a brand new fruit of your choosing!")
@@ -346,9 +393,36 @@ function advance(){
   }
 
   if (level_record['round'] < (level_record['final_round']+1) && level_record['sublevel'] == 0.1){
-    $(".dialogHolder").find(".dialogBoxText").html(createFruitForm)         
+    showCreateFruitForm()         
     level_record['sublevel'] = 0.2
     return
+  }
+
+  if (level_record['round'] < (level_record['final_round']+1) && level_record['sublevel'] == 0.2){
+    
+    console.log("submit new fruit")
+
+    let majorPopJQ = $(".factorMajor")
+    let minorPopJQ = $(".factorMinor")
+
+    if (!majorPopJQ.text() || !minorPopJQ.text()){
+      alert("You must pick two factors to affect the popularity of your new fruit.")
+     return
+    }
+
+    let newFruitPopFactors = {}
+
+    newFruitPopFactors[majorPopJQ.attr("id")] = !majorPopJQ.hasClass("factorNegated"),
+    newFruitPopFactors[minorPopJQ.attr("id")] = !minorPopJQ.hasClass("factorNegated")
+
+    console.log(newFruitPopFactors)
+    level_record['sublevel'] = 0.9
+
+    updateGamesTable(null, null, level_record)
+
+    setTimeout(() => {
+      addFruit($(".createFruitInputName").val())
+    }, 500);
   }
 
   $(".dialogHolder").addClass("hidden")
@@ -362,6 +436,34 @@ function advance(){
         resetToNewRound()  
     }
   }
+
+}
+
+function addFruit(name) {
+  $.ajax({
+    type: "GET",
+    url: "../api/fruit/create.php",
+    dataType: "json",
+    data: {
+      table_name: "<?php echo $inv_table_name; ?>",
+      name: name,
+    },
+    error: function (result) {
+      console.log("There was an error that occurred immediately in $.ajax request.", result, result.responseText);
+    },
+    success: function (result) {
+      if (result["status"]) {
+        $(".dialogHolder").removeClass("hidden")
+        allButtonsDisabled(false)
+    if(parseFloat(level_record['sublevel']) < 0.9){
+        showIsland()
+        resetToNewRound()  
+    }
+      } else {
+        console.log(result["message"], result["error"], result);
+      }
+    },
+  });
 }
 
 function resetToNewRound(){
