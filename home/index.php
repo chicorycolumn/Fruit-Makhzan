@@ -77,7 +77,7 @@ function startNewGame() {
       if (result["status"]) {
         window.location = "../play";
       } else {
-        console.log(result["message"], result["error"]);
+        console.log(result["message"], result["error"], result);
       }
     },
   });

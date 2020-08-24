@@ -348,7 +348,7 @@ class Fruit
     if (!$stmt->execute()) {
       return [
         "status" => false,
-        "message" => "Error in execution.",
+        "message" => "Error in execution. " . $query,
         "error" => $this->conn->error,
       ];
     }

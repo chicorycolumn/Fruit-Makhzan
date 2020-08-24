@@ -206,7 +206,11 @@ class Database
 
     $money_initial = 100;
     $days_initial = 0;
-    $level_record_initial = json_encode(["round" => 0, "sublevel" => 0]);
+    $level_record_initial = json_encode([
+      "round" => 0,
+      "sublevel" => 0,
+      "history" => "blah",
+    ]);
 
     $gid = $_SESSION["gid"];
     $timestamp = time();
@@ -233,7 +237,7 @@ class Database
     $_SESSION["trend_calculates"] = $trends;
     $_SESSION["money_stat"] = $money_initial;
     $_SESSION["days_stat"] = $days_initial;
-    $_SESSION["level_record"] = $level_record_initial;
+    $_SESSION['level_record'] = $level_record_initial;
 
     return [
       "status" => true,

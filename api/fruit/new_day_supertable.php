@@ -20,14 +20,13 @@ $get_full = false;
 $update_data = [
   "money_stat" => $_SESSION['money_stat'] + $profit,
   "days_stat" => $_SESSION['days_stat'] + 1,
-  "level_record" => json_encode($level_record),
   "trend_calculates" => evolve_trend_calculates(
     $_SESSION['trend_calculates'],
     $_SESSION['days_stat'],
     $json_data_object['overall_sales_history']
   ),
 ];
-$acronym = "iisss";
+$acronym = "iiss";
 
 function go(
   $db,
@@ -82,16 +81,16 @@ function go(
   $_SESSION['days_stat'] = $update_data['days_stat'];
   $_SESSION['money_stat'] = $update_data['money_stat'];
   $_SESSION['trend_calculates'] = $update_data['trend_calculates'];
-  $_SESSION['level_record'] = $level_record;
+  // $_SESSION['level_record'] = json_encode($level_record);
 
   $result['update_data'] = $update_data;
 
   $result['update_data']['trend_calculates'] = json_decode(
     $result['update_data']['trend_calculates']
   );
-  $result['update_data']['level_record'] = json_decode(
-    $result['update_data']['level_record']
-  );
+  // $result['update_data']['level_record'] = json_decode(
+  //   $result['update_data']['level_record']
+  // );
 
   return $result;
 }

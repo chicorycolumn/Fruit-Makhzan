@@ -114,14 +114,41 @@ $content .=
 include '../master.php';
 ?>
 
-
 <script>
 
-$(document).ready(function(){$(".newDayButton").click(function(){newDay()})})
 let day_costs = 0;
 let week_record = {}
+const messageRef = {1: "Wahad! You reached sublevel 1!", 2: "Nayn! You reached sublevel 2!", 0: "You reached one billion gold dinar! You buy yourself an island for all your hard work, and then pay a magical fruit laboratory to create a brand new fruit!", 4: "You won the whole game! You own five islands and are now king."}
+let level_record
 
-let level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`)
+level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`)
+
+for (let i = 1; i <= level_record['round']; i++){
+  showIsland(i)
+}
+
+$(document).ready(function(){
+  for (let key in level_record){
+    let days = parseInt($("#daysStat").text())
+    console.log({key, days})
+    if (parseInt(key) == days){
+      console.log("I see we are on day " + key + " which was a rubicon day! It was where we entered " + level_record[key]['round'] + "." + level_record[key]['sublevel'] + " so we should load that somehow.")
+      allButtonsDisabled(true)
+      // setTimeout(() => {
+      //   allButtonsDisabled(true)
+      // }, 1000);
+      $(".dialogHolder").removeClass("hidden")
+      $(".dialogHolder").find(".dialogBoxText").text(messageRef[level_record[key]['sublevel']])
+      console.log("I should be showing the dialog now?")
+
+      if (level_record['round'] == level_record['final_round']+1){
+        showIsland()
+        $(".newDayButton").addClass("hidden")
+        $(".crown").removeClass("hidden")  
+      }
+    }
+  }
+})
 
 let trend_calculates = {
   "weather": parseInt(`<?php print_r(
@@ -172,9 +199,8 @@ function newDay() {
   const rubicon = {1: 101, 2: 150, 3: 200}
   // const rubicon = {1: 1000, 2: 1000000, 3: 1000000000}
   
-  const messageRef = {1: "Wahad! You reached sublevel 1!", 2: "Nayn! You reached sublevel 2!", 0: "You reached one billion gold dinar! You buy yourself an island for all your hard work, and then pay a magical fruit laboratory to create a brand new fruit!", 4: "You won the whole game! You own five islands and are now king."}
   let data_object = {"overall_sales_history": week_record}
-  level_record['final_round_number'] = 4
+  level_record['final_round'] = 4
   // console.log({days, money, new_money_stat, incipient_sales, day_profit, data_object })
 
   fillQuantityYesterday(incipient_sales); //Moves current quantities to the qy column.
@@ -183,7 +209,12 @@ function newDay() {
 
   day_costs = 0
 
-  if (level_record['round'] < level_record['final_round_number']){
+  console.log("gonna check 197")
+  console.log(level_record)
+  console.log(typeof level_record)
+  console.log(level_record['round'])
+
+  if (level_record['round'] < level_record['final_round']){
     if (new_money_stat >= rubicon[3]){
       incrementSublevel(messageRef, 0)
     } else if (level_record['sublevel'] == 0){
@@ -197,45 +228,58 @@ function newDay() {
         incrementSublevel(messageRef, 2) 
       }
     }
-  } else if (level_record['round'] >= level_record['final_round_number'] && new_money_stat >= rubicon[3]){
+  } else if (level_record['round'] >= level_record['final_round'] && new_money_stat >= rubicon[3]){
     incrementSublevel(messageRef, 0, true)
   }
-  console.log(level_record)
 
-  function incrementSublevel(messageRef, sublevel, end){
+  updateGamesTable(null, null, level_record)
 
-    if (sublevel == 0){level_record['round']++}
+}
 
-    allButtonsDisabled(true)
+function incrementSublevel(messageRef, sublevel, end){
 
-    level_record['sublevel'] = sublevel
-    $(".dialogHolder").removeClass("hidden")
-    $(".dialogHolder").find(".dialogBoxText").text(messageRef[sublevel])
+  console.log("incrementSublevel fxn with params:", {messageRef, sublevel, end})
 
-    if (end){
-      showIsland()
-      $(".newDayButton").addClass("hidden")
-      $(".crown").removeClass("hidden")  
-    }
+  if (sublevel == 0){level_record['round']++}
+  level_record['sublevel'] = sublevel
+  allButtonsDisabled(true)
+
+  // tomorrow and rubicon_stamp
+  level_record[parseInt($("#daysStat").text())+1] = {
+    "round": level_record['round'],
+    "sublevel": level_record['sublevel']
+  }
+
+  $(".dialogHolder").removeClass("hidden")
+  $(".dialogHolder").find(".dialogBoxText").text(messageRef[sublevel])
+
+  if (end){
+    showIsland()
+    $(".newDayButton").addClass("hidden")
+    $(".crown").removeClass("hidden")  
   }
 }
 
-function showIsland(){
-    $("#island" + level_record['round']).removeClass("hidden")
+function showIsland(num){
+    if (!num){
+      num = level_record['round']
+    }
+
+    $("#island" + num).removeClass("hidden")
 }
 
 function advance(){ 
-  console.log("*", level_record)
+
   $(".dialogHolder").addClass("hidden")
   
-  if(level_record['round'] < (level_record['final_round_number']+1)){
+  if(level_record['round'] < (level_record['final_round']+1)){
   
-  allButtonsDisabled(false)
-  
-  if(level_record['sublevel'] == 0){
-      showIsland()
-      resetToNewRound()  
-  }
+    allButtonsDisabled(false)
+    
+    if(level_record['sublevel'] == 0){
+        showIsland()
+        resetToNewRound()  
+    }
   }
 }
 
@@ -257,7 +301,7 @@ function resetToNewRound(){
     },
     error: function (result) {
       console.log(
-        "An error occurred immediately in $.ajax request.",
+        "An error has occurred immediately in $.ajax request.",
         result, result.responseText
       );
     },
@@ -266,12 +310,10 @@ function resetToNewRound(){
         $(".quantityData").text(0) //Maybe you should grab this all again from db? But... I think it's okay like this. Provided the db default value for `quantity` column remains the same during development.
         $(".amountInput_restock").val(1)
       } else {
-        console.log(result["message"], result["error"]);
+        console.log(result["message"], result["error"], result);
       }
     },
   });
-
-  //Reset all .amountInput_restock to 0
 }
 
 function fillQuantityYesterday(incipient_sales) {
@@ -299,11 +341,11 @@ function updateGamesTableNewDay(profit, data_object) {
         identifying_column: "game_id",
         identifying_data: `<?php echo $_SESSION['gid']; ?>`,
         profit: profit,
-        json_data_object: data_object, 
+        json_data_object: data_object, //week_record
         level_record: level_record
       },
       error: function (result) {
-        console.log("An error occurred immediately in $.ajax request.", result, result.responseText);
+        console.log("A kind of error which occurred immediately in $.ajax request.", result, result.responseText);
       },
       success: function (result) {
 
@@ -314,18 +356,38 @@ function updateGamesTableNewDay(profit, data_object) {
           ];
           updateGameStats(money_stat, days_stat, trend_calculates);
         } else {
-          console.log(result["message"], result["error"]);
+          console.log(result["message"], result["error"], result);
         }
       },
     });
 }
   
-function updateGamesTable(money_crement, money_absolute) {
+function updateGamesTable(money_crement, money_absolute, new_level_record) {
 
-  let new_money_stat = 666
+  let acronym
+    let update_data
 
-  if (money_absolute){new_money_stat = money_absolute}else
-  {new_money_stat = parseInt($("#moneyStat").text()) - money_crement}
+  if (new_level_record){
+
+    acronym = "ss"
+    update_data = {
+      level_record: new_level_record
+    }
+
+  }else{
+    let new_money_stat = 666
+
+if (money_absolute){new_money_stat = money_absolute}else
+{new_money_stat = parseInt($("#moneyStat").text()) - money_crement}
+
+
+acronym = "is"
+update_data = {
+          money_stat: new_money_stat,
+        }
+  }
+
+
 
     $.ajax({
       type: "GET",
@@ -335,15 +397,13 @@ function updateGamesTable(money_crement, money_absolute) {
         table_name: "games",
         identifying_column: "game_id",
         identifying_data: `<?php echo $_SESSION['gid']; ?>`,
-        acronym: "is",
-        update_data: {
-          money_stat: new_money_stat,
-        },
+        acronym: acronym,
+        update_data: update_data,
         should_update_session: true,
       },
       error: function (result) {
         console.log(
-          "An error occurred immediately in this $.ajax request.",
+          "An error that occurred immediately in this $.ajax request.",
           result, result.responseText
         );
       },
@@ -354,10 +414,11 @@ function updateGamesTable(money_crement, money_absolute) {
           let { money_stat } = result["update_data"];
           updateGameStats(money_stat);
         } else {
-          console.log(result["message"], result["error"]);
+          console.log(result["message"], result["error"], result);
         }
       },
     });
+  
 }
 
 function updateInventoryTable(incipient_sales) {
@@ -377,7 +438,7 @@ function updateInventoryTable(incipient_sales) {
     },
     error: function (result) {
       console.log(
-        "An error occurred immediately in $.ajax request.",
+        "An error, which occurred immediately in $.ajax request.",
         result, result.responseText
       );
     },
@@ -399,7 +460,7 @@ function updateInventoryTable(incipient_sales) {
         });
         verifyBuyButtons()
       } else {
-        console.log(result["message"], result["error"]);
+        console.log(result["message"], result["error"], result);
       }
     },
   });
@@ -418,7 +479,7 @@ function fillInvTable(shouldWipe) {
       get_full: false,
     },
     error: function (result) {
-      console.log("An error occurred immediately in $.ajax request.", result, result.responseText);
+      console.log("An error, it has occurred immediately in $.ajax request.", result, result.responseText);
     },
     success: function (result) {
 
@@ -445,11 +506,6 @@ function fillInvTable(shouldWipe) {
           );
           
           let pop_factor_keys = Object.keys(popularity_factors)
-
-          //The first pf should be bigger, the second smaller.
-          //If positive, then blue, if neg then red.
-          //Accessibility means ↶↷ surrounds negative value.
-
           let pf1 = pop_factor_keys[0]
           let pf2 = pop_factor_keys[1]
 
@@ -579,7 +635,7 @@ function fillInvTable(shouldWipe) {
                     verifyBuyButtons()
 
       } else {
-        console.log(result["message"], result["error"]);
+        console.log(result["message"], result["error"], result);
       }
     },
   });
@@ -696,7 +752,7 @@ function submitSellingPrice(formattedName){
         should_update_session: 0,
       },
       error: function (result) {
-        console.log("An error occurred immediately in $.ajax request.", result.responseText, result);
+        console.log("An error, it occurred immediately in $.ajax request.", result.responseText, result);
       },
       success: function (result) {
         if (result["status"]) {
@@ -705,7 +761,7 @@ function submitSellingPrice(formattedName){
           span.removeClass("hidden");
           span.text(result["update_data"]["selling_price"]);
         } else {
-          console.log(result["message"], result["error"]);
+          console.log(result["message"], result["error"], result);
         }
       },
     });
@@ -769,7 +825,7 @@ function restockFruit(formattedName) {
         increment: requested_amount,
       },
       error: function (result) {
-        console.log("An error occurred immediately in $.ajax request.", result.responseText, result);
+        console.log("An error which has occurred immediately in $.ajax request.", result.responseText, result);
       },
       success: function (result) {
         day_costs += putative_cost
@@ -791,7 +847,7 @@ function restockFruit(formattedName) {
           updateGamesTable(putative_cost); //Send off the db to change money stat.
           
         } else {
-          console.log(result["message"], result["error"]);
+          console.log(result["message"], result["error"], result);
         }
       },
     });
@@ -935,15 +991,15 @@ function getPopularityFactor(pop_factor_names, i, trend_calculates) {
 }
 
 function printDevData1(){
-  allButtonsDisabled(true)
+  // allButtonsDisabled(true)
 
   console.log("LEVEL RECORD FROM JS:")
   console.log(level_record)
   console.log(" ")
 
-  console.log("LEVEL RECORD FROM PHP:")
-  console.log(JSON.parse(`<?php echo $_SESSION['level_record']; ?>`))
-  console.log(" ")
+  // console.log("LEVEL RECORD FROM PHP:")
+  // console.log(JSON.parse(`<?php echo $_SESSION['level_record']; ?>`))
+  // console.log(" ")
 
   console.log("OLD SESSION FROM PHP:");
   console.log(`<?php print_r($_SESSION); ?>`);
@@ -973,7 +1029,7 @@ $.ajax({
     get_full: false,
   },
   error: function (result) {
-    console.log("An error occurred immediately in $.ajax request.", result, result.responseText);
+    console.log("A kind of error occurred immediately in $.ajax request.", result, result.responseText);
   },
   success: function (result) {
     if (result["status"]) {
@@ -1020,12 +1076,23 @@ function printDevDataHTML(popularity, max_buying_price){
   }
 }
 
-function allButtonsDisabled(toggle){
-  if (toggle){
-    console.log("GONNA DISABLE ALL BUTTONS")
-    $("button").attr("disabled", true)}else{
-      console.log("GONNA enable ALL BUTTONS")
-      $("button").removeAttr("disabled")}
+function allButtonsDisabled(toggle) {
+
+  $(document).ready(function(){
+      if (toggle) {
+    console.log("GONNA DISABLE ALL BUTTONS");
+  
+      $("button").attr("disabled", true)
+   
+  } else {
+    console.log("GONNA enable ALL BUTTONS");
+   
+      $("button").removeAttr("disabled")
+  
+  }
+  })
+
+
 }
 
 </script>

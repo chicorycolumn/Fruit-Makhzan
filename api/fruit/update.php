@@ -16,6 +16,13 @@ $update_data = $_GET['update_data'];
 $should_update_session = $_GET['should_update_session'];
 $get_full = false;
 
+if (array_key_exists("level_record", $update_data)) {
+  $update_data['level_record'] = json_encode($update_data['level_record']);
+}
+
+// print_r(gettype($update_data['level_record']));
+// return;
+
 function go(
   $db,
   $fruit,
@@ -48,6 +55,8 @@ function go(
     return $result;
   }
 
+  $result["update_data"] = $update_data;
+
   if ($should_update_session) {
     $labels = ['days_stat', 'money_stat', 'trend_calculates'];
 
@@ -56,9 +65,17 @@ function go(
         $_SESSION[$label] = $update_data[$label];
       }
     }
+
+    $label = "level_record";
+
+    if (array_key_exists($label, $update_data)) {
+      $_SESSION[$label] = $update_data[$label];
+      // $result['update_data']['level_record'] = json_decode(
+      //   $result['update_data']['level_record']
+      // );
+    }
   }
 
-  $result["update_data"] = $update_data;
   return $result;
 }
 

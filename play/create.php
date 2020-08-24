@@ -74,14 +74,14 @@ function addFruit() {
       selling_price: $("#selling_price").val(),
     },
     error: function (result) {
-      console.log("An error occurred immediately in $.ajax request.", result, result.responseText);
+      console.log("There was an error that occurred immediately in $.ajax request.", result, result.responseText);
     },
     success: function (result) {
       if (result["status"]) {
         console.log(result);
         window.location.href = "../play";
       } else {
-        console.log(result["message"], result["error"]);
+        console.log(result["message"], result["error"], result);
       }
     },
   });
