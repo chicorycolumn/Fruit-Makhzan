@@ -11,6 +11,7 @@ $fruit = new Fruit($db);
 $fruit->name = $_GET['name'];
 $name = $_GET['name'];
 $popularity_factors = json_encode($_GET['popularity_factors']);
+$max_prices = json_encode($_GET['max_prices']);
 $table_name = $_GET['table_name'];
 $identifying_column = "name";
 $identifying_data = $_GET['name'];
@@ -23,13 +24,19 @@ function go(
   $table_name,
   $name,
   $popularity_factors,
+  $max_prices,
   $identifying_column,
   $identifying_data,
   $acronym,
   $get_full
 ) {
   if (
-    !($result = $fruit->create_self($table_name, $name, $popularity_factors))
+    !($result = $fruit->create_self(
+      $table_name,
+      $name,
+      $popularity_factors,
+      $max_prices
+    ))
   ) {
     return [
       "status" => false,
@@ -99,6 +106,7 @@ $response = go(
   $table_name,
   $name,
   $popularity_factors,
+  $max_prices,
   $identifying_column,
   $identifying_data,
   $acronym,

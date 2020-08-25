@@ -17,7 +17,6 @@
   <header class="mainHeader">
  
   <a href="../home">Home</a>
-  <a href="../play/create.php">Create</a>
   <a href="../play">Play</a>     
           
   </header>

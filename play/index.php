@@ -470,12 +470,19 @@ function submitNewFruit(majorPopJQ, minorPopJQ, nameInput){
   newFruitPopFactors[majorPopJQ.attr("id")] = !majorPopJQ.hasClass("factorNegated"),
   newFruitPopFactors[minorPopJQ.attr("id")] = !minorPopJQ.hasClass("factorNegated")
 
+
+  let multiplicationFactor = Math.ceil(Math.random()*26) + 4
+  let Low = Math.ceil(Math.random()*80)
+  let High = Math.round(multiplicationFactor * Low)
+  let maxPrices = {Low, High}
+
+
   setTimeout(() => {
-    addFruit(nameInput, newFruitPopFactors)
+    addFruit(nameInput, newFruitPopFactors, maxPrices)
   }, 500);
 }
 
-function addFruit(name, popularity_factors) {
+function addFruit(name, popularity_factors, max_prices) {
 
   console.log("ADDFRUIT FXN: " + level_record['round'] + "~" + level_record['sublevel'])
 
@@ -486,7 +493,8 @@ function addFruit(name, popularity_factors) {
     data: {
       table_name: "<?php echo $inv_table_name; ?>",
       name: name,
-      popularity_factors: popularity_factors
+      popularity_factors: popularity_factors,
+      max_prices: max_prices
     },
     error: function (result) {
       console.log("There was an error that occurred immediately in $.ajax request.", result, result.responseText);
@@ -772,6 +780,7 @@ function addRowToTable(fruit, shouldPrepend){
             rubicon
           } = fruit;
           let formattedName = name.replace(/\s/g, "_");
+          max_prices = integeriseObjectValues(max_prices)
           let {
             popularity,
             max_buying_price,
@@ -779,7 +788,8 @@ function addRowToTable(fruit, shouldPrepend){
           } = getSalesSubstrates(
             popularity_factors,
             max_prices,
-            trend_calculates
+            trend_calculates,
+            name
           );
           
           let pop_factor_keys = Object.keys(popularity_factors)
@@ -1134,6 +1144,13 @@ function restockFruit(formattedName) {
   }
 }
 
+function integeriseObjectValues(obj){
+  for (key in obj){
+    obj[key] = parseInt(obj[key])
+  }
+  return obj
+}
+
 function calculateSales() {
   let incipient_sales = {};
 
@@ -1145,12 +1162,13 @@ function calculateSales() {
       row.find(".sellingPriceData").text()
     );
 
-    let max_prices = JSON.parse(row.find(".maxPricesData").text())
+    let max_prices = integeriseObjectValues(JSON.parse(row.find(".maxPricesData").text()))
     let popularity_factors = JSON.parse(row.find(".popFactorsData").text())
     let { popularity, max_buying_price, restock_price } = getSalesSubstrates(
       popularity_factors,
       max_prices,
-      trend_calculates
+      trend_calculates,
+      name
     );
 
     let price_disparity =
@@ -1159,6 +1177,10 @@ function calculateSales() {
     let sales_percentage = (popularity + price_disparity * 4) / 5 / 100;
 
     let sales_quantity = Math.ceil(sales_percentage * quantity);
+
+    let plusOrMinusFive = Math.round(Math.random()*10)-5
+
+    sales_quantity += (plusOrMinusFive/100)*quantity
 
     if (sales_quantity < 0) {
       sales_quantity = 0;
@@ -1174,16 +1196,18 @@ function calculateSales() {
   return incipient_sales;
 }
 
-function getSalesSubstrates(popularity_factors, max_prices, trend_calculates) {
+function getSalesSubstrates(popularity_factors, max_prices, trend_calculates, name) {
   let factor1 = getPopularityFactor(popularity_factors, 0, trend_calculates);
   let factor2 = getPopularityFactor(popularity_factors, 1, trend_calculates);
   let popularity = Math.ceil((factor1 * 3 + factor2) / 4);
-
 
   let range = max_prices['High'] - max_prices['Low']
   let fraction_of_price_range = (Math.floor((popularity-1)/20)/4)*range
   let max_buying_price = max_prices['Low'] + fraction_of_price_range
   let restock_price = Math.ceil(0.8 * max_buying_price);
+
+  if (name){console.log("***" + name, {popularity_factors, max_prices, popularity, range, fraction_of_price_range, max_buying_price, restock_price})}
+  else{console.log("***", {popularity_factors, max_prices, popularity, range, fraction_of_price_range, max_buying_price, restock_price})}
 
   return { popularity, max_buying_price, restock_price };
 }
@@ -1228,13 +1252,14 @@ function updateSalesSubstratesInDisplayedTable() {
     let row = $(this)
     let name = row.find(".nameData").text();
 
-    let max_prices = JSON.parse(row.find(".maxPricesData").text())
+    let max_prices = integeriseObjectValues(JSON.parse(row.find(".maxPricesData").text()))
     let popularity_factors = JSON.parse(row.find(".popFactorsData").text())
 
     let { popularity, max_buying_price, restock_price } = getSalesSubstrates(
       popularity_factors,
       max_prices,
-      trend_calculates
+      trend_calculates,
+      name
     );
 
     row.find(".devdata1")
