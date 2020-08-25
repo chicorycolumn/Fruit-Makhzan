@@ -169,16 +169,14 @@ for (let i = 1; i <= level_record['round']; i++){
 }
 
 $(document).ready(function(){
-  console.log("doc ready")
-  console.log(level_record)
+  console.log("READY: " + level_record['round'] + "~" + level_record['sublevel'])
   for (let key in level_record){
     let days = parseInt($("#daysStat").text())
-    if (parseInt(key) == days && parseFloat(level_record['sublevel']) !== 0.3){
+    if (parseInt(key) == days && parseFloat(level_record['sublevel']) < 0.9){
       console.log("I see we are on day " + key + " which was a rubicon day! It was where we entered " + level_record[key]['round'] + "." + level_record[key]['sublevel'] + " so we should load that somehow.")
       allButtonsDisabled(true)
       $(".dialogHolder").removeClass("hidden")
       $(".dialogHolder").find(".dialogBoxText").text(messageRef[level_record[key]['sublevel']])
-      console.log("I should be showing the dialog now?")
 
       if (level_record['round'] == level_record['final_round']+1){
         showIsland()
@@ -189,7 +187,7 @@ $(document).ready(function(){
      
     }
   }
-  // showCreateFruitForm()///////////////////temp
+  // showCreateFruitForm()  ////temp
 })
 
 function showCreateFruitForm(){
@@ -205,11 +203,9 @@ function selectFactor(e, label){
 
   function toggleNegation(item, negate){
     if (negate){
-      console.log("Make " + item.attr("id") + " negated.")
       item.addClass("factorNegated")
       item.text("↻" + item.text())
     }else{
-      console.log("Make " + item.attr("id") + " un-negated.")
       item.removeClass("factorNegated")
       item.text(item.text().replace("↻", ""))
     }
@@ -296,8 +292,7 @@ updateGameStats( //**************** */
 )
 
 function newDay() {
-  // console.log("FXN newDay says level_record is")
-  // console.log(level_record)
+  console.log("NEWDAY FXN: " + level_record['round'] + "~" + level_record['sublevel'])
 
   let incipient_sales = calculateSales();
   let day_profit = Object.values(incipient_sales).reduce(
@@ -382,64 +377,65 @@ function showIsland(num){
 
 function advance(){ 
 
-  console.log("advance")
-  console.log(level_record['sublevel'])
+  console.log("ADVANCE FXN: " + level_record['round'] + "~" + level_record['sublevel'])
+
+  //Endgame.
+  if (level_record['round'] >= (level_record['final_round']+1)){
+    $(".dialogHolder").addClass("hidden")
+    return
+  }
   
-  if (level_record['round'] < (level_record['final_round']+1) && level_record['sublevel'] == 0){
+  //Round transition.
+  if (level_record['sublevel'] == 0){
     $(".dialogHolder").find(".dialogBoxText").text("With the remaining half billion dinar, you pay a magical fruit laboratory to create a brand new fruit of your choosing!")
     level_record['sublevel'] = 0.1
     showIsland()
     return
   }
 
-  if (level_record['round'] < (level_record['final_round']+1) && level_record['sublevel'] == 0.1){
-    showCreateFruitForm()         
+  if (level_record['sublevel'] == 0.1){
     level_record['sublevel'] = 0.2
+    showCreateFruitForm()         
     return
   }
 
-  if (level_record['round'] < (level_record['final_round']+1) && level_record['sublevel'] == 0.2){
-    
-    console.log("submit new fruit")
-
-    let majorPopJQ = $(".factorMajor")
-    let minorPopJQ = $(".factorMinor")
-
-    if (!majorPopJQ.text() || !minorPopJQ.text()){
-      alert("You must pick two factors to affect the popularity of your new fruit.")
-     return
-    }
-
-    let newFruitPopFactors = {}
-
-    newFruitPopFactors[majorPopJQ.attr("id")] = !majorPopJQ.hasClass("factorNegated"),
-    newFruitPopFactors[minorPopJQ.attr("id")] = !minorPopJQ.hasClass("factorNegated")
-
-    console.log(newFruitPopFactors)
-    level_record['sublevel'] = 0.9
-
-    updateGamesTable(null, null, level_record)
-
-    setTimeout(() => {
-      addFruit($(".createFruitInputName").val())
-    }, 500);
+  if (level_record['sublevel'] == 0.2){
+    level_record['sublevel'] = 0.3
+    submitNewFruit()
+    return
   }
 
+  //Everything that's neither endgame nor round-transition. ie the rubicon transitions.
   $(".dialogHolder").addClass("hidden")
-  
-  if(level_record['round'] < (level_record['final_round']+1)){
-  
-    allButtonsDisabled(false)
-    
-    if(level_record['sublevel'] == 0){
-        showIsland()
-        resetToNewRound()  
-    }
-  }
+  allButtonsDisabled(false)  
 
 }
 
+function submitNewFruit(){
+  console.log("SUBMIT FXN: " + level_record['round'] + "~" + level_record['sublevel'])
+
+  let majorPopJQ = $(".factorMajor")
+  let minorPopJQ = $(".factorMinor")
+
+  if (!majorPopJQ.text() || !minorPopJQ.text()){
+    alert("You must pick two factors to affect the popularity of your new fruit.")
+    return
+  }
+
+  let newFruitPopFactors = {}
+
+  newFruitPopFactors[majorPopJQ.attr("id")] = !majorPopJQ.hasClass("factorNegated"),
+  newFruitPopFactors[minorPopJQ.attr("id")] = !minorPopJQ.hasClass("factorNegated")
+
+  setTimeout(() => {
+    addFruit($(".createFruitInputName").val())
+  }, 500);
+}
+
 function addFruit(name) {
+
+  console.log("ADDFRUIT FXN: " + level_record['round'] + "~" + level_record['sublevel'])
+
   $.ajax({
     type: "GET",
     url: "../api/fruit/create.php",
@@ -453,12 +449,15 @@ function addFruit(name) {
     },
     success: function (result) {
       if (result["status"]) {
-        $(".dialogHolder").removeClass("hidden")
+        
+        level_record['sublevel'] = 0.9
+        updateGamesTable(null, null, level_record)
+
+        $(".dialogHolder").addClass("hidden")
         allButtonsDisabled(false)
-    if(parseFloat(level_record['sublevel']) < 0.9){
-        showIsland()
-        resetToNewRound()  
-    }
+
+        resetToNewRound()
+    
       } else {
         console.log(result["message"], result["error"], result);
       }
@@ -467,12 +466,11 @@ function addFruit(name) {
 }
 
 function resetToNewRound(){
-  console.log("FXN resetToNewRound")
-  //Reset money_stat to 100, in db and session
-  updateGamesTable(null, 100)
+  console.log("RESET FXN: " + level_record['round'] + "~" + level_record['sublevel'])
+  
+  updateGamesTable(null, 100)   //Reset money_stat to 100, in db and session. 
 
-  //Reset all quantities to 0, in db, and load table again from that
-  $.ajax({
+  $.ajax({ //Reset all quantities to 0, in db, and load table again from that
     type: "GET",
     url: "../api/fruit/new_round.php",
     dataType: "json",
@@ -490,7 +488,7 @@ function resetToNewRound(){
     },
     success: function (result) {
       if (result["status"]) {
-        $(".quantityData").text(0) //Maybe you should grab this all again from db? But... I think it's okay like this. Provided the db default value for `quantity` column remains the same during development.
+        $(".quantityData").text(0)
         $(".amountInput_restock").val(1)
       } else {
         console.log(result["message"], result["error"], result);
@@ -591,7 +589,6 @@ update_data = {
         );
       },
       success: function (result) {
-        // console.log(result);
         if (result["status"]) {
 
           let { money_stat } = result["update_data"];
@@ -825,7 +822,6 @@ function fillInvTable(shouldWipe) {
 }
 
 function verifyBuyButtons(){
-  console.log("verifyBuyButtons fxn")
 
   if($(".dialogHolder").hasClass("hidden")){
 
@@ -838,8 +834,6 @@ function verifyBuyButtons(){
     let maxBuyableQuantity = Math.floor(parseInt($("#moneyStat").text()) / restockPrice)
     $(this).prop("disabled", restockQuantity > maxBuyableQuantity || !restockQuantity)
   })
-  }else{
-    console.log("Ordinarily I would run verifyBuyButtons, but I won't this time, as the scroll dialog is showing.")
   }
 }
 
@@ -995,7 +989,7 @@ function restockFruit(formattedName) {
   setAmount(formattedName, "restock", "", requested_amount);
 
   if (putative_cost > money) {
-    console.log("insuff funds")
+    console.log("insufficient funds")
     return
   } else {
     $.ajax({
@@ -1174,14 +1168,12 @@ function getPopularityFactor(pop_factor_names, i, trend_calculates) {
 }
 
 function printDevData1(){
-  // allButtonsDisabled(true)
-
-  console.log("LEVEL RECORD FROM JS:")
-  console.log(level_record)
-  console.log(" ")
-
   // console.log("LEVEL RECORD FROM PHP:")
-  // console.log(JSON.parse(`<?php echo $_SESSION['level_record']; ?>`))
+  // console.log(JSON.parse(`
+  // <
+  // ?php echo $_SESSION['level_record']; 
+  // ?
+  // >`))
   // console.log(" ")
 
   console.log("OLD SESSION FROM PHP:");
@@ -1194,7 +1186,11 @@ function printDevData1(){
 }
 
 function printDevData2(){
-  console.log("*")
+  console.log(" ")
+  console.log("PRINT: " + level_record['round'] + "~" + level_record['sublevel'])
+  console.log(" ")
+  console.log(level_record)
+  console.log(" ")
 }
 
 function printSingle(name) {
@@ -1216,8 +1212,7 @@ $.ajax({
   },
   success: function (result) {
     if (result["status"]) {
-      console.log("Result from fruit->read_single:")
-      console.log(result['data'][0]);
+      console.log("Result from fruit->read_single:", result['data'][0]);
     } else {
       console.log(result, result["message"], result["error"]);
   }},
@@ -1264,7 +1259,6 @@ function allButtonsDisabled(toggle) {
   $(document).ready(function(){
       if (toggle) {
     console.log("GONNA DISABLE ALL BUTTONS");
-  
       $("button").attr("disabled", true)
    
   } else {
