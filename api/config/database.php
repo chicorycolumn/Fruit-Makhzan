@@ -60,6 +60,7 @@ class Database
     $create_table_querystring =
       " (
       `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      `rubicon` int(11) NOT NULL,
       `name` varchar(100) NOT NULL,
       `quantity` int(11) DEFAULT 0,
       `selling_price` int(11) DEFAULT 0,
@@ -77,71 +78,18 @@ class Database
 
     $seed_data = [
       [
-        "name" => "The Perfect Date", //x25
-        "max_prices" => ["Low" => 200, "High" => 5000],
+        "name" => "Grapes", //x5.0
+        "rubicon" => 0,
+        "max_prices" => ["Low" => 1, "High" => 5],
         "popularity_factors" => [
-          "love" => false,
           "weather" => true,
-        ],
-      ],
-      [
-        "name" => "Enchanted Pomegranate", //x20
-        "max_prices" => ["Low" => 150, "High" => 3000],
-        "popularity_factors" => [
-          "decadence" => true,
           "love" => true,
         ],
       ],
-      [
-        "name" => "Flammable Walnut", //x15
-        "max_prices" => ["Low" => 100, "High" => 1500],
-        "popularity_factors" => [
-          "politics" => false,
-          "conformity" => true,
-        ],
-      ],
-      [
-        "name" => "Albino Almond", //x11
-        "max_prices" => ["Low" => 60, "High" => 660],
-        "popularity_factors" => [
-          "conformity" => true,
-          "weather" => true,
-        ],
-      ],
-      [
-        "name" => "Rare Melon", //x8
-        "max_prices" => ["Low" => 30, "High" => 240],
-        "popularity_factors" => [
-          "politics" => true,
-          "decadence" => true,
-        ],
-      ],
-      [
-        "name" => "Pistachio", //x6.1
-        "max_prices" => ["Low" => 20, "High" => 122],
-        "popularity_factors" => [
-          "weather" => false,
-          "politics" => true,
-        ],
-      ],
-      [
-        "name" => "Orange", //x5.9
-        "max_prices" => ["Low" => 10, "High" => 59],
-        "popularity_factors" => [
-          "conformity" => true,
-          "love" => true,
-        ],
-      ],
-      [
-        "name" => "Peach", //x5.75
-        "max_prices" => ["Low" => 4, "High" => 23],
-        "popularity_factors" => [
-          "decadence" => true,
-          "conformity" => true,
-        ],
-      ],
+
       [
         "name" => "Fig", //x5.3
+        "rubicon" => 0,
         "max_prices" => ["Low" => 3, "High" => 16],
         "popularity_factors" => [
           "politics" => true,
@@ -149,11 +97,75 @@ class Database
         ],
       ],
       [
-        "name" => "Grapes", //x5.0
-        "max_prices" => ["Low" => 1, "High" => 5],
+        "name" => "Peach", //x5.75
+        "rubicon" => 0,
+        "max_prices" => ["Low" => 4, "High" => 23],
         "popularity_factors" => [
-          "weather" => true,
+          "decadence" => true,
+          "conformity" => true,
+        ],
+      ],
+      [
+        "name" => "Orange", //x5.9
+        "rubicon" => 0,
+        "max_prices" => ["Low" => 10, "High" => 59],
+        "popularity_factors" => [
+          "conformity" => true,
           "love" => true,
+        ],
+      ],
+      [
+        "name" => "Pistachio", //x6.1
+        "rubicon" => 0,
+        "max_prices" => ["Low" => 20, "High" => 122],
+        "popularity_factors" => [
+          "weather" => false,
+          "politics" => true,
+        ],
+      ],
+      [
+        "name" => "Rare Melon", //x8
+        "rubicon" => 1,
+        "max_prices" => ["Low" => 30, "High" => 240],
+        "popularity_factors" => [
+          "politics" => true,
+          "decadence" => true,
+        ],
+      ],
+      [
+        "name" => "Albino Almond", //x11
+        "rubicon" => 2,
+        "max_prices" => ["Low" => 60, "High" => 660],
+        "popularity_factors" => [
+          "conformity" => true,
+          "weather" => true,
+        ],
+      ],
+      [
+        "name" => "Flammable Walnut", //x15
+        "rubicon" => 3,
+        "max_prices" => ["Low" => 100, "High" => 1500],
+        "popularity_factors" => [
+          "politics" => false,
+          "conformity" => true,
+        ],
+      ],
+      [
+        "name" => "Enchanted Pomegranate", //x20
+        "rubicon" => 4,
+        "max_prices" => ["Low" => 150, "High" => 3000],
+        "popularity_factors" => [
+          "decadence" => true,
+          "love" => true,
+        ],
+      ],
+      [
+        "name" => "The Perfect Date", //x25
+        "rubicon" => 5,
+        "max_prices" => ["Low" => 200, "High" => 5000],
+        "popularity_factors" => [
+          "love" => false,
+          "weather" => true,
         ],
       ],
     ];
@@ -164,10 +176,12 @@ class Database
       $query_array[] =
         "INSERT INTO " .
         $table_name .
-        " (`name`, `selling_price`, `max_prices`, `popularity_factors`) VALUES
+        " (`name`, `rubicon`, `selling_price`, `max_prices`, `popularity_factors`) VALUES
       ('" .
         $seed_item['name'] .
         "', " .
+        $seed_item['rubicon'] .
+        ", " .
         16 .
         ", '" .
         json_encode($seed_item['max_prices']) .
@@ -204,11 +218,12 @@ class Database
       "conformity_history" => "ss",
     ]);
 
-    $money_initial = 100;
+    $money_initial = 199;
     $days_initial = 0;
     $level_record_initial = json_encode([
       "round" => 0,
       "sublevel" => 0,
+      "final_round" => 4,
     ]);
 
     $gid = $_SESSION["gid"];

@@ -244,6 +244,7 @@ function build_table_array($table, $result, $get_full)
     if (substr($table, -3) == "inv") {
       $item = [
         "id" => $row["id"],
+        "rubicon" => $row["rubicon"],
         "name" => $row["name"],
         "quantity" => $row["quantity"],
         "selling_price" => $row["selling_price"],

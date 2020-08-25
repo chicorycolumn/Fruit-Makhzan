@@ -114,6 +114,7 @@ include '../master.php';
 
 <script>
 
+
 let createFruitForm ='<form class="createFruitForm">' +
     
     '<div class="boxBody">' +
@@ -157,10 +158,13 @@ let createFruitForm ='<form class="createFruitForm">' +
 
 let day_costs = 0;
 let week_record = {}
-const messageRef = {1: "Wahad! You reached sublevel 1!", 2: "Nayn! You reached sublevel 2!", 0: "You're a billionaire! As a reward for all your hard work, you buy an 500 million dinar island to relax on.", 4: "You won the whole game! You own five islands and are now king."}
+const messageRef = {1: "Wahad! You reached sublevel 1!", 2: "Nayn! You reached sublevel 2!", 0: "You're a double billionaire! As a reward for all your hard work, you buy an island to relax on.", 4: "You won the whole game! You own five islands and are now king."}
 let level_record
 
 level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`)
+
+let current_rubicon = 0
+updateCurrentRubicon()
 
 //'
 
@@ -183,11 +187,8 @@ $(document).ready(function(){
         $(".newDayButton").addClass("hidden")
         $(".crown").removeClass("hidden")  
       }
-
-     
     }
   }
-  // showCreateFruitForm()  ////temp
 })
 
 function showCreateFruitForm(){
@@ -197,6 +198,23 @@ function showCreateFruitForm(){
       $(".factorSelect").each(function(){$(this).bind("contextmenu",function(e){
         return false;
       })})
+}
+
+function updateCurrentRubicon(){
+  let round = level_record['round']
+  let sublevel = level_record['sublevel']
+
+  if (round == 0 && sublevel == 1){
+    current_rubicon = 1
+  } else   if (round == 0 && sublevel == 2){
+    current_rubicon = 2
+  } else   if (round == 1 && sublevel == 1){
+    current_rubicon = 3
+  } else   if (round == 1 && sublevel == 2){
+    current_rubicon = 4
+  } else   if (round == 3 && sublevel == 2){
+    current_rubicon = 5
+  }
 }
 
 function selectFactor(e, label){
@@ -309,10 +327,10 @@ function newDay() {
   let new_money_stat = money + day_profit
 
   const rubicon = {1: 101, 2: 150, 3: 200}
-  // const rubicon = {1: 1000, 2: 1000000, 3: 1000000000}
+  // const rubicon = {1: 2000, 2: 2000000, 3: 2000000000}
   
   let data_object = {"overall_sales_history": week_record}
-  level_record['final_round'] = 4
+
   // console.log({days, money, new_money_stat, incipient_sales, day_profit, data_object })
 
   fillQuantityYesterday(incipient_sales); //Moves current quantities to the qy column.
@@ -339,7 +357,7 @@ function newDay() {
     incrementSublevel(messageRef, 0, true)
   }
 
-  updateGamesTable(null, null, level_record)
+  updateGamesTable(null, null, level_record) //But no changes to level_record?
 
 }
 
@@ -347,8 +365,13 @@ function incrementSublevel(messageRef, sublevel, end){
 
   console.log("incrementSublevel fxn with params:", {messageRef, sublevel, end})
 
-  if (sublevel < 0.9){level_record['round']++}
+  if (sublevel < 0.9){
+    level_record['round']++
+    updateCurrentRubicon()
+  }
+
   level_record['sublevel'] = sublevel
+  updateCurrentRubicon()
   allButtonsDisabled(true)
 
   // tomorrow and rubicon_stamp
@@ -387,20 +410,23 @@ function advance(){
   
   //Round transition.
   if (level_record['sublevel'] == 0){
-    $(".dialogHolder").find(".dialogBoxText").text("With the remaining half billion dinar, you pay a magical fruit laboratory to create a brand new fruit of your choosing!")
+    $(".dialogHolder").find(".dialogBoxText").text("With the remaining billion dinar, you pay a magical fruit laboratory to create a brand new fruit of your choosing!")
     level_record['sublevel'] = 0.1
+    updateCurrentRubicon()
     showIsland()
     return
   }
 
   if (level_record['sublevel'] == 0.1){
     level_record['sublevel'] = 0.2
+    updateCurrentRubicon()
     showCreateFruitForm()         
     return
   }
 
   if (level_record['sublevel'] == 0.2){
     level_record['sublevel'] = 0.3
+    updateCurrentRubicon()
     submitNewFruit()
     return
   }
@@ -451,6 +477,7 @@ function addFruit(name) {
       if (result["status"]) {
         
         level_record['sublevel'] = 0.9
+        updateCurrentRubicon()
         updateGamesTable(null, null, level_record)
 
         $(".dialogHolder").addClass("hidden")
@@ -673,6 +700,7 @@ function fillInvTable(shouldWipe) {
             selling_price,
             max_prices,
             popularity_factors,
+            rubicon
           } = fruit;
           let formattedName = name.replace(/\s/g, "_");
           let {
@@ -700,6 +728,7 @@ function fillInvTable(shouldWipe) {
                       "<td class='regularTD nameTD'>"+
                         "<div class='invSubtd nameSubtd'>"+
                           "<p class='invData nameData'>"+name+"</p>"+
+                          "<p class='invData rubiconData'>"+rubicon+"</p>"+
                           "<p class='invData hiddenData popFactorsData'>"+JSON.stringify(popularity_factors)+"</p>"+
                           "<p class='invData hiddenData maxPricesData'>"+JSON.stringify(max_prices)+"</p>"+
                         "</div>"+
@@ -811,6 +840,7 @@ function fillInvTable(shouldWipe) {
                       bindUsefulJqueriesAfterLoadingDataIntoTable()
                     }, 500);
                     
+                    hideSpecificRows()
                     updateSalesSubstratesInDisplayedTable()
                     verifyBuyButtons()
 
@@ -819,6 +849,14 @@ function fillInvTable(shouldWipe) {
       }
     },
   });
+}
+
+function hideSpecificRows(){
+  $("table#inventory tbody tr").each(function(){
+    if (parseInt($(this).find(".rubiconData").text()) > current_rubicon){
+      $(this).addClass("hidden")
+    }
+  })
 }
 
 function verifyBuyButtons(){
@@ -1186,6 +1224,7 @@ function printDevData1(){
 }
 
 function printDevData2(){
+  console.log({current_rubicon})
   console.log(" ")
   console.log("PRINT: " + level_record['round'] + "~" + level_record['sublevel'])
   console.log(" ")

@@ -2,3 +2,4 @@ node_modules
 vendor
 play/update.php
 resources/js/
+utils/del.*
