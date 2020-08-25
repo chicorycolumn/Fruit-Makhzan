@@ -39,10 +39,10 @@ body {
 }
 
 .holderForHorizontalMainDivs {
+  /* border: blue solid 1pt; */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  /* border: blue solid 1pt; */
 }
 
 .mainDivBulletin {

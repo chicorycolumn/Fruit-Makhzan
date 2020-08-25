@@ -20,10 +20,10 @@
 }
 
 .shown {
-  /* display: none; */
 }
 
-.dialogBox {
+.dialogBox 
+  /* background-color: rgba(0, 0, 0, 0.5); */ {
   user-select: none;
   z-index: 4;
   text-align: center;
@@ -34,25 +34,20 @@
   margin-left: -132.5px;
   top: 120px;
   position: fixed;
-  /* background-color: rgba(0, 0, 0, 0.5); */
   border-radius: var(--bradius1);
   text-align: center;
 }
 
 .dialogBoxInner {
-  text-align: left;
   /* border: black solid 2pt; */
-  /* padding: 40px; */
-  /* padding-top: 15px; */
-  /* padding-bottom: 15px; */
+  /* overflow: auto; */
+  text-align: left;
   padding-left: 30px;
   padding-right: 30px;
   overflow-wrap: break-word;
   word-wrap: break-word;
   height: 200px;
-  /* overflow: auto; */
   display: flex;
-  /* font-size: 8px; */
 }
 
 .dialogBoxInnerInner {
@@ -63,7 +58,6 @@
   text-align: center;
   height: 340px;
   width: 430px;
-  /* max-width: 330px; */
   left: 50%;
   margin-left: -220px;
   top: 80px;
@@ -78,7 +72,6 @@
   background-color: rgba(255, 255, 255, 0.5);
   font-size: 16px;
   width: 170px;
-  /* border-radius: var(--bradius1); */
 }
 
 .createFruitLabel {
@@ -86,8 +79,8 @@
 }
 
 .createFruitFormGroup {
-  width: 220px;
   /* border: blue dotted 1pt; */
+  width: 220px;
   margin-left: -10px;
   text-align: center;
 }

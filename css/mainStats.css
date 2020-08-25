@@ -34,7 +34,6 @@
 }
 
 .mainStatTitle {
-  /* color: red; */
 }
 
 .mainStatText {
@@ -61,9 +60,6 @@
 }
 
 .islandHolder {
-  /* position: absolute; */
-  /* background-color: yellow; */
-  /* left: 900px; */
   width: 32px;
   height: 190px;
   border-radius: 0px var(--bradius1) var(--bradius1) 0px;

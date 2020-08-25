@@ -73,14 +73,9 @@ button:disabled {
 }
 
 .dialogBoxButton {
-  /* margin-top: 25px; */
-  /* bottom: 25px; */
-  /* height: 52px; */
-  /* width: 120px; */
   background-color: rgba(0, 255, 0, 0.1);
   box-shadow: rgba(0, 255, 0, 0.2) 0px 0px 50px;
   border-radius: var(--bradius1);
-  /* margin-left: -10px; */
   padding: 0px;
   margin: 0px;
   font-family: "Merienda", cursive !important;
@@ -90,5 +85,4 @@ button:disabled {
   left: 62.5px;
   width: 135px;
   text-align: left;
-  /* margin-left: -5px; */
 }
