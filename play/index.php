@@ -168,6 +168,8 @@ updateCurrentRubicon()
 
 //'
 
+if (level_record['round'] > level_record["final_round"]){showEndScreen(4)}
+
 for (let i = 1; i <= level_record['round']; i++){
   showIsland(i)
 }
@@ -185,7 +187,8 @@ $(document).ready(function(){
       if (level_record['round'] == level_record['final_round']+1){
         showIsland()
         $(".newDayButton").addClass("hidden")
-        $(".crown").removeClass("hidden")  
+        $(".crown").removeClass("hidden")
+        $(document).ready(function(){allButtonsDisabled(true)})  
       }
     }
   }
@@ -204,17 +207,26 @@ function updateCurrentRubicon(){
   let round = level_record['round']
   let sublevel = level_record['sublevel']
 
-  if (round == 0 && sublevel == 1){
-    current_rubicon = 1
-  } else   if (round == 0 && sublevel == 2){
-    current_rubicon = 2
-  } else   if (round == 1 && sublevel == 1){
-    current_rubicon = 3
-  } else   if (round == 1 && sublevel == 2){
-    current_rubicon = 4
-  } else   if (round == 3 && sublevel == 2){
-    current_rubicon = 5
+  if (round >= 0 && sublevel >= 1) {
+  current_rubicon = 1;
   }
+  if (round >= 0 && sublevel >= 2 || round >= 1) {
+    current_rubicon = 2;
+  }
+  if (round >= 1 && sublevel >= 2 || round >= 2) {
+    current_rubicon = 3;
+  }
+  if (round >= 2 && sublevel >= 2 || round >= 3) {
+    current_rubicon = 4;
+  }
+  if (round >= 3 && sublevel >= 2 || round >= 4) {
+    current_rubicon = 5;
+  }
+
+  console.log("gonna call fillInvTable fxn from updateCurrentRubicon fxn")
+  
+  revealSpecificRows()
+
 }
 
 function selectFactor(e, label){
@@ -326,7 +338,7 @@ function newDay() {
 
   let new_money_stat = money + day_profit
 
-  const rubicon = {1: 101, 2: 150, 3: 200}
+  const rubicon = {1: 101, 2: 200, 3: 300}
   // const rubicon = {1: 2000, 2: 2000000, 3: 2000000000}
   
   let data_object = {"overall_sales_history": week_record}
@@ -342,7 +354,7 @@ function newDay() {
   if (level_record['round'] < level_record['final_round']){
     if (new_money_stat >= rubicon[3]){
       incrementSublevel(messageRef, 0)
-    } else if (parseFloat(level_record['sublevel']) < 0.9){
+    } else if (parseFloat(level_record['sublevel']) < 1){
       if (new_money_stat >= rubicon[2]){
         incrementSublevel(messageRef, 2)
       } else if (new_money_stat >= rubicon[1]){
@@ -354,20 +366,17 @@ function newDay() {
       }
     }
   } else if (level_record['round'] >= level_record['final_round'] && new_money_stat >= rubicon[3]){
-    incrementSublevel(messageRef, 0, true)
+    incrementSublevel(messageRef, 4)
   }
-
-  updateGamesTable(null, null, level_record) //But no changes to level_record?
 
 }
 
-function incrementSublevel(messageRef, sublevel, end){
+function incrementSublevel(messageRef, sublevel){
 
-  console.log("incrementSublevel fxn with params:", {messageRef, sublevel, end})
+  console.log("incrementSublevel fxn with params:", {messageRef, sublevel})
 
   if (sublevel < 0.9){
     level_record['round']++
-    updateCurrentRubicon()
   }
 
   level_record['sublevel'] = sublevel
@@ -383,11 +392,21 @@ function incrementSublevel(messageRef, sublevel, end){
   $(".dialogHolder").removeClass("hidden")
   $(".dialogHolder").find(".dialogBoxText").text(messageRef[sublevel])
 
-  if (end){
+  if (sublevel == 4){
+    level_record['round']++
+    showEndScreen()
+  }
+
+  updateGamesTable(null, null, level_record)
+}
+
+function showEndScreen(sublevel){
+    $(".dialogHolder").removeClass("hidden")
+    $(".dialogHolder").find(".dialogBoxText").text(messageRef[sublevel])
     showIsland()
     $(".newDayButton").addClass("hidden")
-    $(".crown").removeClass("hidden")  
-  }
+    $(".crown").removeClass("hidden")
+    $(document).ready(function(){allButtonsDisabled(true)})
 }
 
 function showIsland(num){
@@ -412,21 +431,18 @@ function advance(){
   if (level_record['sublevel'] == 0){
     $(".dialogHolder").find(".dialogBoxText").text("With the remaining billion dinar, you pay a magical fruit laboratory to create a brand new fruit of your choosing!")
     level_record['sublevel'] = 0.1
-    updateCurrentRubicon()
     showIsland()
     return
   }
 
   if (level_record['sublevel'] == 0.1){
     level_record['sublevel'] = 0.2
-    updateCurrentRubicon()
     showCreateFruitForm()         
     return
   }
 
   if (level_record['sublevel'] == 0.2){
     level_record['sublevel'] = 0.3
-    updateCurrentRubicon()
     submitNewFruit()
     return
   }
@@ -477,12 +493,11 @@ function addFruit(name) {
       if (result["status"]) {
         
         level_record['sublevel'] = 0.9
-        updateCurrentRubicon()
         updateGamesTable(null, null, level_record)
+        fillInvTable(false, name)
 
         $(".dialogHolder").addClass("hidden")
         allButtonsDisabled(false)
-
         resetToNewRound()
     
       } else {
@@ -673,10 +688,30 @@ function updateInventoryTable(incipient_sales) {
   });
 }
 
-function fillInvTable(shouldWipe) {
+function revealSpecificRows(){
+  $("table#inventory tbody tr").each(function(){
+    let row = $(this)
+    if (parseInt(row.find(".rubiconData").text()) <= current_rubicon && row.hasClass("hidden")){
+      row.removeClass("hidden")
+      makeSparkly(row)
+    }
+  })
+}
+
+function makeSparkly(row){
+  row.addClass("sparkly")
+      setTimeout(() => {
+        row.removeClass("sparkly")
+      }, 2000);
+}
+
+function fillInvTable(shouldWipe, name) {
+  console.log("fillInvTable is called, with name as " + name);
+
   if (shouldWipe) {
     $("#inventory tbody tr").remove();
   }
+
   $.ajax({
     type: "GET",
     url: "../api/fruit/read.php",
@@ -686,13 +721,45 @@ function fillInvTable(shouldWipe) {
       get_full: false,
     },
     error: function (result) {
-      console.log("An error, it has occurred immediately in $.ajax request.", result, result.responseText);
+      console.log(
+        "An error, it has occurred immediately in $.ajax request.",
+        result,
+        result.responseText
+      );
     },
     success: function (result) {
-
       if (result["status"]) {
-        result["data"].forEach((fruit) => {
-          let response = "";
+    
+
+          if (name){
+            result["data"].filter(fruit => fruit['name'] == name).forEach((fruit)=>{
+              addRowToTable(fruit, true);
+            })
+          } else
+
+        {  result["data"].forEach((fruit) => {
+            addRowToTable(fruit);
+          });}
+        
+
+        setTimeout(() => {
+          bindUsefulJqueriesAfterLoadingDataIntoTable();
+        }, 500);
+
+        hideSpecificRows();
+        updateSalesSubstratesInDisplayedTable();
+        verifyBuyButtons();
+      } else {
+        console.log(result["message"], result["error"], result);
+      }
+    },
+  });
+}
+
+
+function addRowToTable(fruit, shouldPrepend){
+  console.log("addRowToTable fxn")
+  let response = "";
           let {
             id,
             name,
@@ -833,22 +900,16 @@ function fillInvTable(shouldWipe) {
                       "</td>"+
                     
                     "</tr>";
-                  
-                    $(response).appendTo($("#inventory"));              
-        });
-                    setTimeout(() => {
-                      bindUsefulJqueriesAfterLoadingDataIntoTable()
-                    }, 500);
-                    
-                    hideSpecificRows()
-                    updateSalesSubstratesInDisplayedTable()
-                    verifyBuyButtons()
 
-      } else {
-        console.log(result["message"], result["error"], result);
-      }
-    },
-  });
+                    if (shouldPrepend){
+                      $(response).prependTo($("#inventory"));
+                      let newRow = $("table#inventory tbody tr#" + formattedName)
+                      makeSparkly(newRow)
+                    }else{
+                       $(response).appendTo($("#inventory")); 
+                    }
+
+                   
 }
 
 function hideSpecificRows(){

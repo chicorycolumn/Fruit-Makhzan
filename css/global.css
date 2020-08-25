@@ -143,3 +143,7 @@
   background-color: rgba(255, 34, 34, 0.25);
   box-shadow: 0 0 2.5px rgba(255, 34, 34, 0.25);
 }
+
+.sparkly {
+  background-color: gold;
+}

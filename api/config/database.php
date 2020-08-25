@@ -60,7 +60,7 @@ class Database
     $create_table_querystring =
       " (
       `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      `rubicon` int(11) NOT NULL,
+      `rubicon` int(11) DEFAULT -1,
       `name` varchar(100) NOT NULL,
       `quantity` int(11) DEFAULT 0,
       `selling_price` int(11) DEFAULT 0,
@@ -218,7 +218,7 @@ class Database
       "conformity_history" => "ss",
     ]);
 
-    $money_initial = 199;
+    $money_initial = 100;
     $days_initial = 0;
     $level_record_initial = json_encode([
       "round" => 0,

@@ -58,7 +58,7 @@ class Fruit
   ) {
     if (substr($table_name, -3) == "inv" && !$get_full) {
       $columns =
-        "`id`, `name`, `quantity`, `selling_price`, `max_prices`, `popularity_factors`";
+        "`id`, `rubicon`, `name`, `quantity`, `selling_price`, `max_prices`, `popularity_factors`";
     } else {
       $columns = "*";
     }
