@@ -99,7 +99,7 @@ class Fruit
     ];
   }
 
-  function create_self($table_name, $name)
+  function create_self($table_name, $name, $popularity_factors)
   {
     if (!$this->is_fruit_in_table($table_name, $name)) {
       return [
@@ -118,7 +118,10 @@ class Fruit
       ];
     }
 
-    $query = "INSERT INTO  " . $table_name . " ( `name` ) VALUES (?)";
+    $query =
+      "INSERT INTO  " .
+      $table_name .
+      " ( `name`, `popularity_factors` ) VALUES (?, ?)";
 
     if (!($stmt = $this->conn->prepare($query))) {
       return [
@@ -128,7 +131,7 @@ class Fruit
       ];
     }
 
-    $stmt->bind_param("s", $name);
+    $stmt->bind_param("ss", $name, $popularity_factors);
 
     if (!$stmt->execute()) {
       return [

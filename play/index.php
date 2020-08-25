@@ -442,9 +442,20 @@ function advance(){
   }
 
   if (level_record['sublevel'] == 0.2){
-    level_record['sublevel'] = 0.3
-    submitNewFruit()
-    return
+
+  let majorPopJQ = $(".factorMajor")
+  let minorPopJQ = $(".factorMinor")
+  let nameInput = $(".createFruitInputName").val().replace(/^[\s]+/, "")
+  nameInput = nameInput.slice(0, 1).toUpperCase() + nameInput.slice(1)
+
+  if (!majorPopJQ.text() || !minorPopJQ.text() || !nameInput || !nameInput.replace(/ /g, "").length){
+    alert("You must pick a name and two factors to affect the popularity of your new fruit.")
+    return 
+  }else
+
+{    level_record['sublevel'] = 0.3
+    submitNewFruit(majorPopJQ, minorPopJQ, nameInput)
+    return}
   }
 
   //Everything that's neither endgame nor round-transition. ie the rubicon transitions.
@@ -453,16 +464,8 @@ function advance(){
 
 }
 
-function submitNewFruit(){
+function submitNewFruit(majorPopJQ, minorPopJQ, nameInput){
   console.log("SUBMIT FXN: " + level_record['round'] + "~" + level_record['sublevel'])
-
-  let majorPopJQ = $(".factorMajor")
-  let minorPopJQ = $(".factorMinor")
-
-  if (!majorPopJQ.text() || !minorPopJQ.text()){
-    alert("You must pick two factors to affect the popularity of your new fruit.")
-    return
-  }
 
   let newFruitPopFactors = {}
 
@@ -470,11 +473,11 @@ function submitNewFruit(){
   newFruitPopFactors[minorPopJQ.attr("id")] = !minorPopJQ.hasClass("factorNegated")
 
   setTimeout(() => {
-    addFruit($(".createFruitInputName").val())
+    addFruit(nameInput, newFruitPopFactors)
   }, 500);
 }
 
-function addFruit(name) {
+function addFruit(name, popularity_factors) {
 
   console.log("ADDFRUIT FXN: " + level_record['round'] + "~" + level_record['sublevel'])
 
@@ -485,6 +488,7 @@ function addFruit(name) {
     data: {
       table_name: "<?php echo $inv_table_name; ?>",
       name: name,
+      popularity_factors: popularity_factors
     },
     error: function (result) {
       console.log("There was an error that occurred immediately in $.ajax request.", result, result.responseText);
@@ -784,9 +788,13 @@ function addRowToTable(fruit, shouldPrepend){
           let pf1 = pop_factor_keys[0]
           let pf2 = pop_factor_keys[1]
 
+          for (let key in popularity_factors){
+            if (popularity_factors[key] == "false"){popularity_factors[key] = false}else
+            if (popularity_factors[key] == "true"){popularity_factors[key] = true} 
+          }
+
           pf1 = "<p class='popFactor1 noMarginPadding"+(popularity_factors[pf1]?" popFactorPositive":" popFactorNegative")+"'>"+(popularity_factors[pf1]?"":"↻")+pf1+"</p>"
           pf2 = "<p class='popFactor2 noMarginPadding"+(popularity_factors[pf2]?" popFactorPositive":" popFactorNegative")+"'>"+(popularity_factors[pf2]?"":"↻")+pf2+"</p>"
-
 
                     response += 
                     "<tr id='"+formattedName+"'>"+
@@ -795,7 +803,7 @@ function addRowToTable(fruit, shouldPrepend){
                       "<td class='regularTD nameTD'>"+
                         "<div class='invSubtd nameSubtd'>"+
                           "<p class='invData nameData'>"+name+"</p>"+
-                          "<p class='invData rubiconData'>"+rubicon+"</p>"+
+                          "<p class='invData hiddenData rubiconData'>"+rubicon+"</p>"+
                           "<p class='invData hiddenData popFactorsData'>"+JSON.stringify(popularity_factors)+"</p>"+
                           "<p class='invData hiddenData maxPricesData'>"+JSON.stringify(max_prices)+"</p>"+
                         "</div>"+
@@ -907,9 +915,7 @@ function addRowToTable(fruit, shouldPrepend){
                       makeSparkly(newRow)
                     }else{
                        $(response).appendTo($("#inventory")); 
-                    }
-
-                   
+                    }              
 }
 
 function hideSpecificRows(){

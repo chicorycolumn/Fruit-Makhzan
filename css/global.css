@@ -24,6 +24,7 @@
 }
 
 .dialogBox {
+  user-select: none;
   z-index: 4;
   text-align: center;
   height: 290px;
