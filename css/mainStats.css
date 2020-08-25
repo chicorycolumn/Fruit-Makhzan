@@ -62,10 +62,10 @@
 
 .islandHolder {
   /* position: absolute; */
-  /* background-color: yellow; */
+  background-color: yellow;
   /* left: 900px; */
-  width: 27.5px;
-  height: 185px;
+  width: 32px;
+  height: 190px;
   border-radius: 0px var(--bradius1) var(--bradius1) 0px;
   display: flex;
   flex-direction: column;
@@ -74,10 +74,10 @@
 }
 
 .island {
-  margin-top: 4.5px;
-  margin-bottom: 4.5px;
-  width: 25px;
-  height: 28px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  width: 32px;
+  height: 35px;
 }
 
 .crown {

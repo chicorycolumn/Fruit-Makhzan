@@ -88,54 +88,36 @@ class Database
       ],
 
       [
-        "name" => "Fig", //x5.3
+        "name" => "Fig", //x5.5
         "rubicon" => 0,
-        "max_prices" => ["Low" => 3, "High" => 16],
+        "max_prices" => ["Low" => 2, "High" => 11],
         "popularity_factors" => [
           "politics" => true,
-          "conformity" => true,
-        ],
-      ],
-      [
-        "name" => "Peach", //x5.75
-        "rubicon" => 0,
-        "max_prices" => ["Low" => 4, "High" => 23],
-        "popularity_factors" => [
-          "decadence" => true,
           "conformity" => true,
         ],
       ],
       [
         "name" => "Pistachio", //x6.0
         "rubicon" => 0,
-        "max_prices" => ["Low" => 10, "High" => 60],
+        "max_prices" => ["Low" => 5, "High" => 30],
         "popularity_factors" => [
           "weather" => false,
           "politics" => true,
         ],
       ],
       [
-        "name" => "Albino Almond", //x10
+        "name" => "Flammable Walnut", //x10
         "rubicon" => 1,
-        "max_prices" => ["Low" => 57, "High" => 570],
-        "popularity_factors" => [
-          "conformity" => true,
-          "weather" => true,
-        ],
-      ],
-      [
-        "name" => "Flammable Walnut", //x15
-        "rubicon" => 2,
-        "max_prices" => ["Low" => 100, "High" => 1500],
+        "max_prices" => ["Low" => 11, "High" => 110],
         "popularity_factors" => [
           "politics" => false,
           "conformity" => true,
         ],
       ],
       [
-        "name" => "Enchanted Pomegranate", //x20
-        "rubicon" => 3,
-        "max_prices" => ["Low" => 150, "High" => 3000],
+        "name" => "Enchanted Pomegranate", //x16
+        "rubicon" => 2,
+        "max_prices" => ["Low" => 36, "High" => 576],
         "popularity_factors" => [
           "decadence" => true,
           "love" => true,
@@ -143,8 +125,8 @@ class Database
       ],
       [
         "name" => "The Perfect Date", //x25
-        "rubicon" => 4,
-        "max_prices" => ["Low" => 200, "High" => 5000],
+        "rubicon" => 3,
+        "max_prices" => ["Low" => 80, "High" => 2000],
         "popularity_factors" => [
           "love" => false,
           "weather" => true,
@@ -164,7 +146,7 @@ class Database
         "', " .
         $seed_item['rubicon'] .
         ", " .
-        16 .
+        12 .
         ", '" .
         json_encode($seed_item['max_prices']) .
         "', '" .
@@ -205,7 +187,7 @@ class Database
     $level_record_initial = json_encode([
       "round" => 0,
       "sublevel" => 0,
-      "final_round" => 4,
+      "final_round" => 3,
     ]);
 
     $gid = $_SESSION["gid"];

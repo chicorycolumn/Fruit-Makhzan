@@ -207,7 +207,7 @@ function updateCurrentRubicon(){
   let round = level_record['round']
   let sublevel = level_record['sublevel']
 
-  for (let i = 1; i <= 4; i++){
+  for (let i = 1; i <= 3; i++){
       if (round >= i-1 && sublevel >= 1 || round >= i) {
       current_rubicon = i;
     }
@@ -417,11 +417,13 @@ function advance(){
   console.log("ADVANCE FXN: " + level_record['round'] + "~" + level_record['sublevel'])
 
   //Endgame.
-  if (level_record['round'] >= (level_record['final_round']+1)){
+  if (level_record['round'] >= (level_record['final_round']+1) || level_record['sublevel'] == 4){
     $(".dialogHolder").addClass("hidden")
-    allButtonsDisabled(true)
+    $(document).ready(function(){allButtonsDisabled(true)})
     return
   }
+
+  console.log("advance fxn says we're NOT in endgame")
   
   //Round transition.
   if (level_record['sublevel'] == 0){
@@ -799,7 +801,7 @@ function addRowToTable(fruit, shouldPrepend){
                       "<td class='regularTD nameTD'>"+
                         "<div class='invSubtd nameSubtd'>"+
                           "<p class='invData nameData'>"+name+"</p>"+
-                          "<p class='invData hiddenData rubiconData'>"+rubicon+"</p>"+
+                          "<p class='invData rubiconData'>"+rubicon+"</p>"+
                           "<p class='invData hiddenData popFactorsData'>"+JSON.stringify(popularity_factors)+"</p>"+
                           "<p class='invData hiddenData maxPricesData'>"+JSON.stringify(max_prices)+"</p>"+
                         "</div>"+

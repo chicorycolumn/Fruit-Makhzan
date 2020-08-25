@@ -12,7 +12,6 @@ $mainStats = "
       <img id='island2' class='island hidden' src='.././images/island2_small.png'>
       <img id='island3' class='island hidden' src='.././images/island2_small.png'>
       <img id='island4' class='island hidden' src='.././images/island2_small.png'>
-      <img id='island5' class='island hidden' src='.././images/island2_small.png'>
     </div>
 
   </div>
