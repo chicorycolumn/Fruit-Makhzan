@@ -175,11 +175,11 @@ for (let i = 1; i <= level_record['round']; i++){
 }
 
 $(document).ready(function(){
-  console.log("READY: " + level_record['round'] + "~" + level_record['sublevel'])
+  // console.log("READY: " + level_record['round'] + "~" + level_record['sublevel'])
   for (let key in level_record){
     let days = parseInt($("#daysStat").text())
     if (parseInt(key) == days && parseFloat(level_record['sublevel']) < 0.9){
-      console.log("I see we are on day " + key + " which was a rubicon day! It was where we entered " + level_record[key]['round'] + "." + level_record[key]['sublevel'] + " so we should load that somehow.")
+      // console.log("I see we are on day " + key + " which was a rubicon day! It was where we entered " + level_record[key]['round'] + "." + level_record[key]['sublevel'] + " so we should load that somehow.")
       allButtonsDisabled(true)
       $(".dialogHolder").removeClass("hidden")
       $(".dialogHolder").find(".dialogBoxText").text(messageRef[level_record[key]['sublevel']])
@@ -195,7 +195,7 @@ $(document).ready(function(){
 })
 
 function showCreateFruitForm(){
-  console.log("showCreateFruitForm fxn")
+  // console.log("showCreateFruitForm fxn")
   $(".dialogHolder").removeClass("hidden")
   $(".dialogHolder").find(".dialogBoxText").html(createFruitForm) 
       $(".factorSelect").each(function(){$(this).bind("contextmenu",function(e){
@@ -212,21 +212,6 @@ function updateCurrentRubicon(){
       current_rubicon = i;
     }
   }
-
-  // if (round >= 0 && sublevel >= 1 || round >= 1) {
-  //   current_rubicon = 1;
-  // }
-  // if (round >= 1 && sublevel >= 1 || round >= 2) {
-  //   current_rubicon = 2;
-  // }
-  // if (round >= 2 && sublevel >= 1 || round >= 3) {
-  //   current_rubicon = 3;
-  // }
-  // if (round >= 3 && sublevel >= 1 || round >= 4) {
-  //   current_rubicon = 4;
-  // }
-
-  console.log("gonna call fillInvTable fxn from updateCurrentRubicon fxn")
   
   revealSpecificRows()
 
@@ -325,7 +310,7 @@ updateGameStats( //**************** */
 )
 
 function newDay() {
-  console.log("NEWDAY FXN: " + level_record['round'] + "~" + level_record['sublevel'])
+  // console.log("NEWDAY FXN: " + level_record['round'] + "~" + level_record['sublevel'])
 
   let incipient_sales = calculateSales();
   let day_profit = Object.values(incipient_sales).reduce(
@@ -348,7 +333,6 @@ function newDay() {
 
   // console.log({days, money, new_money_stat, incipient_sales, day_profit, data_object })
 
-  fillQuantityYesterday(incipient_sales); //Moves current quantities to the qy column.
   updateGamesTableNewDay(day_profit, data_object); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
   updateInventoryTable(incipient_sales); //Reduces quantities by sold amounts.
 
@@ -368,7 +352,7 @@ function newDay() {
 
 function incrementSublevel(messageRef, sublevel){
 
-  console.log("incrementSublevel fxn with params:", {messageRef, sublevel})
+  // console.log("incrementSublevel fxn with params:", {messageRef, sublevel})
 
   if (sublevel < 0.9){
     level_record['round']++
@@ -414,7 +398,7 @@ function showIsland(num){
 
 function advance(){ 
 
-  console.log("ADVANCE FXN: " + level_record['round'] + "~" + level_record['sublevel'])
+  // console.log("ADVANCE FXN: " + level_record['round'] + "~" + level_record['sublevel'])
 
   //Endgame.
   if (level_record['round'] >= (level_record['final_round']+1) || level_record['sublevel'] == 4){
@@ -423,7 +407,7 @@ function advance(){
     return
   }
 
-  console.log("advance fxn says we're NOT in endgame")
+  // console.log("advance fxn says we're NOT in endgame")
   
   //Round transition.
   if (level_record['sublevel'] == 0){
@@ -463,7 +447,7 @@ function advance(){
 }
 
 function submitNewFruit(majorPopJQ, minorPopJQ, nameInput){
-  console.log("SUBMIT FXN: " + level_record['round'] + "~" + level_record['sublevel'])
+  // console.log("SUBMIT FXN: " + level_record['round'] + "~" + level_record['sublevel'])
 
   let newFruitPopFactors = {}
 
@@ -484,7 +468,7 @@ function submitNewFruit(majorPopJQ, minorPopJQ, nameInput){
 
 function addFruit(name, popularity_factors, max_prices) {
 
-  console.log("ADDFRUIT FXN: " + level_record['round'] + "~" + level_record['sublevel'])
+  // console.log("ADDFRUIT FXN: " + level_record['round'] + "~" + level_record['sublevel'])
 
   $.ajax({
     type: "GET",
@@ -492,9 +476,9 @@ function addFruit(name, popularity_factors, max_prices) {
     dataType: "json",
     data: {
       table_name: "<?php echo $inv_table_name; ?>",
-      name: name,
-      popularity_factors: popularity_factors,
-      max_prices: max_prices
+      name,
+      popularity_factors,
+      max_prices
     },
     error: function (result) {
       console.log("There was an error that occurred immediately in $.ajax request.", result, result.responseText);
@@ -518,11 +502,11 @@ function addFruit(name, popularity_factors, max_prices) {
 }
 
 function resetToNewRound(){
-  console.log("RESET FXN: " + level_record['round'] + "~" + level_record['sublevel'])
+  // console.log("RESET FXN: " + level_record['round'] + "~" + level_record['sublevel'])
   
-  updateGamesTable(null, 100)   //Reset money_stat to 100, in db and session. 
+  updateGamesTable(null, 100) 
 
-  $.ajax({ //Reset all quantities to 0, in db, and load table again from that
+  $.ajax({
     type: "GET",
     url: "../api/fruit/new_round.php",
     dataType: "json",
@@ -549,20 +533,6 @@ function resetToNewRound(){
   });
 }
 
-function fillQuantityYesterday(incipient_sales) {
-  $("table#inventory tbody tr").each(function () {
-    let row = $(this)
-    
-    let qy1 = row.find(".qy1")
-    let qy2 = row.find(".qy2")
-    let qy3 = row.find(".qy3")
-
-    qy3.text(qy2.text())
-    qy2.text(qy1.text())
-    qy1.text(incipient_sales[row.find(".nameData").text()]['sales_quantity'] || 0)
-  });
-}
-
 function updateGamesTableNewDay(profit, data_object) {
   
     $.ajax({
@@ -573,9 +543,9 @@ function updateGamesTableNewDay(profit, data_object) {
         table_name: "games",
         identifying_column: "game_id",
         identifying_data: `<?php echo $_SESSION['gid']; ?>`,
-        profit: profit,
+        profit,
         json_data_object: data_object, //week_record
-        level_record: level_record
+        level_record
       },
       error: function (result) {
         console.log("A kind of error which occurred immediately in $.ajax request.", result, result.responseText);
@@ -630,8 +600,8 @@ update_data = {
         table_name: "games",
         identifying_column: "game_id",
         identifying_data: `<?php echo $_SESSION['gid']; ?>`,
-        acronym: acronym,
-        update_data: update_data,
+        acronym,
+        update_data,
         should_update_session: true,
       },
       error: function (result) {
@@ -716,7 +686,7 @@ function makeSparkly(row){
 }
 
 function fillInvTable(shouldWipe, name) {
-  console.log("fillInvTable is called, with name as " + name);
+  // console.log("fillInvTable is called, with name as " + name);
 
   if (shouldWipe) {
     $("#inventory tbody tr").remove();
@@ -768,7 +738,7 @@ function fillInvTable(shouldWipe, name) {
 
 
 function addRowToTable(fruit, shouldPrepend){
-  console.log("addRowToTable fxn")
+  // console.log("addRowToTable fxn")
   let response = "";
           let {
             id,
@@ -1031,7 +1001,7 @@ function submitSellingPrice(formattedName){
       url: "../api/fruit/update.php",
       dataType: "json",
       data: {
-        name: name,
+        name,
         table_name: "<?php echo $inv_table_name; ?>",
         identifying_column: "name",
         identifying_data: name,
@@ -1102,7 +1072,7 @@ function restockFruit(formattedName) {
   setAmount(formattedName, "restock", "", requested_amount);
 
   if (putative_cost > money) {
-    console.log("insufficient funds")
+    alert("Insufficient funds!")
     return
   } else {
     $.ajax({
@@ -1110,7 +1080,7 @@ function restockFruit(formattedName) {
       url: "../api/fruit/restock.php",
       dataType: "json",
       data: {
-        name: name,
+        name,
         table_name: "<?php echo $inv_table_name; ?>",
         increment: requested_amount,
       },
@@ -1157,6 +1127,12 @@ function calculateSales() {
   $("table#inventory tbody tr").each(function () {
     let row = $(this);
     let name = row.find(".nameData").text();
+
+    if (row.hasClass("hidden")){
+      console.log(name + " is hidden.")
+      return
+    }
+
     let quantity = parseInt(row.find(".quantityData").text());
     let selling_price = parseInt(
       row.find(".sellingPriceData").text()
@@ -1188,7 +1164,14 @@ function calculateSales() {
       sales_quantity = quantity;
     }
 
-    let profit = sales_quantity * selling_price;
+    // console.log(name + " has unrounded sales quantity " + sales_quantity)
+    sales_quantity = Math.round(sales_quantity)
+    // console.log(name + " sales quantity ROUNDED TO " + sales_quantity)
+    
+    let profit = Math.round(sales_quantity * selling_price);
+    // console.log(name + " has unrounded profit " + profit)
+    profit = Math.round(profit);
+    // console.log(name + " profit ROUNDED TO " + profit)
 
     incipient_sales[name] = { sales_quantity, profit };
   });
@@ -1202,12 +1185,9 @@ function getSalesSubstrates(popularity_factors, max_prices, trend_calculates, na
   let popularity = Math.ceil((factor1 * 3 + factor2) / 4);
 
   let range = max_prices['High'] - max_prices['Low']
-  let fraction_of_price_range = (Math.floor((popularity-1)/20)/4)*range
-  let max_buying_price = max_prices['Low'] + fraction_of_price_range
+  let fraction_of_price_range = Math.round((Math.floor((popularity-1)/20)/4)*range)
+  let max_buying_price = Math.round(max_prices['Low'] + fraction_of_price_range)
   let restock_price = Math.ceil(0.8 * max_buying_price);
-
-  if (name){console.log("***" + name, {popularity_factors, max_prices, popularity, range, fraction_of_price_range, max_buying_price, restock_price})}
-  else{console.log("***", {popularity_factors, max_prices, popularity, range, fraction_of_price_range, max_buying_price, restock_price})}
 
   return { popularity, max_buying_price, restock_price };
 }
@@ -1251,6 +1231,11 @@ function updateSalesSubstratesInDisplayedTable() {
   $("table#inventory tbody tr").each(function () {
     let row = $(this)
     let name = row.find(".nameData").text();
+
+    if (row.hasClass("hidden")){
+      console.log(name + " is hidden.")
+      return
+    }
 
     let max_prices = integeriseObjectValues(JSON.parse(row.find(".maxPricesData").text()))
     let popularity_factors = JSON.parse(row.find(".popFactorsData").text())
@@ -1296,14 +1281,6 @@ function getPopularityFactor(pop_factor_names, i, trend_calculates) {
 }
 
 function printDevData1(){
-  // console.log("LEVEL RECORD FROM PHP:")
-  // console.log(JSON.parse(`
-  // <
-  // ?php echo $_SESSION['level_record']; 
-  // ?
-  // >`))
-  // console.log(" ")
-
   console.log("OLD SESSION FROM PHP:");
   console.log(`<?php print_r($_SESSION); ?>`);
   console.log(" ")
@@ -1387,11 +1364,11 @@ function allButtonsDisabled(toggle) {
 
   $(document).ready(function(){
       if (toggle) {
-    console.log("GONNA DISABLE ALL BUTTONS");
+    // console.log("GONNA DISABLE ALL BUTTONS");
       $("button").attr("disabled", true)
    
   } else {
-    console.log("GONNA enable ALL BUTTONS");
+    // console.log("GONNA enable ALL BUTTONS");
    
       $("button").removeAttr("disabled")
   
