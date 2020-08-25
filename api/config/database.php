@@ -106,36 +106,18 @@ class Database
         ],
       ],
       [
-        "name" => "Orange", //x5.9
+        "name" => "Pistachio", //x6.0
         "rubicon" => 0,
-        "max_prices" => ["Low" => 10, "High" => 59],
-        "popularity_factors" => [
-          "conformity" => true,
-          "love" => true,
-        ],
-      ],
-      [
-        "name" => "Pistachio", //x6.1
-        "rubicon" => 0,
-        "max_prices" => ["Low" => 20, "High" => 122],
+        "max_prices" => ["Low" => 10, "High" => 60],
         "popularity_factors" => [
           "weather" => false,
           "politics" => true,
         ],
       ],
       [
-        "name" => "Rare Melon", //x8
+        "name" => "Albino Almond", //x10
         "rubicon" => 1,
-        "max_prices" => ["Low" => 30, "High" => 240],
-        "popularity_factors" => [
-          "politics" => true,
-          "decadence" => true,
-        ],
-      ],
-      [
-        "name" => "Albino Almond", //x11
-        "rubicon" => 2,
-        "max_prices" => ["Low" => 60, "High" => 660],
+        "max_prices" => ["Low" => 57, "High" => 570],
         "popularity_factors" => [
           "conformity" => true,
           "weather" => true,
@@ -143,7 +125,7 @@ class Database
       ],
       [
         "name" => "Flammable Walnut", //x15
-        "rubicon" => 3,
+        "rubicon" => 2,
         "max_prices" => ["Low" => 100, "High" => 1500],
         "popularity_factors" => [
           "politics" => false,
@@ -152,7 +134,7 @@ class Database
       ],
       [
         "name" => "Enchanted Pomegranate", //x20
-        "rubicon" => 4,
+        "rubicon" => 3,
         "max_prices" => ["Low" => 150, "High" => 3000],
         "popularity_factors" => [
           "decadence" => true,
@@ -161,7 +143,7 @@ class Database
       ],
       [
         "name" => "The Perfect Date", //x25
-        "rubicon" => 5,
+        "rubicon" => 4,
         "max_prices" => ["Low" => 200, "High" => 5000],
         "popularity_factors" => [
           "love" => false,

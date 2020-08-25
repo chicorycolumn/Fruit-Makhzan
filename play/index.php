@@ -158,7 +158,7 @@ let createFruitForm ='<form class="createFruitForm">' +
 
 let day_costs = 0;
 let week_record = {}
-const messageRef = {1: "Wahad! You reached sublevel 1!", 2: "Nayn! You reached sublevel 2!", 0: "You're a double billionaire! As a reward for all your hard work, you buy an island to relax on.", 4: "You won the whole game! You own five islands and are now king."}
+const messageRef = {1: "Wahad! You reached sublevel 1!", 0: "You're a double billionaire! As a reward for all your hard work, you buy an island to relax on.", 4: "You won the whole game! You own five islands and are now king."}
 let level_record
 
 level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`)
@@ -207,21 +207,24 @@ function updateCurrentRubicon(){
   let round = level_record['round']
   let sublevel = level_record['sublevel']
 
-  if (round >= 0 && sublevel >= 1) {
-  current_rubicon = 1;
+  for (let i = 1; i <= 4; i++){
+      if (round >= i-1 && sublevel >= 1 || round >= i) {
+      current_rubicon = i;
+    }
   }
-  if (round >= 0 && sublevel >= 2 || round >= 1) {
-    current_rubicon = 2;
-  }
-  if (round >= 1 && sublevel >= 2 || round >= 2) {
-    current_rubicon = 3;
-  }
-  if (round >= 2 && sublevel >= 2 || round >= 3) {
-    current_rubicon = 4;
-  }
-  if (round >= 3 && sublevel >= 2 || round >= 4) {
-    current_rubicon = 5;
-  }
+
+  // if (round >= 0 && sublevel >= 1 || round >= 1) {
+  //   current_rubicon = 1;
+  // }
+  // if (round >= 1 && sublevel >= 1 || round >= 2) {
+  //   current_rubicon = 2;
+  // }
+  // if (round >= 2 && sublevel >= 1 || round >= 3) {
+  //   current_rubicon = 3;
+  // }
+  // if (round >= 3 && sublevel >= 1 || round >= 4) {
+  //   current_rubicon = 4;
+  // }
 
   console.log("gonna call fillInvTable fxn from updateCurrentRubicon fxn")
   
@@ -338,8 +341,8 @@ function newDay() {
 
   let new_money_stat = money + day_profit
 
-  const rubicon = {1: 101, 2: 200, 3: 300}
-  // const rubicon = {1: 2000, 2: 2000000, 3: 2000000000}
+  const rubicon = {1: 150, 3: 300}
+  // const rubicon = {1: 20000, 3: 2000000000}
   
   let data_object = {"overall_sales_history": week_record}
 
@@ -354,16 +357,8 @@ function newDay() {
   if (level_record['round'] < level_record['final_round']){
     if (new_money_stat >= rubicon[3]){
       incrementSublevel(messageRef, 0)
-    } else if (parseFloat(level_record['sublevel']) < 1){
-      if (new_money_stat >= rubicon[2]){
-        incrementSublevel(messageRef, 2)
-      } else if (new_money_stat >= rubicon[1]){
+    } else if (parseFloat(level_record['sublevel']) < 1 && new_money_stat >= rubicon[1]){
         incrementSublevel(messageRef, 1)
-      }
-    } else if (level_record['sublevel'] == 1){
-      if (new_money_stat >= rubicon[2]){
-        incrementSublevel(messageRef, 2) 
-      }
     }
   } else if (level_record['round'] >= level_record['final_round'] && new_money_stat >= rubicon[3]){
     incrementSublevel(messageRef, 4)
@@ -424,6 +419,7 @@ function advance(){
   //Endgame.
   if (level_record['round'] >= (level_record['final_round']+1)){
     $(".dialogHolder").addClass("hidden")
+    allButtonsDisabled(true)
     return
   }
   
