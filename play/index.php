@@ -770,7 +770,6 @@ function addRowToTable(fruit, shouldPrepend){
   // console.log("addRowToTable fxn")
   let response = "";
           let {
-            id,
             name,
             quantity,
             selling_price,

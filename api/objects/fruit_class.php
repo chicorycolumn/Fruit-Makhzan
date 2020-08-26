@@ -8,7 +8,6 @@ class Fruit
   private $conn;
   private $inv_table_name;
 
-  public $id;
   public $name;
   public $quantity;
   public $selling_price;
@@ -58,7 +57,7 @@ class Fruit
   ) {
     if (substr($table_name, -3) == "inv" && !$get_full) {
       $columns =
-        "`id`, `rubicon`, `name`, `quantity`, `selling_price`, `max_prices`, `popularity_factors`";
+        "`rubicon`, `name`, `quantity`, `selling_price`, `max_prices`, `popularity_factors`";
     } else {
       $columns = "*";
     }
@@ -221,7 +220,7 @@ class Fruit
 
   function delete_self($table_name)
   {
-    $query = "DELETE FROM " . $table_name . " WHERE id=?";
+    $query = "DELETE FROM " . $table_name . " WHERE name=?";
 
     if (!($stmt = $this->conn->prepare($query))) {
       return [
@@ -231,7 +230,7 @@ class Fruit
       ];
     }
 
-    $stmt->bind_param("i", $this->id);
+    $stmt->bind_param("s", $this->name);
 
     if (!$stmt->execute()) {
       return [

@@ -243,7 +243,6 @@ function build_table_array($table, $result, $get_full)
   while ($row = $result->fetch_assoc()) {
     if (substr($table, -3) == "inv") {
       $item = [
-        "id" => $row["id"],
         "rubicon" => $row["rubicon"],
         "name" => $row["name"],
         "quantity" => $row["quantity"],
@@ -389,8 +388,8 @@ function update_row(
   $connection,
   $change_column,
   $change_data,
-  $id_column,
-  $id_data,
+  $identifying_column,
+  $identifying_data,
   $table_name,
   $acronym
 ) {
@@ -400,7 +399,7 @@ function update_row(
     " SET " .
     $change_column .
     " = ? WHERE " .
-    $id_column .
+    $identifying_column .
     " = ?";
 
   if (!($stmt = $connection->prepare($query))) {
@@ -411,7 +410,7 @@ function update_row(
     ];
   }
 
-  $stmt->bind_param($acronym, $change_data, $id_data);
+  $stmt->bind_param($acronym, $change_data, $identifying_data);
 
   if (!$stmt->execute()) {
     return [

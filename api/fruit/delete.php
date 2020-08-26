@@ -7,7 +7,7 @@ $database = new Database();
 $db = $database->getConnection();
 
 $fruit = new Fruit($db);
-$fruit->id = $_GET['id'];
+$fruit->name = $_GET['name'];
 $table_name = $_GET['table_name'];
 
 function go($db, $fruit, $table_name)

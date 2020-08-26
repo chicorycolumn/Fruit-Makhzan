@@ -83,9 +83,8 @@ class Database
 
     $create_table_querystring =
       " (
-      `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
       `rubicon` float(11,1) DEFAULT -1,
-      `name` varchar(100) NOT NULL,
+      `name` varchar(100) PRIMARY KEY,
       `quantity` int(11) DEFAULT 0,
       `selling_price` int(11) DEFAULT 0,
       `max_prices` json DEFAULT '" .
