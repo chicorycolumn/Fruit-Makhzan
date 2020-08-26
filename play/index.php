@@ -50,6 +50,8 @@ include 'content/mainStats.php';
 include 'content/mainBulletin.php';
 include 'content/invTable.php';
 include 'content/mainGraphs.php';
+include 'functions/f1.php';
+include 'functions/f2.php';
 
 if ($show_dev_data) {
   $_SESSION['show_dev_data'] = 1;
@@ -314,6 +316,7 @@ updateGameStats( //**************** */
 
 function newDay() {
   // console.log("NEWDAY FXN: " + level_record['round'] + "~" + level_record['sublevel'])
+  sayHowdy()
 
   let incipient_sales = calculateSales();
   let day_profit = Object.values(incipient_sales).reduce(
