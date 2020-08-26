@@ -162,13 +162,15 @@ let day_costs = 0;
 let week_record = {};
 const messageRef = {
   1: "Wahad! You reached sublevel 1!",
-  0: "You're a double billionaire! As a reward for all your hard work, you buy an island to relax on.",
+  0: "You're a billionaire! As a reward for all your hard work, you buy an island to relax on.",
   4: "You won the whole game! You own five islands and are now king.",
 };
 let level_record;
 
 level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`);
 
+// const rubicon = { 1: 150, 3: 300 };
+const rubicons = {1: 10000, 3: 1000000000}
 let current_rubicon = 0;
 updateCurrentRubicon();
 
@@ -314,9 +316,25 @@ updateGameStats( //**************** */
   null
 )
 
+function digitGrouping(num, ungroup){
+
+  if (num == ""){
+    return num
+  }
+
+  if (ungroup){
+    return parseInt(num.replace(/\s/g, ""))
+  }
+
+  num = num.toString()
+	if (num.length <= 3){return num}else{
+	return digitGrouping(num.slice(0, num.length-3)) + " " + num.slice(-3)
+	}
+}
+
 function newDay() {
   // console.log("NEWDAY FXN: " + level_record['round'] + "~" + level_record['sublevel'])
-  sayHowdy()
+  // sayHowdy()
 
   let incipient_sales = calculateSales();
   let day_profit = Object.values(incipient_sales).reduce(
@@ -325,7 +343,7 @@ function newDay() {
   );
 
   let days = parseInt($("#daysStat").text());
-  let money = parseInt($("#moneyStat").text());
+  let money = digitGrouping($("#moneyStat").text(), true);
 
   if (days % 7 == 0) {
     week_record = {};
@@ -333,9 +351,6 @@ function newDay() {
   week_record[days + 1] = { profit: day_profit, costs: day_costs };
 
   let new_money_stat = money + day_profit;
-
-  const rubicon = { 1: 150, 3: 300 };
-  // const rubicon = {1: 20000, 3: 2000000000}
 
   let data_object = { overall_sales_history: week_record };
 
@@ -347,17 +362,17 @@ function newDay() {
   day_costs = 0;
 
   if (level_record["round"] < level_record["final_round"]) {
-    if (new_money_stat >= rubicon[3]) {
+    if (new_money_stat >= rubicons[3]) {
       incrementSublevel(messageRef, 0);
     } else if (
       parseFloat(level_record["sublevel"]) < 1 &&
-      new_money_stat >= rubicon[1]
+      new_money_stat >= rubicons[1]
     ) {
       incrementSublevel(messageRef, 1);
     }
   } else if (
     level_record["round"] >= level_record["final_round"] &&
-    new_money_stat >= rubicon[3]
+    new_money_stat >= rubicons[3]
   ) {
     incrementSublevel(messageRef, 4);
   }
@@ -432,7 +447,7 @@ function advance() {
     $(".dialogHolder")
       .find(".dialogBoxText")
       .text(
-        "With the remaining billion dinar, you pay a magical fruit laboratory to create a brand new fruit of your choosing!"
+        "With the remaining fortune, you pay a magical fruit laboratory to create a brand new fruit of your choosing!"
       );
     level_record["sublevel"] = 0.1;
     showIsland();
@@ -570,6 +585,9 @@ function resetToNewRound() {
 }
 
 function updateGamesTableNewDay(profit, data_object) {
+
+  // if (parseInt(profit) + digitGrouping($("#moneyStat").text(), true) > rubicons[3])
+
   $.ajax({
     type: "GET",
     url: "../api/fruit/new_day_supertable.php",
@@ -592,6 +610,7 @@ function updateGamesTableNewDay(profit, data_object) {
     success: function (result) {
       if (result["status"]) {
         let { money_stat, days_stat, trend_calculates } = result["update_data"];
+        console.log("I'm gonna call updateGameStat with ", money_stat)
         updateGameStats(money_stat, days_stat, trend_calculates);
       } else {
         console.log(result["message"], result["error"], result);
@@ -615,7 +634,7 @@ function updateGamesTable(money_crement, money_absolute, new_level_record) {
     if (money_absolute) {
       new_money_stat = money_absolute;
     } else {
-      new_money_stat = parseInt($("#moneyStat").text()) - money_crement;
+      new_money_stat = digitGrouping($("#moneyStat").text(), true) - money_crement;
     }
 
     acronym = "is";
@@ -645,8 +664,9 @@ function updateGamesTable(money_crement, money_absolute, new_level_record) {
     },
     success: function (result) {
       if (result["status"]) {
-        let { money_stat } = result["update_data"];
-        updateGameStats(money_stat);
+        
+        if (!new_level_record){ updateGameStats(result["update_data"]['money_stat']);}
+       
       } else {
         console.log(result["message"], result["error"], result);
       }
@@ -682,11 +702,19 @@ function updateInventoryTable(incipient_sales) {
         names.forEach((name) => {
           let formattedName = name.replace(/\s/g, "_");
           let row = $("table#inventory tbody tr#" + formattedName);
-          let current_quantity = parseInt(row.find(".quantityData").text());
+          let current_quantity = digitGrouping(row.find(".quantityData").text(), true);
           let new_quantity =
             current_quantity -
             parseInt(result["update_data"][name]["sales_quantity"]);
-          row.find(".quantityData").text(new_quantity);
+
+          let formattedNewQuantity = digitGrouping(new_quantity)
+
+          if (parseInt(formattedNewQuantity) < 0 || (/-/).test(formattedNewQuantity)){
+            console.log("WOAH! the new quantity is negative.")
+            formattedNewQuantity = "0"
+          }
+
+          row.find(".quantityData").text(formattedNewQuantity);
         });
         verifyBuyButtons();
       } else {
@@ -818,7 +846,7 @@ function addRowToTable(fruit, shouldPrepend){
 
                       "<td class='regularTD'>"+
                         "<div class='invSubtd quantitySubtd'>"+
-                          "<p class='invData quantityData noMarginPadding'>"+quantity+"</p>"+
+                          "<p class='invData quantityData noMarginPadding'>"+digitGrouping(quantity)+"</p>"+
                         "</div>"+
                       "</td>"+
                       
@@ -829,14 +857,14 @@ function addRowToTable(fruit, shouldPrepend){
 
                           "<div class='invSubtd sellingPriceSubtd'>"+
                           
-                            "<p class='invData sellingPriceData clickable shown'>"+selling_price+"</p>"+
+                            "<p class='invData sellingPriceData clickable shown'>"+digitGrouping(selling_price)+"</p>"+
                             
                             "<form class='sellingPriceForm noMarginPadding sellingPriceFormHidden' "+
                               "onsubmit=submitSellingPrice(`"+formattedName+"`) "+
                               "onfocusout=changeSellingPrice(false,'"+formattedName+"')>"+
                                 
                               "<textarea class='sellingPriceInput noMarginPadding' "+
-                              "onkeypress='return validateNumbersAndSubmit(event,`"+formattedName+"`,`selling`)' "+
+                              "onkeydown='return validateNumbersAndSubmit(event,`"+formattedName+"`,`selling`)' "+
                               "maxlength=10 maxlength=10 type='text'>"+"</textarea>"+
                               
                               "<button type='submit' class='mediumButtonKind sellingPriceButton noMarginPadding' "+
@@ -853,7 +881,7 @@ function addRowToTable(fruit, shouldPrepend){
                       "<td class='regularTD'>"+
                         "<div class='invSubtd restockPriceSubtd'>"+
                           "<div class='popHolder'>"+
-                            "<p class='invData restockPriceData'>"+restock_price+"</p>"+
+                            "<p class='invData restockPriceData'>"+digitGrouping(restock_price)+"</p>"+
                             "<div class='popularityCircleSpan'></div>"+
                           "</div>"+
                         "</div>"+
@@ -932,10 +960,10 @@ function verifyBuyButtons() {
     $(".buyButton").each(function () {
       let row = $(this).parents("tr");
       let name = row.find(".nameData").text();
-      let restockPrice = parseInt(row.find(".restockPriceData").text());
-      let restockQuantity = parseInt(row.find(".amountInput_restock").val());
+      let restockPrice = digitGrouping(row.find(".restockPriceData").text(), true);
+      let restockQuantity = digitGrouping(row.find(".amountInput_restock").val(), true);
       let maxBuyableQuantity = Math.floor(
-        parseInt($("#moneyStat").text()) / restockPrice
+        digitGrouping($("#moneyStat").text(), true) / restockPrice
       );
       $(this).prop(
         "disabled",
@@ -951,11 +979,11 @@ function setAmount(formattedName, operation, modifier, forced_amount) {
   let row = $("table#inventory tbody tr#" + formattedName);
 
   let class_name = ".amountInput" + "_" + operation;
-  let quantity = parseInt(row.find(".quantityData").text());
-  let restock_amount = parseInt(row.find(".amountInput_restock").val());
-  let restock_price = parseInt(row.find(".restockPriceData").text());
+  let quantity = digitGrouping(row.find(".quantityData").text(), true);
+  let restock_amount = digitGrouping(row.find(".amountInput_restock").val(), true);
+  let restock_price = digitGrouping(row.find(".restockPriceData").text(), true);
   let max_buyable_quantity = Math.floor(
-    parseInt($("#moneyStat").text()) / restock_price
+    digitGrouping($("#moneyStat").text(), true) / restock_price
   );
   let key = operation + "_amount";
   let reset_value = restock_amount;
@@ -981,12 +1009,14 @@ function setAmount(formattedName, operation, modifier, forced_amount) {
     reset_value = restock_amount - 1 || 1;
   }
 
-  row.find(class_name).val(reset_value);
+  row.find(class_name).val(digitGrouping(reset_value));
 
   verifyBuyButtons();
 }
 
 function validateNumbersAndSubmit(e, formattedName, operation) {
+  
+
   verifyBuyButtons();
 
   let k = e.keyCode;
@@ -1000,11 +1030,26 @@ function validateNumbersAndSubmit(e, formattedName, operation) {
     }
   }
 
-  function checkKey(key) {
-    return key == 13 || (key >= 48 && key <= 57);
+  if ((k >= 48 && k <= 57) || (w >= 48 && w <= 57)){
+
+    let keyValue
+
+    if (k >= 48 && k <= 57){keyValue = String.fromCharCode(k)}else if (w >= 48 && w <= 57){keyValue = string.fromCharCode(w)}
+
+    e.target.value = digitGrouping(digitGrouping(e.target.value, true) + keyValue)
   }
 
-  return checkKey(k) || checkKey(w);
+  if ((k == 8 || k == 46) || (w == 8 || w == 46)){
+    e.target.value = digitGrouping((digitGrouping(e.target.value, true)).toString().slice(0, -1))
+  }
+
+  return false;
+}
+
+function inputDigitGrouping(e){
+  setTimeout(() => {
+    e.target.value = digitGrouping(digitGrouping(e.target.value, true))
+  }, 1);
 }
 
 function submitSellingPrice(formattedName) {
@@ -1012,18 +1057,18 @@ function submitSellingPrice(formattedName) {
 
   name = formattedName.replace(/_/g, " ");
   let row = $("table#inventory tbody tr#" + formattedName);
-  let span = row.find(".sellingPriceData");
-  let span_text = span.text();
+  let sellingPriceData = row.find(".sellingPriceData");
+  let sellingPriceData_text = digitGrouping(sellingPriceData.text(), true);
   let form = row.find(".sellingPriceForm");
   let input = row.find(".sellingPriceInput");
   let button = row.find(".sellingPriceButton");
 
-  let putative_price = input.val();
+  let putative_price = (digitGrouping(input.val(), true)).toString();
 
   if (!putative_price || !parseInt(putative_price)) {
     input.val("");
     form.addClass("sellingPriceFormHidden");
-    span.removeClass("hidden");
+    sellingPriceData.removeClass("hidden");
     return;
   }
 
@@ -1054,8 +1099,8 @@ function submitSellingPrice(formattedName) {
         if (result["status"]) {
           input.val("");
           form.addClass("sellingPriceFormHidden");
-          span.removeClass("hidden");
-          span.text(result["update_data"]["selling_price"]);
+          sellingPriceData.removeClass("hidden");
+          sellingPriceData.text(digitGrouping(result["update_data"]["selling_price"]));
         } else {
           console.log(result["message"], result["error"], result);
         }
@@ -1068,42 +1113,43 @@ function changeSellingPrice(showInput, formattedName) {
   name = formattedName.replace(/_/g, " ");
 
   let row = $("table#inventory tbody tr#" + formattedName);
-  let span = row.find(".sellingPriceData");
-  let span_text = span.text();
+  let sellingPriceData = row.find(".sellingPriceData");
+  let sellingPriceData_text = digitGrouping(sellingPriceData.text(), true);
   let form = row.find(".sellingPriceForm");
   let input = row.find(".sellingPriceInput");
   let button = row.find(".sellingPriceButton");
 
   if (!showInput) {
     setTimeout(() => {
-      span.removeClass("hidden");
+      sellingPriceData.removeClass("hidden");
       form.addClass("sellingPriceFormHidden");
     }, 200);
   }
 
   if (showInput && !form.find(":focus").length) {
-    span.addClass("hidden");
+    sellingPriceData.addClass("hidden");
     form.removeClass("sellingPriceFormHidden");
-    input.val(span_text);
+    input.val(digitGrouping(sellingPriceData_text));
     input.focus();
     input.select();
   }
 }
+
 
 function restockFruit(formattedName) {
   name = formattedName.replace(/_/g, " ");
 
   let row = $("table#inventory tbody tr#" + formattedName);
 
-  let requested_amount = parseInt(row.find(".amountInput_restock").val());
+  let requested_amount = digitGrouping(row.find(".amountInput_restock").val(), true);
 
   if (!requested_amount) {
     return;
   }
 
-  let restock_price = parseInt(row.find(".restockPriceData").text());
+  let restock_price = digitGrouping(row.find(".restockPriceData").text(), true);
   let putative_cost = requested_amount * restock_price;
-  let money = parseInt($("#moneyStat").text());
+  let money = digitGrouping($("#moneyStat").text(), true);
 
   setAmount(formattedName, "restock", "", requested_amount);
 
@@ -1133,7 +1179,7 @@ function restockFruit(formattedName) {
           let fruit = result["data"][0];
 
           let row = $("table#inventory tbody tr#" + formattedName);
-          row.find(".quantityData").text(fruit["quantity"]);
+          row.find(".quantityData").text(digitGrouping(fruit["quantity"]));
 
           let maxPossibleToBuy = Math.floor(
             (money - putative_cost) / restock_price
@@ -1142,7 +1188,7 @@ function restockFruit(formattedName) {
           if (requested_amount > maxPossibleToBuy) {
             let reset_value = maxPossibleToBuy || 1;
 
-            row.find(".amountInput_restock").val(reset_value);
+            row.find(".amountInput_restock").val(digitGrouping(reset_value));
           }
           updateGamesTable(putative_cost); //Send off the db to change money stat.
         } else {
@@ -1171,8 +1217,8 @@ function calculateSales() {
       return;
     }
 
-    let quantity = parseInt(row.find(".quantityData").text());
-    let selling_price = parseInt(row.find(".sellingPriceData").text());
+    let quantity = digitGrouping(row.find(".quantityData").text(), true);
+    let selling_price = digitGrouping(row.find(".sellingPriceData").text(), true);
 
     let max_prices = integeriseObjectValues(
       JSON.parse(row.find(".maxPricesData").text())
@@ -1192,15 +1238,21 @@ function calculateSales() {
 
     let sales_quantity = Math.ceil(sales_percentage * quantity);
 
+    let copy_of_sales_quantity_before_plusminus = sales_quantity
+
     let plusOrMinusFive = Math.round(Math.random() * 10) - 5;
 
-    sales_quantity += (plusOrMinusFive / 100) * quantity;
+    sales_quantity += Math.round((plusOrMinusFive / 100) * quantity);
 
     if (sales_quantity < 0) {
+      // console.log(">>restablish sales_quantity to zero (min).")
       sales_quantity = 0;
     } else if (sales_quantity > quantity) {
+      // console.log(">>restablish sales_quantity to quantity (max).")
       sales_quantity = quantity;
     }
+
+    // if(name == "Grapes"){console.log({name, quantity, selling_price, sales_quantity, copy_of_sales_quantity_before_plusminus})}
 
     // console.log(name + " has unrounded sales quantity " + sales_quantity)
     sales_quantity = Math.round(sales_quantity);
@@ -1239,28 +1291,8 @@ function getSalesSubstrates(
   return { popularity, max_buying_price, restock_price };
 }
 
-function getColumnIndexes() {
-  function getIndex(match) {
-    return $("table#inventory thead tr th")
-      .filter(function () {
-        return $(this).text().toLowerCase() == match;
-      })
-      .index();
-  }
-
-  let columnIndexRef = {};
-
-  let labels = ["quantity", "selling price", "name", "restock price"];
-
-  labels.forEach((label) => {
-    columnIndexRef[label] = getIndex(label);
-  });
-
-  return columnIndexRef;
-}
-
 function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates) {
-  $("#moneyStat").text(new_money_stat);
+  $("#moneyStat").text(digitGrouping(new_money_stat));
 
   if (new_days_stat) {
     $("#daysStat").text(new_days_stat);
@@ -1316,7 +1348,7 @@ function updateSalesSubstratesInDisplayedTable() {
       }
     }
 
-    row.find(".restockPriceData").text(restock_price);
+    row.find(".restockPriceData").text(digitGrouping(restock_price));
   });
 }
 
@@ -1390,22 +1422,22 @@ function bindUsefulJqueriesAfterLoadingDataIntoTable() {
       e.stopPropagation();
     }
 
-    let current_val = parseInt($(this).find("input").val());
+    let current_val = digitGrouping($(this).find("input").val(), true);
     let max_buyable_quantity = Math.floor(
-      parseInt($("#moneyStat").text()) /
-        parseInt($(this).parents("tr").find(".restockPriceData").text())
+      digitGrouping($("#moneyStat").text(), true) /
+      digitGrouping($(this).parents("tr").find(".restockPriceData").text(), true)
     );
 
     if (delta / 120 > 0) {
       current_val < max_buyable_quantity &&
         $(this)
           .find("input")
-          .val(current_val + 1);
+          .val(digitGrouping(current_val + 1));
     } else {
       current_val > 1 &&
         $(this)
           .find("input")
-          .val(current_val - 1);
+          .val(digitGrouping(current_val - 1));
     }
   });
 }

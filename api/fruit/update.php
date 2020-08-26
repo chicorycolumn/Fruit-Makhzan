@@ -70,9 +70,11 @@ function go(
 
     if (array_key_exists($label, $update_data)) {
       $_SESSION[$label] = $update_data[$label];
-      // $result['update_data']['level_record'] = json_decode(
-      //   $result['update_data']['level_record']
-      // );
+      ////recently uncommented this
+      $result['update_data']['level_record'] = json_decode(
+        $result['update_data']['level_record']
+      );
+      ////
     }
   }
 
