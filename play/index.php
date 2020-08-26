@@ -837,7 +837,7 @@ function addRowToTable(fruit, shouldPrepend){
                       "<td class='regularTD nameTD'>"+
                         "<div class='invSubtd nameSubtd'>"+
                           "<p class='invData nameData'>"+name+"</p>"+
-                          "<p class='invData rubiconData'>"+rubicon+"</p>"+
+                          "<p class='invData hiddenData rubiconData'>"+rubicon+"</p>"+
                           "<p class='invData hiddenData popFactorsData'>"+JSON.stringify(popularity_factors)+"</p>"+
                           "<p class='invData hiddenData maxPricesData'>"+JSON.stringify(max_prices)+"</p>"+
                         "</div>"+
@@ -903,23 +903,22 @@ function addRowToTable(fruit, shouldPrepend){
                           "<div class='buttonSuperHolder'>"+
                           printDevDataHTML(popularity, max_buying_price)+
                             
-                            "<div class='buttonSubHolder'>"+
-                              
-                              "<button "+
-                              "class='mediumButtonKind button2 buyButton'"+
-                              "onClick=restockFruit('"+formattedName+"')>Buy"+
-                              "</button>"+            
+                            "<div class='buttonSubHolder'>"+        
                               
                               "<input value=1 "+
                                 "class='amountInput amountInput_restock' "+
                                 "onclick=this.select() "+
-                                "onkeyup='return validateNumbersAndSubmit(event,`"+formattedName+"`,`restock`)' "+
+                                "onkeydown='return validateNumbersAndSubmit(event,`"+formattedName+"`,`restock`)' "+
                                 "onblur=setAmount('"+formattedName+"','restock') "+
                                 "maxlength=10>"+
                             
                             "</div>"+ 
                             
                             "<div class='buttonSubHolder'>"+
+                              "<button "+
+                              "class='mediumButtonKind button2 buyButton'"+
+                              "onClick=restockFruit('"+formattedName+"')>Buy"+
+                              "</button>"+    
                               "<button class='mediumButtonKind button3 maxBuyButton' "+
                                 "onclick=setAmount('"+formattedName+"','restock','max') "+
                               ">MAX</button>"+
@@ -1015,7 +1014,6 @@ function setAmount(formattedName, operation, modifier, forced_amount) {
 }
 
 function validateNumbersAndSubmit(e, formattedName, operation) {
-  
 
   verifyBuyButtons();
 
@@ -1031,6 +1029,8 @@ function validateNumbersAndSubmit(e, formattedName, operation) {
   }
 
   if ((k >= 48 && k <= 57) || (w >= 48 && w <= 57)){
+
+    if (e.target.value.length > 10){return}
 
     let keyValue
 
@@ -1457,6 +1457,12 @@ function printDevDataHTML(popularity, max_buying_price) {
 
 function allButtonsDisabled(toggle) {
   $(document).ready(function () {
+//     // let document = $(document)
+//     let scale = 0.1;
+//     // document.body.style.zoom = 0.1
+// document.body.style.webkitTransform =  scale;    // Chrome, Opera, Safari
+//  document.body.style.msTransform =   scale;       // IE 9
+//  document.body.style.transform = scale;
     if (toggle) {
       // console.log("GONNA DISABLE ALL BUTTONS");
       $("button").attr("disabled", true);

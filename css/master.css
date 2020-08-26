@@ -1,6 +1,8 @@
 :root {
   --bradius1: 15px;
-  --bigBoxWidth: 850px;
+  --bigBoxWidth: 1100px;
+  --cellWidth1: 160px;
+  --tdFontSize1: 20px;
 }
 
 body {
