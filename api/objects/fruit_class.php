@@ -22,7 +22,7 @@ class Fruit
 
   function read($table_name, $get_full)
   {
-    $query = "SELECT * FROM " . $table_name . " ORDER BY id DESC";
+    $query = "SELECT * FROM " . $table_name . " ORDER BY rubicon DESC";
 
     if (!($stmt = $this->conn->prepare($query))) {
       return [
@@ -99,8 +99,13 @@ class Fruit
     ];
   }
 
-  function create_self($table_name, $name, $popularity_factors, $max_prices)
-  {
+  function create_self(
+    $table_name,
+    $name,
+    $popularity_factors,
+    $max_prices,
+    $rubicon
+  ) {
     if (!$this->is_fruit_in_table($table_name, $name)) {
       return [
         "status" => false,
@@ -121,7 +126,7 @@ class Fruit
     $query =
       "INSERT INTO  " .
       $table_name .
-      " ( `name`, `popularity_factors`, `max_prices` ) VALUES (?, ?, ?)";
+      " ( `name`, `popularity_factors`, `max_prices`, `rubicon` ) VALUES (?, ?, ?, ?)";
 
     if (!($stmt = $this->conn->prepare($query))) {
       return [
@@ -131,7 +136,13 @@ class Fruit
       ];
     }
 
-    $stmt->bind_param("sss", $name, $popularity_factors, $max_prices);
+    $stmt->bind_param(
+      "sssd",
+      $name,
+      $popularity_factors,
+      $max_prices,
+      $rubicon
+    );
 
     if (!$stmt->execute()) {
       return [

@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 class Database
 {
-  private $use_clear_db = 1;
+  private $use_clear_db = 0;
 
   private $username = "root";
   private $password = "";
@@ -23,6 +23,30 @@ class Database
       $this->host = "eu-cdbr-west-03.cleardb.net";
       $this->db_name = "heroku_73f57e9b43b49b3";
     }
+  }
+
+  public function makeGamesTable()
+  {
+    include "../../utils/get_gid.php";
+    include "../../utils/table_utils.php";
+
+    $this->connection = mysqli_connect(
+      $this->host,
+      $this->username,
+      $this->password,
+      $this->db_name
+    );
+
+    if (!$this->connection) {
+      echo "Error: Unable to connect to MySQL." . PHP_EOL;
+      echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+      echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+      exit();
+    }
+
+    //1. Check if games table exists.
+
+    //2. Make games tables, if it doesn't exist.
   }
 
   public function startNewGame()
@@ -60,7 +84,7 @@ class Database
     $create_table_querystring =
       " (
       `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      `rubicon` int(11) DEFAULT -1,
+      `rubicon` float(11,1) DEFAULT -1,
       `name` varchar(100) NOT NULL,
       `quantity` int(11) DEFAULT 0,
       `selling_price` int(11) DEFAULT 0,
@@ -89,7 +113,7 @@ class Database
 
       [
         "name" => "Fig", //x5.5
-        "rubicon" => 0,
+        "rubicon" => 0.1,
         "max_prices" => ["Low" => 2, "High" => 11],
         "popularity_factors" => [
           "politics" => true,
@@ -98,7 +122,7 @@ class Database
       ],
       [
         "name" => "Pistachio", //x6.0
-        "rubicon" => 0,
+        "rubicon" => 0.2,
         "max_prices" => ["Low" => 5, "High" => 30],
         "popularity_factors" => [
           "weather" => false,

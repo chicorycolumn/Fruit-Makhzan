@@ -334,8 +334,8 @@ function newDay() {
 
   let new_money_stat = money + day_profit;
 
-  // const rubicon = { 1: 150, 3: 300 };
-  const rubicon = {1: 20000, 3: 2000000000}
+  const rubicon = { 1: 150, 3: 300 };
+  // const rubicon = {1: 20000, 3: 2000000000}
 
   let data_object = { overall_sales_history: week_record };
 
@@ -500,6 +500,8 @@ function submitNewFruit(majorPopJQ, minorPopJQ, nameInput) {
 function addFruit(name, popularity_factors, max_prices) {
   // console.log("ADDFRUIT FXN: " + level_record['round'] + "~" + level_record['sublevel'])
 
+  let rubicon = Math.floor(current_rubicon) + 0.1
+
   $.ajax({
     type: "GET",
     url: "../api/fruit/create.php",
@@ -509,6 +511,7 @@ function addFruit(name, popularity_factors, max_prices) {
       name,
       popularity_factors,
       max_prices,
+      rubicon
     },
     error: function (result) {
       console.log(

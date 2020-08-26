@@ -12,6 +12,7 @@ $fruit->name = $_GET['name'];
 $name = $_GET['name'];
 $popularity_factors = json_encode($_GET['popularity_factors']);
 $max_prices = json_encode($_GET['max_prices']);
+$rubicon = $_GET['rubicon'];
 $table_name = $_GET['table_name'];
 $identifying_column = "name";
 $identifying_data = $_GET['name'];
@@ -25,6 +26,7 @@ function go(
   $name,
   $popularity_factors,
   $max_prices,
+  $rubicon,
   $identifying_column,
   $identifying_data,
   $acronym,
@@ -35,7 +37,8 @@ function go(
       $table_name,
       $name,
       $popularity_factors,
-      $max_prices
+      $max_prices,
+      $rubicon
     ))
   ) {
     return [
@@ -107,6 +110,7 @@ $response = go(
   $name,
   $popularity_factors,
   $max_prices,
+  $rubicon,
   $identifying_column,
   $identifying_data,
   $acronym,
