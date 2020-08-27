@@ -8,11 +8,11 @@ $database = new Database();
 $db = $database->getConnection();
 
 $fruit = new Fruit($db);
-$fruit->name = $_GET['name'];
-$increment = $_GET['increment'];
-$table_name = $_GET['table_name'];
+$fruit->name = $_POST['name'];
+$increment = $_POST['increment'];
+$table_name = $_POST['table_name'];
 $identifying_column = "name";
-$identifying_data = $_GET['name'];
+$identifying_data = $_POST['name'];
 $acronym = "s";
 $get_full = false;
 

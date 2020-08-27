@@ -8,14 +8,14 @@ $database = new Database();
 $db = $database->getConnection();
 
 $fruit = new Fruit($db);
-$fruit->name = $_GET['name'];
-$name = $_GET['name'];
-$popularity_factors = json_encode($_GET['popularity_factors']);
-$max_prices = json_encode($_GET['max_prices']);
-$rubicon = $_GET['rubicon'];
-$table_name = $_GET['table_name'];
+$fruit->name = $_POST['name'];
+$name = $_POST['name'];
+$popularity_factors = json_encode($_POST['popularity_factors']);
+$max_prices = json_encode($_POST['max_prices']);
+$rubicon = $_POST['rubicon'];
+$table_name = $_POST['table_name'];
 $identifying_column = "name";
-$identifying_data = $_GET['name'];
+$identifying_data = $_POST['name'];
 $acronym = "s";
 $get_full = false;
 

@@ -201,7 +201,7 @@ function resetToNewRound() {
   updateGamesTable(null, 100);
 
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: "../api/fruit/new_round.php",
     dataType: "json",
     data: {

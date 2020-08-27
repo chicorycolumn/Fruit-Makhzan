@@ -34,7 +34,7 @@ function addFruit(name, popularity_factors, max_prices) {
   let rubicon = Math.floor(current_rubicon) + 0.1;
 
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: "../api/fruit/create.php",
     dataType: "json",
     data: {

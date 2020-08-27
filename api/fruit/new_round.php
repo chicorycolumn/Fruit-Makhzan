@@ -8,10 +8,10 @@ $database = new Database();
 $db = $database->getConnection();
 
 $fruit = new Fruit($db);
-$table_name = $_GET['table_name'];
-$column_to_change = $_GET['column_to_change'];
-$new_value = $_GET['new_value'];
-$data_type = $_GET['data_type'];
+$table_name = $_POST['table_name'];
+$column_to_change = $_POST['column_to_change'];
+$new_value = $_POST['new_value'];
+$data_type = $_POST['data_type'];
 
 function go($db, $fruit, $table_name, $column_to_change, $new_value, $data_type)
 {

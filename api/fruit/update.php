@@ -8,12 +8,12 @@ $database = new Database();
 $db = $database->getConnection();
 
 $fruit = new Fruit($db);
-$table_name = $_GET['table_name'];
-$identifying_column = $_GET['identifying_column'];
-$identifying_data = $_GET['identifying_data'];
-$acronym = $_GET['acronym'];
-$update_data = $_GET['update_data'];
-$should_update_session = $_GET['should_update_session'];
+$table_name = $_POST['table_name'];
+$identifying_column = $_POST['identifying_column'];
+$identifying_data = $_POST['identifying_data'];
+$acronym = $_POST['acronym'];
+$update_data = $_POST['update_data'];
+$should_update_session = $_POST['should_update_session'];
 $get_full = false;
 
 if (array_key_exists("level_record", $update_data)) {

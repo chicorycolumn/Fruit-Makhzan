@@ -22,7 +22,7 @@ function submitSellingPrice(formattedName) {
 
   if (putative_price.match(/^\d+$/)) {
     $.ajax({
-      type: "GET",
+      type: "POST",
       url: "../api/fruit/update.php",
       dataType: "json",
       data: {

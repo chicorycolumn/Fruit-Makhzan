@@ -116,7 +116,7 @@ function updateGamesTableNewDay(profit, data_object) {
   // if (parseInt(profit) + digitGrouping($("#moneyStat").text(), true) > rubicons[2])
 
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: "../api/fruit/new_day_supertable.php",
     dataType: "json",
     data: {
@@ -137,7 +137,6 @@ function updateGamesTableNewDay(profit, data_object) {
     success: function (result) {
       if (result["status"]) {
         let { money_stat, days_stat, trend_calculates } = result["update_data"];
-        console.log("I'm gonna call updateGameStat with ", money_stat)
         updateGameStats(money_stat, days_stat, trend_calculates);
       } else {
         console.log(result["message"], result["error"], result);
@@ -171,7 +170,7 @@ function updateGamesTable(money_crement, money_absolute, new_level_record) {
   }
 
   $.ajax({
-    type: "GET",
+    type: "POST",
     url: "../api/fruit/update.php",
     dataType: "json",
     data: {
@@ -473,7 +472,7 @@ function restockFruit(formattedName) {
     return;
   } else {
     $.ajax({
-      type: "GET",
+      type: "POST",
       url: "../api/fruit/restock.php",
       dataType: "json",
       data: {
