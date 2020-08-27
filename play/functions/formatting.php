@@ -22,7 +22,10 @@ function bindUsefulJqueriesAfterLoadingDataIntoTable() {
     let current_val = digitGrouping($(this).find("input").val(), true);
     let max_buyable_quantity = Math.floor(
       digitGrouping($("#moneyStat").text(), true) /
-      digitGrouping($(this).parents("tr").find(".restockPriceData").text(), true)
+        digitGrouping(
+          $(this).parents("tr").find(".restockPriceData").text(),
+          true
+        )
     );
 
     if (delta / 120 > 0) {
@@ -120,12 +123,12 @@ function verifyBuyButtons() {
   }
 }
 
-function setZoom(){
-  let scale = '0.5';
-    document.body.style.zoom = 0.8
-    document.body.style.webkitTransform =  scale; 
-    document.body.style.msTransform =   scale;    
-    document.body.style.transform = scale;
+function setZoom() {
+  let scale = "0.5";
+  document.body.style.zoom = 0.8;
+  document.body.style.webkitTransform = scale;
+  document.body.style.msTransform = scale;
+  document.body.style.transform = scale;
 }
 
 </script>

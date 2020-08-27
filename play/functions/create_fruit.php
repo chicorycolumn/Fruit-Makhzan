@@ -31,7 +31,7 @@ function submitNewFruit(majorPopJQ, minorPopJQ, nameInput) {
 }
 
 function addFruit(name, popularity_factors, max_prices) {
-  let rubicon = Math.floor(current_rubicon) + 0.1
+  let rubicon = Math.floor(current_rubicon) + 0.1;
 
   $.ajax({
     type: "GET",
@@ -42,7 +42,7 @@ function addFruit(name, popularity_factors, max_prices) {
       name,
       popularity_factors,
       max_prices,
-      rubicon
+      rubicon,
     },
     error: function (result) {
       console.log(

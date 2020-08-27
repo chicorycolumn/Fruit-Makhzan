@@ -11,7 +11,7 @@ function submitSellingPrice(formattedName) {
   let input = row.find(".sellingPriceInput");
   let button = row.find(".sellingPriceButton");
 
-  let putative_price = (digitGrouping(input.val(), true)).toString();
+  let putative_price = digitGrouping(input.val(), true).toString();
 
   if (!putative_price || !parseInt(putative_price)) {
     input.val("");
@@ -48,7 +48,9 @@ function submitSellingPrice(formattedName) {
           input.val("");
           form.addClass("sellingPriceFormHidden");
           sellingPriceData.removeClass("hidden");
-          sellingPriceData.text(digitGrouping(result["update_data"]["selling_price"]));
+          sellingPriceData.text(
+            digitGrouping(result["update_data"]["selling_price"])
+          );
         } else {
           console.log(result["message"], result["error"], result);
         }
@@ -133,14 +135,14 @@ function validateNumbersAndSubmit(e, formattedName, operation) {
   verifyBuyButtons();
 
   let highlightedText = "";
-    if (window.getSelection) {
-        highlightedText = window.getSelection().toString();
-    } else if (document.selection && document.selection.type != "Control") {
-        highlightedText = document.selection.createRange().text;
-    }
-    if (highlightedText == e.target.value){
-      e.target.value = ""
-    }
+  if (window.getSelection) {
+    highlightedText = window.getSelection().toString();
+  } else if (document.selection && document.selection.type != "Control") {
+    highlightedText = document.selection.createRange().text;
+  }
+  if (highlightedText == e.target.value) {
+    e.target.value = "";
+  }
 
   let k = e.keyCode;
   let w = e.which;
@@ -153,19 +155,28 @@ function validateNumbersAndSubmit(e, formattedName, operation) {
     }
   }
 
-  if ((k >= 48 && k <= 57) || (w >= 48 && w <= 57)){
+  if ((k >= 48 && k <= 57) || (w >= 48 && w <= 57)) {
+    if (e.target.value.length > 10) {
+      return;
+    }
 
-    if (e.target.value.length > 10){return}
+    let keyValue;
 
-    let keyValue
+    if (k >= 48 && k <= 57) {
+      keyValue = String.fromCharCode(k);
+    } else if (w >= 48 && w <= 57) {
+      keyValue = string.fromCharCode(w);
+    }
 
-    if (k >= 48 && k <= 57){keyValue = String.fromCharCode(k)}else if (w >= 48 && w <= 57){keyValue = string.fromCharCode(w)}
-
-    e.target.value = digitGrouping(digitGrouping(e.target.value, true) + keyValue)
+    e.target.value = digitGrouping(
+      digitGrouping(e.target.value, true) + keyValue
+    );
   }
 
-  if ((k == 8 || k == 46) || (w == 8 || w == 46)){
-    e.target.value = digitGrouping((digitGrouping(e.target.value, true)).toString().slice(0, -1))
+  if (k == 8 || k == 46 || w == 8 || w == 46) {
+    e.target.value = digitGrouping(
+      digitGrouping(e.target.value, true).toString().slice(0, -1)
+    );
   }
 
   return false;

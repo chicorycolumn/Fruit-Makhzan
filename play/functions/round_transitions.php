@@ -1,45 +1,43 @@
 <script>
 
-let createFruitForm ='<form class="createFruitForm">' +
-    
+let createFruitForm =
+  '<form class="createFruitForm">' +
     '<div class="boxBody">' +
-      
+
       '<div class="formGroup createFruitFormGroup">' +
-      '<label class="createFruitLabel noMarginPadding">Name of brand new fruit:</label>'+
+        '<label class="createFruitLabel noMarginPadding">Name of brand new fruit:</label>' +
         '<span><input type="text" class="formControl createFruitInputName" id="name" maxlength=20' +
         'onkeypress="return /[0-9a-zA-Z ]/.test(event.key)" ></span>' +
       "</div>" +
-    
+
       '<div class="formGroup createFruitFormGroup">' +
         "<label class='createFruitLabel'>Which two will affect its popularity?</label>" +
         '<div class="formControl factorsHolder">' +
+      
+          '<span id="love" class="factorSelect factorDimensions" ' +
+          'onMouseUp="return selectFactor(event,`Love`)" ' +
+          ">Love</span>" +
           
-          '<span id="love" class="factorSelect factorDimensions" '+
-            'onMouseUp="return selectFactor(event,`Love`)" '+
-          '>Love</span>'+
-
-          '<span id="politics" class="factorSelect factorDimensions" '+
-            'onMouseUp="return selectFactor(event,`Politics`)" '+
-          '>Politics</span>'+
-
-          '<span id="weather" class="factorSelect factorDimensions" '+
-            'onMouseUp="return selectFactor(event,`Weather`)" '+
-          '>Weather</span>'+
-
-          '<span id="conformity" class="factorSelect factorDimensions" '+
-            'onMouseUp="return selectFactor(event,`Conformity`)" '+
-          '>Conformity</span>'+
-
-          '<span id="decadence" class="factorSelect factorDimensions" '+
-            'onMouseUp="return selectFactor(event,`Decadence`)" '+
-          '>Decadence</span>'+
+          '<span id="politics" class="factorSelect factorDimensions" ' +
+          'onMouseUp="return selectFactor(event,`Politics`)" ' +
+          ">Politics</span>" +
           
-        '</div>'+
+          '<span id="weather" class="factorSelect factorDimensions" ' +
+          'onMouseUp="return selectFactor(event,`Weather`)" ' +
+          ">Weather</span>" +
+          
+          '<span id="conformity" class="factorSelect factorDimensions" ' +
+          'onMouseUp="return selectFactor(event,`Conformity`)" ' +
+          ">Conformity</span>" +
+          
+          '<span id="decadence" class="factorSelect factorDimensions" ' +
+          'onMouseUp="return selectFactor(event,`Decadence`)" ' +
+          ">Decadence</span>" +
+      
+        "</div>" +
       "</div>" +
-    
     "</div>" +
-  
-"</form>";
+  "</form>";
 
 const rubiconMessageRef = {
   1: "Wahad! You reached sublevel 1!",
@@ -51,7 +49,6 @@ const rubicons = { 1: 150, 2: 300 };
 // const rubicons = {1: 10000, 2: 1000000000}
 
 function advance() {
-
   //Endgame.
   if (
     level_record["round"] >= level_record["final_round"] + 1 ||
@@ -112,16 +109,15 @@ function advance() {
   allButtonsDisabled(false);
 }
 
-function loadRubiconIfAt(){
-
-    if (level_record["round"] > level_record["final_round"]) {
+function loadRubiconIfAt() {
+  if (level_record["round"] > level_record["final_round"]) {
     showEndScreen(4);
   }
 
   for (let i = 1; i <= level_record["round"]; i++) {
     showIsland(i);
   }
-        for (let key in level_record) {
+  for (let key in level_record) {
     let days = dayGrouping($("#daysStat").text(), $("#yearsStat").text(), true);
     if (parseInt(key) == days && parseFloat(level_record["sublevel"]) < 0.9) {
       allButtonsDisabled(true);
@@ -155,7 +151,6 @@ function updateCurrentRubicon() {
 }
 
 function incrementSublevel(rubiconMessageRef, sublevel) {
-
   if (sublevel < 0.9) {
     level_record["round"]++;
   }
@@ -165,7 +160,7 @@ function incrementSublevel(rubiconMessageRef, sublevel) {
   allButtonsDisabled(true);
 
   // tomorrow and rubicon_stamp
-  let days = dayGrouping($("#daysStat").text(), $("#yearsStat").text(), true)
+  let days = dayGrouping($("#daysStat").text(), $("#yearsStat").text(), true);
 
   level_record[days + 1] = {
     round: level_record["round"],
@@ -203,7 +198,6 @@ function showIsland(num) {
 }
 
 function resetToNewRound() {
-
   updateGamesTable(null, 100);
 
   $.ajax({

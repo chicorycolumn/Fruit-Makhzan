@@ -4,7 +4,6 @@ echo "<link rel='stylesheet' type='text/css' href='.././css/mainGraphs.css' />";
 
 $mainGraphs = "
 
-
 <div class='mainDivGraphs'>
 <ul>
 <li>Graphs go here</li>
