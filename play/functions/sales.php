@@ -1,0 +1,134 @@
+<script>
+
+function calculateSales() {
+  let incipient_sales = {};
+
+  $("table#inventory tbody tr").each(function () {
+    let row = $(this);
+    let name = row.find(".nameData").text();
+
+    if (row.hasClass("hidden")) {
+      return;
+    }
+
+    let quantity = digitGrouping(row.find(".quantityData").text(), true);
+    let selling_price = digitGrouping(row.find(".sellingPriceData").text(), true);
+
+    let max_prices = integeriseObjectValues(
+      JSON.parse(row.find(".maxPricesData").text())
+    );
+    let popularity_factors = JSON.parse(row.find(".popFactorsData").text());
+    let { popularity, max_buying_price, restock_price } = getSalesSubstrates(
+      popularity_factors,
+      max_prices,
+      trend_calculates,
+      name
+    );
+
+    let price_disparity =
+      ((max_buying_price - selling_price) / max_buying_price) * 100;
+
+    let sales_percentage = (popularity + price_disparity * 4) / 5 / 100;
+
+    let sales_quantity = Math.ceil(sales_percentage * quantity);
+
+    let copy_of_sales_quantity_before_plusminus = sales_quantity
+
+    let plusOrMinusFive = Math.round(Math.random() * 10) - 5;
+
+    sales_quantity += Math.round((plusOrMinusFive / 100) * quantity);
+
+    if (sales_quantity < 0) {
+      // console.log(">>restablish sales_quantity to zero (min).")
+      sales_quantity = 0;
+    } else if (sales_quantity > quantity) {
+      // console.log(">>restablish sales_quantity to quantity (max).")
+      sales_quantity = quantity;
+    }
+
+    // if(name == "Grapes"){console.log({name, quantity, selling_price, sales_quantity, copy_of_sales_quantity_before_plusminus})}
+
+    // console.log(name + " has unrounded sales quantity " + sales_quantity)
+    sales_quantity = Math.round(sales_quantity);
+    // console.log(name + " sales quantity ROUNDED TO " + sales_quantity)
+
+    let profit = Math.round(sales_quantity * selling_price);
+    // console.log(name + " has unrounded profit " + profit)
+    profit = Math.round(profit);
+    // console.log(name + " profit ROUNDED TO " + profit)
+
+    incipient_sales[name] = { sales_quantity, profit };
+  });
+
+  return incipient_sales;
+}
+
+function getSalesSubstrates(
+  popularity_factors,
+  max_prices,
+  trend_calculates,
+  name
+) {
+  let factor1 = getPopularityFactor(popularity_factors, 0, trend_calculates);
+  let factor2 = getPopularityFactor(popularity_factors, 1, trend_calculates);
+  let popularity = Math.ceil((factor1 * 3 + factor2) / 4);
+
+  let range = max_prices["High"] - max_prices["Low"];
+  let fraction_of_price_range = Math.round(
+    (Math.floor((popularity - 1) / 20) / 4) * range
+  );
+  let max_buying_price = Math.round(
+    max_prices["Low"] + fraction_of_price_range
+  );
+  let restock_price = Math.ceil(0.8 * max_buying_price);
+
+  return { popularity, max_buying_price, restock_price };
+}
+
+function updateSalesSubstratesInDisplayedTable() {
+  $("table#inventory tbody tr").each(function () {
+    let row = $(this);
+    let name = row.find(".nameData").text();
+
+    if (row.hasClass("hidden")) {
+      return;
+    }
+
+    let max_prices = integeriseObjectValues(
+      JSON.parse(row.find(".maxPricesData").text())
+    );
+    let popularity_factors = JSON.parse(row.find(".popFactorsData").text());
+
+    let { popularity, max_buying_price, restock_price } = getSalesSubstrates(
+      popularity_factors,
+      max_prices,
+      trend_calculates,
+      name
+    );
+
+    row.find(".devdata1").text("P" + popularity + "  M" + max_buying_price);
+
+    row
+      .find(".popularityCircleSpan")
+      .text(getPopularityColor(popularity).text)
+      .css({ "background-color": getPopularityColor(popularity).color });
+
+    function getPopularityColor(pop) {
+      if (pop < 20) {
+        return { text: "⇊", color: "red" };
+      } else if (pop < 40) {
+        return { text: "↓", color: "orange" };
+      } else if (pop < 60) {
+        return { text: "·", color: "yellow" };
+      } else if (pop < 80) {
+        return { text: "↑", color: "greenyellow" };
+      } else if (pop >= 80) {
+        return { text: "⇈", color: "cyan" };
+      }
+    }
+
+    row.find(".restockPriceData").text(digitGrouping(restock_price));
+  });
+}
+
+</script>
