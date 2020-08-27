@@ -2,44 +2,18 @@
   height: 40px;
 }
 
-.button1 {
-  width: 25px;
-  background-color: red;
-}
-
-.button2 {
-  width: 50px;
-  background-color: rgb(158, 255, 158);
-  padding: 0px;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.button3 {
-  width: 50px;
-  background-color: rgb(203, 226, 255);
-  font-size: 14px;
-  font-weight: bold;
-  padding: 0px;
-}
-
-.button4 {
-  width: 30px;
-  background-color: rgb(255, 245, 203);
-  text-align: center;
-  padding: 0px;
-  font-size: 14px;
-  font-weight: bold;
-}
-
 button:disabled {
-  background-color: lightgrey;
+  background-color: rgb(240, 240, 240);
 }
 
 .sellingPriceButton {
+  width: 50px;
+  padding: 0px;
+  font-size: 14px;
+  font-weight: bold;
   height: 26px;
   width: 100%;
-  background-color: lightgreen;
+  background-color: var(--buttonGreen);
   border-radius: 0 0 var(--bradius1) var(--bradius1);
 }
 
@@ -49,9 +23,22 @@ button:disabled {
 
 .maxBuyButton {
   position: relative;
+  width: 50px;
+  /* background-color: var(--thisOrange); */
+  background-color: var(--divGreen);
+  font-size: 14px;
+  font-weight: bold;
+  padding: 0px;
 }
 
-.incBuyButton {
+.buttonCrement {
+  width: 30px;
+  /* background-color: var(--thisYellow); */
+  background-color: var(--divGreen);
+  text-align: center;
+  padding: 0px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .decBuyButton {
@@ -61,6 +48,11 @@ button:disabled {
 .buyButton {
   border-radius: 0 0 0 var(--bradius1);
   position: relative;
+  width: 50px;
+  padding: 0px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: var(--buttonGreen);
 }
 
 .newDayButton {
@@ -68,14 +60,19 @@ button:disabled {
   height: 145px;
   width: 145px;
   position: absolute;
-  top: 17.5px;
-  left: 17.5px;
+  top: 27.5px;
+  left: 27.5px;
   border-radius: 100px;
   font-size: var(--tdFontSize1);
   padding-left: 15px;
   padding-right: 15px;
   padding-bottom: 7.5px;
   z-index: 1;
+  border: none;
+}
+
+.newDayButton:active {
+  border: 2pt solid var(--thisYellow);
 }
 
 .dialogBoxButton {

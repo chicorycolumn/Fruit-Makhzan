@@ -53,11 +53,18 @@
 
 .mainStatBox {
   /* border: fuchsia solid 1pt; */
-  width: 180px;
+  width: 200px;
   display: flex;
   flex-direction: column;
   position: relative;
   top: -48px;
+}
+
+.coin {
+  height: 200px;
+  width: 200px;
+  position: absolute;
+  z-index: 1;
 }
 
 .mainStatTitle {
@@ -66,15 +73,9 @@
 .mainStatText {
   /* border: fuchsia solid 2pt; */
   position: relative;
-  top: 66px;
+  top: 72px;
+  z-index: 2;
   /* left: 5px; */
-}
-
-.coin {
-  height: 180px;
-  width: 180px;
-  position: absolute;
-  z-index: 1;
 }
 
 .crown {

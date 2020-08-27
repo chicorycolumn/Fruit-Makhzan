@@ -1,0 +1,30 @@
+.navbar {
+  /* border: black solid 1pt; */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.navBarLinkSubholder {
+  /* border: blue solid 1pt; */
+  display: flex;
+  flex-direction: row;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.navbarImage {
+  height: 50px;
+  width: 50px;
+}
+
+.navbarText {
+  font-size: 28px;
+  color: darkgreen;
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+  text-decoration: none;
+  margin-left: 2.5px;
+}

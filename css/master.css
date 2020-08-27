@@ -3,11 +3,27 @@
   --bigBoxWidth: 1100px;
   --cellWidth1: 160px;
   --tdFontSize1: 20px;
+  --thisYellow: #faf908;
+  --thisOrange: #f9bd07;
+  --buttonGreen: lightgreen;
+  --paleGreen: rgb(212, 255, 187);
+  --divGreen: rgb(235, 255, 224);
 }
 
 body {
-  background-color: lightyellow;
+  background-color: var(--paleGreen);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.background {
+  background-image: url(../images/fruit-tile1.jpg);
+  background-size: 500px;
+  background-repeat: repeat;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  opacity: 0.05;
 }
 
 .mainHeader {
@@ -28,16 +44,19 @@ body {
   justify-content: center;
 }
 
-.wrapper {
-  background-color: rgba(0, 255, 0, 0.1);
-  height: 95vh;
-}
-
 .mainDiv {
   border-radius: var(--bradius1);
-  border: black dashed 2pt;
+  /* border: black dashed 2pt; */
+  box-shadow: 2.5px 2.5px 10px black;
   margin: 20px 0px 20px 0px;
   width: var(--bigBoxWidth);
+  background-color: var(--divGreen);
+}
+
+.mainDivStats {
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  box-shadow: none;
 }
 
 .holderForHorizontalMainDivs {

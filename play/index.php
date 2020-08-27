@@ -418,16 +418,16 @@ function addRowToTable(fruit, shouldPrepend){
                             
                             "<div class='buttonSubHolder'>"+
                               "<button "+
-                              "class='mediumButtonKind button2 buyButton'"+
+                              "class='mediumButtonKind buyButton'"+
                               "onClick=restockFruit('"+formattedName+"')>BUY"+
                               "</button>"+    
-                              "<button class='mediumButtonKind button3 maxBuyButton' "+
+                              "<button class='mediumButtonKind maxBuyButton' "+
                                 "onclick=setAmount('"+formattedName+"','restock','max') "+
                               ">MAX</button>"+
-                              "<button class='mediumButtonKind button4 incBuyButton' "+
+                              "<button class='mediumButtonKind buttonCrement incBuyButton' "+
                                 "onclick=setAmount('"+formattedName+"','restock','increment') "+
                               ">⇧</button>"+
-                              "<button class='mediumButtonKind button4 decBuyButton' "+
+                              "<button class='mediumButtonKind buttonCrement decBuyButton' "+
                                 "onclick=setAmount('"+formattedName+"','restock','decrement') "+
                               ">⇩</button>"+
                               
