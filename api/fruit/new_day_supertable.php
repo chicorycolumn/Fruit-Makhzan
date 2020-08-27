@@ -81,16 +81,12 @@ function go(
   $_SESSION['days_stat'] = $update_data['days_stat'];
   $_SESSION['money_stat'] = $update_data['money_stat'];
   $_SESSION['trend_calculates'] = $update_data['trend_calculates'];
-  // $_SESSION['level_record'] = json_encode($level_record);
 
   $result['update_data'] = $update_data;
 
   $result['update_data']['trend_calculates'] = json_decode(
     $result['update_data']['trend_calculates']
   );
-  // $result['update_data']['level_record'] = json_decode(
-  //   $result['update_data']['level_record']
-  // );
 
   return $result;
 }

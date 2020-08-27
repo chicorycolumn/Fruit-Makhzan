@@ -42,7 +42,7 @@ function loadPrevious() {
         echo $_COOKIE['makhzan'];
       } else {
         echo "NO GID ON COOKIE";
-      } ?>", //******************** */
+      } ?>",
       acronym: "s",
       get_full: false,
       load_session_from_db: true,

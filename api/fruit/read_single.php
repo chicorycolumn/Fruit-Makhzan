@@ -120,7 +120,6 @@ if ($load_session_from_db) {
   $_SESSION['trend_calculates'] = $response['data'][0]['trend_calculates'];
   $_SESSION['show_dev_data'] = 0;
   $_SESSION['level_record'] = $response['data'][0]['level_record'];
-  // $_SESSION['level_record'] = "oi oi";
 }
 
 echo json_encode($response);

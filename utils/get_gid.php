@@ -7,7 +7,7 @@ function make($length, $chars)
   for ($i = 0; $i < $length; ++$i) {
     $gid .= $chars[random_int(0, $max)];
   }
-  return $gid; //gid always 15 chars.
+  return $gid;
 }
 
 $gid = make(1, "hjklmnpqrstvwyz");

@@ -307,7 +307,6 @@ class Fruit
             "error" => $this->conn->error,
           ];
         }
-        // $result = $stmt->get_result();
         $stmt->close();
       }
     }

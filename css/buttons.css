@@ -49,8 +49,6 @@ button:disabled {
 
 .maxBuyButton {
   position: relative;
-  /* top: -0.5px;
-  height: 38.5px; */
 }
 
 .incBuyButton {
@@ -63,8 +61,6 @@ button:disabled {
 .buyButton {
   border-radius: 0 0 0 var(--bradius1);
   position: relative;
-  /* top: -0.5px; */
-  /* height: 39px; */
 }
 
 .newDayButton {

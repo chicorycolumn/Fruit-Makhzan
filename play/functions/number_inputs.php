@@ -130,7 +130,6 @@ function setAmount(formattedName, operation, modifier, forced_amount) {
 }
 
 function validateNumbersAndSubmit(e, formattedName, operation) {
-  // return false;
 
   verifyBuyButtons();
 

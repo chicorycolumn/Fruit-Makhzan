@@ -89,8 +89,8 @@ function newDay() {
 
   let data_object = { overall_sales_history: week_record };
 
-  updateGamesTableNewDay(day_profit, data_object); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
-  updateInventoryTable(incipient_sales); //Reduces quantities by sold amounts.
+  updateGamesTableNewDay(day_profit, data_object);
+  updateInventoryTable(incipient_sales);
 
   day_costs = 0;
 
@@ -112,8 +112,6 @@ function newDay() {
 }
 
 function updateGamesTableNewDay(profit, data_object) {
-
-  // if (parseInt(profit) + digitGrouping($("#moneyStat").text(), true) > rubicons[2])
 
   $.ajax({
     type: "POST",
@@ -504,7 +502,7 @@ function restockFruit(formattedName) {
 
             row.find(".amountInput_restock").val(digitGrouping(reset_value));
           }
-          updateGamesTable(putative_cost); //Send off the db to change money stat.
+          updateGamesTable(putative_cost);
         } else {
           console.log(result["message"], result["error"], result);
         }

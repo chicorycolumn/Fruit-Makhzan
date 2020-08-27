@@ -49,7 +49,6 @@ const rubicons = { 1: 150, 2: 300 };
 // const rubicons = {1: 10000, 2: 1000000000}
 
 function advance() {
-  //Endgame.
   if (
     level_record["round"] >= level_record["final_round"] + 1 ||
     level_record["sublevel"] == 4
@@ -61,7 +60,6 @@ function advance() {
     return;
   }
 
-  //Round transition.
   if (level_record["sublevel"] == 0) {
     $(".dialogHolder")
       .find(".dialogBoxText")
@@ -103,8 +101,6 @@ function advance() {
       return;
     }
   }
-
-  //Everything that's neither endgame nor round-transition. ie the rubicon transitions.
   $(".dialogHolder").addClass("hidden");
   allButtonsDisabled(false);
 }
@@ -159,7 +155,6 @@ function incrementSublevel(rubiconMessageRef, sublevel) {
   updateCurrentRubicon();
   allButtonsDisabled(true);
 
-  // tomorrow and rubicon_stamp
   let days = dayGrouping($("#daysStat").text(), $("#yearsStat").text(), true);
 
   level_record[days + 1] = {
