@@ -10,13 +10,17 @@
 .button2 {
   width: 50px;
   background-color: rgb(158, 255, 158);
+  padding: 0px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .button3 {
   width: 50px;
   background-color: rgb(203, 226, 255);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: bold;
+  padding: 0px;
 }
 
 .button4 {
@@ -24,6 +28,8 @@
   background-color: rgb(255, 245, 203);
   text-align: center;
   padding: 0px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 button:disabled {
@@ -43,8 +49,8 @@ button:disabled {
 
 .maxBuyButton {
   position: relative;
-  top: -0.5px;
-  height: 38.5px;
+  /* top: -0.5px;
+  height: 38.5px; */
 }
 
 .incBuyButton {
@@ -69,9 +75,10 @@ button:disabled {
   top: 17.5px;
   left: 17.5px;
   border-radius: 100px;
-  font-size: 18px;
+  font-size: var(--tdFontSize1);
   padding-left: 15px;
   padding-right: 15px;
+  padding-bottom: 7.5px;
   z-index: 1;
 }
 

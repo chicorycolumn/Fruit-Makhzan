@@ -31,8 +31,19 @@ $mainStats = "
     
     <div class='mainStatBox'>
       <img class='coin' src='.././images/circle.png' />
-      <span class='mainStatText mainStatTextNumber' id='daysStat'>--</span>
-      <span class='mainStatText mainStatTextFaded'>days</span>
+      <div class='daysYearsHolder'>
+
+        <div class='daysYearsSubholder'>
+          <span class='mainStatText mainStatTextNumber' id='yearsStat'>~~</span>
+          <span class='mainStatText mainStatTextFaded'>year</span>
+        </div>
+
+        <div class='daysYearsSubholder'>
+          <span class='mainStatText mainStatTextNumber' id='daysStat'>--</span>
+          <span class='mainStatText mainStatTextFaded'>days</span>
+        </div>
+        
+      </div>
     </div>
 
   </div>

@@ -169,8 +169,8 @@ let level_record;
 
 level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`);
 
-// const rubicon = { 1: 150, 3: 300 };
-const rubicons = {1: 10000, 3: 1000000000}
+const rubicons = { 1: 150, 3: 300 };
+// const rubicons = {1: 10000, 3: 1000000000}
 let current_rubicon = 0;
 updateCurrentRubicon();
 
@@ -185,9 +185,16 @@ for (let i = 1; i <= level_record["round"]; i++) {
 }
 
 $(document).ready(function () {
+      // let document = $(document)
+    let scale = '0.5';
+    document.body.style.zoom = 0.8
+  document.body.style.webkitTransform =  scale; 
+  document.body.style.msTransform =   scale;    
+  document.body.style.transform = scale;
+
   // console.log("READY: " + level_record['round'] + "~" + level_record['sublevel'])
   for (let key in level_record) {
-    let days = parseInt($("#daysStat").text());
+    let days = dayGrouping($("#daysStat").text(), $("#yearsStat").text(), true);
     if (parseInt(key) == days && parseFloat(level_record["sublevel"]) < 0.9) {
       // console.log("I see we are on day " + key + " which was a rubicon day! It was where we entered " + level_record[key]['round'] + "." + level_record[key]['sublevel'] + " so we should load that somehow.")
       allButtonsDisabled(true);
@@ -316,6 +323,22 @@ updateGameStats( //**************** */
   null
 )
 
+function dayGrouping(days, years, ungroup){
+
+  days = parseInt(days)
+
+  if (ungroup){return (parseInt(years)*365)+days};
+
+  years = 0
+
+  while (days >= 365){
+    days-=365
+    years++
+  }
+
+  return {days, years}
+}
+
 function digitGrouping(num, ungroup){
 
   if (num == ""){
@@ -342,7 +365,8 @@ function newDay() {
     0
   );
 
-  let days = parseInt($("#daysStat").text());
+  let days = dayGrouping($("#daysStat").text(), $("#yearsStat").text(), true);
+
   let money = digitGrouping($("#moneyStat").text(), true);
 
   if (days % 7 == 0) {
@@ -390,7 +414,9 @@ function incrementSublevel(messageRef, sublevel) {
   allButtonsDisabled(true);
 
   // tomorrow and rubicon_stamp
-  level_record[parseInt($("#daysStat").text()) + 1] = {
+  let days = dayGrouping($("#daysStat").text(), $("#yearsStat").text(), true)
+
+  level_record[days + 1] = {
     round: level_record["round"],
     sublevel: level_record["sublevel"],
   };
@@ -917,7 +943,7 @@ function addRowToTable(fruit, shouldPrepend){
                             "<div class='buttonSubHolder'>"+
                               "<button "+
                               "class='mediumButtonKind button2 buyButton'"+
-                              "onClick=restockFruit('"+formattedName+"')>Buy"+
+                              "onClick=restockFruit('"+formattedName+"')>BUY"+
                               "</button>"+    
                               "<button class='mediumButtonKind button3 maxBuyButton' "+
                                 "onclick=setAmount('"+formattedName+"','restock','max') "+
@@ -1014,8 +1040,19 @@ function setAmount(formattedName, operation, modifier, forced_amount) {
 }
 
 function validateNumbersAndSubmit(e, formattedName, operation) {
+  // return false;
 
   verifyBuyButtons();
+
+  let highlightedText = "";
+    if (window.getSelection) {
+        highlightedText = window.getSelection().toString();
+    } else if (document.selection && document.selection.type != "Control") {
+        highlightedText = document.selection.createRange().text;
+    }
+    if (highlightedText == e.target.value){
+      e.target.value = ""
+    }
 
   let k = e.keyCode;
   let w = e.which;
@@ -1295,7 +1332,11 @@ function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates) {
   $("#moneyStat").text(digitGrouping(new_money_stat));
 
   if (new_days_stat) {
-    $("#daysStat").text(new_days_stat);
+
+    let {days, years} = dayGrouping(new_days_stat)
+
+    $("#daysStat").text(days);
+    $("#yearsStat").text(years);
   }
 
   verifyBuyButtons();
@@ -1457,12 +1498,6 @@ function printDevDataHTML(popularity, max_buying_price) {
 
 function allButtonsDisabled(toggle) {
   $(document).ready(function () {
-//     // let document = $(document)
-//     let scale = 0.1;
-//     // document.body.style.zoom = 0.1
-// document.body.style.webkitTransform =  scale;    // Chrome, Opera, Safari
-//  document.body.style.msTransform =   scale;       // IE 9
-//  document.body.style.transform = scale;
     if (toggle) {
       // console.log("GONNA DISABLE ALL BUTTONS");
       $("button").attr("disabled", true);

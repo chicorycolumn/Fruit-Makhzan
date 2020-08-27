@@ -7,49 +7,6 @@
   height: 150px;
 }
 
-.topHalf {
-  background-color: rgba(255, 0, 0, 0.1);
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  width: var(--bigBoxWidth);
-}
-
-.bottomHalf {
-  /* background-color: rgba(0, 0, 255, 0.1); */
-  width: var(--bigBoxWidth);
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  top: 55px;
-}
-
-.mainStatBox {
-  width: 20%;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  top: -48px;
-}
-
-.mainStatTitle {
-}
-
-.mainStatText {
-  /* border: fuchsia solid 2pt; */
-  position: relative;
-  top: 67.5px;
-  left: 5px;
-}
-
-.coin {
-  height: 180px;
-  width: 180px;
-  position: absolute;
-  z-index: 1;
-}
-
 .mainStatTextFaded {
   color: #000000;
   opacity: 0.2;
@@ -76,10 +33,69 @@
   height: 35px;
 }
 
+.bottomHalf {
+  /* background-color: rgba(0, 255, 100, 0.1); */
+  width: var(--bigBoxWidth);
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  top: 55px;
+}
+
+.topHalf {
+  /* background-color: rgba(255, 0, 0, 0.1); */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: var(--bigBoxWidth);
+}
+
+.mainStatBox {
+  /* border: fuchsia solid 1pt; */
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: -48px;
+}
+
+.mainStatTitle {
+}
+
+.mainStatText {
+  /* border: fuchsia solid 2pt; */
+  position: relative;
+  top: 66px;
+  /* left: 5px; */
+}
+
+.coin {
+  height: 180px;
+  width: 180px;
+  position: absolute;
+  z-index: 1;
+}
+
 .crown {
   height: 100px;
   width: 120px;
   position: absolute;
   top: 32.5px;
   left: 31px;
+}
+
+.daysYearsHolder {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  position: relative;
+  left: -1.5px;
+}
+
+.daysYearsSubholder {
+  margin-left: 5px;
+  margin-right: 5px;
+  display: flex;
+  flex-direction: column;
 }
