@@ -1,7 +1,6 @@
 <script>
 
 function showCreateFruitForm() {
-  // console.log("showCreateFruitForm fxn")
   $(".dialogHolder").removeClass("hidden");
   $(".dialogHolder").find(".dialogBoxText").html(createFruitForm);
   $(".factorSelect").each(function () {
@@ -12,8 +11,6 @@ function showCreateFruitForm() {
 }
 
 function submitNewFruit(majorPopJQ, minorPopJQ, nameInput) {
-  // console.log("SUBMIT FXN: " + level_record['round'] + "~" + level_record['sublevel'])
-
   let newFruitPopFactors = {};
 
   (newFruitPopFactors[majorPopJQ.attr("id")] = !majorPopJQ.hasClass(
@@ -34,8 +31,6 @@ function submitNewFruit(majorPopJQ, minorPopJQ, nameInput) {
 }
 
 function addFruit(name, popularity_factors, max_prices) {
-  // console.log("ADDFRUIT FXN: " + level_record['round'] + "~" + level_record['sublevel'])
-
   let rubicon = Math.floor(current_rubicon) + 0.1
 
   $.ajax({

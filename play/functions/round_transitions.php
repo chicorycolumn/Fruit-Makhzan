@@ -41,17 +41,16 @@ let createFruitForm ='<form class="createFruitForm">' +
   
 "</form>";
 
-const messageRef = {
+const rubiconMessageRef = {
   1: "Wahad! You reached sublevel 1!",
   0: "You're a billionaire! As a reward for all your hard work, you buy an island to relax on.",
   4: "You won the whole game! You own five islands and are now king.",
 };
 
-const rubicons = { 1: 150, 3: 300 };
-// const rubicons = {1: 10000, 3: 1000000000}
+const rubicons = { 1: 150, 2: 300 };
+// const rubicons = {1: 10000, 2: 1000000000}
 
 function advance() {
-  // console.log("ADVANCE FXN: " + level_record['round'] + "~" + level_record['sublevel'])
 
   //Endgame.
   if (
@@ -64,8 +63,6 @@ function advance() {
     });
     return;
   }
-
-  // console.log("advance fxn says we're NOT in endgame")
 
   //Round transition.
   if (level_record["sublevel"] == 0) {
@@ -124,16 +121,14 @@ function loadRubiconIfAt(){
   for (let i = 1; i <= level_record["round"]; i++) {
     showIsland(i);
   }
-        // console.log("READY: " + level_record['round'] + "~" + level_record['sublevel'])
         for (let key in level_record) {
     let days = dayGrouping($("#daysStat").text(), $("#yearsStat").text(), true);
     if (parseInt(key) == days && parseFloat(level_record["sublevel"]) < 0.9) {
-      // console.log("I see we are on day " + key + " which was a rubicon day! It was where we entered " + level_record[key]['round'] + "." + level_record[key]['sublevel'] + " so we should load that somehow.")
       allButtonsDisabled(true);
       $(".dialogHolder").removeClass("hidden");
       $(".dialogHolder")
         .find(".dialogBoxText")
-        .text(messageRef[level_record[key]["sublevel"]]);
+        .text(rubiconMessageRef[level_record[key]["sublevel"]]);
 
       if (level_record["round"] == level_record["final_round"] + 1) {
         showIsland();
@@ -159,8 +154,7 @@ function updateCurrentRubicon() {
   revealSpecificRows();
 }
 
-function incrementSublevel(messageRef, sublevel) {
-  // console.log("incrementSublevel fxn with params:", {messageRef, sublevel})
+function incrementSublevel(rubiconMessageRef, sublevel) {
 
   if (sublevel < 0.9) {
     level_record["round"]++;
@@ -179,7 +173,7 @@ function incrementSublevel(messageRef, sublevel) {
   };
 
   $(".dialogHolder").removeClass("hidden");
-  $(".dialogHolder").find(".dialogBoxText").text(messageRef[sublevel]);
+  $(".dialogHolder").find(".dialogBoxText").text(rubiconMessageRef[sublevel]);
 
   if (sublevel == 4) {
     level_record["round"]++;
@@ -191,7 +185,7 @@ function incrementSublevel(messageRef, sublevel) {
 
 function showEndScreen(sublevel) {
   $(".dialogHolder").removeClass("hidden");
-  $(".dialogHolder").find(".dialogBoxText").text(messageRef[sublevel]);
+  $(".dialogHolder").find(".dialogBoxText").text(rubiconMessageRef[sublevel]);
   showIsland();
   $(".newDayButton").addClass("hidden");
   $(".crown").removeClass("hidden");
@@ -209,7 +203,6 @@ function showIsland(num) {
 }
 
 function resetToNewRound() {
-  // console.log("RESET FXN: " + level_record['round'] + "~" + level_record['sublevel'])
 
   updateGamesTable(null, 100);
 

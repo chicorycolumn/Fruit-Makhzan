@@ -70,9 +70,6 @@ $(document).ready(function () {
 });
 
 function newDay() {
-  // console.log("NEWDAY FXN: " + level_record['round'] + "~" + level_record['sublevel'])
-  // sayHowdy()
-
   let incipient_sales = calculateSales();
   let day_profit = Object.values(incipient_sales).reduce(
     (sum, obj) => sum + obj.profit,
@@ -92,33 +89,31 @@ function newDay() {
 
   let data_object = { overall_sales_history: week_record };
 
-  // console.log({days, money, new_money_stat, incipient_sales, day_profit, data_object })
-
   updateGamesTableNewDay(day_profit, data_object); //Increments Money and Days. Also updates displayed table new Pop and Mxb.
   updateInventoryTable(incipient_sales); //Reduces quantities by sold amounts.
 
   day_costs = 0;
 
   if (level_record["round"] < level_record["final_round"]) {
-    if (new_money_stat >= rubicons[3]) {
-      incrementSublevel(messageRef, 0);
+    if (new_money_stat >= rubicons[2]) {
+      incrementSublevel(rubiconMessageRef, 0);
     } else if (
       parseFloat(level_record["sublevel"]) < 1 &&
       new_money_stat >= rubicons[1]
     ) {
-      incrementSublevel(messageRef, 1);
+      incrementSublevel(rubiconMessageRef, 1);
     }
   } else if (
     level_record["round"] >= level_record["final_round"] &&
-    new_money_stat >= rubicons[3]
+    new_money_stat >= rubicons[2]
   ) {
-    incrementSublevel(messageRef, 4);
+    incrementSublevel(rubiconMessageRef, 4);
   }
 }
 
 function updateGamesTableNewDay(profit, data_object) {
 
-  // if (parseInt(profit) + digitGrouping($("#moneyStat").text(), true) > rubicons[3])
+  // if (parseInt(profit) + digitGrouping($("#moneyStat").text(), true) > rubicons[2])
 
   $.ajax({
     type: "GET",
@@ -257,7 +252,6 @@ function updateInventoryTable(incipient_sales) {
 }
 
 function fillInvTable(shouldWipe, name) {
-  // console.log("fillInvTable is called, with name as " + name);
 
   if (shouldWipe) {
     $("#inventory tbody tr").remove();
@@ -307,7 +301,6 @@ function fillInvTable(shouldWipe, name) {
 }
 
 function addRowToTable(fruit, shouldPrepend){
-  // console.log("addRowToTable fxn")
   let response = "";
           let {
             name,

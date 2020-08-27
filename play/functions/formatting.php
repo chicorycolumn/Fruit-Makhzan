@@ -82,11 +82,8 @@ function inputDigitGrouping(e) {
 function allButtonsDisabled(toggle) {
   $(document).ready(function () {
     if (toggle) {
-      // console.log("GONNA DISABLE ALL BUTTONS");
       $("button").attr("disabled", true);
     } else {
-      // console.log("GONNA enable ALL BUTTONS");
-
       $("button").removeAttr("disabled");
     }
   });

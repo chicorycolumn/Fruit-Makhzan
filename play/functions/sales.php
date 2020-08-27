@@ -39,24 +39,14 @@ function calculateSales() {
     sales_quantity += Math.round((plusOrMinusFive / 100) * quantity);
 
     if (sales_quantity < 0) {
-      // console.log(">>restablish sales_quantity to zero (min).")
       sales_quantity = 0;
     } else if (sales_quantity > quantity) {
-      // console.log(">>restablish sales_quantity to quantity (max).")
       sales_quantity = quantity;
     }
 
-    // if(name == "Grapes"){console.log({name, quantity, selling_price, sales_quantity, copy_of_sales_quantity_before_plusminus})}
-
-    // console.log(name + " has unrounded sales quantity " + sales_quantity)
     sales_quantity = Math.round(sales_quantity);
-    // console.log(name + " sales quantity ROUNDED TO " + sales_quantity)
-
     let profit = Math.round(sales_quantity * selling_price);
-    // console.log(name + " has unrounded profit " + profit)
     profit = Math.round(profit);
-    // console.log(name + " profit ROUNDED TO " + profit)
-
     incipient_sales[name] = { sales_quantity, profit };
   });
 
