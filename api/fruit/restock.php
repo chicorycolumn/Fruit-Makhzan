@@ -8,11 +8,11 @@ $database = new Database();
 $db = $database->getConnection();
 
 $fruit = new Fruit($db);
-$fruit->name = $_POST['name'];
-$increment = $_POST['increment'];
-$table_name = $_POST['table_name'];
+$fruit->name = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
+$increment = filter_var($_POST['increment'], FILTER_SANITIZE_SPECIAL_CHARS);
+$table_name = filter_var($_POST['table_name'], FILTER_SANITIZE_SPECIAL_CHARS);
 $identifying_column = "name";
-$identifying_data = $_POST['name'];
+$identifying_data = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
 $acronym = "s";
 $get_full = false;
 

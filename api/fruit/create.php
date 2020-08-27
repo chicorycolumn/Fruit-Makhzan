@@ -8,8 +8,8 @@ $database = new Database();
 $db = $database->getConnection();
 
 $fruit = new Fruit($db);
-$fruit->name = $_POST['name'];
-$name = $_POST['name'];
+$fruit->name = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
+$name = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
 $popularity_factors = json_encode($_POST['popularity_factors']);
 $max_prices = json_encode($_POST['max_prices']);
 $rubicon = $_POST['rubicon'];

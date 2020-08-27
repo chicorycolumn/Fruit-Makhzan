@@ -16,12 +16,16 @@ $update_data = $_POST['update_data'];
 $should_update_session = $_POST['should_update_session'];
 $get_full = false;
 
-if (array_key_exists("level_record", $update_data)) {
-  $update_data['level_record'] = json_encode($update_data['level_record']);
+foreach ($update_data as $key => $val) {
+  if ($key == "level_record") {
+    $update_data['level_record'] = json_encode($update_data['level_record']);
+  } else {
+    $update_data[$key] = filter_var(
+      $update_data[$key],
+      FILTER_SANITIZE_SPECIAL_CHARS
+    );
+  }
 }
-
-// print_r(gettype($update_data['level_record']));
-// return;
 
 function go(
   $db,
