@@ -1,6 +1,5 @@
 <?php
 
-$_SESSION['show_dev_data'] = 0;
 $content = "";
 
 if ($show_dev_data) {

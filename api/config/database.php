@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 class Database
 {
-  private $use_clear_db = 1;
+  private $use_clear_db = 0;
 
   private $username = "root";
   private $password = "";

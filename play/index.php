@@ -12,6 +12,7 @@ if (!isset($_SESSION['gid'])) {
 }
 
 $show_dev_data = false;
+$_SESSION['show_dev_data'] = 0;
 
 setcookie("makhzan", $_SESSION['gid'], time() + 3600 * 24 * 30, "/");
 $gid = $_SESSION['gid'];
@@ -403,7 +404,6 @@ function addRowToTable(fruit, shouldPrepend){
                       "<td class='buttonTD'>"+
                           
                           "<div class='buttonSuperHolder'>"+
-                          printDevDataHTML(popularity, max_buying_price)+
                             
                             "<div class='buttonSubHolder'>"+        
                               
