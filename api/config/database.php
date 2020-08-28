@@ -6,7 +6,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 class Database
 {
-  private $use_clear_db = 0;
+  private $use_clear_db = 1;
 
   private $username = "root";
   private $password = "";
@@ -25,11 +25,8 @@ class Database
     }
   }
 
-  public function makeGamesTable()
+  public function checkOrMakeGamesTable()
   {
-    include "../../utils/get_gid.php";
-    include "../../utils/table_utils.php";
-
     $this->connection = mysqli_connect(
       $this->host,
       $this->username,
@@ -44,15 +41,130 @@ class Database
       exit();
     }
 
-    //1. Check if games table exists.
+    $query = "SELECT TABLE_NAME FROM information_schema.tables";
 
-    //2. Make games tables, if it doesn't exist.
+    function check($conn, $query)
+    {
+      if (!($stmt = $conn->prepare($query))) {
+        return [
+          "status" => false,
+          "message" => "Could not prepare query.",
+          "error" => $conn->error,
+        ];
+      }
+
+      if (!$stmt->execute()) {
+        return [
+          "status" => false,
+          "message" => "Error in execution.",
+          "error" => $conn->error,
+        ];
+      }
+
+      $result = $stmt->get_result();
+
+      $stmt->close();
+      return [
+        "status" => true,
+        "data" => $result,
+      ];
+    }
+
+    function build($db, $result)
+    {
+      if (!$result["status"]) {
+        return $result;
+      }
+
+      if (!$result['data']->num_rows) {
+        return [
+          "status" => false,
+          "message" => "There are no rows from reading the db.",
+          "error" => $db->error,
+        ];
+      }
+
+      if (
+        !($fruit_arr = build_table_array(
+          "information_schema",
+          $result["data"],
+          true
+        ))
+      ) {
+        return [
+          "status" => false,
+          "message" => "Error in build_table_array.",
+          "error" => $db->error,
+        ];
+      }
+
+      return [
+        "status" => true,
+        "data" => $fruit_arr,
+      ];
+    }
+
+    $response = check($this->connection, $query);
+    $response = build($this->connection, $response);
+
+    function test($arr)
+    {
+      if (
+        array_key_exists("TABLE_NAME", $arr) &&
+        $arr["TABLE_NAME"] == "games"
+      ) {
+        return true;
+      }
+    }
+
+    if (!count(array_filter($response['data'], "test"))) {
+      $table_name = "games";
+
+      $trends_default = json_encode([
+        "weather" => random_int(1, 100),
+        "love" => random_int(1, 100),
+        "politics" => random_int(1, 100),
+        "conformity" => random_int(1, 100),
+        "decadence" => random_int(1, 100),
+        "conformity_history" => "ss",
+      ]);
+
+      $level_record_default = json_encode([
+        "round" => 0,
+        "sublevel" => 0,
+        "final_round" => 3,
+      ]);
+
+      $create_table_querystring =
+        " (
+        `game_id` varchar(32) PRIMARY KEY,
+        `last_accessed` int(11) NOT NULL DEFAULT 0,
+        `money_stat` int(11) NOT NULL DEFAULT 0,
+        `days_stat` int(11) NOT NULL DEFAULT 0,
+        `trend_calculates` json DEFAULT '" .
+        $trends_default .
+        "',
+        `level_record` json DEFAULT '" .
+        $level_record_default .
+        "',
+        `overall_sales_history` json DEFAULT '{}'
+      )";
+
+      make_table(
+        $table_name,
+        $create_table_querystring,
+        $this->connection,
+        null
+      );
+    }
   }
 
   public function startNewGame()
   {
     include "../../utils/get_gid.php";
     include "../../utils/table_utils.php";
+    $this->checkOrMakeGamesTable();
+    // die();
 
     $this->connection = mysqli_connect(
       $this->host,

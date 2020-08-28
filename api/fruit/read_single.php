@@ -71,21 +71,6 @@ function go(
     ];
   }
 
-  if (!$result['data']->num_rows) {
-    return [
-      "status" => false,
-      "message" =>
-        "There are no rows from reading the db. The identifying data (" .
-        $identifying_data .
-        ") at identifying column (" .
-        $identifying_column .
-        ") does not correspond to anything in the table (" .
-        $table_name .
-        ").",
-      "error" => $db->error,
-    ];
-  }
-
   if (
     !($fruit_arr = build_table_array($table_name, $result["data"], $get_full))
   ) {

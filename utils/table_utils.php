@@ -241,42 +241,24 @@ function build_table_array($table, $result, $get_full)
   $res_array = [];
 
   while ($row = $result->fetch_assoc()) {
-    if (substr($table, -3) == "inv") {
-      $item = [
-        "rubicon" => $row["rubicon"],
-        "name" => $row["name"],
-        "quantity" => $row["quantity"],
-        "selling_price" => $row["selling_price"],
-        "max_prices" => json_decode($row["max_prices"]),
-        "popularity_factors" => json_decode($row["popularity_factors"]),
-      ];
-
-      if ($get_full) {
-        $item['popularity_history'] = json_decode($row['popularity_history']);
-        $item['price_history'] = json_decode($row['price_history']);
-        $item['quantity_sold_history'] = json_decode(
-          $row['quantity_sold_history']
-        );
-        $item['from_quantity_sold_history'] = json_decode(
-          $row['from_quantity_sold_history']
-        );
+    foreach ($row as $key => $val) {
+      if (
+        in_array($key, [
+          "max_prices",
+          "popularity_factors",
+          'popularity_history',
+          'price_history',
+          'quantity_sold_history',
+          'from_quantity_sold_history',
+        ])
+      ) {
+        $item[$key] = json_decode($val);
+      } else {
+        $item[$key] = $val;
       }
-    } elseif ($table == "games") {
-      $item = [
-        "game_id" => $row["game_id"],
-        "last_accessed" => $row["last_accessed"],
-        "money_stat" => $row["money_stat"],
-        "days_stat" => $row["days_stat"],
-        "trend_calculates" => $row["trend_calculates"],
-        "level_record" => $row["level_record"],
-      ];
-    } else {
-      return false;
     }
-
     array_push($res_array, $item);
   }
-
   return $res_array;
 }
 
@@ -288,16 +270,18 @@ function make_table(
 ) {
   $query = "CREATE TABLE " . $table_name . $create_table_querystring;
 
-  if (mysqli_query($connection, $query)) {
-    foreach ($query_array as $query) {
-      mysqli_query($connection, $query);
+  if ($query_array) {
+    if (mysqli_query($connection, $query)) {
+      foreach ($query_array as $query) {
+        mysqli_query($connection, $query);
+      }
+    } else {
+      echo "Error: Unable to mysqli_query(Sthis->connection, Squery). Possibly there was already a table with this game id, in which case just try clicking the New Game button again." .
+        PHP_EOL;
+      echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+      echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+      exit();
     }
-  } else {
-    echo "Error: Unable to mysqli_query(Sthis->connection, Squery). Possibly there was already a table with this game id, in which case just try clicking the New Game button again." .
-      PHP_EOL;
-    echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
-    echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
-    exit();
   }
   return true;
 }
