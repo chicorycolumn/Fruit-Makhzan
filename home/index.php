@@ -17,7 +17,7 @@ On a flight of fancy, you use your botanical knowledge to open a Fruit Makhzan (
 From here you aim to become the best fruit seller in all of Al-Andalus!
 <br/>
 <br/>
-<img src="../images/pineapple.png" style="height:75px; width:50px;" />
+<img src="../images/pineapple_sized_shadow2.png" style="height:75px; width:75px;" />
 <br/>
 <button style="height:150px;width:200px;" ' .
   (isset($_COOKIE["makhzan"]) ? "" : "disabled") .
