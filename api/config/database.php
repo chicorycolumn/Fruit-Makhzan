@@ -137,10 +137,12 @@ class Database
 
       $create_table_querystring = " (
         `game_id` varchar(32) PRIMARY KEY,
-        `trend_calculates` longtext DEFAULT '{}',
         `last_accessed` int(11) DEFAULT 0,
         `money_stat` int(11) DEFAULT 0,
-        `days_stat` int(11) DEFAULT 0 )";
+        `days_stat` int(11) DEFAULT 0,
+        `trend_calculates` json, 
+        `level_record` json, 
+        `overall_sales_history` json)";
 
       return $res = make_table(
         $table_name,
