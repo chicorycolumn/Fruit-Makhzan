@@ -23,7 +23,7 @@ button:disabled {
 
 .maxBuyButton {
   position: relative;
-  width: 50px;
+  width: 55px;
   /* background-color: var(--thisOrange); */
   background-color: var(--divGreen);
   font-size: 14px;
@@ -32,7 +32,7 @@ button:disabled {
 }
 
 .buttonCrement {
-  width: 30px;
+  width: 25px;
   /* background-color: var(--thisYellow); */
   background-color: var(--divGreen);
   text-align: center;
@@ -48,7 +48,7 @@ button:disabled {
 .buyButton {
   border-radius: 0 0 0 var(--bradius1);
   position: relative;
-  width: 50px;
+  width: 55px;
   padding: 0px;
   font-size: 14px;
   font-weight: bold;

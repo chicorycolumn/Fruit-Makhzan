@@ -15,7 +15,15 @@ class Database
 
   public function __construct()
   {
+    $db_url = null;
+
     if (array_key_exists("CLEARDB_DATABASE_URL", getenv())) {
+      $db_url = getenv()["CLEARDB_DATABASE_URL"];
+    } elseif (array_key_exists("DATABASE_URL", getenv())) {
+      $db_url = getenv()["DATABASE_URL"];
+    }
+
+    if ($db_url) {
       $db_url = getenv()["CLEARDB_DATABASE_URL"];
 
       preg_match("/:\/\/(\w+):/", $db_url, $matches);
