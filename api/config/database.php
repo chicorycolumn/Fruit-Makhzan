@@ -6,8 +6,6 @@ if (session_status() == PHP_SESSION_NONE) {
 
 class Database
 {
-  private $use_clear_db = 0;
-
   private $username = "root";
   private $password = "";
   private $host = "localhost";
@@ -17,43 +15,34 @@ class Database
 
   public function __construct()
   {
-    if ($this->use_clear_db) {
-      $this->username = "b3845dbeabd54b";
-      $this->password = "c8ee23f4";
-      $this->host = "eu-cdbr-west-03.cleardb.net";
-      $this->db_name = "heroku_73f57e9b43b49b3";
-    }
-
-    // $qx =
-    //   "mysql://b3845dbeabd54b:c8ee23f4@eu-cdbr-west-03.cleardb.net/heroku_73f57e9b43b49b3?reconnect=true";
-
     if (array_key_exists("CLEARDB_DATABASE_URL", getenv())) {
-      $qx = getenv()["CLEARDB_DATABASE_URL"];
+      $db_url = getenv()["CLEARDB_DATABASE_URL"];
+
+      preg_match("/:\/\/(\w+):/", $db_url, $matches);
+      $username_from_getenv = substr($matches[0], 3, -1);
+
+      preg_match("/:(\w+)@/", $db_url, $matches);
+      $password_from_getenv = substr($matches[0], 1, -1);
+
+      preg_match("/@(.+)\//", $db_url, $matches);
+      $host_from_getenv = substr($matches[0], 1, -1);
+
+      preg_match("/\/\/(.+)\?/", $db_url, $matches);
+      $db_name_from_getenv = substr($matches[0], 2);
+
+      $db_name_from_getenv = preg_match(
+        "/\/(.+)\?/",
+        $db_name_from_getenv,
+        $matches
+      );
+
+      $db_name_from_getenv = substr($matches[0], 1, -1);
+
+      $this->username = $username_from_getenv;
+      $this->password = $password_from_getenv;
+      $this->host = $host_from_getenv;
+      $this->db_name = $db_name_from_getenv;
     }
-
-    $username_from_getenv = substr($qx, strpos($qx, "://") + 3);
-    $username_from_getenv = substr(
-      $username_from_getenv,
-      0,
-      strpos($username_from_getenv, ":")
-    );
-
-    echo $username_from_getenv;
-
-    $password_from_getenv = null;
-    $host_from_getenv = null;
-    $db_name_from_getenv = null;
-
-    // echo "b3845dbeabd54b" != $username_from_getenv;
-    // echo "c8ee23f4" != $password_from_getenv;
-    // echo "eu-cdbr-west-03.cleardb.net" != $host_from_getenv;
-    // echo "heroku_73f57e9b43b49b3" != $db_name_from_getenv;
-
-    // print_r(gettype(getenv()));
-
-    // if (array_key_exists("CLEARDB_DATABASE_URL", getenv())) {
-    //   print_r(getenv()["CLEARDB_DATABASE_URL"]);
-    // }
   }
 
   public function checkOrMakeGamesTable()
