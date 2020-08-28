@@ -135,15 +135,12 @@ class Database
         "final_round" => 3,
       ]);
 
-      $create_table_querystring =
-        " (
+      $create_table_querystring = " (
         `game_id` varchar(32) PRIMARY KEY,
         `last_accessed` int(11) DEFAULT 0,
         `money_stat` int(11) DEFAULT 0,
         `days_stat` int(11) DEFAULT 0,
-        `trend_calculates` json DEFAULT '" .
-        $trends_default .
-        "')";
+        `trend_calculates` json DEFAULT '{`name`:`Helga`}')";
 
       return $res = make_table(
         $table_name,
