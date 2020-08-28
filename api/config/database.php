@@ -150,12 +150,7 @@ class Database
         `overall_sales_history` json DEFAULT '{}'
       )";
 
-      make_table(
-        $table_name,
-        $create_table_querystring,
-        $this->connection,
-        null
-      );
+      make_table($table_name, $create_table_querystring, $this->connection, []);
     }
   }
 
