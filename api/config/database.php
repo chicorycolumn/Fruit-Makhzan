@@ -35,7 +35,7 @@ class Database
     );
 
     if (!$this->connection) {
-      echo "Error: Unable to connect to MySQL." . PHP_EOL;
+      echo "Error: Was unable to connect to MySQL." . PHP_EOL;
       echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
       echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
       exit();
@@ -138,9 +138,9 @@ class Database
       $create_table_querystring =
         " (
         `game_id` varchar(32) PRIMARY KEY,
-        `last_accessed` int(11) NOT NULL DEFAULT 0,
-        `money_stat` int(11) NOT NULL DEFAULT 0,
-        `days_stat` int(11) NOT NULL DEFAULT 0,
+        `last_accessed` int(11) DEFAULT 0,
+        `money_stat` int(11) DEFAULT 0,
+        `days_stat` int(11) DEFAULT 0,
         `trend_calculates` json DEFAULT '" .
         $trends_default .
         "',
@@ -169,7 +169,7 @@ class Database
     );
 
     if (!$this->connection) {
-      echo "Error: Unable to connect to MySQL." . PHP_EOL;
+      echo "Error: Am unable to connect to MySQL." . PHP_EOL;
       echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
       echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
       exit();
@@ -363,7 +363,7 @@ class Database
     );
 
     if (!$this->connection) {
-      echo "Error: Unable to connect to MySQL." . PHP_EOL;
+      echo "Error: It is unable to connect to MySQL." . PHP_EOL;
       echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
       echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
       exit();
