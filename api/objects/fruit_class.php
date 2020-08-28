@@ -255,59 +255,161 @@ class Fruit
   ) {
     foreach ($json_data_object as $json_column => $json_data) {
       if ($json_column == "overall_sales_history") {
-        $day = array_key_last($json_data);
+        // return ["status" => true, "message" => "Did not bother updating json!"];
 
-        $query =
-          "UPDATE " .
-          $table_name .
-          " " .
-          $json_column .
-          " SET " .
-          $json_column .
-          "=JSON_INSERT(" .
-          $json_column .
-          ", '$." .
-          $day .
-          "', ?) " .
-          "WHERE " .
-          $identifying_column .
-          " =?";
+        //Read single, table name, id column, id data.
+        if (
+          !($result = $this->read_single(
+            $table_name,
+            $identifying_column,
+            $identifying_data,
+            "s",
+            false
+          ))
+        ) {
+          return [
+            "status" => false,
+            "message" => "Error when calling Sfruit->read_single.",
+            "error" => $this->conn->error,
+          ];
+        }
 
-        if (!($stmt = $this->conn->prepare($query))) {
+        if (!$result["status"]) {
+          return $result;
+        }
+
+        if (!$result['data']->num_rows) {
           return [
             "status" => false,
             "message" =>
-              "Could not prepare query of column `" .
-              $json_column .
-              "` on table `" .
+              "There are no rows from reading the db. The identifying data (" .
+              $identifying_data .
+              ") at identifying column (" .
+              $identifying_column .
+              ") does not correspond to anything in the table (" .
               $table_name .
-              "`.",
+              ").",
             "error" => $this->conn->error,
           ];
         }
 
-        $acronym = "ss";
-        $datum =
-          "['profit':" .
-          $json_data[$day]['profit'] .
-          ",'costs':" .
-          $json_data[$day]['costs'] .
-          "]";
-
-        $stmt->bind_param($acronym, $datum, $identifying_data);
-
-        if (!$stmt->execute()) {
+        if (
+          !($fruit_arr = build_table_array($table_name, $result["data"], false))
+        ) {
           return [
             "status" => false,
-            "Error in execution with column `" .
-            $json_column .
-            "` on table `" .
-            $table_name .
-            "`.",
+            "message" => "Error in build_table_array.",
             "error" => $this->conn->error,
           ];
         }
-        $stmt->close();
+        //
+        ///
+        //
+
+        $json = json_decode($fruit_arr[0][$json_column]);
+
+        //
+        //
+        ///
+
+        // print_r(count(get_object_vars($json)));
+
+        //
+        //
+
+        $json->$json_column = $json_data;
+
+        //
+        //
+
+        if (!isset($update_data)) {
+          $update_data = new stdClass();
+        }
+
+        //
+        //
+
+        $update_data->$json_column = json_encode($json);
+
+        //
+        //
+        //
+
+        // print_r(json_encode($json));
+
+        if (
+          !($result = $this->update_self(
+            $table_name,
+            $identifying_column,
+            $identifying_data,
+            "ss",
+            $update_data
+          ))
+        ) {
+          return [
+            "status" => false,
+            "message" => "Error when calling Sfruit->read_single.",
+            "error" => $this->conn->error,
+          ];
+        }
+
+        if (!$result["status"]) {
+          return $result;
+        }
+
+        // $day = array_key_last($json_data);
+
+        // $query =
+        //   "UPDATE " .
+        //   $table_name .
+        //   " " .
+        //   $json_column .
+        //   " SET " .
+        //   $json_column .
+        //   "=JSON_INSERT(" .
+        //   $json_column .
+        //   ", '$." .
+        //   $day .
+        //   "', ?) " .
+        //   "WHERE " .
+        //   $identifying_column .
+        //   " =?";
+
+        // if (!($stmt = $this->conn->prepare($query))) {
+        //   return [
+        //     "status" => false,
+        //     "message" =>
+        //       "Could not prepare query of column `" .
+        //       $json_column .
+        //       "` on table `" .
+        //       $table_name .
+        //       "`.",
+        //     "error" => $this->conn->error,
+        //   ];
+        // }
+
+        // $acronym = "ss";
+        // $datum =
+        //   "['profit':" .
+        //   $json_data[$day]['profit'] .
+        //   ",'costs':" .
+        //   $json_data[$day]['costs'] .
+        //   "]";
+
+        // $stmt->bind_param($acronym, $datum, $identifying_data);
+
+        // if (!$stmt->execute()) {
+        //   return [
+        //     "status" => false,
+        //     "Error in execution with column `" .
+        //     $json_column .
+        //     "` on table `" .
+        //     $table_name .
+        //     "`.",
+        //     "error" => $this->conn->error,
+        //   ];
+        // }
+        // $stmt->close();
       }
     }
     return ["status" => true, "message" => "Successfully updated json!"];
@@ -349,12 +451,23 @@ class Fruit
       ];
     }
 
-    $stmt->bind_param($acronym, ...$update_values);
+    if (count($update_values) == 1) {
+      $stmt->bind_param($acronym, $update_values);
+    } elseif (count($update_values) > 1) {
+      $stmt->bind_param($acronym, ...$update_values);
+    } else {
+      return [
+        "status" => false,
+        "message" => "Nothing in Supdate_values.",
+        "error" => $this->conn->error,
+      ];
+    }
 
     if (!$stmt->execute()) {
       return [
         "status" => false,
         "message" => "Error in execution. " . $query,
+        "update_values" => $update_values,
         "error" => $this->conn->error,
       ];
     }
