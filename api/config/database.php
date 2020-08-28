@@ -140,7 +140,7 @@ class Database
         `last_accessed` int(11) DEFAULT 0,
         `money_stat` int(11) DEFAULT 0,
         `days_stat` int(11) DEFAULT 0,
-        `trend_calculates` json DEFAULT '{}' )";
+        `trend_calculates` json DEFAULT {} )";
 
       return $res = make_table(
         $table_name,
