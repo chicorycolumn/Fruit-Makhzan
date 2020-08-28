@@ -140,9 +140,9 @@ class Database
         `last_accessed` int(11) DEFAULT 0,
         `money_stat` int(11) DEFAULT 0,
         `days_stat` int(11) DEFAULT 0,
-        `trend_calculates` json, 
-        `level_record` json, 
-        `overall_sales_history` json)";
+        `trend_calculates` longtext, 
+        `level_record` longtext, 
+        `overall_sales_history` longtext)";
 
       return $res = make_table(
         $table_name,
