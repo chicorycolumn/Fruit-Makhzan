@@ -142,7 +142,14 @@ class Database
         `days_stat` int(11) DEFAULT 0
       )";
 
-      make_table($table_name, $create_table_querystring, $this->connection, []);
+      return $res = make_table(
+        $table_name,
+        $create_table_querystring,
+        $this->connection,
+        []
+      );
+    } else {
+      return true;
     }
   }
 
@@ -150,7 +157,13 @@ class Database
   {
     include "../../utils/get_gid.php";
     include "../../utils/table_utils.php";
-    $this->checkOrMakeGamesTable();
+    if (!$this->checkOrMakeGamesTable()) {
+      print_r([
+        "status" => false,
+        "message" =>
+          "false result coming from checkOrMakeGamesTable fxn which called make_table util fxn, when trying to check or make games table.",
+      ]);
+    }
     // die();
 
     $this->connection = mysqli_connect(
