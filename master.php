@@ -19,14 +19,14 @@
  
   <a class='navbarLink' href="../home">
   <div class=navBarLinkSubholder>
-  <img class='navbarImage' src='../images/grapes_sized.png'>  
+  <img class='navbarImage' src='../images/grapes_sized_shadow2.png'>  
   <p class='noMarginPadding navbarText' >Home</p>
   </div>
   </a>    
 
   <a class='navbarLink' href="../play">
   <div class=navBarLinkSubholder>
-  <img class='navbarImage' src='../images/peach_sized.png'>  
+  <img class='navbarImage' src='../images/peach_sized_shadow2.png'>  
   <p class='noMarginPadding navbarText' >Play</p>
   </div>
   </a>   

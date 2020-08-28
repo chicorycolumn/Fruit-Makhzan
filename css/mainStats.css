@@ -61,29 +61,18 @@
 }
 
 .coin {
-  height: 200px;
-  width: 200px;
+  height: 220px;
+  width: 220px;
   position: absolute;
   z-index: 1;
 }
 
-.mainStatTitle {
-}
-
 .mainStatText {
-  /* border: fuchsia solid 2pt; */
+  /* border: blue solid 2pt; */
   position: relative;
-  top: 72px;
+  top: 85.5px;
   z-index: 2;
-  /* left: 5px; */
-}
-
-.crown {
-  height: 100px;
-  width: 120px;
-  position: absolute;
-  top: 32.5px;
-  left: 31px;
+  left: 10px;
 }
 
 .daysYearsHolder {
@@ -99,4 +88,7 @@
   margin-right: 5px;
   display: flex;
   flex-direction: column;
+}
+
+#clock_circle_crown {
 }

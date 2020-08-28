@@ -67,9 +67,11 @@ body {
 }
 
 .mainDivBulletin {
+  margin-top: 50px;
   width: 400px;
 }
 
 .mainDivGraphs {
+  margin-top: 50px;
   width: 400px;
 }

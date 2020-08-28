@@ -60,8 +60,8 @@ button:disabled {
   height: 145px;
   width: 145px;
   position: absolute;
-  top: 27.5px;
-  left: 27.5px;
+  top: 37.5px;
+  left: 37.5px;
   border-radius: 100px;
   font-size: var(--tdFontSize1);
   padding-left: 15px;

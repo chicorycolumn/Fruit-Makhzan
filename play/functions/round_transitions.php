@@ -42,7 +42,7 @@ let createFruitForm =
 const rubiconMessageRef = {
   1: "Wahad! You reached sublevel 1!",
   0: "You're a billionaire! As a reward for all your hard work, you buy an island to relax on.",
-  4: "You won the whole game! You own five islands and are now king.",
+  4: "You won the whole game! You own four lovely islands and are now king.",
 };
 
 const rubicons = { 1: 150, 2: 300 };
@@ -125,7 +125,7 @@ function loadRubiconIfAt() {
       if (level_record["round"] == level_record["final_round"] + 1) {
         showIsland();
         $(".newDayButton").addClass("hidden");
-        $(".crown").removeClass("hidden");
+        $("#clock_circle_crown").attr("src", '.././images/crown2.png');
         $(document).ready(function () {
           allButtonsDisabled(true);
         });
@@ -178,7 +178,7 @@ function showEndScreen(sublevel) {
   $(".dialogHolder").find(".dialogBoxText").text(rubiconMessageRef[sublevel]);
   showIsland();
   $(".newDayButton").addClass("hidden");
-  $(".crown").removeClass("hidden");
+  $("#clock_circle_crown").attr("src", '.././images/crown2.png');
   $(document).ready(function () {
     allButtonsDisabled(true);
   });
