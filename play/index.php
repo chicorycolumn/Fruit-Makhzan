@@ -54,6 +54,12 @@ let level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`);
 let current_rubicon = 0;
 updateCurrentRubicon();
 
+
+let envi = JSON.parse(`<?php echo json_encode(getenv()); ?>`)
+
+console.log({envi})
+
+
 //'
 
 let sessionMoney = "<?php echo $_SESSION['money_stat']; ?>"
