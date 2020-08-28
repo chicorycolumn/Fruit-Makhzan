@@ -140,9 +140,9 @@ class Database
         `last_accessed` int(11) DEFAULT 0,
         `money_stat` int(11) DEFAULT 0,
         `days_stat` int(11) DEFAULT 0,
-        `trend_calculates` longtext, 
-        `level_record` longtext, 
-        `overall_sales_history` longtext)";
+        `trend_calculates` longtext NOT NULL, 
+        `level_record` longtext NOT NULL, 
+        `overall_sales_history` longtext NOT NULL )";
 
       return $res = make_table(
         $table_name,
@@ -195,22 +195,17 @@ class Database
     $max_prices_json = json_encode(["Low" => 1, "High" => 5]);
     $pop_factors_json = json_encode(["weather" => true, "love" => false]);
 
-    $create_table_querystring =
-      " (
+    $create_table_querystring = " (
       `rubicon` float(11,1) DEFAULT -1,
       `name` varchar(100) PRIMARY KEY,
       `quantity` int(11) DEFAULT 0,
       `selling_price` int(11) DEFAULT 0,
-      `max_prices` json DEFAULT '" .
-      $max_prices_json .
-      "',
-      `popularity_factors` json DEFAULT '" .
-      $pop_factors_json .
-      "',
-      `popularity_history` json DEFAULT '{}',
-      `price_history` json DEFAULT '{}',
-      `quantity_sold_history` json DEFAULT '{}',
-      `from_quantity_sold_history` json DEFAULT '{}'
+      `max_prices` longtext NOT NULL,
+      `popularity_factors` longtext NOT NULL,
+      `popularity_history` longtext,
+      `price_history` longtext,
+      `quantity_sold_history` longtext,
+      `from_quantity_sold_history` longtext
     )";
 
     $seed_data = [
