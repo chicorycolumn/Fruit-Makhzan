@@ -55,9 +55,9 @@ let current_rubicon = 0;
 updateCurrentRubicon();
 
 
-let envi = JSON.parse(`<?php echo json_encode(getenv()); ?>`)
+// let envi = JSON.parse(`<?php echo json_encode(getenv()); ?>`)
 
-console.log({envi})
+// console.log({envi})
 
 
 //'

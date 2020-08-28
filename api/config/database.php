@@ -4,9 +4,11 @@ if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
 
+print_r(getenv());
+
 class Database
 {
-  private $use_clear_db = 1;
+  private $use_clear_db = 0;
 
   private $username = "root";
   private $password = "";
