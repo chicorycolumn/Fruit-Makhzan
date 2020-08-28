@@ -4,8 +4,6 @@ if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
 
-print_r(getenv());
-
 class Database
 {
   private $use_clear_db = 0;
@@ -24,6 +22,10 @@ class Database
       $this->password = "c8ee23f4";
       $this->host = "eu-cdbr-west-03.cleardb.net";
       $this->db_name = "heroku_73f57e9b43b49b3";
+    }
+
+    if (isset(getenv()->DATABASE_URL)) {
+      print_r(getenv()->DATABASE_URL);
     }
   }
 
