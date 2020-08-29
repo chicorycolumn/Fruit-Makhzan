@@ -63,15 +63,18 @@ body {
   /* border: blue solid 1pt; */
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-}
-
-.mainDivBulletin {
-  margin-top: 50px;
-  width: 400px;
+  justify-content: center;
 }
 
 .mainDivGraphs {
   margin-top: 50px;
-  width: 400px;
+  width: 460px;
+}
+
+#chartContainer {
+  background-color: none;
+  /* margin-bottom: 50px; */
+  position: relative;
+  top: -20px;
+  margin-top: none;
 }

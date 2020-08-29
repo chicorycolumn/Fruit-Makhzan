@@ -85,19 +85,6 @@
   width: var(--cellWidth1);
 }
 
-.popularityCircleSpan {
-  margin: 0px;
-  background-color: white;
-  border-radius: 50px;
-  height: 27.5px;
-  width: 27.5px;
-  margin-left: 5px;
-  text-align: center;
-  font-size: var(--tdFontSize1);
-  position: relative;
-  top: -3px;
-}
-
 .popHolder {
   display: flex;
   flex-direction: row;
@@ -176,4 +163,46 @@
 
 .hiddenData {
   display: none;
+}
+
+/*********************************/
+/*                               */
+/*********************************/
+
+.popularityCircleSpan {
+  margin: 0px;
+  background-color: white;
+  border-radius: 50px;
+  height: 27.5px;
+  width: 27.5px;
+  margin-left: 5px;
+  text-align: center;
+  font-size: var(--tdFontSize1);
+  position: relative;
+  top: -3px;
+  z-index: 3;
+}
+
+.popularityCircleText {
+  margin: 0;
+  padding: 0;
+  z-index: 3;
+  position: relative;
+  top: 2px;
+}
+
+.popularityCircleSpan .popularityCircleToolTipText {
+  visibility: hidden;
+  width: 240px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+}
+
+.popularityCircleSpan:hover .popularityCircleToolTipText {
+  visibility: visible;
 }

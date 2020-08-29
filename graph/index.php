@@ -9,24 +9,24 @@ include "../fusioncharts/fusioncharts.php"; ?>
 // Chart Configuration stored in Associative Array
 $arrChartConfig = [
   "chart" => [
-    "caption" => "Countries With Most Oil Reserves [2017-18]",
-    "subCaption" => "In MMbbl = One Million barrels",
-    "xAxisName" => "Country",
-    "yAxisName" => "Reserves (MMbbl)",
-    "numberSuffix" => "K",
+    "caption" => "Factors affecting popularity",
+    "subCaption" => "",
+    "xAxisName" => "",
+    "yAxisName" => "",
+    "yAxisMinValue" => 0,
+    "yAxisMaxValue" => 100,
+    "numberSuffix" => "",
     "theme" => "fusion",
+    "bgColor" => "#ebffe0",
   ],
 ];
 // An array of hash objects which stores data
 $arrChartData = [
-  ["Venezuela", "290"],
-  ["Saudi", "260"],
-  ["Canada", "180"],
-  ["Iran", "140"],
-  ["Russia", "115"],
-  ["UAE", "100"],
-  ["US", "30"],
-  ["China", "30"],
+  ["Love", "50"],
+  ["Politics", "50"],
+  ["Weather", "50"],
+  ["Conformity", "50"],
+  ["Decadence", "50"],
 ];
 $arrLabelValueData = [];
 
@@ -46,9 +46,9 @@ $jsonEncodedData = json_encode($arrChartConfig);
 $Chart = new FusionCharts(
   "column2d",
   "MyFirstChart",
-  "700",
-  "400",
-  "chart-container",
+  "450",
+  "200",
+  "chartContainer",
   "json",
   $jsonEncodedData
 );
@@ -56,15 +56,13 @@ $Chart = new FusionCharts(
 // Render the chart
 $Chart->render();
 
-$content = '<html>
+$graph_content = '<html>
 <body>
     <center>
-        <div id="chart-container">Chart will render here!</div>
+        <div id="chartContainer">Chart will render here!</div>
     </center>
 </body>
 </html>';
-
-include '../master.php';
 
 
 ?>

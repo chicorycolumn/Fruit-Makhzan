@@ -27,6 +27,9 @@ include '../master.php';
 let day_costs = 0;
 let week_record = {};
 let level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`);
+
+level_record['round'] = 3;
+
 let current_rubicon = 0;
 updateCurrentRubicon();
 
@@ -361,7 +364,7 @@ function addRowToTable(fruit, shouldPrepend){
                         "<div class='invSubtd restockPriceSubtd'>"+
                           "<div class='popHolder'>"+
                             "<p class='invData restockPriceData'>"+digitGrouping(restock_price)+"</p>"+
-                            "<div class='popularityCircleSpan'></div>"+
+                            "<div class='popularityCircleSpan'><p class='popularityCircleText'>X</p><span class='popularityCircleToolTipText'>Tooltip text</span></div>"+
                           "</div>"+
                         "</div>"+
                       "</td>"+

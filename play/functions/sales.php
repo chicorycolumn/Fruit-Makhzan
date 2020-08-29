@@ -99,21 +99,28 @@ function updateSalesSubstratesInDisplayedTable() {
     row.find(".devdata1").text("P" + popularity + "  M" + max_buying_price);
 
     row
+      .find(".popularityCircleText")
+      .text(getPopularityColor(popularity).text);
+
+    row
       .find(".popularityCircleSpan")
-      .text(getPopularityColor(popularity).text)
       .css({ "background-color": getPopularityColor(popularity).color });
+
+    row
+    .find(".popularityCircleToolTipText")
+    .text(name + " has " + getPopularityColor(popularity).descrip.slice(0, -1) + " popularity" + getPopularityColor(popularity).descrip.slice(-1));
 
     function getPopularityColor(pop) {
       if (pop < 20) {
-        return { text: "⇊", color: "red" };
+        return { text: "⇊", color: "red", descrip: "very low!" };
       } else if (pop < 40) {
-        return { text: "↓", color: "orange" };
+        return { text: "↓", color: "orange", descrip: "low." };
       } else if (pop < 60) {
-        return { text: "·", color: "yellow" };
+        return { text: "·", color: "yellow", descrip: "medium." };
       } else if (pop < 80) {
-        return { text: "↑", color: "greenyellow" };
+        return { text: "↑", color: "greenyellow", descrip: "high." };
       } else if (pop >= 80) {
-        return { text: "⇈", color: "cyan" };
+        return { text: "⇈", color: "cyan", descrip: "very high!" };
       }
     }
 

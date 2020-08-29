@@ -34,13 +34,7 @@ $content .=
 
     <div class="mainDiv mainDivGraphs">
     ' .
-  $mainGraphs .
-  '
-    </div>
-
-    <div class="mainDiv mainDivBulletin">
-      ' .
-  $mainBulletin .
+  // $mainGraphs .
   '
     </div>
 
