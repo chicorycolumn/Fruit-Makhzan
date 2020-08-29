@@ -32,11 +32,11 @@ $content .=
 
   <div class="holderForHorizontalMainDivs">
 
-    <div class="mainDiv mainDivGraphs">
+
     ' .
-  // $mainGraphs .
+  $mainGraphs .
   '
-    </div>
+
 
   </div>
     
