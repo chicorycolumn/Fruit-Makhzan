@@ -73,9 +73,7 @@ function go(
     ];
   }
 
-  if (
-    !($fruit_arr = build_table_array($table_name, $result["data"], $get_full))
-  ) {
+  if (!($fruit_arr = build_table_array($result["data"]))) {
     return [
       "status" => false,
       "message" => "Error in build_table_array. 2re",

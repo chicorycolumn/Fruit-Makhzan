@@ -112,13 +112,7 @@ class Database
         ];
       }
 
-      if (
-        !($fruit_arr = build_table_array(
-          "information_schema",
-          $result["data"],
-          true
-        ))
-      ) {
+      if (!($fruit_arr = build_table_array($result["data"]))) {
         return [
           "status" => false,
           "message" => "Error in build_table_array.",
@@ -194,7 +188,6 @@ class Database
           "false result coming from checkOrMakeGamesTable fxn which called make_table util fxn, when trying to check or make games table.",
       ]);
     }
-    // die();
 
     $this->connection = mysqli_connect(
       $this->host,

@@ -131,4 +131,27 @@ function setZoom() {
   document.body.style.transform = scale;
 }
 
+function updateTimestamp(){
+  $.ajax({
+    type: "POST",
+    url: "../api/fruit/update_timestamp.php",
+    dataType: "json",
+    data: {
+      time: Date.now(),
+    },
+    error: function (result) {
+      console.log(
+        "An error when updating timestamp.",
+        result,
+        result.responseText
+      );
+    },
+    success: function (result) {
+      if (result["status"]) {
+        console.log("Successfully updated timestamp.")
+      } 
+    },
+  });
+}
+
 </script>

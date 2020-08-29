@@ -18,30 +18,6 @@ setcookie("makhzan", $_SESSION['gid'], time() + 3600 * 24 * 30, "/");
 $gid = $_SESSION['gid'];
 $inv_table_name = $_SESSION['inv_table_name'];
 
-function update_timestamp()
-{
-  $database = new Database();
-  $db = $database->getConnection();
-  $result = update_row(
-    $db,
-    "last_accessed",
-    time(),
-    "game_id",
-    $_SESSION['gid'],
-    "games",
-    "is"
-  );
-  $database->closeConnection();
-  return $result;
-}
-
-$result = update_timestamp();
-
-if (!$result) {
-  echo "Error in updating game's timestamp.";
-  die();
-}
-
 include 'functions/includes.php';
 include '../master.php';
 ?>
@@ -53,14 +29,6 @@ let week_record = {};
 let level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`);
 let current_rubicon = 0;
 updateCurrentRubicon();
-
-
-// let envi = JSON.parse(`<?php echo json_encode(getenv()); ?>`)
-
-// console.log({envi})
-
-
-//'
 
 let sessionMoney = "<?php echo $_SESSION['money_stat']; ?>"
 let sessionDays = "<?php echo $_SESSION['days_stat']; ?>"
@@ -77,6 +45,8 @@ $(document).ready(function () {
 });
 
 function newDay() {
+  updateTimestamp()
+
   let incipient_sales = calculateSales();
   let day_profit = Object.values(incipient_sales).reduce(
     (sum, obj) => sum + obj.profit,

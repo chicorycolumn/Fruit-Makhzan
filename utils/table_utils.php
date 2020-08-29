@@ -236,7 +236,7 @@ function add_to_json(
   $conn->query($query);
 }
 
-function build_table_array($table, $result, $get_full)
+function build_table_array($result)
 {
   $res_array = [];
 
@@ -290,6 +290,7 @@ function make_table(
 
 function wipe_previous_game($connection)
 {
+  $message = "Right, ";
   $result = delete_table($connection, $_SESSION["inv_table_name"]);
   if (!$result["status"]) {
     mysqli_close($connection);
@@ -310,7 +311,10 @@ function wipe_previous_game($connection)
 
 function clean_up_db($connection)
 {
+  $timeout = 3600 * 24 * 30;
+  $log = [];
   $query = "SELECT * FROM games WHERE last_accessed < ?";
+  // $query = "SELECT update_time, table_name FROM information_schema.tables";
 
   if (!($stmt = $connection->prepare($query))) {
     return [
@@ -320,7 +324,7 @@ function clean_up_db($connection)
     ];
   }
 
-  $t = time() - 3600; /////////////// 3600 * 24 * 30
+  $t = time() - $timeout;
   $stmt->bind_param("i", $t);
 
   if (!$stmt->execute()) {
@@ -334,7 +338,7 @@ function clean_up_db($connection)
   $result = $stmt->get_result();
   $stmt->close();
 
-  if (!$result->num_rows) {
+  if (!($res_arr = build_table_array($result))) {
     return [
       "status" => true,
       "data" => [],
@@ -342,25 +346,40 @@ function clean_up_db($connection)
     ];
   }
 
-  $gid_arr = [];
-  $log = [];
-  while ($row = $result->fetch_assoc()) {
-    array_push($gid_arr, $row["game_id"]);
-  }
+  // $gid_arr = [];
+  // foreach ($res_arr as $table) {
+  //   if (
+  //     substr($table['table_name'], -5) == "__inv" &&
+  //     $table['update_time'] &&
+  //     $table['update_time'] < time() - $timeout
+  //   ) {
+  //     array_push(
+  //       $gid_arr,
+  //       substr($table['table_name'], 0, strpos($table['table_name'], "__inv"))
+  //     );
+  //   }
+  // }
+  // $res_arr = $gid_arr;
 
-  foreach ($gid_arr as $gid) {
+  foreach ($res_arr as $row) {
     if (
-      !($result = delete_row($connection, "game_id", $gid, "games", "s")) ||
+      !($result = delete_row(
+        $connection,
+        "game_id",
+        $row['game_id'],
+        "games",
+        "s"
+      )) ||
       !$result["status"]
     ) {
-      $log["Undeleted_rows"][] = $gid;
+      $log["Undeleted_rows"][] = $row['game_id'];
     }
 
     if (
-      !($result = delete_table($connection, $gid . "__inv")) ||
+      !($result = delete_table($connection, $row['game_id'] . "__inv")) ||
       !$result["status"]
     ) {
-      $log["Undeleted_tables"][] = $gid;
+      $log["Undeleted_tables"][] = $row['game_id'];
     }
   }
 

@@ -39,9 +39,7 @@ function go($db, $fruit, $table_name, $get_full)
     ];
   }
 
-  if (
-    !($res_array = build_table_array($table_name, $result["data"], $get_full))
-  ) {
+  if (!($res_array = build_table_array($result["data"]))) {
     return [
       "status" => false,
       "message" => "An error in build_table_array. 1rea",
