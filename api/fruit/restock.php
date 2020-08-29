@@ -8,7 +8,7 @@ $database = new Database();
 $db = $database->getConnection();
 
 $fruit = new Fruit($db);
-$fruit->name = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
+$name = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
 $increment = filter_var($_POST['increment'], FILTER_SANITIZE_SPECIAL_CHARS);
 $table_name = filter_var($_POST['table_name'], FILTER_SANITIZE_SPECIAL_CHARS);
 $identifying_column = "name";
@@ -24,9 +24,10 @@ function go(
   $identifying_column,
   $identifying_data,
   $acronym,
+  $name,
   $get_full
 ) {
-  if (!($result = $fruit->restock_self($table_name, $increment))) {
+  if (!($result = $fruit->restock_self($name, $table_name, $increment))) {
     return [
       "status" => false,
       "message" => "Error when calling Sfruit->restock_self.",
@@ -94,6 +95,7 @@ $response = go(
   $identifying_column,
   $identifying_data,
   $acronym,
+  $name,
   $get_full
 );
 $database->closeConnection();

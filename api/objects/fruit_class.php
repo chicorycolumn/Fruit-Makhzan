@@ -191,7 +191,7 @@ class Fruit
     return ["status" => true, "message" => "Entry exists."];
   }
 
-  function restock_self($table_name, $increment)
+  function restock_self($name, $table_name, $increment)
   {
     $query = "UPDATE " . $table_name . " SET quantity=quantity+? WHERE name=?";
 
@@ -203,7 +203,7 @@ class Fruit
       ];
     }
 
-    $stmt->bind_param("is", $increment, $this->name);
+    $stmt->bind_param("is", $increment, $name);
 
     if (!$stmt->execute()) {
       return [
@@ -218,7 +218,7 @@ class Fruit
     return ["status" => true, "message" => "Successfully restocked!"];
   }
 
-  function delete_self($table_name)
+  function delete_self($name, $table_name)
   {
     $query = "DELETE FROM " . $table_name . " WHERE name=?";
 
@@ -230,7 +230,7 @@ class Fruit
       ];
     }
 
-    $stmt->bind_param("s", $this->name);
+    $stmt->bind_param("s", $name);
 
     if (!$stmt->execute()) {
       return [
@@ -255,9 +255,6 @@ class Fruit
   ) {
     foreach ($json_data_object as $json_column => $json_data) {
       if ($json_column == "overall_sales_history") {
-        // return ["status" => true, "message" => "Did not bother updating json!"];
-
-        //Read single, table name, id column, id data.
         if (
           !($result = $this->read_single(
             $table_name,
@@ -300,40 +297,15 @@ class Fruit
             "error" => $this->conn->error,
           ];
         }
-        //
-        ///
-        //
 
         $json = json_decode($fruit_arr[0][$json_column]);
-
-        //
-        //
-        ///
-
-        // print_r(count(get_object_vars($json)));
-
-        //
-        //
-
         $json->$json_column = $json_data;
-
-        //
-        //
 
         if (!isset($update_data)) {
           $update_data = new stdClass();
         }
 
-        //
-        //
-
         $update_data->$json_column = json_encode($json);
-
-        //
-        //
-        //
-
-        // print_r(json_encode($json));
 
         if (
           !($result = $this->update_self(
@@ -354,60 +326,6 @@ class Fruit
         if (!$result["status"]) {
           return $result;
         }
-
-        // $day = array_key_last($json_data);
-
-        // $query =
-        //   "UPDATE " .
-        //   $table_name .
-        //   " " .
-        //   $json_column .
-        //   " SET " .
-        //   $json_column .
-        //   "=JSON_INSERT(" .
-        //   $json_column .
-        //   ", '$." .
-        //   $day .
-        //   "', ?) " .
-        //   "WHERE " .
-        //   $identifying_column .
-        //   " =?";
-
-        // if (!($stmt = $this->conn->prepare($query))) {
-        //   return [
-        //     "status" => false,
-        //     "message" =>
-        //       "Could not prepare query of column `" .
-        //       $json_column .
-        //       "` on table `" .
-        //       $table_name .
-        //       "`.",
-        //     "error" => $this->conn->error,
-        //   ];
-        // }
-
-        // $acronym = "ss";
-        // $datum =
-        //   "['profit':" .
-        //   $json_data[$day]['profit'] .
-        //   ",'costs':" .
-        //   $json_data[$day]['costs'] .
-        //   "]";
-
-        // $stmt->bind_param($acronym, $datum, $identifying_data);
-
-        // if (!$stmt->execute()) {
-        //   return [
-        //     "status" => false,
-        //     "Error in execution with column `" .
-        //     $json_column .
-        //     "` on table `" .
-        //     $table_name .
-        //     "`.",
-        //     "error" => $this->conn->error,
-        //   ];
-        // }
-        // $stmt->close();
       }
     }
     return ["status" => true, "message" => "Successfully updated json!"];
