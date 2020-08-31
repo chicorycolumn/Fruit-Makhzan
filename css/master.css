@@ -8,6 +8,10 @@
   --buttonGreen: lightgreen;
   --paleGreen: rgb(212, 255, 187);
   --divGreen: rgb(235, 255, 224);
+  --facDimW: 105px;
+  --facDimH: 30px;
+  --facDimMBmajor: 4px;
+  --facDimMBminor: 2px;
 }
 
 body {

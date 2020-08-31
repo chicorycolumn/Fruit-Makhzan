@@ -1,0 +1,83 @@
+.createFruitInputName {
+  margin-top: 5px;
+  margin-bottom: 15px;
+  height: 30px;
+  background-color: rgba(255, 255, 255, 0.5);
+  font-size: 16px;
+  width: 170px;
+}
+
+.createFruitLabel {
+  font-size: 20px;
+}
+
+.createFruitFormGroup {
+  /* border: blue dotted 1pt; */
+  width: 250px;
+  line-height: 22.5px;
+  text-align: center;
+  position: relative;
+  top: -15px;
+}
+
+#weather {
+  margin-right: 30px;
+}
+
+.factorsHolder {
+  /* border: red solid 2pt; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 250px;
+  max-width: 250px;
+  height: 120px;
+  margin-top: 12.5px;
+  position: relative;
+  left: -5px;
+}
+
+.factorSelect {
+  font-size: 16px;
+  user-select: none;
+  margin-top: 1.5px;
+  margin-bottom: 1.5px;
+  text-align: center;
+  color: black;
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 2.5px rgba(255, 255, 255, 0.25);
+}
+
+.factorDimensions {
+  width: var(--facDimW);
+  height: var(--facDimH);
+  padding-bottom: 1px;
+}
+
+.factorMajor {
+  width: calc(
+    var(--facDimW) - calc(var(--facDimMBmajor) + var(--facDimMBmajor) + 1px)
+  );
+  height: calc(
+    var(--facDimH) - calc(var(--facDimMBmajor) + var(--facDimMBmajor) + 1px)
+  );
+  border: black solid var(--facDimMBmajor);
+  padding-top: 1px;
+}
+
+.factorMinor {
+  width: calc(var(--facDimW) - 5px);
+  height: calc(var(--facDimH) - 5px);
+  border: black solid var(--facDimMBminor);
+  padding-top: 1px;
+}
+
+.factorNegated {
+  background-color: rgba(255, 34, 34, 0.25);
+  box-shadow: 0 0 2.5px rgba(255, 34, 34, 0.25);
+}

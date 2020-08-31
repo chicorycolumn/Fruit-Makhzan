@@ -18,7 +18,7 @@ setcookie("makhzan", $_SESSION['gid'], time() + 3600 * 24 * 30, "/");
 $gid = $_SESSION['gid'];
 $inv_table_name = $_SESSION['inv_table_name'];
 
-include 'functions/includes.php';
+include 'functions/includes_play.php';
 include '../master.php';
 ?>
 
@@ -28,7 +28,7 @@ let day_costs = 0;
 let week_record = {};
 let level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`);
 
-level_record['round'] = 4;
+// level_record['round'] = 1;
 
 let current_rubicon = 0;
 updateCurrentRubicon();

@@ -21,14 +21,14 @@
 
       <a class='navbarLink' href="../home">
       <div class=navbarLinkSubholder>
-      <img class='navbarImage' src='../images/grapes_sized_shadow2.png'>  
+      <img class='navbarImage' src='../images/blueberry_sized_shadow2.png'>  
       <p class='noMarginPadding navbarText' >Home</p>
       </div>
       </a>    
 
       <a class='navbarLink' href="../play">
       <div class=navbarLinkSubholder>
-      <img class='navbarImage' src='../images/peach_sized_shadow2.png'>  
+      <img class='navbarImage' src='../images/orange_sized_shadow2.png'>  
       <p class='noMarginPadding navbarText' >Play</p>
       </div>
       </a> 

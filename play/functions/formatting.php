@@ -1,5 +1,9 @@
 <script>
 
+function sayHello(){
+  console.log("hi")
+}
+
 function getPopularityFactor(pop_factor_names, i, trend_calculates) {
   let pop_keys = Object.keys(pop_factor_names);
   return pop_factor_names[pop_keys[i]]
@@ -124,11 +128,12 @@ function verifyBuyButtons() {
 }
 
 function setZoom() {
-  let scale = "0.5";
-  document.body.style.zoom = 0.8;
+  let scale = 0.8;
+  document.body.style.zoom = scale;
   document.body.style.webkitTransform = scale;
   document.body.style.msTransform = scale;
   document.body.style.transform = scale;
+  console.log("Zoomed to scale " + scale)
 }
 
 function updateTimestamp(){

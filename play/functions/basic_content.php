@@ -13,7 +13,7 @@ if ($show_dev_data) {
 $content .=
   '
   <div class="dialogHolder hidden">
-    <img class="scroll1" src=".././images/scroll1.png">
+    <img class="scroll" src=".././images/scroll2a.png">
     <div class="dialogBox">
       <div class="dialogBoxInner">
         <div class="dialogBoxInnerInner">

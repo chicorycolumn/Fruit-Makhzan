@@ -11,7 +11,7 @@ let createFruitForm =
       "</div>" +
 
       '<div class="formGroup createFruitFormGroup">' +
-        "<label class='createFruitLabel'>Which two will affect its popularity?</label>" +
+        "<label class='createFruitLabel'>What affects its popularity?</label>" +
         '<div class="formControl factorsHolder">' +
       
           '<span id="love" class="factorSelect factorDimensions" ' +

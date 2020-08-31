@@ -1,0 +1,53 @@
+.dialogBox 
+  /* background-color: rgba(0, 0, 0, 0.5); */ {
+  user-select: none;
+  z-index: 4;
+  text-align: center;
+  height: 290px;
+  width: 275px;
+  max-width: 300px;
+  left: 50%;
+  margin-left: -132.5px;
+  top: 150px;
+  position: fixed;
+  border-radius: var(--bradius1);
+}
+
+.dialogBoxInner {
+  /* border: black solid 2pt; */
+  line-height: 30px;
+  text-align: center;
+  padding-left: 15px;
+  padding-right: 15px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  height: 250px;
+  display: flex;
+}
+
+.dialogBoxInnerInner {
+  margin: auto;
+}
+
+.scroll {
+  text-align: center;
+  height: 485px;
+  width: 590px;
+  left: 50%;
+  margin-left: -292px;
+  top: 55px;
+  position: fixed;
+  z-index: 3;
+}
+
+.dialogBoxText {
+  font-size: 20px;
+}
+
+.dialogBoxTextSmall {
+  font-size: 19px;
+  line-height: 22px;
+  margin: 0px;
+  padding: 0px;
+  margin-bottom: 14px;
+}

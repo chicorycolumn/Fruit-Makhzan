@@ -1,0 +1,52 @@
+.homeButtonHolder {
+  /* border: fuchsia solid 1pt; */
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  position: relative;
+  top: -55px;
+}
+
+.homeButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: none;
+  overflow: hidden;
+  /* outline: none; */
+}
+
+.dialogBoxInnerHome {
+  /* border: blue solid 1pt; */
+  width: 265px;
+  position: relative;
+  top: -20px;
+  left: -7.5px;
+}
+
+.homeButtonImage {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.homeButtonText {
+  font-style: italic;
+}
+
+.greyedOut {
+  filter: grayscale(100%);
+}
+
+.homeButton:disabled {
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: none;
+  overflow: hidden;
+  filter: grayscale(100%);
+  cursor: not-allowed;
+}
