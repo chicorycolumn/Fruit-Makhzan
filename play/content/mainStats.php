@@ -7,12 +7,15 @@ $mainStats = "
 
   <div class='bottomHalf'>
   
-    <div class='islandHolder'>
+    <div class='islandHolder islandHolder1'>
       <img id='island1' class='island hidden' src='.././images/island2_small.png'>
       <img id='island2' class='island hidden' src='.././images/island2_small.png'>
-      <img id='island3' class='island hidden' src='.././images/island2_small.png'>
-      <img id='island4' class='island hidden' src='.././images/island2_small.png'>
     </div>
+
+  <div class='islandHolder islandHolder2'>
+    <img id='island3' class='island hidden' src='.././images/island2_small.png'>
+    <img id='island4' class='island hidden' src='.././images/island2_small.png'>
+  </div>
 
   </div>
 

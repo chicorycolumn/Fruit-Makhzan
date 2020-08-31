@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Factor",
+    "type": "string"
+  },
+  {
+    "name": "Height",
+    "type": "number"
+  }
+]

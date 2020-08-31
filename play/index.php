@@ -28,7 +28,7 @@ let day_costs = 0;
 let week_record = {};
 let level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`);
 
-level_record['round'] = 3;
+level_record['round'] = 4;
 
 let current_rubicon = 0;
 updateCurrentRubicon();

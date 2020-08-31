@@ -17,20 +17,28 @@
 }
 
 .islandHolder {
-  width: 32px;
-  height: 190px;
-  border-radius: 0px var(--bradius1) var(--bradius1) 0px;
+  height: 50px;
+  position: relative;
+  top: 112.5px;
+  width: 102.5px;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  margin-right: 2.5px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.islandHolder1 {
+  left: -546px;
+}
+
+.islandHolder2 {
+  left: -326px;
 }
 
 .island {
   margin-top: 6px;
   margin-bottom: 6px;
-  width: 32px;
-  height: 35px;
+  width: 42px;
+  height: 45px;
 }
 
 .bottomHalf {
@@ -88,7 +96,4 @@
   margin-right: 5px;
   display: flex;
   flex-direction: column;
-}
-
-#clock_circle_crown {
 }
