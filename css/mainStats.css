@@ -41,6 +41,11 @@
   height: 45px;
 }
 
+.islandFaded {
+  opacity: 0.25;
+  filter: grayscale(50%);
+}
+
 .bottomHalf {
   /* background-color: rgba(0, 255, 100, 0.1); */
   width: var(--bigBoxWidth);

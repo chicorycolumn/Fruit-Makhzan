@@ -2,6 +2,7 @@
 
 function showCreateFruitForm() {
   $(".dialogHolder").removeClass("hidden");
+  $(".island").addClass("islandFaded");
   $(".dialogHolder").find(".dialogBoxText").html(createFruitForm);
   $(".factorSelect").each(function () {
     $(this).bind("contextmenu", function (e) {
@@ -25,9 +26,9 @@ function submitNewFruit(majorPopJQ, minorPopJQ, nameInput) {
   let High = Math.round(multiplicationFactor * Low);
   let maxPrices = { Low, High };
 
-  setTimeout(() => {
+  // setTimeout(() => {
     addFruit(nameInput, newFruitPopFactors, maxPrices);
-  }, 500);
+  // }, 500);
 }
 
 function addFruit(name, popularity_factors, max_prices) {
@@ -53,13 +54,16 @@ function addFruit(name, popularity_factors, max_prices) {
     },
     success: function (result) {
       if (result["status"]) {
+
         level_record["sublevel"] = 0.9;
-        updateGamesTable(null, null, level_record);
+
         fillInvTable(false, name);
+        resetToNewRound(level_record);
 
         $(".dialogHolder").addClass("hidden");
+        $(".island").removeClass("islandFaded");
         allButtonsDisabled(false);
-        resetToNewRound();
+
       } else {
         console.log(result["message"], result["error"], result);
       }

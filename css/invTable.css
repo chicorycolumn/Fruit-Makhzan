@@ -170,12 +170,14 @@
 /*********************************/
 
 .popularityCircleSpan {
+  /* border: black solid 1px; */
+  box-shadow: 1px 1px 3px black;
   margin: 0px;
   background-color: white;
   border-radius: 50px;
   height: 27.5px;
   width: 27.5px;
-  margin-left: 5px;
+  margin-left: 15px;
   text-align: center;
   font-size: var(--tdFontSize1);
   position: relative;

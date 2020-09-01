@@ -14,7 +14,7 @@ function calculateSales() {
     let quantity = digitGrouping(row.find(".quantityData").text(), true);
     let selling_price = digitGrouping(row.find(".sellingPriceData").text(), true);
 
-    let max_prices = integeriseObjectValues(
+    let max_prices = parseIntObjectValues(
       JSON.parse(row.find(".maxPricesData").text())
     );
     let popularity_factors = JSON.parse(row.find(".popFactorsData").text());
@@ -84,7 +84,7 @@ function updateSalesSubstratesInDisplayedTable() {
       return;
     }
 
-    let max_prices = integeriseObjectValues(
+    let max_prices = parseIntObjectValues(
       JSON.parse(row.find(".maxPricesData").text())
     );
     let popularity_factors = JSON.parse(row.find(".popFactorsData").text());

@@ -5,7 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 delete_manipulated_cookie();
 
-include '../play/functions/includes_home.php';
+include './includes.php';
 ?>
 
 <?php
@@ -28,7 +28,7 @@ $content =
   (isset($_COOKIE["makhzan"]) ? "" : "disabled") .
   '>
       
-      <img class="homeButtonImage" src="../images/cherry_sized_shadow2a.png" style="height:75px; width:75px;" />
+      <img class="homeButtonImage" src="../images/cherry_sized_shadow2.png" style="height:75px; width:75px;" />
       <p class="noMarginPadding homeButtonText">CONTINUE</p>
     
     </button>
@@ -40,35 +40,16 @@ $content =
 
   </div>
 
-
-
 </div>
 </div>
 ';
-
-// '
-// <br/>
-// You are Ibn al-Baitar (b. 1197 AD), Andalusian botanist and scientist.
-// <br/>
-// <br/>
-// On a flight of fancy, you use your botanical knowledge to open a Fruit Makhzan (storehouse).
-// <br/>
-// <br/>
-// From here you aim to become the best fruit seller in all of Al-Andalus!
-// <br/>
-// <br/>
-// <img src="../images/pineapple_sized_shadow2.png" style="height:75px; width:75px;" />
-// <br/>
-// <button style="height:150px;width:200px;" ' .
-//   (isset($_COOKIE["makhzan"]) ? "" : "disabled") .
-//   ' onClick=loadPrevious()>CONTINUE</button>
-// <button style="height:150px;width:200px;" onClick=startNewGame()>NEW GAME</button>
-// ';
 
 include '../master.php';
 ?>
 
 <script>
+
+$(document).ready(setZoom);
 
 function loadPrevious() {
   $.ajax({
@@ -115,7 +96,6 @@ function startNewGame() {
     },
     success: function (result) {
       if (result["status"]) {
-        // console.log(result)
         window.location = "../play";
       } else {
         console.log(result["message"], result["error"], result);
@@ -123,8 +103,6 @@ function startNewGame() {
     },
   });
 }
-
-setZoom();
 
 </script>
 

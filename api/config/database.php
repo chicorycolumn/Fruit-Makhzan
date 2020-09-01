@@ -179,7 +179,6 @@ class Database
 
   public function startNewGame()
   {
-    include "../../utils/get_gid.php";
     include "../../utils/table_utils.php";
     if (!$this->checkOrMakeGamesTable()) {
       print_r([
@@ -207,7 +206,7 @@ class Database
       wipe_previous_game($this->connection);
     }
 
-    $_SESSION["gid"] = $gid;
+    $_SESSION["gid"] = get_gid();
     $_SESSION["inv_table_name"] = $_SESSION["gid"] . "__inv";
     $table_name = $_SESSION["inv_table_name"];
 

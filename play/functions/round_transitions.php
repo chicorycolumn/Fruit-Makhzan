@@ -40,7 +40,7 @@ let createFruitForm =
   "</form>";
 
 const rubiconMessageRef = {
-  1: "Wahad! You reached sublevel 1!",
+  1: "Well done! You unlocked a new fruit.",
   0: "You're a billionaire! As a reward for all your hard work, you buy an island to relax on.",
   4: "You won the whole game! You own four lovely islands and are now king.",
 };
@@ -54,6 +54,7 @@ function advance() {
     level_record["sublevel"] == 4
   ) {
     $(".dialogHolder").addClass("hidden");
+    $(".island").removeClass("islandFaded");
     $(document).ready(function () {
       allButtonsDisabled(true);
     });
@@ -102,6 +103,7 @@ function advance() {
     }
   }
   $(".dialogHolder").addClass("hidden");
+  $(".island").removeClass("islandFaded");
   allButtonsDisabled(false);
 }
 
@@ -118,6 +120,7 @@ function loadRubiconIfAt() {
     if (parseInt(key) == days && parseFloat(level_record["sublevel"]) < 0.9) {
       allButtonsDisabled(true);
       $(".dialogHolder").removeClass("hidden");
+      $(".island").addClass("islandFaded");
       $(".dialogHolder")
         .find(".dialogBoxText")
         .text(rubiconMessageRef[level_record[key]["sublevel"]]);
@@ -125,7 +128,7 @@ function loadRubiconIfAt() {
       if (level_record["round"] == level_record["final_round"] + 1) {
         showIsland();
         $(".newDayButton").addClass("hidden");
-        $("#clock_circle_crown").attr("src", '.././images/crown3.png');
+        $("#clock_circle_crown").attr("src", '.././images/crown2.png');
         $(document).ready(function () {
           allButtonsDisabled(true);
         });
@@ -163,6 +166,7 @@ function incrementSublevel(rubiconMessageRef, sublevel) {
   };
 
   $(".dialogHolder").removeClass("hidden");
+  $(".island").addClass("islandFaded");
   $(".dialogHolder").find(".dialogBoxText").text(rubiconMessageRef[sublevel]);
 
   if (sublevel == 4) {
@@ -175,10 +179,11 @@ function incrementSublevel(rubiconMessageRef, sublevel) {
 
 function showEndScreen(sublevel) {
   $(".dialogHolder").removeClass("hidden");
+  $(".island").addClass("islandFaded");
   $(".dialogHolder").find(".dialogBoxText").text(rubiconMessageRef[sublevel]);
   showIsland();
   $(".newDayButton").addClass("hidden");
-  $("#clock_circle_crown").attr("src", '.././images/crown3.png');
+  $("#clock_circle_crown").attr("src", '.././images/crown2.png');
   $(document).ready(function () {
     allButtonsDisabled(true);
   });
@@ -192,8 +197,9 @@ function showIsland(num) {
   $("#island" + num).removeClass("hidden");
 }
 
-function resetToNewRound() {
+function resetToNewRound(level_record) {
   updateGamesTable(null, 100);
+  updateGamesTable(null, null, level_record);
 
   $.ajax({
     type: "POST",

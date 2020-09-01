@@ -1,9 +1,5 @@
 <script>
 
-function sayHello(){
-  console.log("hi")
-}
-
 function getPopularityFactor(pop_factor_names, i, trend_calculates) {
   let pop_keys = Object.keys(pop_factor_names);
   return pop_factor_names[pop_keys[i]]
@@ -81,9 +77,9 @@ function digitGrouping(num, ungroup) {
 }
 
 function inputDigitGrouping(e) {
-  setTimeout(() => {
+  // setTimeout(() => {
     e.target.value = digitGrouping(digitGrouping(e.target.value, true));
-  }, 1);
+  // }, 1);
 }
 
 function allButtonsDisabled(toggle) {
@@ -96,7 +92,7 @@ function allButtonsDisabled(toggle) {
   });
 }
 
-function integeriseObjectValues(obj) {
+function parseIntObjectValues(obj) {
   for (key in obj) {
     obj[key] = parseInt(obj[key]);
   }
@@ -133,7 +129,6 @@ function setZoom() {
   document.body.style.webkitTransform = scale;
   document.body.style.msTransform = scale;
   document.body.style.transform = scale;
-  console.log("Zoomed to scale " + scale)
 }
 
 function updateTimestamp(){
