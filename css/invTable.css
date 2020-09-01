@@ -15,6 +15,7 @@
 .th_inventory {
   min-width: 120px;
   max-width: 120px;
+  position: relative;
 }
 
 .regularTD {
@@ -206,5 +207,24 @@
 }
 
 .popularityCircleSpan:hover .popularityCircleToolTipText {
+  visibility: visible;
+}
+
+th .tooltip {
+  font-size: 16px;
+  visibility: hidden;
+  width: 240px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 7.5px;
+  border-radius: 6px;
+  position: absolute;
+  left: -45px;
+  top: 20px;
+  z-index: 3;
+}
+
+th:hover .tooltip {
   visibility: visible;
 }
