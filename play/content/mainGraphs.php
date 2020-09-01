@@ -9,13 +9,13 @@ $mainGraphs =
 
 <div class='mainDiv mainDivGraphs1'>
 " .
-  $trends_graph_content .
+  '<div class="chartContainer" id="trendsChartContainer">Trends chart to render here.</div>' .
   "
 </div>
 
 <div class='mainDiv mainDivGraphs2'>
 " .
-  $sales_graph_content .
+  ' <div class="chartContainer" id="salesChartContainer">Sales chart to render here.</div>' .
   "
 </div>
 
