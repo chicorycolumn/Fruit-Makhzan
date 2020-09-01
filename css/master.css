@@ -12,6 +12,7 @@
   --facDimH: 30px;
   --facDimMBmajor: 4px;
   --facDimMBminor: 2px;
+  --glowColor1: rgb(85, 224, 85);
 }
 
 body {

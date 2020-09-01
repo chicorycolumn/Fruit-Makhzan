@@ -243,10 +243,10 @@ function revealSpecificRows() {
 }
 
 function makeSparkly(row) {
-  row.addClass("sparkly");
+  row.find("td").addClass("sparkly");
   setTimeout(() => {
-    row.removeClass("sparkly");
-  }, 2000);
+    row.find("td").removeClass("sparkly");
+  }, 5000);
 }
 
 function hideSpecificRows() {

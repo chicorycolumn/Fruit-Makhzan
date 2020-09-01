@@ -34,7 +34,7 @@ $content .=
 
 
     ' .
-  $mainGraphs .
+  // $mainGraphs .
   '
 
 
