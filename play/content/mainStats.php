@@ -21,18 +21,18 @@ $mainStats = "
 
   <div class='topHalf'>
     <div class='mainStatBox'>
-      <img class='coin' src='.././images/coin_circle7a_pale.png' />
+      <img class='coin' src='.././images/coin_circle7a_pale.png' id='coin' />
       <span class='mainStatText mainStatTextNumber' id='moneyStat'>--</span>
       <span class='mainStatText mainStatTextFaded'>gold dinars</span>  
     </div>
 
     <div class='mainStatBox'>
-      <img class='coin' src='.././images/clock_circle7aa_pale.png' id='clock_circle_crown' />
+      <img class='coin' src='.././images/clock_circle7aa_pale.png' id='clock' />
       <button class='newDayButton' onClick=newDay()>New day</button>
     </div>
     
     <div class='mainStatBox'>
-      <img class='coin' src='.././images/sun_circle7a_pale.png' />
+      <img class='coin' src='.././images/sun_circle7a_pale.png' id='sun' />
       <div class='daysYearsHolder'>
 
         <div class='daysYearsSubholder'>

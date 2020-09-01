@@ -457,7 +457,7 @@ function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates) {
   if (new_trend_calculates) {
     trend_calculates = new_trend_calculates;
     updateSalesSubstratesInDisplayedTable();
-    makeSalesGraph(new_trend_calculates);
+    updateTrendsGraph(new_trend_calculates);
   }
 }
 

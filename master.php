@@ -37,7 +37,7 @@
           
   </header>
 
-  <div class="contentWrapper">
+  <div class="contentWrapper" id="contentWrapper">
     <section class="content">
       <?php echo $content; ?>
     </section>
