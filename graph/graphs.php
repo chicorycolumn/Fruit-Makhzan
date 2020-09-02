@@ -18,8 +18,8 @@ FusionCharts.ready(function() {
     dataFormat: 'json',
     dataSource: {
       "chart": {
-        "animationDuration": 0,
         "caption": "Factors Affecting Popularity",
+        "palettecolors": "#FFC400",
         "xaxisname": "",
         "yaxisname": "",
         "numbersuffix": "",
@@ -28,7 +28,8 @@ FusionCharts.ready(function() {
         "yAxisMaxValue": 100,
         "bgColor": "#ebffe0",
         "numdisplaysets": "5",
-        "showRealTimeValue": "0"
+        "showRealTimeValue": "0",
+        "showToolTip": "0"
       },
       "categories": [{
         "category": [{
@@ -98,11 +99,13 @@ function makeSalesGraph(initial_data){
   let newCategorySet = []
   let salesObject = {
             "seriesname": "Sales",
+            "color": "#008000",
             "data": []
   }
 
   let spendingObject = {
             "seriesname": "Spending",
+            "color": "#FFC400",
             "data": []
   }
 
@@ -122,8 +125,9 @@ function makeSalesGraph(initial_data){
       dataSource: {
         "chart": {
           "theme": "fusion",
-          "caption": "Visitors",
+          "caption": "Daily Transactions",
           "xAxisName": "",
+          "yAxisName": "Gold Dinar",
           "numDisplaySets": "30",
           "setadaptiveymin": "1",
           "setadaptivesymin": "1",
@@ -131,6 +135,7 @@ function makeSalesGraph(initial_data){
           "bgColor": "#ebffe0",
           "showRealTimeValue": "0",
           "yAxisMaxValue": "50",
+          "showToolTip": "0"
         },
         "categories": [{
           "category": newCategorySet
