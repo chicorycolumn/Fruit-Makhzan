@@ -3,6 +3,14 @@
 <head>
 <link rel="stylesheet" href="../css/master.css" type="text/css">
 <link rel="stylesheet" href="../css/navbar.css" type="text/css">
+<link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Averia+Libre:wght@700&display=swap" rel="stylesheet">
+
+
+
+
+
   <meta charset="utf-8">
   <title>Fruit Makhzan</title>
 
@@ -32,6 +40,13 @@
       <p class='noMarginPadding navbarText' >Play</p>
       </div>
       </a> 
+
+      <a class='navbarLink' href="../about">
+      <div class=navbarLinkSubholder>
+      <img class='navbarImage' src='../images/pear_sized_shadow2.png'>  
+      <p class='noMarginPadding navbarText' >About</p>
+      </div>
+      </a>   
       
     </div>
           

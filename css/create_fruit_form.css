@@ -9,15 +9,17 @@
 
 .createFruitLabel {
   font-size: 20px;
+  /* border: black solid 1px; */
 }
 
 .createFruitFormGroup {
   /* border: blue dotted 1pt; */
-  width: 250px;
+  width: 260px;
   line-height: 22.5px;
   text-align: center;
   position: relative;
   top: -15px;
+  left: -2.5px;
 }
 
 #weather {

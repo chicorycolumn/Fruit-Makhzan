@@ -26,6 +26,7 @@ include '../master.php';
 $(document).ready(function () {
   setZoom()
   loadRubiconIfAt()
+  makeSalesGraph()
 });
 
 let level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`);

@@ -23,6 +23,8 @@
   word-wrap: break-word;
   height: 250px;
   display: flex;
+  position: relative;
+  left: -2.5px;
 }
 
 .dialogBoxInnerInner {
@@ -46,7 +48,7 @@
 
 .dialogBoxTextSmall {
   font-size: 19px;
-  line-height: 22px;
+  line-height: 20px;
   margin: 0px;
   padding: 0px;
   margin-bottom: 14px;

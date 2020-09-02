@@ -67,7 +67,7 @@ function updateGamesTableNewDay(profit, data_object) {
     success: function (result) {
       if (result["status"]) {
         let { money_stat, days_stat, trend_calculates } = result["update_data"];
-        updateGameStats(money_stat, days_stat, trend_calculates);
+        updateGameStats(money_stat, days_stat, trend_calculates, data_object);
       } else {
         console.log(result["message"], result["error"], result);
       }
@@ -441,7 +441,7 @@ function restockFruit(formattedName) {
   }
 }
 
-function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates) {
+function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates, newest_week_record) {
   $("#moneyStat").text(digitGrouping(new_money_stat));
 
   if (new_days_stat) {
@@ -454,11 +454,14 @@ function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates) {
 
   verifyBuyButtons();
 
+  if (newest_week_record){
+    updateSalesGraph(newest_week_record);
+  }
+
   if (new_trend_calculates) {
     trend_calculates = new_trend_calculates;
     updateSalesSubstratesInDisplayedTable();
-    // updateTrendsGraph(new_trend_calculates);
-    updateSalesGraph();
+    updateTrendsGraph(new_trend_calculates);
   }
 }
 

@@ -6,139 +6,224 @@ include "../fusioncharts/fusioncharts.php"; ?>
 
 <script>
 
-
-let salesChart = null;
+let trendsChart = null;
 
 FusionCharts.ready(function() {
-  salesChart = new FusionCharts({
-    type: 'realtimeline',
-    renderAt: 'salesChartContainer',
-    width: '700',
-    height: '400',
+  trendsChart = new FusionCharts({
+    id: "trendsChart",
+    type: 'realtimecolumn',
+    renderAt: 'trendsChartContainer',
+    width: '500',
+    height: '260',
     dataFormat: 'json',
     dataSource: {
       "chart": {
+        "animationDuration": 0,
+        "caption": "Factors Affecting Popularity",
+        "xaxisname": "",
+        "yaxisname": "",
+        "numbersuffix": "",
         "theme": "fusion",
-        "caption": "Visitors",
-        "xAxisName": "Day"
+        "yAxisMinValue": 0,
+        "yAxisMaxValue": 100,
+        "bgColor": "#ebffe0",
+        "numdisplaysets": "5",
+        "showRealTimeValue": "0"
       },
       "categories": [{
         "category": [{
-            "label": "1"
-          },
-          {
-            "label": "2"
-          },
-          {
-            "label": "3"
-          },
-          {
-            "label": "4"
-          },
-          {
-            "label": "5"
-          },
-          {
-            "label": "6"
-          },
-          {
-            "label": "7"
-          }
-        ]
+          "label": "Love"
+        }, {
+          "label": "Weather"
+        },{
+          "label": "Politics"
+        },{
+          "label": "Conformity"
+        },{
+          "label": "Decadence"
+        }]
       }],
       "dataset": [{
-          "seriesname": "Sales",
-          "data": [{
-              "value": "5"
-            },
-            {
-              "value": "10"
-            },
-            {
-              "value": "5"
-            },
-            {
-              "value": "200"
-            },
-            {
-              "value": "0"
-            },
-            {
-              "value": "0"
-            },
-            {
-              "value": "5"
-            }
-          ]
-        },
-        {
-          "seriesname": "Spending",
-          "data": [{
-              "value": "33"
-            },
-            {
-              "value": "33"
-            },
-            {
-              "value": "55"
-            },
-            {
-              "value": "55"
-            },
-            {
-              "value": "44"
-            },
-            {
-              "value": "11"
-            },
-            {
-              "value": "66"
-            }
-          ]
-        }
-      ],
-      "trendlines": [{
-        "line": [{
-          "startvalue": "17022",
-          "color": "#62B58F",
-          "valueOnRight": "1",
-          "displayvalue": "Average"
+        "data": [{
+            "label": "Love",
+          "value": <?php echo json_decode($_SESSION['trend_calculates'])
+            ->love; ?>
+        },{
+            "label": "Weather",
+          "value": <?php echo json_decode($_SESSION['trend_calculates'])
+            ->weather; ?>
+        },{
+            "label": "Politics",
+          "value": <?php echo json_decode($_SESSION['trend_calculates'])
+            ->politics; ?>
+        },{
+            "label": "Conformity",
+          "value": <?php echo json_decode($_SESSION['trend_calculates'])
+            ->conformity; ?>
+        },{
+            "label": "Decadence",
+          "value": <?php echo json_decode($_SESSION['trend_calculates'])
+            ->decadence; ?>
         }]
       }]
-    }
-  }).render();
+    },
+  });
+
+  trendsChart.render();
 });
 
-function updateSalesGraph(){
+function updateTrendsGraph(XTC){
 
-  console.log("quack")
-  console.log(salesChart)
-  // return
+        let currentChartData = trendsChart.getChartData()
+        
+        let XTCArray = []
 
-// let currentChartData = trendsChart.getChartData()
+        let keys = ["love", "weather", "politics", "conformity", "decadence"]
+        
+        keys.forEach(key => {
+            let capitalisedKey = key[0].toUpperCase() + key.slice(1).toLowerCase()
+            XTCArray.push({"label": capitalisedKey, "value": XTC[key]})
+        })
 
-// let XTCArray = []
+        currentChartData["dataset"][0]["data"] = XTCArray
 
-// let keys = ["love", "weather", "politics", "conformity", "decadence"]
+    trendsChart.setChartData(currentChartData)
+}
 
-// keys.forEach(key => {
-//     let capitalisedKey = key[0].toUpperCase() + key.slice(1).toLowerCase()
-//     XTCArray.push({"label": capitalisedKey, "value": XTC[key]})
-// })
+let salesChart = null;
 
-// currentChartData["dataset"][0]["data"] = XTCArray
-let label
-let value
-          label = "8"
-          value = 100;
-          strData = "$seriesname=Profits&label=" + label + "&value=" + value;
-          salesChart.feedData(strData)
+function makeSalesGraph(initialData){
 
-          label = "8"
-          value = 1000;
-          strData = "$seriesname=Spending&label=" + label + "&value=" + value;
-          salesChart.feedData(strData)
+  FusionCharts.ready(function() {
+    salesChart = new FusionCharts({
+      type: 'realtimeline',
+      renderAt: 'salesChartContainer',
+      width: '500',
+      height: '260',
+      dataFormat: 'json',
+      dataSource: {
+        "chart": {
+          "theme": "fusion",
+          "caption": "Visitors",
+          "xAxisName": "",
+          "numDisplaySets": "30",
+          "setadaptiveymin": "1",
+          "setadaptivesymin": "1",
+          "labeldisplay": "auto",
+          "bgColor": "#ebffe0",
+          "showRealTimeValue": "0",
+          "yAxisMaxValue": "20",
+        },
+        "categories": [{
+          "category": [{
+              "label": "1"
+            },
+            {
+              "label": "2"
+            },
+            {
+              "label": "3"
+            },
+            {
+              "label": "4"
+            },
+            {
+              "label": "5"
+            },
+            {
+              "label": "6"
+            },
+            {
+              "label": "7"
+            }
+          ]
+        }],
+        "dataset": [{
+            "seriesname": "Sales",
+            "data": [{
+                "value": "5"
+              },
+              {
+                "value": "10"
+              },
+              {
+                "value": "5"
+              },
+              {
+                "value": "200"
+              },
+              {
+                "value": "0"
+              },
+              {
+                "value": "0"
+              },
+              {
+                "value": "5"
+              }
+            ]
+          },
+          {
+            "seriesname": "Spending",
+            "data": [{
+                "value": "33"
+              },
+              {
+                "value": "33"
+              },
+              {
+                "value": "55"
+              },
+              {
+                "value": "55"
+              },
+              {
+                "value": "44"
+              },
+              {
+                "value": "11"
+              },
+              {
+                "value": "66"
+              }
+            ]
+          }
+        ],
+        "trendlines": [{
+          "line": [{
+            "startvalue": "0",
+            "color": "#62B58F",
+            "valueOnRight": "",
+          }]
+        }]
+      }
+    }).render();
+  });
+}
 
+function updateSalesGraph(week_record){
+  
+  let day = Object.keys(week_record['overall_sales_history']).sort((a, b) => b - a)[0].toString()
+  let newSalesValue = week_record['overall_sales_history'][day]['profit']
+  let newSpendingValue = week_record['overall_sales_history'][day]['costs']
+
+  let currentChartData = salesChart.getChartData()
+  let salesArray = currentChartData["dataset"][0]["data"]
+  let spendingArray = currentChartData["dataset"][1]["data"]
+  let categoryArray = currentChartData["categories"][0]["category"]
+
+  let arrays = [salesArray, spendingArray, categoryArray]
+  arrays.forEach(array => {if (array.length > 30){array.shift()}})
+
+  salesArray.push({"value": newSalesValue})
+  spendingArray.push({"value": newSpendingValue})
+  categoryArray.push({"label": day.toString()})
+
+  currentChartData["dataset"][0]["data"] = salesArray
+  currentChartData["dataset"][1]["data"] = spendingArray
+  currentChartData["categories"][0]["category"] = categoryArray
+
+  salesChart.setChartData(currentChartData)
 }
 
 </script>

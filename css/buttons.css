@@ -81,7 +81,7 @@ button:disabled {
   border-radius: var(--bradius1);
   padding: 0px;
   margin: 0px;
-  font-family: "Merienda", cursive !important;
+  /* font-family: "Merienda", cursive !important; */
   font-size: 22.5px;
   cursor: pointer;
   position: relative;
