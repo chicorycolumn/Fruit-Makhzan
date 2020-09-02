@@ -26,18 +26,22 @@ include '../master.php';
 $(document).ready(function () {
   setZoom()
   loadRubiconIfAt()
-  makeSalesGraph()
+  makeSalesGraph(overall_sales_history)
 });
 
 let level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`);
 let sessionMoney = "<?php echo $_SESSION['money_stat']; ?>"
 let sessionDays = "<?php echo $_SESSION['days_stat']; ?>"
+
+let overall_sales_history = JSON.parse(`<?php print_r(
+  $_SESSION['overall_sales_history']
+); ?>`)
+
 let trend_calculates = JSON.parse(`<?php print_r(
   $_SESSION['trend_calculates']
 ); ?>`)
 
 let day_costs = 0;
-let overall_sales_history = {}; ///*
 let current_rubicon = 0;
 updateCurrentRubicon();
 

@@ -299,7 +299,7 @@ class Fruit
       }
 
       $json = json_decode($fruit_arr[0][$json_data_object_name]);
-      $json->$json_data_object_name = $json_data_object;
+      $json = $json_data_object;
 
       if (!isset($update_data)) {
         $update_data = new stdClass();

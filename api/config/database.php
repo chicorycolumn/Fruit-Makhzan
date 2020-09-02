@@ -362,6 +362,7 @@ class Database
     $_SESSION["money_stat"] = $money_initial;
     $_SESSION["days_stat"] = $days_initial;
     $_SESSION['level_record'] = $level_record_initial;
+    $_SESSION['overall_sales_history'] = '{}';
 
     return [
       "status" => true,

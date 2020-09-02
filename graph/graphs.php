@@ -92,7 +92,25 @@ function updateTrendsGraph(XTC){
 
 let salesChart = null;
 
-function makeSalesGraph(initialData){
+function makeSalesGraph(initial_data){
+
+  let keys = Object.keys(initial_data)
+  let newCategorySet = []
+  let salesObject = {
+            "seriesname": "Sales",
+            "data": []
+  }
+
+  let spendingObject = {
+            "seriesname": "Spending",
+            "data": []
+  }
+
+  keys.forEach(key => {
+    newCategorySet.push({"label": key.toString()})
+    salesObject["data"].push({"value": initial_data[key]["profit"].toString()})
+    spendingObject["data"].push({"value": initial_data[key]["costs"].toString()})
+  })
 
   FusionCharts.ready(function() {
     salesChart = new FusionCharts({
@@ -112,83 +130,12 @@ function makeSalesGraph(initialData){
           "labeldisplay": "auto",
           "bgColor": "#ebffe0",
           "showRealTimeValue": "0",
-          "yAxisMaxValue": "20",
+          "yAxisMaxValue": "50",
         },
         "categories": [{
-          "category": [{
-              "label": "1"
-            },
-            {
-              "label": "2"
-            },
-            {
-              "label": "3"
-            },
-            {
-              "label": "4"
-            },
-            {
-              "label": "5"
-            },
-            {
-              "label": "6"
-            },
-            {
-              "label": "7"
-            }
-          ]
+          "category": newCategorySet
         }],
-        "dataset": [{
-            "seriesname": "Sales",
-            "data": [{
-                "value": "5"
-              },
-              {
-                "value": "10"
-              },
-              {
-                "value": "5"
-              },
-              {
-                "value": "200"
-              },
-              {
-                "value": "0"
-              },
-              {
-                "value": "0"
-              },
-              {
-                "value": "5"
-              }
-            ]
-          },
-          {
-            "seriesname": "Spending",
-            "data": [{
-                "value": "33"
-              },
-              {
-                "value": "33"
-              },
-              {
-                "value": "55"
-              },
-              {
-                "value": "55"
-              },
-              {
-                "value": "44"
-              },
-              {
-                "value": "11"
-              },
-              {
-                "value": "66"
-              }
-            ]
-          }
-        ],
+        "dataset": [salesObject, spendingObject],
         "trendlines": [{
           "line": [{
             "startvalue": "0",
