@@ -7,19 +7,27 @@
   height: 150px;
 }
 
+#moneyStat.mainStatText {
+  left: 11px;
+}
+
+#moneyStatSubtitle.mainStatText {
+  left: 11px;
+}
+
 .mainStatTextFaded {
   color: #000000;
   opacity: 0.2;
 }
 
 .mainStatTextNumber {
-  font-size: 20px;
+  font-size: 24px;
 }
 
 .islandHolder {
   height: 50px;
   position: relative;
-  top: 105px;
+  top: 125px;
   width: 102.5px;
   display: flex;
   flex-direction: row;

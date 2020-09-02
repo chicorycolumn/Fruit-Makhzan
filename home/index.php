@@ -3,7 +3,7 @@ include '../utils/table_utils.php';
 if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
-delete_manipulated_cookie();
+$cookie_gid = delete_manipulated_cookie();
 
 include './includes.php';
 ?>
@@ -25,16 +25,18 @@ $content =
   <div class="homeButtonHolder">
 
     <button class="homeButton" onClick=loadPrevious() ' .
-  (isset($_COOKIE["makhzan"]) ? "" : "disabled") .
+  (preg_match("/[^\w]/i", $cookie_gid) || strlen($cookie_gid) != 15
+    ? "disabled"
+    : "") .
   '>
       
-      <img class="homeButtonImage" src="../images/cherry_sized_shadow2.png" style="height:75px; width:75px;" />
+      <img class="homeButtonImage" src="../images/cherry_sized_shadow2.png" />
       <p class="noMarginPadding homeButtonText">CONTINUE</p>
     
     </button>
 
     <button class="homeButton" onClick=startNewGame()>
-      <img class="homeButtonImage" src="../images/banana_sized_shadow2.png" style="height:75px; width:75px;" />
+      <img class="homeButtonImage" src="../images/banana_sized_shadow2.png" />
       <p class="noMarginPadding homeButtonText">NEW GAME</p>
     </button>
 
@@ -102,6 +104,10 @@ function startNewGame() {
       }
     },
   });
+}
+
+function printCookies(){
+  console.log( `<?php print_r($cookie_gid); ?>`  )
 }
 
 </script>

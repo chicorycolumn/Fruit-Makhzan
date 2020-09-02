@@ -84,6 +84,7 @@ function go(
   $_SESSION['days_stat'] = $update_data['days_stat'];
   $_SESSION['money_stat'] = $update_data['money_stat'];
   $_SESSION['trend_calculates'] = $update_data['trend_calculates'];
+  $_SESSION[$json_data_object_name] = json_encode($json_data_object);
 
   $result['update_data'] = $update_data;
 

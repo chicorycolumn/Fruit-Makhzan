@@ -1,0 +1,71 @@
+.homeHolder {
+  /* border: red solid 1px; */
+  position: relative;
+  top: 20px;
+  width: 1000px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.homeCoinHolder {
+  cursor: pointer;
+  /* border: black solid 1px; */
+  width: 220px;
+  height: 220px;
+  text-decoration: none;
+  color: black;
+}
+
+.homeCoin {
+  width: 220px;
+  height: 220px;
+}
+
+.homeCoinText {
+  margin: 0px;
+  padding: 0px;
+}
+
+.homeCoinFruit {
+  width: 50px;
+  height: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+}
+
+.homeCoinTextHolder {
+  /* border: yellowgreen solid 1px; */
+  width: 120px;
+  height: 120px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: -155px;
+}
+
+.homeSunHolder {
+  /* border: blue solid 1px; */
+  width: 220px;
+  height: 220px;
+}
+
+.homeSun {
+  width: 220px;
+  height: 220px;
+}
+
+.homeSunText {
+}
+
+.homeSunTextHolder {
+  /* border: white solid 1px; */
+  width: 150px;
+  height: 150px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: -170px;
+}

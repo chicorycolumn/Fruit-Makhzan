@@ -4,7 +4,8 @@
   --cellWidth1: 160px;
   --tdFontSize1: 20px;
   --thisYellow: #fffe66;
-  --thisOrange: #f9bd07;
+  --thisOrange2: #f9bd07;
+  --thisOrange: #ffc400;
   --buttonGreen: lightgreen;
   --paleGreen: rgb(212, 255, 187);
   --divGreen: rgb(235, 255, 224);
@@ -12,12 +13,12 @@
   --facDimH: 30px;
   --facDimMBmajor: 4px;
   --facDimMBminor: 2px;
-  --glowColor1: rgb(43, 131, 43);
+  --glowColor1: var(--thisOrange);
 }
 
 body {
   background-color: var(--paleGreen);
-  font-family: "Averia Gruesa Libre", cursive, Arial;
+  /* font-family: "Averia Gruesa Libre", cursive, Arial; */
   font-family: "Averia Libre", cursive, Arial;
   font-size: 18px;
 }
@@ -31,17 +32,6 @@ body {
   width: 100%;
   z-index: -1;
   opacity: 0.05;
-}
-
-.mainHeader {
-  font-size: 22px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 30%;
-  text-align: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
 }
 
 .contentWrapper {

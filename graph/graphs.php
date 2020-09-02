@@ -127,7 +127,7 @@ function makeSalesGraph(initial_data){
           "theme": "fusion",
           "caption": "Daily Transactions",
           "xAxisName": "",
-          "yAxisName": "Gold Dinar",
+          "yAxisName": "Gold Dinars",
           "numDisplaySets": "30",
           "setadaptiveymin": "1",
           "setadaptivesymin": "1",

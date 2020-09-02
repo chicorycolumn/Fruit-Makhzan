@@ -23,7 +23,7 @@ $mainStats = "
     <div class='mainStatBox'>
       <img class='coin' src='.././images/coin_circle7a_pale.png' id='coin' />
       <span class='mainStatText mainStatTextNumber' id='moneyStat'>--</span>
-      <span class='mainStatText mainStatTextFaded'>gold dinars</span>  
+      <span class='mainStatText mainStatTextFaded' id='moneyStatSubtitle'>gold dinars</span>  
     </div>
 
     <div class='mainStatBox'>

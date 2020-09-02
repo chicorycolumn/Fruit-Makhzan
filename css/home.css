@@ -31,20 +31,25 @@
 }
 
 .dialogBoxInnerHome {
-  /* border: blue solid 1pt; */
+  /* border: blue solid 2pt; */
   width: 285px;
   position: relative;
   top: -27.5px;
-  left: -20px;
+  left: -17.5px !important;
 }
 
 .homeButtonImage {
   margin-left: auto;
   margin-right: auto;
+  height: 65px;
+  width: 65px;
 }
 
 .homeButtonText {
-  font-style: italic;
+  font-family: "Averia Libre", cursive, Arial;
+  font-size: 16px;
+  color: darkgreen;
+  text-decoration: underline;
 }
 
 .greyedOut {

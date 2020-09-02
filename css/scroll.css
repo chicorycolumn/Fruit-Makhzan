@@ -14,7 +14,7 @@
 }
 
 .dialogBoxInner {
-  /* border: black solid 2pt; */
+  /* border: none; */
   line-height: 30px;
   text-align: center;
   padding-left: 15px;

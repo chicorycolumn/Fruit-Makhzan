@@ -206,6 +206,7 @@ function delete_manipulated_cookie()
 
     if (preg_match("/[^\w]/i", $putative_gid) || strlen($putative_gid) != 15) {
       setcookie("makhzan", "", time() - 3600);
+      return "0";
     } else {
       include_once '../api/config/database.php';
       $database = new Database();
@@ -220,12 +221,17 @@ function delete_manipulated_cookie()
         "s"
       );
 
+      $database->closeConnection();
+
       if (false || !$result || !$result["status"] || !$result["rows"]) {
         setcookie("makhzan", "", time() - 3600);
+        return "0";
+      } else {
+        return $putative_gid;
       }
-      $database->closeConnection();
     }
   }
+  return "0";
 }
 
 function add_to_json(
