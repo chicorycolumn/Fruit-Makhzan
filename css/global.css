@@ -25,7 +25,7 @@
 .sparkly {
   -webkit-animation: glow 1.2s ease-in-out alternate;
   -moz-animation: glow 1.2s ease-in-out alternate;
-  animation: glow 1.5s ease-in-out alternate;
+  animation: glow 1.2s ease-in-out alternate;
   animation-iteration-count: 2;
   -moz-animation-iteration-count: 2;
   -webkit-animation-iteration-count: 2;

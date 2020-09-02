@@ -23,7 +23,7 @@ function get_gid()
   return $gid;
 }
 
-function evolve_trend_calculates($session_TCs, $days, $week_record)
+function evolve_trend_calculates($session_TCs, $days, $overall_sales_history)
 {
   $trends = (array) json_decode($session_TCs);
 
@@ -38,7 +38,7 @@ function evolve_trend_calculates($session_TCs, $days, $week_record)
   $trends['conformity_history'] = $conf_res['conformity_history'];
 
   if ($days % 7 == 6) {
-    $trends['decadence'] = decadenceFromData($week_record);
+    $trends['decadence'] = decadenceFromData($overall_sales_history);
   } else {
     $trends['decadence'] = $trends['decadence'];
   }
@@ -46,13 +46,13 @@ function evolve_trend_calculates($session_TCs, $days, $week_record)
   return json_encode($trends);
 }
 
-function decadenceFromData($week_record)
+function decadenceFromData($overall_sales_history)
 {
   $total_profit = 0;
   $total_costs = 0;
-  foreach ($week_record as $day => $values) {
-    $total_profit += $week_record[$day]['profit'];
-    $total_costs += $week_record[$day]['costs'];
+  foreach ($overall_sales_history as $day => $values) {
+    $total_profit += $overall_sales_history[$day]['profit'];
+    $total_costs += $overall_sales_history[$day]['costs'];
   }
 
   $net = $total_profit - $total_costs;
@@ -334,7 +334,7 @@ function wipe_previous_game($connection)
 
 function clean_up_db($connection)
 {
-  $timeout = 3600 * 24 * 30;
+  $timeout = 60; //3600 * 24 * 30;
   $log = [];
   $query = "SELECT * FROM games WHERE last_accessed < ?";
   // $query = "SELECT update_time, table_name FROM information_schema.tables";

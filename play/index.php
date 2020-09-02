@@ -37,7 +37,7 @@ let trend_calculates = JSON.parse(`<?php print_r(
 ); ?>`)
 
 let day_costs = 0;
-let week_record = {};
+let overall_sales_history = {}; ///*
 let current_rubicon = 0;
 updateCurrentRubicon();
 

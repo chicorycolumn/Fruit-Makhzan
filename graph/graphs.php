@@ -201,11 +201,11 @@ function makeSalesGraph(initialData){
   });
 }
 
-function updateSalesGraph(week_record){
+function updateSalesGraph(overall_sales_history){
   
-  let day = Object.keys(week_record['overall_sales_history']).sort((a, b) => b - a)[0].toString()
-  let newSalesValue = week_record['overall_sales_history'][day]['profit']
-  let newSpendingValue = week_record['overall_sales_history'][day]['costs']
+  let day = Object.keys(overall_sales_history['overall_sales_history']).sort((a, b) => b - a)[0].toString()
+  let newSalesValue = overall_sales_history['overall_sales_history'][day]['profit']
+  let newSpendingValue = overall_sales_history['overall_sales_history'][day]['costs']
 
   let currentChartData = salesChart.getChartData()
   let salesArray = currentChartData["dataset"][0]["data"]

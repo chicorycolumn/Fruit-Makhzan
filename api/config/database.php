@@ -151,12 +151,6 @@ class Database
         "conformity_history" => "ss",
       ]);
 
-      $level_record_default = json_encode([
-        "round" => 0,
-        "sublevel" => 0,
-        "final_round" => 3,
-      ]);
-
       $create_table_querystring = " (
         `game_id` varchar(32) PRIMARY KEY,
         `last_accessed` int(11) DEFAULT 0,

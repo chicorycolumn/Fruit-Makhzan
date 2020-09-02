@@ -1,7 +1,10 @@
 <script>
 
+let round_transition_in_progress = {"value": false};
+
 function newDay() {
-  updateTimestamp()
+
+  if (round_transition_in_progress["value"]){return}
 
   let incipient_sales = calculateSales();
   let day_profit = Object.values(incipient_sales).reduce(
@@ -12,35 +15,38 @@ function newDay() {
   let days = dayGrouping($("#daysStat").text(), $("#yearsStat").text(), true);
   let money = digitGrouping($("#moneyStat").text(), true);
 
-  if (days % 7 == 0) {
-    week_record = {};
-  }
-  week_record[days + 1] = { profit: day_profit, costs: day_costs };
-
   let new_money_stat = money + day_profit;
-
-  let data_object = { overall_sales_history: week_record };
-
-  updateGamesTableNewDay(day_profit, data_object);
-  updateInventoryTable(incipient_sales);
-
-  day_costs = 0;
 
   if (level_record["round"] < level_record["final_round"]) {
     if (new_money_stat >= rubicons[2]) {
-      incrementSublevel(rubiconMessageRef, 0);
+      round_transition_in_progress["value"] = true
+      incrementSublevel(rubiconMessageRef, 0, round_transition_in_progress);
     } else if (
       parseFloat(level_record["sublevel"]) < 1 &&
       new_money_stat >= rubicons[1]
     ) {
-      incrementSublevel(rubiconMessageRef, 1);
+      round_transition_in_progress["value"] = true
+      incrementSublevel(rubiconMessageRef, 1, round_transition_in_progress);
     }
   } else if (
-    level_record["round"] >= level_record["final_round"] &&
     new_money_stat >= rubicons[2]
   ) {
-    incrementSublevel(rubiconMessageRef, 4);
+    round_transition_in_progress["value"] = true
+    incrementSublevel(rubiconMessageRef, 4, round_transition_in_progress);
   }
+
+  if (Object.keys(overall_sales_history).length > 30) {
+    delete overall_sales_history[Object.keys(overall_sales_history).sort((a, b) => parseInt(a) - parseInt(b))[0]]
+  }
+
+  overall_sales_history[days + 1] = { profit: day_profit, costs: day_costs };
+
+  let data_object = { overall_sales_history: overall_sales_history };
+
+  updateGamesTableNewDay(day_profit, data_object);
+  updateInventoryTable(incipient_sales);
+  updateTimestamp()
+  day_costs = 0;
 }
 
 function updateGamesTableNewDay(profit, data_object) {
@@ -54,7 +60,7 @@ function updateGamesTableNewDay(profit, data_object) {
       identifying_column: "game_id",
       identifying_data: `<?php echo $_SESSION['gid']; ?>`,
       profit,
-      json_data_object: data_object, //week_record
+      json_data_object: data_object, //overall_sales_history
       level_record,
     },
     error: function (result) {
@@ -75,7 +81,7 @@ function updateGamesTableNewDay(profit, data_object) {
   });
 }
 
-function updateGamesTable(money_crement, money_absolute, new_level_record) {
+function updateGamesTable(money_crement, money_absolute, new_level_record, round_transition_in_progress) {
   let acronym;
   let update_data;
 
@@ -120,6 +126,10 @@ function updateGamesTable(money_crement, money_absolute, new_level_record) {
     },
     success: function (result) {
       if (result["status"]) {
+
+        if (round_transition_in_progress){
+          round_transition_in_progress["value"] = false
+        }
         
         if (!new_level_record){ updateGameStats(result["update_data"]['money_stat']);}
        
@@ -441,7 +451,7 @@ function restockFruit(formattedName) {
   }
 }
 
-function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates, newest_week_record) {
+function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates, newest_overall_sales_history) {
   $("#moneyStat").text(digitGrouping(new_money_stat));
 
   if (new_days_stat) {
@@ -454,8 +464,8 @@ function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates, ne
 
   verifyBuyButtons();
 
-  if (newest_week_record){
-    updateSalesGraph(newest_week_record);
+  if (newest_overall_sales_history){
+    updateSalesGraph(newest_overall_sales_history);
   }
 
   if (new_trend_calculates) {

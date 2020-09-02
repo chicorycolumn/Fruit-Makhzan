@@ -45,7 +45,7 @@ const rubiconMessageRef = {
   4: "You won the whole game! You own four lovely islands and are now king.",
 };
 
-const rubicons = { 1: 150, 2: 300 };
+const rubicons = { 1: 101, 2: 201 };
 // const rubicons = {1: 10000, 2: 1000000000}
 
 function advance() {
@@ -149,7 +149,10 @@ function updateCurrentRubicon() {
   revealSpecificRows();
 }
 
-function incrementSublevel(rubiconMessageRef, sublevel) {
+function incrementSublevel(rubiconMessageRef, sublevel, round_transition_in_progress) {
+
+  console.log(111, sublevel, level_record)
+
   if (sublevel < 0.9) {
     level_record["round"]++;
   }
@@ -174,7 +177,9 @@ function incrementSublevel(rubiconMessageRef, sublevel) {
     showEndScreen();
   }
 
-  updateGamesTable(null, null, level_record);
+  console.log(333, sublevel, level_record)
+
+  updateGamesTable(null, null, level_record, round_transition_in_progress);
 }
 
 function showEndScreen(sublevel) {

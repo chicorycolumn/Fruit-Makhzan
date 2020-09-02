@@ -103,6 +103,8 @@ if ($load_session_from_db) {
   $_SESSION['trend_calculates'] = $response['data'][0]['trend_calculates'];
   $_SESSION['show_dev_data'] = 0;
   $_SESSION['level_record'] = $response['data'][0]['level_record'];
+  // $_SESSION['overall_sales_history'] =
+  //   $response['data'][0]['overall_sales_history'];
 }
 
 echo json_encode($response);
