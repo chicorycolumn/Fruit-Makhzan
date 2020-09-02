@@ -13,6 +13,7 @@ $identifying_column = $_POST['identifying_column'];
 $identifying_data = $_POST['identifying_data'];
 $profit = $_POST['profit'];
 $json_data_object = $_POST['json_data_object'];
+$json_data_object_name = $_POST['json_data_object_name'];
 $level_record = $_POST['level_record'];
 
 $get_full = false;
@@ -23,7 +24,7 @@ $update_data = [
   "trend_calculates" => evolve_trend_calculates(
     $_SESSION['trend_calculates'],
     $_SESSION['days_stat'],
-    $json_data_object['overall_sales_history']
+    $json_data_object
   ),
 ];
 $acronym = "iiss";
@@ -37,6 +38,7 @@ function go(
   $acronym,
   $update_data,
   $json_data_object,
+  $json_data_object_name,
   $level_record
 ) {
   if (
@@ -64,7 +66,8 @@ function go(
       $table_name,
       $identifying_column,
       $identifying_data,
-      $json_data_object
+      $json_data_object,
+      $json_data_object_name
     ))
   ) {
     return [
@@ -100,6 +103,7 @@ $response = go(
   $acronym,
   $update_data,
   $json_data_object,
+  $json_data_object_name,
   $level_record
 );
 

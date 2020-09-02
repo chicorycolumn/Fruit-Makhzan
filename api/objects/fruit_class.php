@@ -251,83 +251,83 @@ class Fruit
     $table_name,
     $identifying_column,
     $identifying_data,
-    $json_data_object
+    $json_data_object,
+    $json_data_object_name
   ) {
-    foreach ($json_data_object as $json_column => $json_data) {
-      if ($json_column == "overall_sales_history") {
-        if (
-          !($result = $this->read_single(
-            $table_name,
-            $identifying_column,
-            $identifying_data,
-            "s",
-            false
-          ))
-        ) {
-          return [
-            "status" => false,
-            "message" => "Error when calling Sfruit->read_single.",
-            "error" => $this->conn->error,
-          ];
-        }
+    if ($json_data_object_name == "overall_sales_history") {
+      if (
+        !($result = $this->read_single(
+          $table_name,
+          $identifying_column,
+          $identifying_data,
+          "s",
+          false
+        ))
+      ) {
+        return [
+          "status" => false,
+          "message" => "Error when calling Sfruit->read_single.",
+          "error" => $this->conn->error,
+        ];
+      }
 
-        if (!$result["status"]) {
-          return $result;
-        }
+      if (!$result["status"]) {
+        return $result;
+      }
 
-        if (!$result['data']->num_rows) {
-          return [
-            "status" => false,
-            "message" =>
-              "There are no rows from reading the db. The identifying data (" .
-              $identifying_data .
-              ") at identifying column (" .
-              $identifying_column .
-              ") does not correspond to anything in the table (" .
-              $table_name .
-              ").",
-            "error" => $this->conn->error,
-          ];
-        }
+      if (!$result['data']->num_rows) {
+        return [
+          "status" => false,
+          "message" =>
+            "There are no rows from reading the db. The identifying data (" .
+            $identifying_data .
+            ") at identifying column (" .
+            $identifying_column .
+            ") does not correspond to anything in the table (" .
+            $table_name .
+            ").",
+          "error" => $this->conn->error,
+        ];
+      }
 
-        if (!($fruit_arr = build_table_array($result["data"]))) {
-          return [
-            "status" => false,
-            "message" => "Error in build_table_array.",
-            "error" => $this->conn->error,
-          ];
-        }
+      if (!($fruit_arr = build_table_array($result["data"]))) {
+        return [
+          "status" => false,
+          "message" => "Error in build_table_array.",
+          "error" => $this->conn->error,
+        ];
+      }
 
-        $json = json_decode($fruit_arr[0][$json_column]);
-        $json->$json_column = $json_data;
+      $json = json_decode($fruit_arr[0][$json_data_object_name]);
+      $json->$json_data_object_name = $json_data_object;
 
-        if (!isset($update_data)) {
-          $update_data = new stdClass();
-        }
+      if (!isset($update_data)) {
+        $update_data = new stdClass();
+      }
 
-        $update_data->$json_column = json_encode($json);
+      $update_data->$json_data_object_name = json_encode($json);
 
-        if (
-          !($result = $this->update_self(
-            $table_name,
-            $identifying_column,
-            $identifying_data,
-            "ss",
-            $update_data
-          ))
-        ) {
-          return [
-            "status" => false,
-            "message" => "Error when calling Sfruit->read_single.",
-            "error" => $this->conn->error,
-          ];
-        }
+      if (
+        !($result = $this->update_self(
+          $table_name,
+          $identifying_column,
+          $identifying_data,
+          "ss",
+          $update_data
+        ))
+      ) {
+        return [
+          "status" => false,
+          "message" => "Error when calling Sfruit->read_single.",
+          "error" => $this->conn->error,
+        ];
+      }
 
-        if (!$result["status"]) {
-          return $result;
-        }
+      if (!$result["status"]) {
+        return $result;
       }
     }
+
     return ["status" => true, "message" => "Successfully updated json!"];
   }
 

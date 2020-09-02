@@ -41,15 +41,13 @@ function newDay() {
 
   overall_sales_history[days + 1] = { profit: day_profit, costs: day_costs };
 
-  let data_object = { overall_sales_history: overall_sales_history };
-
-  updateGamesTableNewDay(day_profit, data_object);
+  updateGamesTableNewDay(day_profit, overall_sales_history);
   updateInventoryTable(incipient_sales);
   updateTimestamp()
   day_costs = 0;
 }
 
-function updateGamesTableNewDay(profit, data_object) {
+function updateGamesTableNewDay(profit, overall_sales_history) {
 
   $.ajax({
     type: "POST",
@@ -60,8 +58,9 @@ function updateGamesTableNewDay(profit, data_object) {
       identifying_column: "game_id",
       identifying_data: `<?php echo $_SESSION['gid']; ?>`,
       profit,
-      json_data_object: data_object, //overall_sales_history
-      level_record,
+      json_data_object: overall_sales_history,
+      json_data_object_name: "overall_sales_history",
+      level_record
     },
     error: function (result) {
       console.log(
@@ -73,7 +72,7 @@ function updateGamesTableNewDay(profit, data_object) {
     success: function (result) {
       if (result["status"]) {
         let { money_stat, days_stat, trend_calculates } = result["update_data"];
-        updateGameStats(money_stat, days_stat, trend_calculates, data_object);
+        updateGameStats(money_stat, days_stat, trend_calculates, overall_sales_history);
       } else {
         console.log(result["message"], result["error"], result);
       }
