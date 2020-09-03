@@ -1,68 +1,63 @@
 <script>
-function toggleTooltips(){
-
-  let toggle = $("#tooltipToggle")
+function toggleTooltips() {
+  let toggle = $("#tooltipToggle");
 
   if (toggle.hasClass("halfOpacity")) {
+    toggle.removeClass("halfOpacity");
+    $("th").each(function () {
+      if ($(this).children("span").length) {
+        let text = $(this)
+          .contents()
+          .filter(function () {
+            return this.nodeType == 3;
+          })
+          .text();
 
-    toggle.removeClass("halfOpacity")
-    $("th").each(function(){
+        $(this)
+          .contents()
+          .first()
+          .replaceWith(text + " ⓘ");
 
-      if ($(this).children("span").length){
+        $(this).addClass("thHover");
+      }
+    });
 
-      let text = $(this).contents().filter(function() {
-      return this.nodeType == 3;
-    }).text()
+    $(".popularityCircleSpan").addClass("popularityCircleSpanHover");
+  } else {
+    toggle.addClass("halfOpacity");
+    $("th").each(function () {
+      if ($(this).children("span").length) {
+        let text = $(this)
+          .contents()
+          .filter(function () {
+            return this.nodeType == 3;
+          })
+          .text();
 
-    $(this).contents().first().replaceWith(text+" ⓘ")
-
-    $(this).addClass("thHover")
-
-}
-    })
-
-    $(".popularityCircleSpan").addClass("popularityCircleSpanHover")
-
-    } else {
-
-    toggle.addClass("halfOpacity")
-    $("th").each(function(){
-
-      if ($(this).children("span").length){
-
-      let text = $(this).contents().filter(function() {
-      return this.nodeType == 3;
-    }).text()
-
-    $(this).contents().first().replaceWith(text.replace(" ⓘ", ""))
-    $(this).removeClass("thHover")
-}
-    })
-    $(".popularityCircleSpan").removeClass("popularityCircleSpanHover")
+        $(this).contents().first().replaceWith(text.replace(" ⓘ", ""));
+        $(this).removeClass("thHover");
+      }
+    });
+    $(".popularityCircleSpan").removeClass("popularityCircleSpanHover");
   }
 }
 
-function basicPageFunctions(){
-  setZoom()
-  adjustNavbarGameLink()
+function basicPageFunctions() {
+  setZoom();
+  adjustNavbarGameLink();
 }
 
-function adjustNavbarGameLink(){
-
+function adjustNavbarGameLink() {
   let check = parseInt('<?php echo check_gid(); ?>')
 
-  if( !!check ){
-
-    $("#navbarImagePlay").attr("src", "../images/cherry_sized_shadow2.png")
-    $("#navbarLinkPlay").off("click", "startNewGame")
-    $("#navbarLinkPlay").bind("click", loadPrevious)
-
-    
+  if (!!check) {
+    $("#navbarImagePlay").attr("src", "../images/cherry_sized_shadow2.png");
+    $("#navbarLinkPlay").off("click", "startNewGame");
+    $("#navbarLinkPlay").bind("click", loadPrevious);
   } else {
-
-    $("#navbarImagePlay").attr("src", "../images/banana_sized_shadow2.png")
-    $("#navbarLinkPlay").off("click", "loadPrevious")
-    $("#navbarLinkPlay").bind("click", startNewGame)
+    $("#navbarImagePlay").attr("src", "../images/banana_sized_shadow2.png");
+    $("#navbarLinkPlay").off("click", "loadPrevious");
+    $("#navbarLinkPlay").bind("click", startNewGame);
   }
 }
 
@@ -195,7 +190,7 @@ function setZoom() {
   document.body.style.transform = scale;
 }
 
-function updateTimestamp(){
+function updateTimestamp() {
   $.ajax({
     type: "POST",
     url: "../api/fruit/update_timestamp.php",
@@ -212,8 +207,8 @@ function updateTimestamp(){
     },
     success: function (result) {
       if (result["status"]) {
-        console.log("Successfully updated timestamp.")
-      } 
+        console.log("Successfully updated timestamp.");
+      }
     },
   });
 }

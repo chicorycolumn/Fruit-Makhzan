@@ -48,13 +48,9 @@ include '../master.php';
 
 <script>
 
-$(document).ready(
-  function(){
-    basicPageFunctions()
-  }
-  );
-
-
+$(document).ready(function(){
+  basicPageFunctions()
+});
 
 </script>
 

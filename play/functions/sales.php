@@ -30,15 +30,11 @@ function calculateSales() {
 
     let price_disparity =
       ((max_buying_price - selling_price) / max_buying_price) * 100;
-
     let sales_percentage = (popularity + price_disparity * 4) / 5 / 100;
-
     let sales_quantity = Math.ceil(sales_percentage * quantity);
-
     let copy_of_sales_quantity_before_plusminus = sales_quantity
-
     let plusOrMinusFive = (Math.round(Math.random() * 10) - 5)*4;
-
+    
     sales_quantity += Math.round((plusOrMinusFive / 100) * sales_quantity);
 
     if (sales_quantity < 0) {

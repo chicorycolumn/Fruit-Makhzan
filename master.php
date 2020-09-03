@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="../css/master.css" type="text/css">
-<link rel="stylesheet" href="../css/navbar.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="../css/master.css" >
+<link rel="stylesheet" type="text/css" href="../css/navbar.css" >
+<link rel='stylesheet' type='text/css' href='../css/buttons.css' />
+<link rel='stylesheet' type='text/css' href='../css/global.css' />
+<link rel='stylesheet' type='text/css' href='../css/scroll.css' />
 <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Averia+Libre:wght@700&display=swap" rel="stylesheet">
@@ -25,21 +28,21 @@
       <a class='navbarLink' href="../home">
       <div class=navbarLinkSubholder>
       <img class='navbarImage' src='../images/blueberry_sized_shadow2.png'>  
-      <p class='noMarginPadding navbarText' >Home</p>
+      <p class='navbarText' >Home</p>
       </div>
       </a>    
 
       <div class='navbarLink' id='navbarLinkPlay'>
       <div class=navbarLinkSubholder>
       <img class='navbarImage' id='navbarImagePlay' src='../images/banana_sized_shadow2.png'>  
-      <p class='noMarginPadding navbarText' >Play</p>
+      <p class='navbarText' >Play</p>
       </div>
 </div> 
 
       <a class='navbarLink' href="../about">
       <div class=navbarLinkSubholder>
       <img class='navbarImage' src='../images/pear_sized_shadow2.png'>  
-      <p class='noMarginPadding navbarText' >About</p>
+      <p class='navbarText' >About</p>
       </div>
       </a>   
       
