@@ -34,7 +34,6 @@
 
 .nameTD {
   padding-left: 0px;
-  font-size: var(--nameTDFontSize);
   font-weight: bold;
 }
 
@@ -201,41 +200,37 @@
   /* background-color: rgba(0, 0, 0, 0.2); */
 }
 
-.popularityCircleSpan .popularityCircleToolTipText {
-  visibility: hidden;
-  width: 240px;
+.tooltip {
+  font-weight: bold;
   background-color: black;
-  color: #fff;
+  color: white;
   text-align: center;
-  padding: 5px;
+  padding: 10px;
   border-radius: 6px;
   position: absolute;
-  z-index: 1;
+  z-index: 3;
+  font-size: var(--tooltipFontSize);
+  font-family: var(--simpleFontFamily) !important;
 }
 
-.popularityCircleSpan:hover .popularityCircleToolTipText {
-  font-family: unset;
-  font-family: Arial sans-serif !important;
+.popularityCircleSpan .popularityCircleTooltip {
+  visibility: hidden;
+  width: 180px;
+  left: 25px;
+  top: -15px;
+}
+
+.popularityCircleSpan:hover .popularityCircleTooltip {
   visibility: visible;
 }
 
-th .tooltip {
-  font-size: var(--tooltipFontSize);
+th .THtooltip {
   visibility: hidden;
   width: 240px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  padding: 7.5px;
-  border-radius: 6px;
-  position: absolute;
   left: -45px;
-  top: 20px;
-  z-index: 3;
+  bottom: 30px;
 }
 
-th:hover .tooltip {
-  font-family: unset;
-  font-family: Arial sans-serif !important;
+th:hover .THtooltip {
   visibility: visible;
 }

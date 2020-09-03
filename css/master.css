@@ -1,10 +1,8 @@
 :root {
   --navbarFontSize: 28px;
-
   --newDayButtonFontSize: 28px;
 
   --tdFontSize1: 24px;
-  --nameTDFontSize: var(--tdFontSize1);
   --mainStatFontSize1: 24px;
 
   --dialogBoxButtonFontSize: 22.5px;
@@ -15,26 +13,21 @@
   --createFruitLabelFontSize: 20px;
 
   --dialogBoxFontSize2: 19px;
-
   --thFontSize1: 19px;
+
   --bodyFontSize: 18px;
+  --tooltipFontSize: 18px;
 
   --tdFontSize3: 17px;
 
-  --tooltipFontSize: 16px;
   --homeButtonFontSize: 16px;
   --factorSelectFontSize: 16px;
   --createFruitInputNameFontSize: 16px;
-
   --buyButtonFontSize: 16px;
 
-  /*  */
-
   --inputFontFamily: "Lucida Console", Monaco, monospace;
-
-  --bradius1: 15px;
-  --bigBoxWidth: 1100px;
-  --cellWidth1: 160px;
+  --simpleFontFamily: Arial, sans-serif;
+  --niceFontFamily: "Averia Libre", cursive, Arial;
 
   --thisYellow: #fffe66;
   --thisOrange2: #f9bd07;
@@ -46,6 +39,9 @@
   --dialogBoxButtonBackgColor: rgba(0, 255, 0, 0.1);
   --dialogBoxButtonShadowColor: rgba(0, 255, 0, 0.2);
 
+  --bradius1: 15px;
+  --bigBoxWidth: 1100px;
+  --cellWidth1: 160px;
   --facDimW: 105px;
   --facDimH: 30px;
   --facDimMBmajor: 4px;
@@ -56,8 +52,7 @@
 
 body {
   background-color: var(--paleGreen);
-  /* font-family: "Averia Gruesa Libre", cursive, Arial; */
-  font-family: "Averia Libre", cursive, Arial;
+  font-family: var(--niceFontFamily) !important;
   font-size: var(--bodyFontSize);
 }
 

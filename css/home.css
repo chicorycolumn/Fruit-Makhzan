@@ -46,7 +46,7 @@
 }
 
 .homeButtonText {
-  font-family: "Averia Libre", cursive, Arial;
+  font-family: var(--niceFontFamily);
   font-size: var(--homeButtonFontSize);
   color: darkgreen;
 }

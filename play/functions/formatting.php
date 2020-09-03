@@ -11,16 +11,12 @@ function adjustNavbarGameLink(){
 
   if( !!check ){
 
-    console.log("remove START, add PREV")
-
     $("#navbarImagePlay").attr("src", "../images/cherry_sized_shadow2.png")
     $("#navbarLinkPlay").off("click", "startNewGame")
     $("#navbarLinkPlay").bind("click", loadPrevious)
 
     
   } else {
-
-    console.log("remove PREV, add START")
 
     $("#navbarImagePlay").attr("src", "../images/banana_sized_shadow2.png")
     $("#navbarLinkPlay").off("click", "loadPrevious")

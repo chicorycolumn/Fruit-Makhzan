@@ -107,7 +107,7 @@ function updateSalesSubstratesInDisplayedTable() {
       .css({ "background-color": getPopularityColor(popularity).color });
 
     row
-    .find(".popularityCircleToolTipText")
+    .find(".popularityCircleTooltip")
     .text(name + " has " + getPopularityColor(popularity).descrip.slice(0, -1) + " popularity" + getPopularityColor(popularity).descrip.slice(-1));
 
     function getPopularityColor(pop) {
