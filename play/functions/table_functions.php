@@ -303,7 +303,7 @@ function addRowToTable(fruit, shouldPrepend){
             "onsubmit=submitSellingPrice(`"+formattedName+"`) "+
             "onfocusout=changeSellingPrice(false,'"+formattedName+"')>"+
               
-            "<textarea class='sellingPriceInput noMarginPadding' "+
+            "<textarea class='sellingPriceInput' "+
             "onkeydown='return validateNumbersAndSubmit(event,`"+formattedName+"`,`selling`)' "+
             "maxlength=10 maxlength=10 type='text'>"+"</textarea>"+
             

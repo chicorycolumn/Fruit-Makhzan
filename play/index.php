@@ -32,7 +32,7 @@ $(document).ready(function () {
         $(".holderForHorizontalMainDivs").css({"justify-content": "center"})
       }
     })
-  }, 1000);
+  }, 2000);
 });
 
 let level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`);
