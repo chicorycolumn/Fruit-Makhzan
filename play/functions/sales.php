@@ -3,16 +3,19 @@
 function calculateSales() {
   let incipient_sales = {};
 
+  let example_name = $("table#inventory tbody tr").find(".nameData").text()
+
+  incipient_sales[example_name] = { "sales_quantity": 0, "profit": 0 };
+
   $("table#inventory tbody tr").each(function () {
     let row = $(this);
     let name = row.find(".nameData").text();
-
-    if (row.hasClass("hidden")) {
-      return;
-    }
-
     let quantity = digitGrouping(row.find(".quantityData").text(), true);
     let selling_price = digitGrouping(row.find(".sellingPriceData").text(), true);
+
+    if (row.hasClass("hidden") || !selling_price) {
+      return;
+    }
 
     let max_prices = parseIntObjectValues(
       JSON.parse(row.find(".maxPricesData").text())
@@ -34,9 +37,9 @@ function calculateSales() {
 
     let copy_of_sales_quantity_before_plusminus = sales_quantity
 
-    let plusOrMinusFive = Math.round(Math.random() * 10) - 5;
+    let plusOrMinusFive = (Math.round(Math.random() * 10) - 5)*4;
 
-    sales_quantity += Math.round((plusOrMinusFive / 100) * quantity);
+    sales_quantity += Math.round((plusOrMinusFive / 100) * sales_quantity);
 
     if (sales_quantity < 0) {
       sales_quantity = 0;
@@ -50,6 +53,7 @@ function calculateSales() {
     incipient_sales[name] = { sales_quantity, profit };
   });
 
+  // console.log(incipient_sales)
   return incipient_sales;
 }
 

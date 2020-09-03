@@ -293,7 +293,7 @@ class Database
         "', " .
         $seed_item['rubicon'] .
         ", " .
-        12 .
+        0 .
         ", '" .
         json_encode($seed_item['max_prices']) .
         "', '" .
