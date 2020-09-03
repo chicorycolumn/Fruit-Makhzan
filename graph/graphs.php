@@ -6,7 +6,7 @@ include "../fusioncharts/fusioncharts.php"; ?>
 
 <script>
 
-let salesNumDisplay = 50
+let salesNumDisplay = 70
 let trendsChart = null;
 
 FusionCharts.ready(function() {

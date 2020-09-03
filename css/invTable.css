@@ -30,7 +30,6 @@ table#inventory {
 .buttonTD {
   padding-left: 0px;
   padding-left: 0px;
-  /* box-shadow: none; */
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
   border-radius: var(--bradius1);
 }
@@ -45,7 +44,6 @@ table#inventory {
 /*********************************/
 
 .invSubtd {
-  /* border: green dotted 1pt; */
   margin: 0px;
   margin-left: 0px;
   height: 70px;
@@ -73,6 +71,64 @@ table#inventory {
 }
 
 /*********************************/
+/************ TOOLTIPS ***********/
+/*********************************/
+
+.tooltip {
+  font-weight: bold;
+  background-color: black;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 3;
+  font-size: var(--tooltipFontSize);
+  font-family: var(--simpleFontFamily) !important;
+}
+
+.popularityCircleTooltip {
+  visibility: hidden;
+  width: 180px;
+  left: 25px;
+  top: -15px;
+}
+
+.popularityCircleSpanHover:hover .popularityCircleTooltip {
+  visibility: visible;
+}
+
+.THtooltip {
+  visibility: hidden;
+  width: 240px;
+  left: -50px;
+  bottom: 30px;
+}
+
+.thHover:hover .THtooltip {
+  visibility: visible;
+}
+
+#tooltipToggle {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  z-index: 5;
+  font-weight: bold;
+  color: blue;
+  width: 25px;
+  height: 25px;
+}
+
+.halfOpacity {
+  opacity: 0.5;
+}
+
+.boxBody {
+  position: relative;
+}
+
+/*********************************/
 /*                               */
 /*********************************/
 
@@ -83,7 +139,6 @@ table#inventory {
 }
 
 .nameData {
-  /* background-color: yellow; */
   width: var(--cellWidth1);
 }
 
@@ -172,12 +227,7 @@ table#inventory {
   display: none;
 }
 
-/*********************************/
-/*                               */
-/*********************************/
-
 .popularityCircleSpan {
-  /* border: black solid 1px; */
   box-shadow: 1px 1px 3px black;
   margin: 0px;
   background-color: white;
@@ -200,62 +250,4 @@ table#inventory {
   top: 1.5px;
   left: 0.5px;
   font-size: 24px;
-  /* background-color: rgba(0, 0, 0, 0.2); */
-}
-
-.tooltip {
-  font-weight: bold;
-  background-color: black;
-  color: white;
-  text-align: center;
-  padding: 10px;
-  border-radius: 6px;
-  position: absolute;
-  z-index: 3;
-  font-size: var(--tooltipFontSize);
-  font-family: var(--simpleFontFamily) !important;
-}
-
-.popularityCircleTooltip {
-  visibility: hidden;
-  width: 180px;
-  left: 25px;
-  top: -15px;
-}
-
-.popularityCircleSpanHover:hover .popularityCircleTooltip {
-  visibility: visible;
-}
-
-.THtooltip {
-  visibility: hidden;
-  width: 240px;
-  left: -50px;
-  bottom: 30px;
-}
-
-.thHover:hover .THtooltip {
-  visibility: visible;
-}
-
-#tooltipToggle {
-  position: absolute;
-  right: 5px;
-  top: 5px;
-  /* position: relative; */
-  /* top: 200px; */
-  z-index: 5;
-  font-weight: bold;
-  color: blue;
-  /* right: 0px; */
-  width: 25px;
-  height: 25px;
-}
-
-.halfOpacity {
-  opacity: 0.5;
-}
-
-.boxBody {
-  position: relative;
 }

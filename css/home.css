@@ -1,5 +1,4 @@
 .homeButtonHolder {
-  /* border: fuchsia solid 1pt; */
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -19,7 +18,6 @@
   border: none;
   overflow: hidden;
 
-  /* border: rgba(0, 0, 0, 0.2) solid 1px; */
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
   background-color: rgba(255, 255, 255, 0.2);
   width: 100px;
@@ -27,13 +25,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* outline: none; */
 
   width: 110px;
 }
 
 .dialogBoxInnerHome {
-  /* border: blue solid 2pt; */
   width: 285px;
   position: relative;
   top: -25px;

@@ -30,7 +30,6 @@ button:disabled {
 .maxBuyButton {
   position: relative;
   width: 55px;
-  /* background-color: var(--thisOrange); */
   background-color: var(--divGreen);
   font-weight: bold;
   padding: 0px;
@@ -38,7 +37,6 @@ button:disabled {
 
 .buttonCrement {
   width: 25px;
-  /* background-color: var(--thisYellow); */
   background-color: var(--divGreen);
   text-align: center;
   padding: 0px;
@@ -59,6 +57,7 @@ button:disabled {
 }
 
 .newDayButton {
+  outline: none;
   font-size: var(--newDayButtonFontSize);
   background-color: white;
   height: 145px;

@@ -9,11 +9,9 @@
 
 .createFruitLabel {
   font-size: var(--createFruitLabelFontSize);
-  /* border: black solid 1px; */
 }
 
 .createFruitFormGroup {
-  /* border: blue dotted 1pt; */
   width: 260px;
   line-height: 22.5px;
   text-align: center;
@@ -27,7 +25,6 @@
 }
 
 .factorsHolder {
-  /* border: red solid 2pt; */
   display: flex;
   flex-direction: row;
   justify-content: space-around;

@@ -1,5 +1,4 @@
 <script>
-//popularityCircleSpan
 function toggleTooltips(){
 
   let toggle = $("#tooltipToggle")
@@ -144,9 +143,7 @@ function digitGrouping(num, ungroup) {
 }
 
 function inputDigitGrouping(e) {
-  // setTimeout(() => {
-    e.target.value = digitGrouping(digitGrouping(e.target.value, true));
-  // }, 1);
+  e.target.value = digitGrouping(digitGrouping(e.target.value, true));
 }
 
 function allButtonsDisabled(toggle) {

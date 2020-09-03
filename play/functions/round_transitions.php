@@ -45,8 +45,8 @@ const rubiconMessageRef = {
   4: "You won the whole game! You own four lovely islands and are now king.",
 };
 
-const rubicons = { 1: 101, 2: 201 };
-// const rubicons = {1: 10000, 2: 1000000000}
+// const rubicons = { 1: 101, 2: 201 };
+const rubicons = {1: 10000, 2: 1000000000}
 
 function advance() {
   if (

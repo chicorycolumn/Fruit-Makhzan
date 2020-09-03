@@ -26,9 +26,7 @@ function submitNewFruit(majorPopJQ, minorPopJQ, nameInput) {
   let High = Math.round(multiplicationFactor * Low);
   let maxPrices = { Low, High };
 
-  // setTimeout(() => {
-    addFruit(nameInput, newFruitPopFactors, maxPrices);
-  // }, 500);
+  addFruit(nameInput, newFruitPopFactors, maxPrices);
 }
 
 function addFruit(name, popularity_factors, max_prices) {

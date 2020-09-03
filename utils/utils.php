@@ -13,7 +13,7 @@ function delete_manipulated_cookie()
 
     if (preg_match("/[^\w]/i", $putative_gid) || strlen($putative_gid) != 15) {
       if (!headers_sent()) {
-        setcookie("makhzan", "", time() - 3600);
+        setcookie("makhzan", "", time() - 3600, "/");
       }
       return "0";
     } else {
@@ -34,7 +34,7 @@ function delete_manipulated_cookie()
 
       if (false || !$result || !$result["status"] || !$result["rows"]) {
         if (!headers_sent()) {
-          setcookie("makhzan", "", time() - 3600);
+          setcookie("makhzan", "", time() - 3600, "/");
         }
         return "0";
       } else {

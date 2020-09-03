@@ -4,8 +4,6 @@ include_once '../config/database.php';
 include_once '../objects/fruit_class.php';
 include '../../utils/utils.php';
 
-//When want history graphs, request invtable parameter $get_full = true. So fruit->read_single and build_array add history columns.
-
 $database = new Database();
 $db = $database->getConnection();
 

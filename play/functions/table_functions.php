@@ -35,7 +35,7 @@ function newDay() {
     incrementSublevel(rubiconMessageRef, 4, round_transition_in_progress);
   }
 
-  let salesNumDisplay = 50
+  let salesNumDisplay = 70
 
   if (Object.keys(overall_sales_history).length > salesNumDisplay) {
     delete overall_sales_history[Object.keys(overall_sales_history).sort((a, b) => parseInt(a) - parseInt(b))[0]]
@@ -224,11 +224,7 @@ function fillInvTable(shouldWipe, name) {
             addRowToTable(fruit);
           });
         }
-
-        // setTimeout(() => {
-          bindUsefulJqueriesAfterLoadingDataIntoTable();
-        // }, 500);
-
+        bindUsefulJqueriesAfterLoadingDataIntoTable();
         hideSpecificRows();
         updateSalesSubstratesInDisplayedTable();
         verifyBuyButtons();

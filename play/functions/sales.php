@@ -53,7 +53,6 @@ function calculateSales() {
     incipient_sales[name] = { sales_quantity, profit };
   });
 
-  // console.log(incipient_sales)
   return incipient_sales;
 }
 
