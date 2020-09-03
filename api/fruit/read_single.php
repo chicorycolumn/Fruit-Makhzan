@@ -2,7 +2,7 @@
 
 include_once '../config/database.php';
 include_once '../objects/fruit_class.php';
-include '../../utils/table_utils.php';
+include '../../utils/utils.php';
 
 //When want history graphs, request invtable parameter $get_full = true. So fruit->read_single and build_array add history columns.
 
@@ -12,7 +12,7 @@ $db = $database->getConnection();
 $fruit = new Fruit($db);
 $identifying_column = $_GET['identifying_column'];
 $identifying_data = $_GET['identifying_data'];
-$acronym = $_GET['acronym'];
+$type_definition_string = $_GET['type_definition_string'];
 $table_name = $_GET['table_name'];
 
 $get_full = false;
@@ -33,7 +33,7 @@ function go(
   $table_name,
   $identifying_column,
   $identifying_data,
-  $acronym,
+  $type_definition_string,
   $get_full
 ) {
   if (
@@ -41,7 +41,7 @@ function go(
       $table_name,
       $identifying_column,
       $identifying_data,
-      $acronym,
+      $type_definition_string,
       $get_full
     ))
   ) {
@@ -71,7 +71,7 @@ function go(
     ];
   }
 
-  if (!($fruit_arr = build_table_array($result["data"]))) {
+  if (!($result_arr = build_table_array($result["data"]))) {
     return [
       "status" => false,
       "message" => "Error in build_table_array. 1res",
@@ -81,7 +81,7 @@ function go(
 
   return [
     "status" => true,
-    "data" => $fruit_arr,
+    "data" => $result_arr,
   ];
 }
 $response = go(
@@ -90,7 +90,7 @@ $response = go(
   $table_name,
   $identifying_column,
   $identifying_data,
-  $acronym,
+  $type_definition_string,
   $get_full
 );
 $database->closeConnection();
@@ -101,7 +101,6 @@ if ($load_session_from_db) {
   $_SESSION['money_stat'] = $response['data'][0]['money_stat'];
   $_SESSION['days_stat'] = $response['data'][0]['days_stat'];
   $_SESSION['trend_calculates'] = $response['data'][0]['trend_calculates'];
-  $_SESSION['show_dev_data'] = 0;
   $_SESSION['level_record'] = $response['data'][0]['level_record'];
   $_SESSION['overall_sales_history'] =
     $response['data'][0]['overall_sales_history'];

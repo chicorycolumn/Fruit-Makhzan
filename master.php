@@ -7,6 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Averia+Libre:wght@700&display=swap" rel="stylesheet">
 
+
+
   <meta charset="utf-8">
   <title>Fruit Makhzan</title>
 
@@ -29,12 +31,12 @@
       </div>
       </a>    
 
-      <a class='navbarLink' href="../play">
+      <div class='navbarLink' id='navbarLinkPlay'>
       <div class=navbarLinkSubholder>
-      <img class='navbarImage' src='../images/orange_sized_shadow2.png'>  
+      <img class='navbarImage' id='navbarImagePlay' src='../images/banana_sized_shadow2.png'>  
       <p class='noMarginPadding navbarText' >Play</p>
       </div>
-      </a> 
+</div> 
 
       <a class='navbarLink' href="../about">
       <div class=navbarLinkSubholder>

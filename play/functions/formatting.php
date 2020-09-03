@@ -1,5 +1,33 @@
 <script>
 
+function basicPageFunctions(){
+  setZoom()
+  adjustNavbarGameLink()
+}
+
+function adjustNavbarGameLink(){
+
+  let check = parseInt('<?php echo check_gid(); ?>')
+
+  if( !!check ){
+
+    console.log("remove START, add PREV")
+
+    $("#navbarImagePlay").attr("src", "../images/cherry_sized_shadow2.png")
+    $("#navbarLinkPlay").off("click", "startNewGame")
+    $("#navbarLinkPlay").bind("click", loadPrevious)
+
+    
+  } else {
+
+    console.log("remove PREV, add START")
+
+    $("#navbarImagePlay").attr("src", "../images/banana_sized_shadow2.png")
+    $("#navbarLinkPlay").off("click", "loadPrevious")
+    $("#navbarLinkPlay").bind("click", startNewGame)
+  }
+}
+
 function getPopularityFactor(pop_factor_names, i, trend_calculates) {
   let pop_keys = Object.keys(pop_factor_names);
   return pop_factor_names[pop_keys[i]]
@@ -124,7 +152,7 @@ function verifyBuyButtons() {
 }
 
 function setZoom() {
-  let scale = 0.7;
+  let scale = 0.75;
   document.body.style.zoom = scale;
   document.body.style.webkitTransform = scale;
   document.body.style.msTransform = scale;

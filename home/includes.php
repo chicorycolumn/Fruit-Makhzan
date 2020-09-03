@@ -9,7 +9,9 @@ echo "<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Meri
 // include 'content/invTable.php';
 // include 'content/mainGraphs.php';
 // include 'functions/round_transitions.php';
+include '../utils/utils.php';
 include '../play/functions/formatting.php';
+include '../play/functions/enter_game.php';
 // include 'functions/dev_data.php';
 // include 'functions/create_fruit.php';
 // include 'functions/number_inputs.php';

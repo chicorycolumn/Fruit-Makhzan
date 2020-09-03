@@ -33,7 +33,7 @@ function submitSellingPrice(formattedName) {
         update_data: {
           selling_price: putative_price,
         },
-        acronym: "is",
+        type_definition_string: "is",
         should_update_session: 0,
       },
       error: function (result) {

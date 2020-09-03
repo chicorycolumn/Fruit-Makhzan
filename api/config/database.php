@@ -112,7 +112,7 @@ class Database
         ];
       }
 
-      if (!($fruit_arr = build_table_array($result["data"]))) {
+      if (!($result_arr = build_table_array($result["data"]))) {
         return [
           "status" => false,
           "message" => "Error in build_table_array.",
@@ -122,7 +122,7 @@ class Database
 
       return [
         "status" => true,
-        "data" => $fruit_arr,
+        "data" => $result_arr,
       ];
     }
 
@@ -173,7 +173,7 @@ class Database
 
   public function startNewGame()
   {
-    include "../../utils/table_utils.php";
+    include "../../utils/utils.php";
     if (!$this->checkOrMakeGamesTable()) {
       print_r([
         "status" => false,
@@ -201,6 +201,7 @@ class Database
     }
 
     $_SESSION["gid"] = get_gid();
+    setcookie("makhzan", $_SESSION['gid'], time() + 3600 * 24 * 30, "/");
     $_SESSION["inv_table_name"] = $_SESSION["gid"] . "__inv";
     $table_name = $_SESSION["inv_table_name"];
 

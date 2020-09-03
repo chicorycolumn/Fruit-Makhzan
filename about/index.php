@@ -38,6 +38,6 @@ include '../master.php';
 
 <script>
     $(document).ready(function () {
-  setZoom()
+  basicPageFunctions()
 });
 </script>

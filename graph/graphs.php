@@ -74,20 +74,20 @@ FusionCharts.ready(function() {
   trendsChart.render();
 });
 
-function updateTrendsGraph(XTC){
+function updateTrendsGraph(trendCalculates){
 
         let currentChartData = trendsChart.getChartData()
         
-        let XTCArray = []
+        let trendCalculatesArray = []
 
         let keys = ["love", "weather", "politics", "conformity", "decadence"]
         
         keys.forEach(key => {
             let capitalisedKey = key[0].toUpperCase() + key.slice(1).toLowerCase()
-            XTCArray.push({"label": capitalisedKey, "value": XTC[key]})
+            trendCalculatesArray.push({"label": capitalisedKey, "value": trendCalculates[key]})
         })
 
-        currentChartData["dataset"][0]["data"] = XTCArray
+        currentChartData["dataset"][0]["data"] = trendCalculatesArray
 
     trendsChart.setChartData(currentChartData)
 }

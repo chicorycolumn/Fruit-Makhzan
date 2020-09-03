@@ -2,7 +2,7 @@
 
 include_once '../config/database.php';
 include_once '../objects/fruit_class.php';
-include '../../utils/table_utils.php';
+include '../../utils/utils.php';
 
 $database = new Database();
 $db = $database->getConnection();

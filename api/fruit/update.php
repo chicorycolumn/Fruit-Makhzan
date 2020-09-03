@@ -2,7 +2,7 @@
 
 include_once '../config/database.php';
 include_once '../objects/fruit_class.php';
-include '../../utils/table_utils.php';
+include '../../utils/utils.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -11,7 +11,7 @@ $fruit = new Fruit($db);
 $table_name = $_POST['table_name'];
 $identifying_column = $_POST['identifying_column'];
 $identifying_data = $_POST['identifying_data'];
-$acronym = $_POST['acronym'];
+$type_definition_string = $_POST['type_definition_string'];
 $update_data = $_POST['update_data'];
 $should_update_session = $_POST['should_update_session'];
 $get_full = false;
@@ -33,7 +33,7 @@ function go(
   $table_name,
   $identifying_column,
   $identifying_data,
-  $acronym,
+  $type_definition_string,
   $update_data,
   $get_full,
   $should_update_session
@@ -43,7 +43,7 @@ function go(
       $table_name,
       $identifying_column,
       $identifying_data,
-      $acronym,
+      $type_definition_string,
       $update_data,
       $get_full
     ))
@@ -89,7 +89,7 @@ $response = go(
   $table_name,
   $identifying_column,
   $identifying_data,
-  $acronym,
+  $type_definition_string,
   $update_data,
   $get_full,
   $should_update_session

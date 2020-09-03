@@ -1,5 +1,17 @@
 <script>
 
+function bindDevDataFunctions(value){
+  if (value == 666){
+    console.log("bound")
+    $("#factorsTH").bind("click", printDevData1)
+    $("#factorsTH").css({"color": "purple"})
+    $("#restockTH").bind("click", printDevData2)
+    $("#restockTH").css({"color": "purple"})
+    $(".factorsTD").bind("click", function(e){return printSingle(e)})
+    $(".factorsTD").css({"border": "purple solid 1px"})
+  }
+}
+
 function printDevData1() {
   console.log("OLD SESSION FROM PHP:");
   console.log(`<?php print_r($_SESSION); ?>`);
@@ -21,7 +33,10 @@ function printDevData2() {
   console.log(" ");
 }
 
-function printSingle(name) {
+function printSingle(e) {
+
+  let name = $(e.target).parents("tr").find(".nameData").text()
+
   name = name.replace(/_/g, " ");
   $.ajax({
     type: "GET",
@@ -31,7 +46,7 @@ function printSingle(name) {
       table_name: "<?php echo $inv_table_name; ?>",
       identifying_column: "name",
       identifying_data: name,
-      acronym: "s",
+      type_definition_string: "s",
       get_full: false,
     },
     error: function (result) {
@@ -49,18 +64,6 @@ function printSingle(name) {
       }
     },
   });
-}
-
-function printDevDataHTML(popularity, max_buying_price) {
-  let show = <?php echo $_SESSION['show_dev_data']; ?>;
-
-  if (show) {
-    return (
-      "<p class='devdata1'>P" + popularity + "  M" + max_buying_price + "</p>"
-    );
-  } else {
-    return "";
-  }
 }
 
 </script>

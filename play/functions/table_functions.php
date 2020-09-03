@@ -83,11 +83,11 @@ function updateGamesTableNewDay(profit, overall_sales_history) {
 }
 
 function updateGamesTable(money_crement, money_absolute, new_level_record, round_transition_in_progress) {
-  let acronym;
+  let type_definition_string;
   let update_data;
 
   if (new_level_record) {
-    acronym = "ss";
+    type_definition_string = "ss";
     update_data = {
       level_record: new_level_record,
     };
@@ -100,7 +100,7 @@ function updateGamesTable(money_crement, money_absolute, new_level_record, round
       new_money_stat = digitGrouping($("#moneyStat").text(), true) - money_crement;
     }
 
-    acronym = "is";
+    type_definition_string = "is";
     update_data = {
       money_stat: new_money_stat,
     };
@@ -114,7 +114,7 @@ function updateGamesTable(money_crement, money_absolute, new_level_record, round
       table_name: "games",
       identifying_column: "game_id",
       identifying_data: `<?php echo $_SESSION['gid']; ?>`,
-      acronym,
+      type_definition_string,
       update_data,
       should_update_session: true,
     },
@@ -332,8 +332,7 @@ function addRowToTable(fruit, shouldPrepend){
     "</td>"+
     
 
-    "<td class='regularTD' style='cursor:help;' "+                       
-    "onclick=printSingle('"+formattedName+"')>"+
+    "<td class='regularTD factorsTD' >"+
       
       "<div class='invSubtd factorsSubtd'>"+
         pf1+pf2+
@@ -351,6 +350,7 @@ function addRowToTable(fruit, shouldPrepend){
             "<input value=1 "+
               "class='amountInput amountInput_restock' "+
               "onclick=this.select() "+
+              "ondblclick='bindDevDataFunctions(value)' "+
               "onkeydown='return validateNumbersAndSubmit(event,`"+formattedName+"`,`restock`)' "+
               "onblur=setAmount('"+formattedName+"','restock') "+
               "maxlength=10>"+

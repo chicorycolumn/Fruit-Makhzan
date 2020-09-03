@@ -2,7 +2,7 @@
 
 include_once '../config/database.php';
 include_once '../objects/fruit_class.php';
-include '../../utils/table_utils.php';
+include '../../utils/utils.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -13,7 +13,7 @@ $increment = filter_var($_POST['increment'], FILTER_SANITIZE_SPECIAL_CHARS);
 $table_name = filter_var($_POST['table_name'], FILTER_SANITIZE_SPECIAL_CHARS);
 $identifying_column = "name";
 $identifying_data = filter_var($_POST['name'], FILTER_SANITIZE_SPECIAL_CHARS);
-$acronym = "s";
+$type_definition_string = "s";
 $get_full = false;
 
 function go(
@@ -23,7 +23,7 @@ function go(
   $table_name,
   $identifying_column,
   $identifying_data,
-  $acronym,
+  $type_definition_string,
   $name,
   $get_full
 ) {
@@ -44,7 +44,7 @@ function go(
       $table_name,
       $identifying_column,
       $identifying_data,
-      $acronym,
+      $type_definition_string,
       $get_full
     ))
   ) {
@@ -74,7 +74,7 @@ function go(
     ];
   }
 
-  if (!($fruit_arr = build_table_array($result["data"]))) {
+  if (!($result_arr = build_table_array($result["data"]))) {
     return [
       "status" => false,
       "message" => "Error in build_table_array. 2re",
@@ -82,7 +82,7 @@ function go(
     ];
   }
   return [
-    "data" => $fruit_arr,
+    "data" => $result_arr,
     "status" => true,
   ];
 }
@@ -94,7 +94,7 @@ $response = go(
   $table_name,
   $identifying_column,
   $identifying_data,
-  $acronym,
+  $type_definition_string,
   $name,
   $get_full
 );

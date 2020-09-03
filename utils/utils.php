@@ -1,5 +1,50 @@
 <?php
 
+function check_gid()
+{
+  $gid = delete_manipulated_cookie();
+  return !(preg_match("/[^\w]/i", $gid) || strlen($gid) != 15);
+}
+
+function delete_manipulated_cookie()
+{
+  if (isset($_COOKIE["makhzan"])) {
+    $putative_gid = $_COOKIE["makhzan"];
+
+    if (preg_match("/[^\w]/i", $putative_gid) || strlen($putative_gid) != 15) {
+      if (!headers_sent()) {
+        setcookie("makhzan", "", time() - 3600);
+      }
+      return "0";
+    } else {
+      include_once '../api/config/database.php';
+      $database = new Database();
+      $db = $database->getConnection();
+
+      $result = check_row_exists(
+        $db,
+        "game_id",
+        $putative_gid,
+        "games",
+        "last_accessed",
+        "s"
+      );
+
+      $database->closeConnection();
+
+      if (false || !$result || !$result["status"] || !$result["rows"]) {
+        if (!headers_sent()) {
+          setcookie("makhzan", "", time() - 3600);
+        }
+        return "0";
+      } else {
+        return $putative_gid;
+      }
+    }
+  }
+  return "0";
+}
+
 function get_gid()
 {
   function make($length, $chars)
@@ -199,41 +244,6 @@ function politicsFromDay($days, $current)
   }
 }
 
-function delete_manipulated_cookie()
-{
-  if (isset($_COOKIE["makhzan"])) {
-    $putative_gid = $_COOKIE["makhzan"];
-
-    if (preg_match("/[^\w]/i", $putative_gid) || strlen($putative_gid) != 15) {
-      setcookie("makhzan", "", time() - 3600);
-      return "0";
-    } else {
-      include_once '../api/config/database.php';
-      $database = new Database();
-      $db = $database->getConnection();
-
-      $result = check_row_exists(
-        $db,
-        "game_id",
-        $putative_gid,
-        "games",
-        "last_accessed",
-        "s"
-      );
-
-      $database->closeConnection();
-
-      if (false || !$result || !$result["status"] || !$result["rows"]) {
-        setcookie("makhzan", "", time() - 3600);
-        return "0";
-      } else {
-        return $putative_gid;
-      }
-    }
-  }
-  return "0";
-}
-
 function add_to_json(
   $conn,
   $table_name,
@@ -425,7 +435,7 @@ function update_row(
   $identifying_column,
   $identifying_data,
   $table_name,
-  $acronym
+  $type_definition_string
 ) {
   $query =
     "UPDATE " .
@@ -444,7 +454,7 @@ function update_row(
     ];
   }
 
-  $stmt->bind_param($acronym, $change_data, $identifying_data);
+  $stmt->bind_param($type_definition_string, $change_data, $identifying_data);
 
   if (!$stmt->execute()) {
     return [
@@ -465,7 +475,7 @@ function check_row_exists(
   $identifier,
   $table_name,
   $column_to_return,
-  $acronym
+  $type_definition_string
 ) {
   $query = "SELECT * FROM " . $table_name . " WHERE " . $column . " = ?";
 
@@ -477,7 +487,7 @@ function check_row_exists(
     ];
   }
 
-  $stmt->bind_param($acronym, $identifier);
+  $stmt->bind_param($type_definition_string, $identifier);
 
   if (!$stmt->execute()) {
     return [
@@ -511,8 +521,13 @@ function check_row_exists(
   return $response;
 }
 
-function delete_row($connection, $column, $identifier, $table_name, $acronym)
-{
+function delete_row(
+  $connection,
+  $column,
+  $identifier,
+  $table_name,
+  $type_definition_string
+) {
   $query = "DELETE FROM " . $table_name . " WHERE " . $column . " = ?";
 
   if (!($stmt = $connection->prepare($query))) {
@@ -523,7 +538,7 @@ function delete_row($connection, $column, $identifier, $table_name, $acronym)
     ];
   }
 
-  $stmt->bind_param($acronym, $identifier);
+  $stmt->bind_param($type_definition_string, $identifier);
 
   if (!$stmt->execute()) {
     return [

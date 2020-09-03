@@ -1,6 +1,6 @@
 <?php
 include_once '../config/database.php';
-include_once '../../utils/table_utils.php';
+include_once '../../utils/utils.php';
 
 $database = new Database();
 $db = $database->getConnection();

@@ -1,6 +1,6 @@
 <?php
 include_once '../api/config/database.php';
-include '../utils/table_utils.php';
+
 if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
@@ -9,9 +9,6 @@ if (!isset($_SESSION['gid'])) {
   header("Location: ../home");
   exit();
 }
-
-$show_dev_data = false;
-$_SESSION['show_dev_data'] = 0;
 
 setcookie("makhzan", $_SESSION['gid'], time() + 3600 * 24 * 30, "/");
 $gid = $_SESSION['gid'];
@@ -23,8 +20,7 @@ include '../master.php';
 
 <script>
 $(document).ready(function () {
-  console.log("play index ready", overall_sales_history)
-  setZoom()
+  basicPageFunctions()
   loadRubiconIfAt()
   makeSalesGraph(overall_sales_history)
 });

@@ -52,7 +52,7 @@ class Fruit
     $table_name,
     $identifying_column,
     $identifying_data,
-    $acronym,
+    $type_definition_string,
     $get_full
   ) {
     if (substr($table_name, -3) == "inv" && !$get_full) {
@@ -79,7 +79,7 @@ class Fruit
       ];
     }
 
-    $stmt->bind_param($acronym, $identifying_data);
+    $stmt->bind_param($type_definition_string, $identifying_data);
 
     if (!$stmt->execute()) {
       return [
@@ -290,7 +290,7 @@ class Fruit
         ];
       }
 
-      if (!($fruit_arr = build_table_array($result["data"]))) {
+      if (!($result_arr = build_table_array($result["data"]))) {
         return [
           "status" => false,
           "message" => "Error in build_table_array.",
@@ -298,7 +298,7 @@ class Fruit
         ];
       }
 
-      $json = json_decode($fruit_arr[0][$json_data_object_name]);
+      $json = json_decode($result_arr[0][$json_data_object_name]);
       $json = $json_data_object;
 
       if (!isset($update_data)) {
@@ -335,7 +335,7 @@ class Fruit
     $table_name,
     $identifying_column,
     $identifying_data,
-    $acronym,
+    $type_definition_string,
     $update_data
   ) {
     $update_string = "";
@@ -368,9 +368,9 @@ class Fruit
     }
 
     if (count($update_values) == 1) {
-      $stmt->bind_param($acronym, $update_values);
+      $stmt->bind_param($type_definition_string, $update_values);
     } elseif (count($update_values) > 1) {
-      $stmt->bind_param($acronym, ...$update_values);
+      $stmt->bind_param($type_definition_string, ...$update_values);
     } else {
       return [
         "status" => false,
@@ -447,7 +447,7 @@ class Fruit
       " = CASE " .
       $identifying_column;
 
-    $acronym = "";
+    $type_definition_string = "";
     $new_data_set = [];
 
     foreach ($identifying_data_set as $identifying_data) {
@@ -469,7 +469,7 @@ class Fruit
         $query .= " WHEN '" . $identifying_data . "' THEN ?";
       }
 
-      $acronym .= $data_type;
+      $type_definition_string .= $data_type;
 
       $new_data_set[] = $data_obj[$identifying_data][$new_data_key];
     }
@@ -493,7 +493,7 @@ class Fruit
       ];
     }
 
-    $stmt->bind_param($acronym, ...$new_data_set);
+    $stmt->bind_param($type_definition_string, ...$new_data_set);
 
     if (!$stmt->execute()) {
       return [
