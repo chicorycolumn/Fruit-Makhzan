@@ -124,7 +124,7 @@ function verifyBuyButtons() {
 }
 
 function setZoom() {
-  let scale = 0.8;
+  let scale = 0.7;
   document.body.style.zoom = scale;
   document.body.style.webkitTransform = scale;
   document.body.style.msTransform = scale;

@@ -21,7 +21,12 @@
 }
 
 .mainStatTextNumber {
-  font-size: 24px;
+  font-size: var(--mainStatFontSize1);
+}
+
+.mainStatTextNumberDays {
+  /* border: black solid 1px; */
+  width: 50px;
 }
 
 .islandHolder {
@@ -91,7 +96,7 @@
 .mainStatText {
   /* border: blue solid 2pt; */
   position: relative;
-  top: 85.5px;
+  top: 81px;
   z-index: 2;
   left: 10px;
 }
@@ -101,7 +106,7 @@
   flex-direction: row;
   justify-content: center;
   position: relative;
-  left: -1.5px;
+  left: 2px;
 }
 
 .daysYearsSubholder {

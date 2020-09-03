@@ -328,7 +328,7 @@ class Database
       "conformity_history" => "ss",
     ]);
 
-    $money_initial = 1000000000;
+    $money_initial = 100;
     $days_initial = 0;
     $level_record_initial = json_encode([
       "round" => 0,

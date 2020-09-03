@@ -9,7 +9,8 @@
   margin-right: auto;
 }
 
-.th_inventory {
+#inventory th {
+  font-size: var(--thFontSize1);
   min-width: 120px;
   max-width: 120px;
   position: relative;
@@ -33,7 +34,7 @@
 
 .nameTD {
   padding-left: 0px;
-  font-size: 12pt;
+  font-size: var(--nameTDFontSize);
   font-weight: bold;
 }
 
@@ -93,11 +94,12 @@
 }
 
 .sellingPriceInput {
+  font-family: var(--inputFontFamily);
   border-radius: var(--bradius1) var(--bradius1) 0 0;
   resize: none;
   width: 100%;
   height: 52.5px;
-  font-size: var(--tdFontSize1);
+  font-size: var(--tdFontSize2);
   text-justify: top;
   overflow: hidden;
   text-align: center;
@@ -135,10 +137,12 @@
 }
 
 .amountInput {
+  font-family: var(--inputFontFamily);
+  padding-top: 5px;
   border-radius: var(--bradius1) var(--bradius1) 0 0;
   width: var(--cellWidth1);
   height: 40px;
-  font-size: var(--tdFontSize1);
+  font-size: var(--tdFontSize2);
   text-align: center;
   border-right: lightgray solid 1.5pt;
   border-bottom: lightgray solid 1.5pt;
@@ -146,12 +150,12 @@
 }
 
 .popFactor1 {
-  font-size: var(--tdFontSize1);
+  font-size: var(--tdFontSize2);
   margin-top: 5px;
 }
 
 .popFactor2 {
-  font-size: 14px;
+  font-size: var(--tdFontSize3);
 }
 
 .popFactorPositive {
@@ -176,8 +180,8 @@
   margin: 0px;
   background-color: white;
   border-radius: 50px;
-  height: 27.5px;
-  width: 27.5px;
+  height: 32.5px;
+  width: 32.5px;
   margin-left: 15px;
   text-align: center;
   font-size: var(--tdFontSize1);
@@ -191,7 +195,8 @@
   padding: 0;
   z-index: 3;
   position: relative;
-  top: 2px;
+  top: 4px;
+  font-size: 24px;
 }
 
 .popularityCircleSpan .popularityCircleToolTipText {
@@ -213,7 +218,7 @@
 }
 
 th .tooltip {
-  font-size: 16px;
+  font-size: var(--tooltipFontSize);
   visibility: hidden;
   width: 240px;
   background-color: black;

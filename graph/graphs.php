@@ -6,6 +6,7 @@ include "../fusioncharts/fusioncharts.php"; ?>
 
 <script>
 
+let salesNumDisplay = 50
 let trendsChart = null;
 
 FusionCharts.ready(function() {
@@ -128,7 +129,7 @@ function makeSalesGraph(initial_data){
           "caption": "Daily Transactions",
           "xAxisName": "",
           "yAxisName": "Gold Dinars",
-          "numDisplaySets": "30",
+          "numDisplaySets": salesNumDisplay,
           "setadaptiveymin": "1",
           "setadaptivesymin": "1",
           "labeldisplay": "auto",
@@ -165,7 +166,7 @@ function updateSalesGraph(overall_sales_history){
   let categoryArray = currentChartData["categories"][0]["category"]
 
   let arrays = [salesArray, spendingArray, categoryArray]
-  arrays.forEach(array => {if (array.length > 30){array.shift()}})
+  arrays.forEach(array => {if (array.length > salesNumDisplay){array.shift()}})
 
   salesArray.push({"value": newSalesValue})
   spendingArray.push({"value": newSpendingValue})

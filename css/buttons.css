@@ -1,5 +1,11 @@
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
 .mediumButtonKind {
   height: 40px;
+  font-size: var(--buyButtonFontSize);
 }
 
 button:disabled {
@@ -9,7 +15,7 @@ button:disabled {
 .sellingPriceButton {
   width: 50px;
   padding: 0px;
-  font-size: 14px;
+  font-size: var(--buyButtonFontSize);
   font-weight: bold;
   height: 26px;
   width: 100%;
@@ -26,7 +32,6 @@ button:disabled {
   width: 55px;
   /* background-color: var(--thisOrange); */
   background-color: var(--divGreen);
-  font-size: 14px;
   font-weight: bold;
   padding: 0px;
 }
@@ -37,7 +42,6 @@ button:disabled {
   background-color: var(--divGreen);
   text-align: center;
   padding: 0px;
-  font-size: 14px;
   font-weight: bold;
 }
 
@@ -50,12 +54,12 @@ button:disabled {
   position: relative;
   width: 55px;
   padding: 0px;
-  font-size: 14px;
   font-weight: bold;
   background-color: var(--buttonGreen);
 }
 
 .newDayButton {
+  font-size: var(--newDayButtonFontSize);
   background-color: white;
   height: 145px;
   width: 145px;
@@ -76,12 +80,12 @@ button:disabled {
 }
 
 .dialogBoxButton {
-  background-color: rgba(0, 255, 0, 0.1);
-  box-shadow: rgba(0, 255, 0, 0.2) 0px 0px 50px;
+  background-color: var(--dialogBoxButtonBackgColor);
+  box-shadow: var(--dialogBoxButtonShadowColor) 0px 0px 50px;
   border-radius: var(--bradius1);
   padding: 0px;
   margin: 0px;
-  font-size: 22.5px;
+  font-size: var(--dialogBoxButtonFontSize);
   cursor: pointer;
   position: relative;
   left: 70px;

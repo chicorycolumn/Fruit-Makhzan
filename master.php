@@ -7,13 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Averia+Libre:wght@700&display=swap" rel="stylesheet">
 
-
-
-
-
   <meta charset="utf-8">
   <title>Fruit Makhzan</title>
-
 
 <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
 <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>

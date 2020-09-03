@@ -1,26 +1,64 @@
 :root {
+  --navbarFontSize: 28px;
+
+  --newDayButtonFontSize: 28px;
+
+  --tdFontSize1: 24px;
+  --nameTDFontSize: var(--tdFontSize1);
+  --mainStatFontSize1: 24px;
+
+  --dialogBoxButtonFontSize: 22.5px;
+
+  --tdFontSize2: 21px;
+
+  --dialogBoxFontSize1: 20px;
+  --createFruitLabelFontSize: 20px;
+
+  --dialogBoxFontSize2: 19px;
+
+  --thFontSize1: 19px;
+  --bodyFontSize: 18px;
+
+  --tdFontSize3: 17px;
+
+  --tooltipFontSize: 16px;
+  --homeButtonFontSize: 16px;
+  --factorSelectFontSize: 16px;
+  --createFruitInputNameFontSize: 16px;
+
+  --buyButtonFontSize: 16px;
+
+  /*  */
+
+  --inputFontFamily: "Lucida Console", Monaco, monospace;
+
   --bradius1: 15px;
   --bigBoxWidth: 1100px;
   --cellWidth1: 160px;
-  --tdFontSize1: 20px;
+
   --thisYellow: #fffe66;
   --thisOrange2: #f9bd07;
   --thisOrange: #ffc400;
   --buttonGreen: lightgreen;
   --paleGreen: rgb(212, 255, 187);
   --divGreen: rgb(235, 255, 224);
+  --glowColor1: var(--thisOrange);
+  --dialogBoxButtonBackgColor: rgba(0, 255, 0, 0.1);
+  --dialogBoxButtonShadowColor: rgba(0, 255, 0, 0.2);
+
   --facDimW: 105px;
   --facDimH: 30px;
   --facDimMBmajor: 4px;
   --facDimMBminor: 2px;
-  --glowColor1: var(--thisOrange);
+
+  --aboutCoinDimensions: 250px;
 }
 
 body {
   background-color: var(--paleGreen);
   /* font-family: "Averia Gruesa Libre", cursive, Arial; */
   font-family: "Averia Libre", cursive, Arial;
-  font-size: 18px;
+  font-size: var(--bodyFontSize);
 }
 
 .background {

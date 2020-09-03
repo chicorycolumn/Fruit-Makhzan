@@ -41,7 +41,7 @@ $mainStats = "
         </div>
 
         <div class='daysYearsSubholder'>
-          <span class='mainStatText mainStatTextNumber' id='daysStat'>--</span>
+          <span class='mainStatText mainStatTextNumber mainStatTextNumberDays' id='daysStat'>--</span>
           <span class='mainStatText mainStatTextFaded'>days</span>
         </div>
         

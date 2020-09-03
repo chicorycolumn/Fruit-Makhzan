@@ -5,7 +5,7 @@
   flex-direction: row;
   justify-content: space-evenly;
   position: relative;
-  top: -60px;
+  top: -57.5px;
 }
 
 .homeButton {
@@ -20,7 +20,7 @@
   overflow: hidden;
 
   /* border: rgba(0, 0, 0, 0.2) solid 1px; */
-  box-shadow: -1px -1px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
   background-color: rgba(255, 255, 255, 0.2);
   width: 100px;
 
@@ -34,7 +34,7 @@
   /* border: blue solid 2pt; */
   width: 285px;
   position: relative;
-  top: -27.5px;
+  top: -25px;
   left: -17.5px !important;
 }
 
@@ -47,9 +47,8 @@
 
 .homeButtonText {
   font-family: "Averia Libre", cursive, Arial;
-  font-size: 16px;
+  font-size: var(--homeButtonFontSize);
   color: darkgreen;
-  text-decoration: underline;
 }
 
 .greyedOut {

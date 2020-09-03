@@ -35,7 +35,9 @@ function newDay() {
     incrementSublevel(rubiconMessageRef, 4, round_transition_in_progress);
   }
 
-  if (Object.keys(overall_sales_history).length > 30) {
+  let salesNumDisplay = 50
+
+  if (Object.keys(overall_sales_history).length > salesNumDisplay) {
     delete overall_sales_history[Object.keys(overall_sales_history).sort((a, b) => parseInt(a) - parseInt(b))[0]]
   }
 

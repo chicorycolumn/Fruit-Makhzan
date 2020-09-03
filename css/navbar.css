@@ -43,7 +43,7 @@
 }
 
 .navbarText {
-  font-size: 28px;
+  font-size: var(--navbarFontSize);
   color: darkgreen;
   font-weight: bold;
   margin-top: auto;
