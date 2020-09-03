@@ -350,7 +350,7 @@ function wipe_previous_game($connection)
 
 function clean_up_db($connection)
 {
-  $timeout = 60; //3600 * 24 * 30;
+  $timeout = 3600 * 24 * 30;
   $log = [];
   $query = "SELECT * FROM games WHERE last_accessed < ?";
   // $query = "SELECT update_time, table_name FROM information_schema.tables";

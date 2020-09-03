@@ -7,8 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Averia+Libre:wght@700&display=swap" rel="stylesheet">
 
-
-
   <meta charset="utf-8">
   <title>Fruit Makhzan</title>
 

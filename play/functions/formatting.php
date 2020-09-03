@@ -1,4 +1,47 @@
 <script>
+//popularityCircleSpan
+function toggleTooltips(){
+
+  let toggle = $("#tooltipToggle")
+
+  if (toggle.hasClass("halfOpacity")) {
+
+    toggle.removeClass("halfOpacity")
+    $("th").each(function(){
+
+      if ($(this).children("span").length){
+
+      let text = $(this).contents().filter(function() {
+      return this.nodeType == 3;
+    }).text()
+
+    $(this).contents().first().replaceWith(text+" ⓘ")
+
+    $(this).addClass("thHover")
+
+}
+    })
+
+    $(".popularityCircleSpan").addClass("popularityCircleSpanHover")
+
+    } else {
+
+    toggle.addClass("halfOpacity")
+    $("th").each(function(){
+
+      if ($(this).children("span").length){
+
+      let text = $(this).contents().filter(function() {
+      return this.nodeType == 3;
+    }).text()
+
+    $(this).contents().first().replaceWith(text.replace(" ⓘ", ""))
+    $(this).removeClass("thHover")
+}
+    })
+    $(".popularityCircleSpan").removeClass("popularityCircleSpanHover")
+  }
+}
 
 function basicPageFunctions(){
   setZoom()

@@ -23,6 +23,16 @@ $(document).ready(function () {
   basicPageFunctions()
   loadRubiconIfAt()
   makeSalesGraph(overall_sales_history)
+
+  setTimeout(() => {
+    let trendsContainers = ["#trendsChartContainer", "#salesChartContainer"]
+    trendsContainers.forEach(id => {
+      if($(id).is(":empty")){
+        $(id).parent().addClass("hidden")
+        $(".holderForHorizontalMainDivs").css({"justify-content": "center"})
+      }
+    })
+  }, 1000);
 });
 
 let level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`);

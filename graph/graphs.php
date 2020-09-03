@@ -150,7 +150,9 @@ function makeSalesGraph(initial_data){
           }]
         }]
       }
-    }).render();
+    })
+    
+    salesChart.render();
   });
 }
 

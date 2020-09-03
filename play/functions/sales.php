@@ -116,7 +116,7 @@ function updateSalesSubstratesInDisplayedTable() {
 
     function getPopularityColor(pop) {
       if (pop < 20) {
-        return { text: "⇊", color: "red", descrip: "very low!" };
+        return { text: "⇊", color: "red", descrip: "very low." };
       } else if (pop < 40) {
         return { text: "↓", color: "orange", descrip: "low." };
       } else if (pop < 60) {
@@ -124,7 +124,7 @@ function updateSalesSubstratesInDisplayedTable() {
       } else if (pop < 80) {
         return { text: "↑", color: "greenyellow", descrip: "high." };
       } else if (pop >= 80) {
-        return { text: "⇈", color: "cyan", descrip: "very high!" };
+        return { text: "⇈", color: "cyan", descrip: "very high." };
       }
     }
 

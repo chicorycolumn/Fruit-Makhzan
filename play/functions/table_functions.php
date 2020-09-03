@@ -326,7 +326,7 @@ function addRowToTable(fruit, shouldPrepend){
       "<div class='invSubtd restockPriceSubtd'>"+
         "<div class='popHolder'>"+
           "<p class='invData restockPriceData'>"+digitGrouping(restock_price)+"</p>"+
-          "<div class='popularityCircleSpan'><p class='popularityCircleText'>X</p><span class='tooltip popularityCircleTooltip'>Tooltip text</span></div>"+
+          "<div class='popularityCircleSpan popularityCircleSpanHover'><p class='popularityCircleText'>X</p><span class='tooltip popularityCircleTooltip'>Tooltip text</span></div>"+
         "</div>"+
       "</div>"+
     "</td>"+

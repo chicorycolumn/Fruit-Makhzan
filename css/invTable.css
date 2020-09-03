@@ -2,18 +2,21 @@
 /************* TABLE *************/
 /*********************************/
 
-.table {
+table#inventory {
   border-collapse: separate;
   border-spacing: 15px 20px;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
 }
 
 #inventory th {
   font-size: var(--thFontSize1);
   min-width: 120px;
   max-width: 120px;
+  line-height: 21px;
   position: relative;
+  right: 0px;
 }
 
 .regularTD {
@@ -213,24 +216,46 @@
   font-family: var(--simpleFontFamily) !important;
 }
 
-.popularityCircleSpan .popularityCircleTooltip {
+.popularityCircleTooltip {
   visibility: hidden;
   width: 180px;
   left: 25px;
   top: -15px;
 }
 
-.popularityCircleSpan:hover .popularityCircleTooltip {
+.popularityCircleSpanHover:hover .popularityCircleTooltip {
   visibility: visible;
 }
 
-th .THtooltip {
+.THtooltip {
   visibility: hidden;
   width: 240px;
-  left: -45px;
+  left: -50px;
   bottom: 30px;
 }
 
-th:hover .THtooltip {
+.thHover:hover .THtooltip {
   visibility: visible;
+}
+
+#tooltipToggle {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  /* position: relative; */
+  /* top: 200px; */
+  z-index: 5;
+  font-weight: bold;
+  color: blue;
+  /* right: 0px; */
+  width: 25px;
+  height: 25px;
+}
+
+.halfOpacity {
+  opacity: 0.5;
+}
+
+.boxBody {
+  position: relative;
 }
