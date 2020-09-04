@@ -206,8 +206,8 @@ function updateTimestamp() {
       );
     },
     success: function (result) {
-      if (result["status"]) {
-        console.log("Successfully updated timestamp.");
+      if (!result["status"]) {
+        console.log("Did not manage to update timestamp.");
       }
     },
   });

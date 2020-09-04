@@ -2,7 +2,6 @@
 
 function bindDevDataFunctions(value){
   if (value == 666){
-    console.log("bound")
     $("#factorsTH").bind("click", printDevData1)
     $("#factorsTH").css({"color": "purple"})
     $("#restockTH").bind("click", printDevData2)
@@ -13,24 +12,12 @@ function bindDevDataFunctions(value){
 }
 
 function printDevData1() {
-  console.log("OLD SESSION FROM PHP:");
-  console.log(`<?php print_r($_SESSION); ?>`);
-  console.log(" ")
-
-  console.log("TC PROXY:");
-  console.log(trend_calculates);
-  console.log(" ");
+  console.log("OLD SESSION FROM PHP:", `<?php print_r($_SESSION); ?>`);
+  console.log("TC PROXY:", trend_calculates);
 }
 
 function printDevData2() {
-  console.log({ current_rubicon });
-  console.log(" ");
-  console.log(
-    "PRINT: " + level_record["round"] + "~" + level_record["sublevel"]
-  );
-  console.log(" ");
-  console.log(level_record);
-  console.log(" ");
+  console.log({ current_rubicon }, "PRINT: " + level_record)
 }
 
 function printSingle(e) {

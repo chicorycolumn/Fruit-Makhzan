@@ -4,8 +4,6 @@ let round_transition_in_progress = {"value": false};
 
 function newDay() {
 
-  console.log("entering fxn newDay")
-
   if (round_transition_in_progress["value"]){return}
 
   let incipient_sales = calculateSales();
@@ -45,7 +43,6 @@ function newDay() {
 
   overall_sales_history[days + 1] = { profit: day_profit, costs: day_costs };
 
-  console.log("now executing fxn newDay with overall_sales_history:", overall_sales_history)
   updateGamesTableNewDay(day_profit, overall_sales_history);
   updateInventoryTable(incipient_sales);
   updateTimestamp()

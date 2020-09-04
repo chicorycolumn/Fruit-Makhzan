@@ -5,10 +5,6 @@ function loadPrevious() {
   if (!"<?php echo isset($_COOKIE['makhzan']); ?>"){
     return
   }
-
-  console.log("loadPrevious", "<?php if (isset($_COOKIE['makhzan'])) {
-    echo $_COOKIE['makhzan'];
-  } ?>" )
   
   $.ajax({
     type: "GET",
@@ -42,8 +38,6 @@ function loadPrevious() {
 }
 
 function startNewGame() {
-
-  console.log("startNewGame")
 
   $.ajax({
     type: "POST",
