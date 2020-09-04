@@ -1,0 +1,43 @@
+#trendsChartContainer {
+  pointer-events: none !important;
+  position: relative;
+}
+
+.ersatzGraph {
+  width: 480px;
+  height: 240px;
+  z-index: 5;
+  position: absolute;
+  left: 20px;
+  top: 10px;
+  /* opacity: 0.5; */
+}
+
+.ersatzGraphUnderlay {
+  width: 430px;
+  height: 200px;
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  position: absolute;
+  left: 60px;
+  top: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.ersatzBarHolder {
+  width: 82.5px;
+  height: 167px;
+  /* opacity: 0.5; */
+  border: black solid 1px;
+  position: relative;
+  top: 17px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.ersatzBar {
+  background-color: var(--thisOrange);
+  height: 99%;
+}

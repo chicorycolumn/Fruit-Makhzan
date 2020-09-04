@@ -25,13 +25,11 @@ $(document).ready(function () {
   makeSalesGraph(overall_sales_history)
 
   setTimeout(() => {
-    let trendsContainers = ["#trendsChartContainer", "#salesChartContainer"]
-    trendsContainers.forEach(id => {
-      if($(id).is(":empty")){
-        $(id).parent().addClass("hidden")
-        $(".holderForHorizontalMainDivs").css({"justify-content": "center"})
-      }
-    })
+    if (!$("#trendsChart").length){
+        $(".ersatzGraph").removeClass("hidden")
+        $(".ersatzGraphUnderlay").removeClass("hidden")
+        updateTrendsGraph(trend_calculates)
+    }
   }, 2000);
 });
 

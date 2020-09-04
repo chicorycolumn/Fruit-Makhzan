@@ -30,7 +30,9 @@ FusionCharts.ready(function() {
         "bgColor": "#ebffe0",
         "numdisplaysets": "5",
         "showRealTimeValue": "0",
-        "showToolTip": "0"
+        "showToolTip": "0",
+        "showHoverEffect" : "0",
+        "showHoverEffect" : "0"
       },
       "categories": [{
         "category": [{
@@ -71,114 +73,138 @@ FusionCharts.ready(function() {
     },
   });
 
-  trendsChart.render();
+  // trendsChart.render();
 });
 
-function updateTrendsGraph(trendCalculates){
+function updateTrendsGraph(trendCalculates) {
+  let keys = ["love", "weather", "politics", "conformity", "decadence"];
 
-        let currentChartData = trendsChart.getChartData()
-        
-        let trendCalculatesArray = []
+  if ($("#trendsChart").length) {
+    console.log(111)
+    let currentChartData = trendsChart.getChartData();
 
-        let keys = ["love", "weather", "politics", "conformity", "decadence"]
-        
-        keys.forEach(key => {
-            let capitalisedKey = key[0].toUpperCase() + key.slice(1).toLowerCase()
-            trendCalculatesArray.push({"label": capitalisedKey, "value": trendCalculates[key]})
-        })
+    let trendCalculatesArray = [];
 
-        currentChartData["dataset"][0]["data"] = trendCalculatesArray
+    keys.forEach((key) => {
+      let capitalisedKey = key[0].toUpperCase() + key.slice(1).toLowerCase();
+      trendCalculatesArray.push({
+        label: capitalisedKey,
+        value: trendCalculates[key],
+      });
+    });
 
-    trendsChart.setChartData(currentChartData)
+    console.log(222)
+
+    currentChartData["dataset"][0]["data"] = trendCalculatesArray;
+    trendsChart.setChartData(currentChartData);
+  } else {
+    keys.forEach((key) => {
+      let id = "#ersatzBar_" + key;
+      let value = trendCalculates[key].toString() + "%";
+      $(id).css({ height: value });
+    });
+  }
 }
 
 let salesChart = null;
 
-function makeSalesGraph(initial_data){
-
-  let keys = Object.keys(initial_data)
-  let newCategorySet = []
+function makeSalesGraph(initial_data) {
+  let keys = Object.keys(initial_data);
+  let newCategorySet = [];
   let salesObject = {
-            "seriesname": "Sales",
-            "color": "#008000",
-            "data": []
-  }
+    seriesname: "Sales",
+    color: "#008000",
+    data: [],
+  };
 
   let spendingObject = {
-            "seriesname": "Spending",
-            "color": "#FFC400",
-            "data": []
-  }
+    seriesname: "Spending",
+    color: "#FFC400",
+    data: [],
+  };
 
-  keys.forEach(key => {
-    newCategorySet.push({"label": key.toString()})
-    salesObject["data"].push({"value": initial_data[key]["profit"].toString()})
-    spendingObject["data"].push({"value": initial_data[key]["costs"].toString()})
-  })
+  keys.forEach((key) => {
+    newCategorySet.push({ label: key.toString() });
+    salesObject["data"].push({ value: initial_data[key]["profit"].toString() });
+    spendingObject["data"].push({
+      value: initial_data[key]["costs"].toString(),
+    });
+  });
 
-  FusionCharts.ready(function() {
+  FusionCharts.ready(function () {
     salesChart = new FusionCharts({
-      type: 'realtimeline',
-      renderAt: 'salesChartContainer',
-      width: '500',
-      height: '260',
-      dataFormat: 'json',
+      type: "realtimeline",
+      renderAt: "salesChartContainer",
+      width: "500",
+      height: "260",
+      dataFormat: "json",
       dataSource: {
-        "chart": {
-          "theme": "fusion",
-          "caption": "Daily Transactions",
-          "xAxisName": "",
-          "yAxisName": "Gold Dinars",
-          "numDisplaySets": salesNumDisplay,
-          "setadaptiveymin": "1",
-          "setadaptivesymin": "1",
-          "labeldisplay": "auto",
-          "bgColor": "#ebffe0",
-          "showRealTimeValue": "0",
-          "yAxisMaxValue": "50",
-          "showToolTip": "0"
+        chart: {
+          theme: "fusion",
+          caption: "Daily Transactions",
+          xAxisName: "",
+          yAxisName: "Gold Dinars",
+          numDisplaySets: salesNumDisplay,
+          setadaptiveymin: "1",
+          setadaptivesymin: "1",
+          labeldisplay: "auto",
+          bgColor: "#ebffe0",
+          showRealTimeValue: "0",
+          yAxisMaxValue: "50",
+          showToolTip: "0",
         },
-        "categories": [{
-          "category": newCategorySet
-        }],
-        "dataset": [salesObject, spendingObject],
-        "trendlines": [{
-          "line": [{
-            "startvalue": "0",
-            "color": "#62B58F",
-            "valueOnRight": "",
-          }]
-        }]
-      }
-    })
-    
+        categories: [
+          {
+            category: newCategorySet,
+          },
+        ],
+        dataset: [salesObject, spendingObject],
+        trendlines: [
+          {
+            line: [
+              {
+                startvalue: "0",
+                color: "#62B58F",
+                valueOnRight: "",
+              },
+            ],
+          },
+        ],
+      },
+    });
+
     salesChart.render();
   });
 }
 
-function updateSalesGraph(overall_sales_history){
-  
-  let day = Object.keys(overall_sales_history).sort((a, b) => b - a)[0].toString()
-  let newSalesValue = overall_sales_history[day]['profit']
-  let newSpendingValue = overall_sales_history[day]['costs']
+function updateSalesGraph(overall_sales_history) {
+  let day = Object.keys(overall_sales_history)
+    .sort((a, b) => b - a)[0]
+    .toString();
+  let newSalesValue = overall_sales_history[day]["profit"];
+  let newSpendingValue = overall_sales_history[day]["costs"];
 
-  let currentChartData = salesChart.getChartData()
-  let salesArray = currentChartData["dataset"][0]["data"]
-  let spendingArray = currentChartData["dataset"][1]["data"]
-  let categoryArray = currentChartData["categories"][0]["category"]
+  let currentChartData = salesChart.getChartData();
+  let salesArray = currentChartData["dataset"][0]["data"];
+  let spendingArray = currentChartData["dataset"][1]["data"];
+  let categoryArray = currentChartData["categories"][0]["category"];
 
-  let arrays = [salesArray, spendingArray, categoryArray]
-  arrays.forEach(array => {if (array.length > salesNumDisplay){array.shift()}})
+  let arrays = [salesArray, spendingArray, categoryArray];
+  arrays.forEach((array) => {
+    if (array.length > salesNumDisplay) {
+      array.shift();
+    }
+  });
 
-  salesArray.push({"value": newSalesValue})
-  spendingArray.push({"value": newSpendingValue})
-  categoryArray.push({"label": day.toString()})
+  salesArray.push({ value: newSalesValue });
+  spendingArray.push({ value: newSpendingValue });
+  categoryArray.push({ label: day.toString() });
 
-  currentChartData["dataset"][0]["data"] = salesArray
-  currentChartData["dataset"][1]["data"] = spendingArray
-  currentChartData["categories"][0]["category"] = categoryArray
+  currentChartData["dataset"][0]["data"] = salesArray;
+  currentChartData["dataset"][1]["data"] = spendingArray;
+  currentChartData["categories"][0]["category"] = categoryArray;
 
-  salesChart.setChartData(currentChartData)
+  salesChart.setChartData(currentChartData);
 }
 
 </script>
