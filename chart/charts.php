@@ -80,9 +80,7 @@ function updateTrendsChart(trendCalculates) {
   let keys = ["love", "weather", "politics", "conformity", "decadence"];
 
   if ($("#trendsChart").length) {
-    console.log(111)
     let currentChartData = trendsChart.getChartData();
-
     let trendCalculatesArray = [];
 
     keys.forEach((key) => {
@@ -92,9 +90,7 @@ function updateTrendsChart(trendCalculates) {
         value: trendCalculates[key],
       });
     });
-
-    console.log(222)
-
+    
     currentChartData["dataset"][0]["data"] = trendCalculatesArray;
     trendsChart.setChartData(currentChartData);
   } else {
