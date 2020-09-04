@@ -27,7 +27,12 @@ function loadPrevious() {
     },
     success: function (result) {
       if (result["status"]) {
-        window.location = "../play";
+
+        console.log(result['data'][0])
+
+        setTimeout(() => {
+          window.location = "../play";
+        }, 5000);
       } else {
         console.log(result, result["message"], result["error"]);
       }

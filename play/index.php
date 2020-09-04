@@ -19,6 +19,9 @@ include '../master.php';
 ?>
 
 <script>
+
+console.log( `<?php print_r($_SESSION); ?>` )
+
 let level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`);
 let sessionMoney = "<?php echo $_SESSION['money_stat']; ?>"
 let sessionDays = "<?php echo $_SESSION['days_stat']; ?>"
