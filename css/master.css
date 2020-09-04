@@ -96,13 +96,13 @@ body {
   margin-bottom: 50px;
 }
 
-.mainDivCharts1 {
+#mainDivCharts1 {
   margin-top: 50px;
   width: 520px;
   height: 265px;
 }
 
-.mainDivCharts2 {
+#mainDivCharts2 {
   margin-top: 50px;
   width: 520px;
   height: 265px;

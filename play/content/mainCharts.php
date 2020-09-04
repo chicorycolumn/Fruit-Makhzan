@@ -7,7 +7,7 @@ echo "<link rel='stylesheet' type='text/css' href='.././css/mainCharts.css' />";
 $mainCharts =
   "
 
-<div class='mainDiv mainDivCharts1'>
+<div class='mainDiv' id='mainDivCharts1'>
 " .
   '<div class="chartContainer" id="trendsChartContainer">
   
@@ -39,7 +39,7 @@ $mainCharts =
   "
 </div>
 
-<div class='mainDiv mainDivCharts2'>
+<div class='mainDiv' id='mainDivCharts2'>
 " .
   ' <div class="chartContainer" id="salesChartContainer"></div>' .
   "
