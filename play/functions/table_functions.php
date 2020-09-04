@@ -257,6 +257,12 @@ function addRowToTable(fruit, shouldPrepend){
     trend_calculates,
     name
   );
+
+  let quantityFlaggedStyle = ""
+  if (parseInt(quantity)<0){
+    quantity = 0
+    quantityFlaggedStyle = "style='color: darkgreen;'"
+  }
   
   let pop_factor_keys = Object.keys(popularity_factors)
   let pf1 = pop_factor_keys[0]
@@ -286,7 +292,7 @@ function addRowToTable(fruit, shouldPrepend){
 
     "<td class='regularTD'>"+
       "<div class='invSubtd quantitySubtd'>"+
-        "<p class='invData quantityData noMarginPadding'>"+digitGrouping(quantity)+"</p>"+
+        "<p class='invData quantityData noMarginPadding' "+quantityFlaggedStyle+">"+digitGrouping(quantity)+"</p>"+
       "</div>"+
     "</td>"+
     
