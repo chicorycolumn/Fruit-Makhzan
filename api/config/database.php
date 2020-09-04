@@ -151,14 +151,29 @@ class Database
         "conformity_history" => "ss",
       ]);
 
-      $create_table_querystring = " (
+      $level_record_default = json_encode([
+        "round" => 0,
+        "sublevel" => 0,
+        "history" => [],
+      ]);
+
+      $overall_sales_history_default = '{}';
+
+      $create_table_querystring =
+        " (
         `game_id` varchar(32) PRIMARY KEY,
         `last_accessed` int(11) DEFAULT 0,
         `money_stat` int(11) DEFAULT 0,
         `days_stat` int(11) DEFAULT 0,
-        `trend_calculates` longtext NOT NULL, 
-        `level_record` longtext NOT NULL, 
-        `overall_sales_history` longtext NOT NULL )";
+        `trend_calculates` longtext DEFAULT '" .
+        $trends_default .
+        "', 
+        `level_record` longtext DEFAULT '" .
+        $level_record_default .
+        "', 
+        `overall_sales_history` longtext DEFAULT '" .
+        $overall_sales_history_default .
+        "' )";
 
       return $res = make_table(
         $table_name,
@@ -174,6 +189,7 @@ class Database
   public function startNewGame()
   {
     include "../../utils/utils.php";
+
     if (!$this->checkOrMakeGamesTable()) {
       print_r([
         "status" => false,

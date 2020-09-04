@@ -2,8 +2,14 @@
 
 function loadPrevious() {
 
-  console.log("loadPrevious", "<?php echo $_COOKIE['makhzan']; ?>" )
+  if (!"<?php echo isset($_COOKIE['makhzan']); ?>"){
+    return
+  }
 
+  console.log("loadPrevious", "<?php if (isset($_COOKIE['makhzan'])) {
+    echo $_COOKIE['makhzan'];
+  } ?>" )
+  
   $.ajax({
     type: "GET",
     url: "../api/fruit/read_single.php",
