@@ -45,15 +45,15 @@ $(document).ready(function () {
   basicPageFunctions()
   loadRubiconIfAt()
   makeSalesChart(overall_sales_history)
+  makeTrendsChart()
 
-  setTimeout(() => {
-    return //deactivate ersatz
-    if (!$("#trendsChart").length){
-        $(".ersatzChart").removeClass("hidden")
-        $(".ersatzChartUnderlay").removeClass("hidden")
-        updateTrendsChart(trend_calculates)
-    }
-  }, 2000);
+  // setTimeout(() => {
+  //   if (!$("#trendsChart").length){
+  //       $(".ersatzChart").removeClass("hidden")
+  //       $(".ersatzChartUnderlay").removeClass("hidden")
+  //       updateTrendsChart(trend_calculates)
+  //   }
+  // }, 2000);
 });
 
 </script>

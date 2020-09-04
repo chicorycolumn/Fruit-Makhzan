@@ -9,72 +9,74 @@ include "../fusioncharts/fusioncharts.php"; ?>
 let salesNumDisplay = 70
 let trendsChart = null;
 
-FusionCharts.ready(function() {
-  trendsChart = new FusionCharts({
-    id: "trendsChart",
-    type: 'realtimecolumn',
-    renderAt: 'trendsChartContainer',
-    width: '500',
-    height: '260',
-    dataFormat: 'json',
-    dataSource: {
-      "chart": {
-        "caption": "Factors Affecting Popularity",
-        "palettecolors": "#FFC400",
-        "xaxisname": "",
-        "yaxisname": "",
-        "numbersuffix": "",
-        "theme": "fusion",
-        "yAxisMinValue": 0,
-        "yAxisMaxValue": 100,
-        "bgColor": "#ebffe0",
-        "numdisplaysets": "5",
-        "showRealTimeValue": "0",
-        "showToolTip": "0",
-        "showHoverEffect" : "0",
-        "showHoverEffect" : "0"
+function makeTrendsChart(){
+  FusionCharts.ready(function() {
+    trendsChart = new FusionCharts({
+      id: "trendsChart",
+      type: 'realtimecolumn',
+      renderAt: 'trendsChartContainer',
+      width: '500',
+      height: '260',
+      dataFormat: 'json',
+      dataSource: {
+        "chart": {
+          "caption": "Factors Affecting Popularity",
+          "palettecolors": "#FFC400",
+          "xaxisname": "",
+          "yaxisname": "",
+          "numbersuffix": "",
+          "theme": "fusion",
+          "yAxisMinValue": 0,
+          "yAxisMaxValue": 100,
+          "bgColor": "#ebffe0",
+          "numdisplaysets": "5",
+          "showRealTimeValue": "0",
+          "showToolTip": "0",
+          "showHoverEffect" : "0",
+          "showHoverEffect" : "0"
+        },
+        "categories": [{
+          "category": [{
+            "label": "Love"
+          }, {
+            "label": "Weather"
+          },{
+            "label": "Politics"
+          },{
+            "label": "Conformity"
+          },{
+            "label": "Decadence"
+          }]
+        }],
+        "dataset": [{
+          "data": [{
+              "label": "Love",
+            "value": <?php echo json_decode($_SESSION['trend_calculates'])
+              ->love; ?>
+          },{
+              "label": "Weather",
+            "value": <?php echo json_decode($_SESSION['trend_calculates'])
+              ->weather; ?>
+          },{
+              "label": "Politics",
+            "value": <?php echo json_decode($_SESSION['trend_calculates'])
+              ->politics; ?>
+          },{
+              "label": "Conformity",
+            "value": <?php echo json_decode($_SESSION['trend_calculates'])
+              ->conformity; ?>
+          },{
+              "label": "Decadence",
+            "value": <?php echo json_decode($_SESSION['trend_calculates'])
+              ->decadence; ?>
+          }]
+        }]
       },
-      "categories": [{
-        "category": [{
-          "label": "Love"
-        }, {
-          "label": "Weather"
-        },{
-          "label": "Politics"
-        },{
-          "label": "Conformity"
-        },{
-          "label": "Decadence"
-        }]
-      }],
-      "dataset": [{
-        "data": [{
-            "label": "Love",
-          "value": <?php echo json_decode($_SESSION['trend_calculates'])
-            ->love; ?>
-        },{
-            "label": "Weather",
-          "value": <?php echo json_decode($_SESSION['trend_calculates'])
-            ->weather; ?>
-        },{
-            "label": "Politics",
-          "value": <?php echo json_decode($_SESSION['trend_calculates'])
-            ->politics; ?>
-        },{
-            "label": "Conformity",
-          "value": <?php echo json_decode($_SESSION['trend_calculates'])
-            ->conformity; ?>
-        },{
-            "label": "Decadence",
-          "value": <?php echo json_decode($_SESSION['trend_calculates'])
-            ->decadence; ?>
-        }]
-      }]
-    },
-  });
+    });
 
-  trendsChart.render();
-});
+    trendsChart.render();
+  });
+}
 
 function updateTrendsChart(trendCalculates) {
   let keys = ["love", "weather", "politics", "conformity", "decadence"];

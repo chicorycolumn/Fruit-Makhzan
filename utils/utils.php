@@ -369,7 +369,7 @@ function clean_up_db($connection)
   if (!$stmt->execute()) {
     return [
       "status" => false,
-      "message" => "Error in execution.",
+      "message" => "Error in execution appeared.",
       "error" => $connection->error,
     ];
   }
@@ -459,7 +459,7 @@ function update_row(
   if (!$stmt->execute()) {
     return [
       "status" => false,
-      "message" => "Error in execution.",
+      "message" => "Error in execution occurred.",
       "error" => $connection->error,
     ];
   }
@@ -492,7 +492,7 @@ function check_row_exists(
   if (!$stmt->execute()) {
     return [
       "status" => false,
-      "message" => "An error in execution.",
+      "message" => "An error in execution appeared.",
       "error" => $connection->error,
     ];
   }
@@ -543,7 +543,7 @@ function delete_row(
   if (!$stmt->execute()) {
     return [
       "status" => false,
-      "message" => "An error in execution.",
+      "message" => "An error occurred in execution.",
       "error" => $connection->error,
     ];
   }
@@ -572,7 +572,7 @@ function delete_table($connection, $table_name)
   if (!$stmt->execute()) {
     return [
       "status" => false,
-      "message" => "An error in execution.",
+      "message" => "There was an error in execution.",
       "error" => $connection->error,
     ];
   }

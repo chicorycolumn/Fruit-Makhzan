@@ -34,7 +34,7 @@ class Fruit
     if (!$stmt->execute()) {
       return [
         "status" => false,
-        "message" => "Error in execution.",
+        "message" => "An error in execution has happened.",
         "error" => $this->conn->error,
       ];
     }
@@ -84,7 +84,7 @@ class Fruit
     if (!$stmt->execute()) {
       return [
         "status" => false,
-        "message" => "Error in execution.",
+        "message" => "Error in execution has occurred.",
         "error" => $this->conn->error,
       ];
     }
@@ -147,7 +147,7 @@ class Fruit
     if (!$stmt->execute()) {
       return [
         "status" => false,
-        "message" => "Error in execution.",
+        "message" => "An error in execution has occurred.",
         "error" => $this->conn->error,
       ];
     }
@@ -209,7 +209,7 @@ class Fruit
     if (!$stmt->execute()) {
       return [
         "status" => false,
-        "message" => "Error in execution.",
+        "message" => "Error in execution has arisen.",
         "error" => $this->conn->error,
       ];
     }
@@ -236,7 +236,7 @@ class Fruit
     if (!$stmt->execute()) {
       return [
         "status" => false,
-        "message" => "Error in execution.",
+        "message" => "An error in execution has arisen.",
         "error" => $this->conn->error,
       ];
     }
@@ -383,7 +383,7 @@ class Fruit
     if (!$stmt->execute()) {
       return [
         "status" => false,
-        "message" => "Error in execution. " . $query,
+        "message" => "Error in execution with query: " . $query,
         "update_values" => $update_values,
         "error" => $this->conn->error,
       ];
@@ -414,7 +414,7 @@ class Fruit
     if (!$stmt->execute()) {
       return [
         "status" => false,
-        "message" => "Error in execution.",
+        "message" => "An error in execution arose.",
         "error" => $this->conn->error,
       ];
     }
@@ -499,7 +499,7 @@ class Fruit
     if (!$stmt->execute()) {
       return [
         "status" => false,
-        "message" => "Error in execution.",
+        "message" => "Error in execution arose.",
         "error" => $this->conn->error,
       ];
     }

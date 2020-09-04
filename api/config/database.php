@@ -84,7 +84,7 @@ class Database
       if (!$stmt->execute()) {
         return [
           "status" => false,
-          "message" => "Error in execution.",
+          "message" => "Error in execution emerged.",
           "error" => $conn->error,
         ];
       }
@@ -350,7 +350,7 @@ class Database
     if (!$stmt->execute()) {
       return [
         "status" => false,
-        "message" => "An error in execution.",
+        "message" => "An error in execution emerged.",
         "error" => $this->connection->error,
       ];
     }
