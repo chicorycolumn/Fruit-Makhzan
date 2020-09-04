@@ -73,10 +73,10 @@ FusionCharts.ready(function() {
     },
   });
 
-  // trendsChart.render();
+  trendsChart.render();
 });
 
-function updateTrendsGraph(trendCalculates) {
+function updateTrendsChart(trendCalculates) {
   let keys = ["love", "weather", "politics", "conformity", "decadence"];
 
   if ($("#trendsChart").length) {
@@ -108,7 +108,7 @@ function updateTrendsGraph(trendCalculates) {
 
 let salesChart = null;
 
-function makeSalesGraph(initial_data) {
+function makeSalesChart(initial_data) {
   let keys = Object.keys(initial_data);
   let newCategorySet = [];
   let salesObject = {
@@ -177,7 +177,7 @@ function makeSalesGraph(initial_data) {
   });
 }
 
-function updateSalesGraph(overall_sales_history) {
+function updateSalesChart(overall_sales_history) {
   let day = Object.keys(overall_sales_history)
     .sort((a, b) => b - a)[0]
     .toString();

@@ -4,7 +4,7 @@ echo "<link rel='stylesheet' type='text/css' href='../css/create_fruit_form.css'
 include '../utils/utils.php';
 include 'content/mainStats.php';
 include 'content/invTable.php';
-include 'content/mainGraphs.php';
+include 'content/mainCharts.php';
 include 'functions/enter_game.php';
 include 'functions/table_functions.php';
 include 'functions/round_transitions.php';

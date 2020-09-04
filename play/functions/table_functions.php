@@ -462,13 +462,13 @@ function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates, ne
   verifyBuyButtons();
 
   if (newest_overall_sales_history){
-    updateSalesGraph(newest_overall_sales_history);
+    updateSalesChart(newest_overall_sales_history);
   }
 
   if (new_trend_calculates) {
     trend_calculates = new_trend_calculates;
     updateSalesSubstratesInDisplayedTable();
-    updateTrendsGraph(new_trend_calculates);
+    updateTrendsChart(new_trend_calculates);
   }
 }
 

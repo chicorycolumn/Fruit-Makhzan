@@ -22,13 +22,13 @@ include '../master.php';
 $(document).ready(function () {
   basicPageFunctions()
   loadRubiconIfAt()
-  makeSalesGraph(overall_sales_history)
+  makeSalesChart(overall_sales_history)
 
   setTimeout(() => {
     if (!$("#trendsChart").length){
-        $(".ersatzGraph").removeClass("hidden")
-        $(".ersatzGraphUnderlay").removeClass("hidden")
-        updateTrendsGraph(trend_calculates)
+        $(".ersatzChart").removeClass("hidden")
+        $(".ersatzChartUnderlay").removeClass("hidden")
+        updateTrendsChart(trend_calculates)
     }
   }, 2000);
 });

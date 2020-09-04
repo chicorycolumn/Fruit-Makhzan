@@ -26,7 +26,7 @@ $content .=
 
 
     ' .
-  $mainGraphs .
+  $mainCharts .
   '
 
 

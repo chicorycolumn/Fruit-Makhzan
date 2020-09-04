@@ -1,18 +1,18 @@
 <?php
 
-include '.././graph/graphs.php';
+include '.././chart/charts.php';
 
-echo "<link rel='stylesheet' type='text/css' href='.././css/mainGraphs.css' />";
+echo "<link rel='stylesheet' type='text/css' href='.././css/mainCharts.css' />";
 
-$mainGraphs =
+$mainCharts =
   "
 
-<div class='mainDiv mainDivGraphs1'>
+<div class='mainDiv mainDivCharts1'>
 " .
   '<div class="chartContainer" id="trendsChartContainer">
   
-  <img class="ersatzGraph hidden" src="../images/ersatz_graph2.png">
-  <div class="ersatzGraphUnderlay hidden">
+  <img class="ersatzChart hidden" src="../images/ersatz_chart2.png">
+  <div class="ersatzChartUnderlay hidden">
   
     <div class="ersatzBarHolder">
       <div class="ersatzBar" id="ersatzBar_love"></div>
@@ -39,7 +39,7 @@ $mainGraphs =
   "
 </div>
 
-<div class='mainDiv mainDivGraphs2'>
+<div class='mainDiv mainDivCharts2'>
 " .
   ' <div class="chartContainer" id="salesChartContainer"></div>' .
   "
