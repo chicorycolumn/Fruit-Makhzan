@@ -358,7 +358,7 @@ function clean_up_db($connection)
   if (!($stmt = $connection->prepare($query))) {
     return [
       "status" => false,
-      "message" => "Could not prepare query.",
+      "message" => "Not able: prepare query.",
       "error" => $connection->error,
     ];
   }
@@ -449,7 +449,7 @@ function update_row(
   if (!($stmt = $connection->prepare($query))) {
     return [
       "status" => false,
-      "message" => "Could not prepare query.",
+      "message" => "Unable to: prepare query.",
       "error" => $connection->error,
     ];
   }
@@ -482,7 +482,7 @@ function check_row_exists(
   if (!($stmt = $connection->prepare($query))) {
     return [
       "status" => false,
-      "message" => "Couldn't prepare this query.",
+      "message" => "Wasn't able to prepare this query.",
       "error" => $connection->error,
     ];
   }
@@ -533,7 +533,7 @@ function delete_row(
   if (!($stmt = $connection->prepare($query))) {
     return [
       "status" => false,
-      "message" => "Couldn't prepare this query.",
+      "message" => "Was not able to prepare this query.",
       "error" => $connection->error,
     ];
   }
@@ -564,7 +564,7 @@ function delete_table($connection, $table_name)
   if (!($stmt = $connection->prepare($query))) {
     return [
       "status" => false,
-      "message" => "Couldn't prepare the query.",
+      "message" => "Not able to prepare the query.",
       "error" => $connection->error,
     ];
   }

@@ -26,7 +26,7 @@ class Fruit
     if (!($stmt = $this->conn->prepare($query))) {
       return [
         "status" => false,
-        "message" => "Could not prepare query.",
+        "message" => "Unable: prepare query.",
         "error" => $this->conn->error,
       ];
     }
@@ -74,7 +74,7 @@ class Fruit
     if (!($stmt = $this->conn->prepare($query))) {
       return [
         "status" => false,
-        "message" => "Could not prepare query.",
+        "message" => "Not able: prepare query.",
         "error" => $this->conn->error,
       ];
     }
@@ -130,7 +130,8 @@ class Fruit
     if (!($stmt = $this->conn->prepare($query))) {
       return [
         "status" => false,
-        "message" => "Could not prepare query with name " . $name,
+        "message" =>
+          "Unsuccessful in trying to prepare query with name " . $name,
         "error" => $this->conn->error,
       ];
     }
@@ -198,7 +199,7 @@ class Fruit
     if (!($stmt = $this->conn->prepare($query))) {
       return [
         "status" => false,
-        "message" => "Could not prepare query.",
+        "message" => "Unsuccessful: prepare query.",
         "error" => $this->conn->error,
       ];
     }
@@ -225,7 +226,7 @@ class Fruit
     if (!($stmt = $this->conn->prepare($query))) {
       return [
         "status" => false,
-        "message" => "Could not prepare query.",
+        "message" => "Could not do: prepare query.",
         "error" => $this->conn->error,
       ];
     }
@@ -362,7 +363,7 @@ class Fruit
     if (!($stmt = $this->conn->prepare($query))) {
       return [
         "status" => false,
-        "message" => "Could not prepare query.",
+        "message" => "Could not: prepare query.",
         "error" => $this->conn->error,
       ];
     }
@@ -405,7 +406,7 @@ class Fruit
     if (!($stmt = $this->conn->prepare($query))) {
       return [
         "status" => false,
-        "message" => "Could not prepare query.",
+        "message" => "Couldn't do: prepare query.",
         "error" => $this->conn->error,
       ];
     }
@@ -488,7 +489,7 @@ class Fruit
     if (!($stmt = $this->conn->prepare($query))) {
       return [
         "status" => false,
-        "message" => "Could not prepare query.",
+        "message" => "Couldn't: prepare query.",
         "error" => $this->conn->error,
       ];
     }

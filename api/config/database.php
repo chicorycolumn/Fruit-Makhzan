@@ -76,7 +76,7 @@ class Database
       if (!($stmt = $conn->prepare($query))) {
         return [
           "status" => false,
-          "message" => "Could not prepare query.",
+          "message" => "Unable to prepare query.",
           "error" => $conn->error,
         ];
       }
@@ -142,38 +142,15 @@ class Database
     if (!count(array_filter($response['data'], "test"))) {
       $table_name = "games";
 
-      $trends_default = json_encode([
-        "weather" => random_int(1, 100),
-        "love" => random_int(1, 100),
-        "politics" => random_int(1, 100),
-        "conformity" => random_int(1, 100),
-        "decadence" => random_int(1, 100),
-        "conformity_history" => "ss",
-      ]);
-
-      $level_record_default = json_encode([
-        "round" => 0,
-        "sublevel" => 0,
-        "history" => [],
-      ]);
-
-      $overall_sales_history_default = '{}';
-
-      $create_table_querystring =
-        " (
+      $create_table_querystring = " (
         `game_id` varchar(32) PRIMARY KEY,
         `last_accessed` int(11) DEFAULT 0,
         `money_stat` int(11) DEFAULT 0,
         `days_stat` int(11) DEFAULT 0,
-        `trend_calculates` longtext DEFAULT '" .
-        $trends_default .
-        "', 
-        `level_record` longtext DEFAULT '" .
-        $level_record_default .
-        "', 
-        `overall_sales_history` longtext DEFAULT '" .
-        $overall_sales_history_default .
-        "' )";
+        `trend_calculates` longtext NOT NULL,
+        `level_record` longtext NOT NULL,
+        `overall_sales_history` longtext NOT NULL
+        )";
 
       return $res = make_table(
         $table_name,
@@ -326,17 +303,17 @@ class Database
 
     //                                                            Add row to games table.
     $query =
-      "INSERT INTO games (`game_id`, `last_accessed`, `trend_calculates`, `money_stat`, `days_stat`, `level_record`) VALUES (?, ?, ?, ?, ?, ?)";
+      "INSERT INTO games (`game_id`, `last_accessed`, `trend_calculates`, `money_stat`, `days_stat`, `level_record`, `overall_sales_history`) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
     if (!($stmt = $this->connection->prepare($query))) {
       return [
         "status" => false,
-        "message" => "Couldn't prepare query.",
+        "message" => "Was unable to prepare query.",
         "error" => $this->connection->error,
       ];
     }
 
-    $trends = json_encode([
+    $trends_example = json_encode([
       "weather" => random_int(1, 100),
       "love" => random_int(1, 100),
       "politics" => random_int(1, 100),
@@ -345,24 +322,29 @@ class Database
       "conformity_history" => "ss",
     ]);
 
-    $money_initial = 100;
-    $days_initial = 0;
-    $level_record_initial = json_encode([
+    $level_record_example = json_encode([
       "round" => 0,
       "sublevel" => 0,
+      "history" => [],
       "final_round" => 3,
     ]);
+
+    $overall_sales_history_example = '{}';
+
+    $money_initial = 100;
+    $days_initial = 0;
 
     $gid = $_SESSION["gid"];
     $timestamp = time();
     $stmt->bind_param(
-      "sisiis",
+      "sisiiss",
       $gid,
       $timestamp,
-      $trends,
+      $trends_example,
       $money_initial,
       $days_initial,
-      $level_record_initial
+      $level_record_example,
+      $overall_sales_history_example
     );
 
     if (!$stmt->execute()) {
@@ -375,11 +357,11 @@ class Database
 
     $stmt->close();
 
-    $_SESSION["trend_calculates"] = $trends;
+    $_SESSION["trend_calculates"] = $trends_example;
     $_SESSION["money_stat"] = $money_initial;
     $_SESSION["days_stat"] = $days_initial;
-    $_SESSION['level_record'] = $level_record_initial;
-    $_SESSION['overall_sales_history'] = '{}';
+    $_SESSION['level_record'] = $level_record_example;
+    $_SESSION['overall_sales_history'] = $overall_sales_history_example;
 
     return [
       "status" => true,
