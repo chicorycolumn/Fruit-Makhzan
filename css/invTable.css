@@ -6,34 +6,6 @@
   position: relative;
 }
 
-.invTableOverlay {
-  width: 100%;
-  height: 100%;
-  background-color: var(--divGreenTrans);
-  z-index: 3;
-  position: absolute;
-  border-radius: var(--bradius1);
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  font-size: 36px;
-}
-
-.invTableOverlayText {
-  margin: 0px;
-  padding: 0px;
-  box-shadow: 0px 0px 50px var(--divGreen);
-  background-color: var(--divGreen);
-  z-index: 4;
-  position: absolute;
-}
-
-.invTableOverlayOval {
-  z-index: 3;
-  position: absolute;
-}
-
 table#inventory {
   border-collapse: separate;
   border-spacing: 15px 20px;
@@ -69,6 +41,69 @@ table#inventory {
 .nameTD {
   padding-left: 0px;
   font-weight: bold;
+}
+
+/*********************************/
+/************ OVERLAY ************/
+/*********************************/
+
+.invTableOverlay {
+  width: 100%;
+  height: 100%;
+  background-color: var(--divBeigeTrans);
+  z-index: 3;
+  position: absolute;
+  border-radius: var(--bradius1);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 36px;
+}
+
+.invTableOverlayText {
+  margin: 0px;
+  padding: 0px;
+  box-shadow: 0px 0px 50px var(--divBeige);
+  background-color: var(--divBeige);
+  z-index: 4;
+  position: absolute;
+  left: 290px;
+}
+
+.invTableOverlayOval {
+  z-index: 3;
+  position: absolute;
+  left: 200px;
+  /* border: black solid 1px; */
+}
+
+.invTableOverlayImage {
+  width: 306px;
+  height: 230px;
+  position: relative;
+  z-index: 4;
+  left: 330px;
+  border-radius: 200px;
+}
+
+.invTableOverlayOval2 {
+  z-index: 3;
+  position: absolute;
+  left: 600px;
+  /* border: black solid 1px; */
+}
+
+.invTableOverlayImageTag {
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  z-index: 4;
+  font-size: 14px;
+  top: 285px;
+  left: 745px;
+  opacity: 0.3;
+  color: black;
 }
 
 /*********************************/

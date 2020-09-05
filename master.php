@@ -16,7 +16,7 @@
 <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
 <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
 
-  <link rel="icon" href="../images/pom_favicon2.ico" type="image/ico">
+  <link rel="icon" href="../images/blueberry_favicon2.ico" type="image/ico">
 </head>
 <body>
 <div class='background'></div>

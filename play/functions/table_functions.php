@@ -191,17 +191,22 @@ function updateGamesTable(money_crement, money_absolute, new_level_record) {
         if (!new_level_record){ 
           updateGameStats(result["update_data"]['money_stat']);
         }
-        // setTimeout(() => {
+        setTimeout(() => {
           if (in_progress){
           console.log("updateGamesTable 2", in_progress, in_progress["restock"]["value"])
           in_progress["round"]["value"] = false
           in_progress["restock"]["value"] = false
           allButtonsDisabled(false); //wang
-          if (!$(".invTableOverlay").hasClass("hidden")){$(".invTableOverlay").addClass("hidden")}
+          if (!$(".invTableOverlay").hasClass("hidden")){
+
+            let loadingGifs = ["avocado", "carrot", "lemon"]
+            $(".invTableOverlayImage").attr("src", ".././images/"+loadingGifs[Date.now() % 3]+".gif")
+            $(".invTableOverlay").addClass("hidden")
+          }
           setTimeout(verifyBuyButtons, 10);
           console.log("updateGamesTable 3", in_progress, in_progress["restock"]["value"])
         }
-        // }, 2000);
+        }, 2000);
       } else {
         console.log(result["message"], result["error"], result);
       }
@@ -441,7 +446,7 @@ function restockFruit(formattedName) {
 
   setAmount(formattedName, "restock", "", requested_amount);
 
-  // setTimeout(() => {
+  setTimeout(() => {
     if (putative_cost > money) {
     alert("Insufficient funds!");
   } else {
@@ -486,7 +491,7 @@ function restockFruit(formattedName) {
       },
     });
   }
-  // }, 2000);
+  }, 2000);
 }
 
 function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates, newest_overall_sales_history) {

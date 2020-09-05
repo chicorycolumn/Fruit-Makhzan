@@ -5,7 +5,18 @@ echo "<link rel='stylesheet' type='text/css' href='.././css/invTable.css' />";
 $invTable =
   "
 <div class='invTable'>
-<div class='invTableOverlay hidden'><img class='invTableOverlayOval' src='.././images/blurryOval.png'/><p class='invTableOverlayText'>Waiting for database...</p></div>
+
+  <div class='invTableOverlay hidden'>
+
+    <img class='invTableOverlayOval' src='.././images/blurryBeige1.png'/>
+    <p class='invTableOverlayText'>Waiting for database...</p>
+    <img class='invTableOverlayOval2' src='.././images/blurryBeige2.png'/>
+    <a href='https://jonasmosesson.se/' target='_blank'>
+    <img class='invTableOverlayImage' src='.././images/avocado.gif'/>
+    <p class='invTableOverlayImageTag'>Art by Jonas Mosesson (CC BY-NC-ND 4.0)</p>
+    </a>
+  </div>
+
 <div class='row'>
 <div class='col'>
 <div class='box'>
