@@ -166,34 +166,32 @@ function verifyBuyButtons() {
   }
 
   console.log("verifyBuyButtons")
-  if ($(".dialogHolder").hasClass("hidden")) {
-    $(".buyButton").each(function () {
-      let row = $(this).parents("tr");
-      let name = row.find(".nameData").text();
-      let restockPrice = digitGrouping(
-        row.find(".restockPriceData").text(),
-        true
-      );
-      let restockQuantity = digitGrouping(
-        row.find(".amountInput_restock").val(),
-        true
-      );
-      let maxBuyableQuantity = Math.floor(
-        digitGrouping($("#moneyStat").text(), true) / restockPrice
-      );
+  $(".buyButton").each(function () {
+    let row = $(this).parents("tr");
+    let name = row.find(".nameData").text();
+    let restockPrice = digitGrouping(
+      row.find(".restockPriceData").text(),
+      true
+    );
+    let restockQuantity = digitGrouping(
+      row.find(".amountInput_restock").val(),
+      true
+    );
+    let maxBuyableQuantity = Math.floor(
+      digitGrouping($("#moneyStat").text(), true) / restockPrice
+    );
 
-      if (restockQuantity > maxBuyableQuantity || !restockQuantity) {
-        $(this).attr("disabled", true);
-        setTimeout(() => {
-          $(this).addClass("buyButtonHover");
-        }, 1000);
-      } else {
-        $(this).removeAttr("disabled");
-        $(this).removeClass("buyButtonHover");
-      }
+    if (restockQuantity > maxBuyableQuantity || !restockQuantity) {
+      $(this).attr("disabled", true);
+      setTimeout(() => {
+        $(this).addClass("buyButtonHover");
+      }, 1000);
+    } else {
+      $(this).removeAttr("disabled");
+      $(this).removeClass("buyButtonHover");
+    }
 
-    });
-  }
+  });
 }
 
 function setZoom() {
