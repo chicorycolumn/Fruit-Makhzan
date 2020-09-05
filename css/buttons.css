@@ -3,6 +3,10 @@ button {
   font-family: inherit;
 }
 
+button:disabled {
+  cursor: not-allowed;
+}
+
 .mediumButtonKind {
   height: 40px;
   font-size: var(--buyButtonFontSize);
