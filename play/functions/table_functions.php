@@ -1,7 +1,5 @@
 <script>
 
-let in_progress = {"round": {"value": false}, "restock": {"value": false}};
-
 function newDay() {
 
   if (in_progress["round"]["value"] || in_progress["restock"]["value"]){
@@ -23,19 +21,19 @@ function newDay() {
   if (level_record["round"] < level_record["final_round"]) {
     if (new_money_stat >= rubicons[2]) {
       in_progress["round"]["value"] = true
-      incrementSublevel(rubiconMessageRef, 0, in_progress);
+      incrementSublevel(rubiconMessageRef, 0);
     } else if (
       parseFloat(level_record["sublevel"]) < 1 &&
       new_money_stat >= rubicons[1]
     ) {
       in_progress["round"]["value"] = true
-      incrementSublevel(rubiconMessageRef, 1, in_progress);
+      incrementSublevel(rubiconMessageRef, 1);
     }
   } else if (
     new_money_stat >= rubicons[2]
   ) {
     in_progress["round"]["value"] = true
-    incrementSublevel(rubiconMessageRef, 4, in_progress);
+    incrementSublevel(rubiconMessageRef, 4);
   }
 
   // let salesNumDisplay = 70
@@ -141,11 +139,11 @@ function updateInventoryTable(incipient_sales) {
   });
 }
 
-function updateGamesTable(money_crement, money_absolute, new_level_record, in_progress) {
+function updateGamesTable(money_crement, money_absolute, new_level_record) {
   let type_definition_string;
   let update_data;
 
-  console.log(1, in_progress)
+  console.log("updateGamesTable 1", in_progress, in_progress["restock"]["value"])
 
   if (new_level_record) {
     type_definition_string = "ss";
@@ -193,12 +191,14 @@ function updateGamesTable(money_crement, money_absolute, new_level_record, in_pr
         }
         // setTimeout(() => {
           if (in_progress){
-          console.log(2, in_progress)
+          console.log("updateGamesTable 2", in_progress, in_progress["restock"]["value"])
           in_progress["round"]["value"] = false
           in_progress["restock"]["value"] = false
-          console.log(3, in_progress)
+          $(".buyButton").removeAttr("disabled")
+          verifyBuyButtons()
+          console.log("updateGamesTable 3", in_progress, in_progress["restock"]["value"])
         }
-        // }, 2000);
+        // }, 1000);
       } else {
         console.log(result["message"], result["error"], result);
       }
@@ -378,7 +378,7 @@ function addRowToTable(fruit, shouldPrepend){
           "<div class='buttonSubHolder'>"+
             "<button "+
             "class='mediumButtonKind buyButton'"+
-            "onClick=restockFruit('"+formattedName+"',in_progress)>BUY"+
+            "onClick=restockFruit('"+formattedName+"')>BUY"+
             "</button>"+    
             "<button class='mediumButtonKind maxBuyButton' "+
               "onclick=setAmount('"+formattedName+"','restock','max') "+
@@ -407,19 +407,22 @@ function addRowToTable(fruit, shouldPrepend){
   }             
 }
 
-function restockFruit(formattedName, in_progress) {
+function restockFruit(formattedName) {
   name = formattedName.replace(/_/g, " ");
   let row = $("table#inventory tbody tr#" + formattedName);
   let requested_amount = digitGrouping(row.find(".amountInput_restock").val(), true);
 
   if (!requested_amount || in_progress["restock"]["value"]) {
-    console.log("restock is in progress, hold on")
+    if (in_progress["restock"]["value"]){console.log("restock is in progress, hold on")}
     return;
   }
 
+  console.log("setting in_progress.restock to TRUE...")
   in_progress["restock"]["value"] = true
+  $(".buyButton").attr("disabled", true)
 
-  console.log(-1, in_progress)
+  console.log("...so it should now be ", in_progress["restock"]["value"])
+  console.log("restockFruit", in_progress, in_progress["restock"]["value"])
 
   let restock_price = digitGrouping(row.find(".restockPriceData").text(), true);
   let putative_cost = requested_amount * restock_price;
@@ -427,7 +430,8 @@ function restockFruit(formattedName, in_progress) {
 
   setAmount(formattedName, "restock", "", requested_amount);
 
-  if (putative_cost > money) {
+  // setTimeout(() => {
+    if (putative_cost > money) {
     alert("Insufficient funds!");
     return;
   } else {
@@ -464,14 +468,15 @@ function restockFruit(formattedName, in_progress) {
 
             row.find(".amountInput_restock").val(digitGrouping(reset_value));
           }
-          console.log(0, in_progress)
-          updateGamesTable(putative_cost, null, null, in_progress);
+          console.log("restockFruit about to call updateGamesTable", in_progress, in_progress["restock"]["value"])
+          updateGamesTable(putative_cost, null, null);
         } else {
           console.log(result["message"], result["error"], result);
         }
       },
     });
   }
+  // }, 1000);
 }
 
 function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates, newest_overall_sales_history) {

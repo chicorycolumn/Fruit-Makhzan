@@ -86,6 +86,7 @@ function changeSellingPrice(showInput, formattedName) {
 }
 
 function setAmount(formattedName, operation, modifier, forced_amount) {
+  
   name = formattedName.replace(/_/g, " ");
 
   let row = $("table#inventory tbody tr#" + formattedName);
@@ -126,7 +127,9 @@ function setAmount(formattedName, operation, modifier, forced_amount) {
 
   row.find(class_name).val(digitGrouping(reset_value));
 
-  verifyBuyButtons();
+  if (!in_progress["restock"]["value"]){
+    verifyBuyButtons()
+  };
 }
 
 function validateNumbersAndSubmit(e, formattedName, operation) {
@@ -148,7 +151,7 @@ function validateNumbersAndSubmit(e, formattedName, operation) {
 
   if (k == 13 || w == 13) {
     if (operation == "restock") {
-      restockFruit(formattedName, in_progress);
+      restockFruit(formattedName);
     } else if (operation == "selling") {
       submitSellingPrice(formattedName);
     }
