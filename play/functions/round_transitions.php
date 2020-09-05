@@ -41,7 +41,7 @@ let createFruitForm =
 
 const rubiconMessageRef = {
   1: "Well done! You unlocked a new fruit.",
-  0: "You're a billionaire! As a reward for all your hard work, you buy an island to relax on.",
+  0: "You're a millionaire! As a reward for all your hard work, you buy an island to relax on.",
   4: "You won the whole game! You own four lovely islands and are now king.",
 };
 
