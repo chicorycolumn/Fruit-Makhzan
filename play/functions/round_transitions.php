@@ -128,7 +128,7 @@ function loadRubiconIfAt() {
       if (level_record["round"] == level_record["final_round"] + 1) {
         showIsland();
         $(".newDayButton").addClass("hidden");
-        $("#clock_circle_crown").attr("src", '.././images/crown2.png');
+        $("#clock").attr("src", '.././images/crown2.png');
         $(document).ready(function () {
           allButtonsDisabled(true);
         });
@@ -184,7 +184,7 @@ function showEndScreen(sublevel) {
   $(".dialogHolder").find(".dialogBoxText").text(rubiconMessageRef[sublevel]);
   showIsland();
   $(".newDayButton").addClass("hidden");
-  $("#clock_circle_crown").attr("src", '.././images/crown2.png');
+  $("#clock").attr("src", '.././images/crown2.png');
   $(document).ready(function () {
     allButtonsDisabled(true);
   });
