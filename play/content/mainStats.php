@@ -28,7 +28,7 @@ $mainStats = "
 
     <div class='mainStatBox'>
       <img class='coin' src='.././images/clock_circle7aa_pale.png' id='clock' />
-      <button class='newDayButton' onClick=newDay()>New day</button>
+      <button class='newDayButton' id='newDayButton' onClick=newDay()>New day</button>
     </div>
     
     <div class='mainStatBox'>

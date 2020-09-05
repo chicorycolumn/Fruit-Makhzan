@@ -5,6 +5,7 @@ echo "<link rel='stylesheet' type='text/css' href='.././css/invTable.css' />";
 $invTable =
   "
 <div class='invTable'>
+<div class='invTableOverlay hidden'><img class='invTableOverlayOval' src='.././images/blurryOval.png'/><p class='invTableOverlayText'>Waiting for database...</p></div>
 <div class='row'>
 <div class='col'>
 <div class='box'>

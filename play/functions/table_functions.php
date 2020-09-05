@@ -36,12 +36,6 @@ function newDay() {
     incrementSublevel(rubiconMessageRef, 4);
   }
 
-  // let salesNumDisplay = 70
-
-  // if (Object.keys(overall_sales_history).length > salesNumDisplay) {
-  //   delete overall_sales_history[Object.keys(overall_sales_history).sort((a, b) => parseInt(a) - parseInt(b))[0]]
-  // }
-
   overall_sales_history[days + 1] = { profit: day_profit, costs: day_costs };
 
   updateGamesTableNewDay(new_money_stat, new_days_stat, day_profit, overall_sales_history);
@@ -78,6 +72,14 @@ function updateGamesTableNewDay(new_money_stat, new_days_stat, profit, overall_s
     },
     success: function (result) {
       if (result["status"]) {
+
+        let salesNumDisplay = 70
+
+        if (Object.keys(overall_sales_history).length > salesNumDisplay) {
+          delete overall_sales_history[Object.keys(overall_sales_history).sort((a, b) => parseInt(a) - parseInt(b))[0]]
+        }
+
+
         // let { money_stat, days_stat, trend_calculates } = result["update_data"];
         // updateGameStats(money_stat, days_stat, trend_calculates, overall_sales_history);
       } else {
@@ -194,11 +196,12 @@ function updateGamesTable(money_crement, money_absolute, new_level_record) {
           console.log("updateGamesTable 2", in_progress, in_progress["restock"]["value"])
           in_progress["round"]["value"] = false
           in_progress["restock"]["value"] = false
-          $(".buyButton").removeAttr("disabled")
-          verifyBuyButtons()
+          allButtonsDisabled(false); //wang
+          if (!$(".invTableOverlay").hasClass("hidden")){$(".invTableOverlay").addClass("hidden")}
+          setTimeout(verifyBuyButtons, 10);
           console.log("updateGamesTable 3", in_progress, in_progress["restock"]["value"])
         }
-        // }, 1000);
+        // }, 2000);
       } else {
         console.log(result["message"], result["error"], result);
       }
@@ -379,6 +382,7 @@ function addRowToTable(fruit, shouldPrepend){
             "<button "+
             "class='mediumButtonKind buyButton'"+
             "onClick=restockFruit('"+formattedName+"')>BUY"+
+            "<span class='tooltip insufficientFundsTooltip'>Insufficient funds</span>"+
             "</button>"+    
             "<button class='mediumButtonKind maxBuyButton' "+
               "onclick=setAmount('"+formattedName+"','restock','max') "+
@@ -419,7 +423,13 @@ function restockFruit(formattedName) {
 
   console.log("setting in_progress.restock to TRUE...")
   in_progress["restock"]["value"] = true
-  $(".buyButton").attr("disabled", true)
+  allButtonsDisabled(true); //wang
+
+  let smbc = setTimeout(() => {
+    if (in_progress["restock"]["value"]){
+      $(".invTableOverlay").removeClass("hidden")
+    }
+  }, 1000);
 
   console.log("...so it should now be ", in_progress["restock"]["value"])
   console.log("restockFruit", in_progress, in_progress["restock"]["value"])
@@ -476,7 +486,7 @@ function restockFruit(formattedName) {
       },
     });
   }
-  // }, 1000);
+  // }, 2000);
 }
 
 function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates, newest_overall_sales_history) {

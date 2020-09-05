@@ -35,6 +35,7 @@
   --buttonGreen: lightgreen;
   --paleGreen: rgb(212, 255, 187);
   --divGreen: rgb(235, 255, 224);
+  --divGreenTrans: rgb(235, 255, 224, 0.6);
   --glowColor1: var(--thisOrange);
   --dialogBoxButtonBackgColor: rgba(0, 255, 0, 0.1);
   --dialogBoxButtonShadowColor: rgba(0, 255, 0, 0.2);

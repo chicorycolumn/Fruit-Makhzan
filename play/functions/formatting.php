@@ -159,6 +159,8 @@ function parseIntObjectValues(obj) {
 }
 
 function verifyBuyButtons() {
+
+  console.log("verifyBuyButtons")
   if ($(".dialogHolder").hasClass("hidden")) {
     $(".buyButton").each(function () {
       let row = $(this).parents("tr");
@@ -174,10 +176,15 @@ function verifyBuyButtons() {
       let maxBuyableQuantity = Math.floor(
         digitGrouping($("#moneyStat").text(), true) / restockPrice
       );
-      $(this).prop(
-        "disabled",
-        restockQuantity > maxBuyableQuantity || !restockQuantity
-      );
+
+      if (restockQuantity > maxBuyableQuantity || !restockQuantity) {
+        $(this).attr("disabled", true);
+        $(this).addClass("buyButtonHover");
+      } else {
+        $(this).removeAttr("disabled");
+        $(this).removeClass("buyButtonHover");
+      }
+
     });
   }
 }
