@@ -11,7 +11,8 @@ $fruit = new Fruit($db);
 $table_name = $_POST['table_name'];
 $identifying_column = $_POST['identifying_column'];
 $identifying_data = $_POST['identifying_data'];
-$profit = $_POST['profit'];
+$new_money_stat = $_POST['new_money_stat'];
+$new_days_stat = $_POST['new_days_stat'];
 $json_data_object = $_POST['json_data_object'];
 $json_data_object_name = $_POST['json_data_object_name'];
 $level_record = $_POST['level_record'];
@@ -19,8 +20,8 @@ $level_record = $_POST['level_record'];
 $get_full = false;
 
 $update_data = [
-  "money_stat" => $_SESSION['money_stat'] + $profit,
-  "days_stat" => $_SESSION['days_stat'] + 1,
+  "money_stat" => $new_money_stat,
+  "days_stat" => $new_days_stat,
   "trend_calculates" => evolve_trend_calculates(
     $_SESSION['trend_calculates'],
     $_SESSION['days_stat'],

@@ -4,7 +4,9 @@ let round_transition_in_progress = {"value": false};
 
 function newDay() {
 
-  if (round_transition_in_progress["value"]){return}
+  if (round_transition_in_progress["value"]){
+    return
+  }
 
   let incipient_sales = calculateSales();
   let day_profit = Object.values(incipient_sales).reduce(
@@ -16,6 +18,7 @@ function newDay() {
   let money = digitGrouping($("#moneyStat").text(), true);
 
   let new_money_stat = money + day_profit;
+  let new_days_stat = days + 1;
 
   if (level_record["round"] < level_record["final_round"]) {
     if (new_money_stat >= rubicons[2]) {
@@ -35,21 +38,24 @@ function newDay() {
     incrementSublevel(rubiconMessageRef, 4, round_transition_in_progress);
   }
 
-  let salesNumDisplay = 70
+  // let salesNumDisplay = 70
 
-  if (Object.keys(overall_sales_history).length > salesNumDisplay) {
-    delete overall_sales_history[Object.keys(overall_sales_history).sort((a, b) => parseInt(a) - parseInt(b))[0]]
-  }
+  // if (Object.keys(overall_sales_history).length > salesNumDisplay) {
+  //   delete overall_sales_history[Object.keys(overall_sales_history).sort((a, b) => parseInt(a) - parseInt(b))[0]]
+  // }
 
   overall_sales_history[days + 1] = { profit: day_profit, costs: day_costs };
 
-  updateGamesTableNewDay(day_profit, overall_sales_history);
-  updateInventoryTable(incipient_sales);
+  updateGamesTableNewDay(new_money_stat, new_days_stat, day_profit, overall_sales_history);
+  updateInventoryTable(incipient_sales); //done
   updateTimestamp()
   day_costs = 0;
 }
 
-function updateGamesTableNewDay(profit, overall_sales_history) {
+function updateGamesTableNewDay(new_money_stat, new_days_stat, profit, overall_sales_history) {
+
+  let newest_trend_calculates = evolve_trend_calculates_js(trend_calculates, new_days_stat, overall_sales_history)
+  updateGameStats(new_money_stat, new_days_stat, newest_trend_calculates, overall_sales_history)
 
   $.ajax({
     type: "POST",
@@ -59,7 +65,8 @@ function updateGamesTableNewDay(profit, overall_sales_history) {
       table_name: "games",
       identifying_column: "game_id",
       identifying_data: `<?php echo $_SESSION['gid']; ?>`,
-      profit,
+      new_money_stat,
+      new_days_stat,
       json_data_object: overall_sales_history,
       json_data_object_name: "overall_sales_history",
       level_record
@@ -73,8 +80,60 @@ function updateGamesTableNewDay(profit, overall_sales_history) {
     },
     success: function (result) {
       if (result["status"]) {
-        let { money_stat, days_stat, trend_calculates } = result["update_data"];
-        updateGameStats(money_stat, days_stat, trend_calculates, overall_sales_history);
+        // let { money_stat, days_stat, trend_calculates } = result["update_data"];
+        // updateGameStats(money_stat, days_stat, trend_calculates, overall_sales_history);
+      } else {
+        console.log(result["message"], result["error"], result);
+      }
+    },
+  });
+}
+
+function updateInventoryTable(incipient_sales) {
+
+  let names = Object.keys(incipient_sales);
+
+  names.forEach((name) => {
+    let formattedName = name.replace(/\s/g, "_");
+    let row = $("table#inventory tbody tr#" + formattedName);
+    let current_quantity = digitGrouping(row.find(".quantityData").text(), true);
+    let new_quantity =
+      current_quantity -
+      parseInt(incipient_sales[name]["sales_quantity"]);
+
+    let formattedNewQuantity = digitGrouping(new_quantity)
+
+    if (parseInt(formattedNewQuantity) < 0 || (/-/).test(formattedNewQuantity)){
+      formattedNewQuantity = "0"
+    }
+
+    row.find(".quantityData").text(formattedNewQuantity);
+  });
+  verifyBuyButtons();
+
+  $.ajax({
+    type: "POST",
+    url: "../api/fruit/new_day_subtable.php",
+    dataType: "json",
+    data: {
+      table_name: `<?php echo $_SESSION['inv_table_name']; ?>`,
+      column_to_change: "quantity",
+      new_data_key: "sales_quantity",
+      identifying_column: "name",
+      operation: "decrement",
+      data_obj: incipient_sales,
+      data_type: "i",
+    },
+    error: function (result) {
+      console.log(
+        "An error, which occurred immediately in $.ajax request.",
+        result,
+        result.responseText
+      );
+    },
+    success: function (result) {
+      if (result["status"]) {
+        // incipient_sales = result["update_data"]
       } else {
         console.log(result["message"], result["error"], result);
       }
@@ -134,55 +193,6 @@ function updateGamesTable(money_crement, money_absolute, new_level_record, round
         
         if (!new_level_record){ updateGameStats(result["update_data"]['money_stat']);}
        
-      } else {
-        console.log(result["message"], result["error"], result);
-      }
-    },
-  });
-}
-
-function updateInventoryTable(incipient_sales) {
-  $.ajax({
-    type: "POST",
-    url: "../api/fruit/new_day_subtable.php",
-    dataType: "json",
-    data: {
-      table_name: `<?php echo $_SESSION['inv_table_name']; ?>`,
-      column_to_change: "quantity",
-      new_data_key: "sales_quantity",
-      identifying_column: "name",
-      operation: "decrement",
-      data_obj: incipient_sales,
-      data_type: "i",
-    },
-    error: function (result) {
-      console.log(
-        "An error, which occurred immediately in $.ajax request.",
-        result,
-        result.responseText
-      );
-    },
-    success: function (result) {
-      if (result["status"]) {
-        let names = Object.keys(result["update_data"]);
-
-        names.forEach((name) => {
-          let formattedName = name.replace(/\s/g, "_");
-          let row = $("table#inventory tbody tr#" + formattedName);
-          let current_quantity = digitGrouping(row.find(".quantityData").text(), true);
-          let new_quantity =
-            current_quantity -
-            parseInt(result["update_data"][name]["sales_quantity"]);
-
-          let formattedNewQuantity = digitGrouping(new_quantity)
-
-          if (parseInt(formattedNewQuantity) < 0 || (/-/).test(formattedNewQuantity)){
-            formattedNewQuantity = "0"
-          }
-
-          row.find(".quantityData").text(formattedNewQuantity);
-        });
-        verifyBuyButtons();
       } else {
         console.log(result["message"], result["error"], result);
       }

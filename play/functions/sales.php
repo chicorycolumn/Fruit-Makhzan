@@ -3,7 +3,7 @@
 function calculateSales() {
   let incipient_sales = {};
 
-  let example_name = $("table#inventory tbody tr").find(".nameData").text()
+  let example_name = $("table#inventory tbody tr").find(".nameData").first().text()
 
   incipient_sales[example_name] = { "sales_quantity": 0, "profit": 0 };
 

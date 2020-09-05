@@ -6,6 +6,7 @@ include 'content/mainStats.php';
 include 'content/invTable.php';
 include 'content/mainCharts.php';
 include 'functions/enter_game.php';
+include 'functions/trend_calculates.php';
 include 'functions/table_functions.php';
 include 'functions/round_transitions.php';
 include 'functions/formatting.php';
