@@ -61,6 +61,7 @@ function addFruit(name, popularity_factors, max_prices) {
         $(".dialogHolder").addClass("hidden");
         $(".island").removeClass("islandFaded");
         allButtonsDisabled(false);
+        verifyBuyButtons()
 
       } else {
         console.log(result["message"], result["error"], result);

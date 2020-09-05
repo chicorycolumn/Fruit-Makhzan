@@ -55,7 +55,7 @@ function advance() {
     $(".dialogHolder").addClass("hidden");
     $(".island").removeClass("islandFaded");
     $(document).ready(function () {
-      console.log("???")
+      verifyBuyButtons();
       allButtonsDisabled(true);
     });
     return;
@@ -105,6 +105,7 @@ function advance() {
   $(".dialogHolder").addClass("hidden");
   $(".island").removeClass("islandFaded");
   allButtonsDisabled(false);
+  verifyBuyButtons();
 }
 
 function loadRubiconIfAt() {
