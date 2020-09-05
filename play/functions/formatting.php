@@ -160,6 +160,11 @@ function parseIntObjectValues(obj) {
 
 function verifyBuyButtons() {
 
+  if(!$(".dialogHolder").hasClass("hidden")){
+    allButtonsDisabled(true)
+    return
+  }
+
   console.log("verifyBuyButtons")
   if ($(".dialogHolder").hasClass("hidden")) {
     $(".buyButton").each(function () {
@@ -179,7 +184,9 @@ function verifyBuyButtons() {
 
       if (restockQuantity > maxBuyableQuantity || !restockQuantity) {
         $(this).attr("disabled", true);
-        $(this).addClass("buyButtonHover");
+        setTimeout(() => {
+          $(this).addClass("buyButtonHover");
+        }, 1000);
       } else {
         $(this).removeAttr("disabled");
         $(this).removeClass("buyButtonHover");

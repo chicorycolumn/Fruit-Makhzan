@@ -55,6 +55,7 @@ function advance() {
     $(".dialogHolder").addClass("hidden");
     $(".island").removeClass("islandFaded");
     $(document).ready(function () {
+      console.log("???")
       allButtonsDisabled(true);
     });
     return;

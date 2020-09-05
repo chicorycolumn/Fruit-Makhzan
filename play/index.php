@@ -20,7 +20,7 @@ include '../master.php';
 
 <script>
 console.log("RESETTING in_progress")
-let in_progress = {"round": {"value": false}, "restock": {"value": false}};
+let in_progress = {"round": {"value": false}, "restock": {"value": false}, "selling_price": {"value": false}};
 let level_record = JSON.parse(`<?php echo $_SESSION['level_record']; ?>`);
 let sessionMoney = "<?php echo $_SESSION['money_stat']; ?>"
 let sessionDays = "<?php echo $_SESSION['days_stat']; ?>"

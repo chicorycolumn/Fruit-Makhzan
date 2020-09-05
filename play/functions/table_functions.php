@@ -425,7 +425,7 @@ function restockFruit(formattedName) {
   in_progress["restock"]["value"] = true
   allButtonsDisabled(true); //wang
 
-  let smbc = setTimeout(() => {
+  setTimeout(() => {
     if (in_progress["restock"]["value"]){
       $(".invTableOverlay").removeClass("hidden")
     }

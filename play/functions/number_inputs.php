@@ -3,6 +3,8 @@
 function submitSellingPrice(formattedName) {
   event.preventDefault();
 
+  // in_progress["selling_price"]["value"] = true;
+  
   name = formattedName.replace(/_/g, " ");
   let row = $("table#inventory tbody tr#" + formattedName);
   let sellingPriceData = row.find(".sellingPriceData");
@@ -19,6 +21,13 @@ function submitSellingPrice(formattedName) {
     sellingPriceData.removeClass("hidden");
     return;
   }
+
+  input.val("");
+  form.addClass("sellingPriceFormHidden");
+  sellingPriceData.removeClass("hidden");
+  sellingPriceData.text(
+    digitGrouping(putative_price)
+  );
 
   if (putative_price.match(/^\d+$/)) {
     $.ajax({
@@ -45,12 +54,6 @@ function submitSellingPrice(formattedName) {
       },
       success: function (result) {
         if (result["status"]) {
-          input.val("");
-          form.addClass("sellingPriceFormHidden");
-          sellingPriceData.removeClass("hidden");
-          sellingPriceData.text(
-            digitGrouping(result["update_data"]["selling_price"])
-          );
         } else {
           console.log(result["message"], result["error"], result);
         }
