@@ -136,7 +136,7 @@ function setAmount(formattedName, operation, modifier, forced_amount) {
 }
 
 function validateNumbersAndSubmit(e, formattedName, operation) {
-
+  console.log("wing")
   verifyBuyButtons();
 
   let highlightedText = "";
@@ -154,6 +154,7 @@ function validateNumbersAndSubmit(e, formattedName, operation) {
 
   if (k == 13 || w == 13) {
     if (operation == "restock") {
+      console.log("wang")
       restockFruit(formattedName);
     } else if (operation == "selling") {
       submitSellingPrice(formattedName);

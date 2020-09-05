@@ -412,6 +412,7 @@ function addRowToTable(fruit, shouldPrepend){
 }
 
 function restockFruit(formattedName) {
+  console.log("wong")
   name = formattedName.replace(/_/g, " ");
   let row = $("table#inventory tbody tr#" + formattedName);
   let requested_amount = digitGrouping(row.find(".amountInput_restock").val(), true);
@@ -443,7 +444,6 @@ function restockFruit(formattedName) {
   // setTimeout(() => {
     if (putative_cost > money) {
     alert("Insufficient funds!");
-    return;
   } else {
     $.ajax({
       type: "POST",

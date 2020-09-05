@@ -33,7 +33,7 @@ function calculateSales() {
     let sales_percentage = (popularity + price_disparity * 4) / 5 / 100;
     let sales_quantity = Math.ceil(sales_percentage * quantity);
     let copy_of_sales_quantity_before_plusminus = sales_quantity
-    let plusOrMinusFive = (Math.round(Math.random() * 10) - 5)*4;
+    let plusOrMinusFive = (Math.round(Math.random() * 10) - 5)*8;
     
     sales_quantity += Math.round((plusOrMinusFive / 100) * sales_quantity);
 
