@@ -148,7 +148,7 @@ function updateCurrentRubicon() {
   revealSpecificRows();
 }
 
-function incrementSublevel(rubiconMessageRef, sublevel, round_transition_in_progress) {
+function incrementSublevel(rubiconMessageRef, sublevel, in_progress) {
 
   if (sublevel < 0.9) {
     level_record["round"]++;
@@ -174,7 +174,7 @@ function incrementSublevel(rubiconMessageRef, sublevel, round_transition_in_prog
     showEndScreen();
   }
 
-  updateGamesTable(null, null, level_record, round_transition_in_progress);
+  updateGamesTable(null, null, level_record, in_progress);
 }
 
 function showEndScreen(sublevel) {

@@ -1,10 +1,10 @@
 <script>
 
-let round_transition_in_progress = {"value": false};
+let in_progress = {"round": {"value": false}, "restock": {"value": false}};
 
 function newDay() {
 
-  if (round_transition_in_progress["value"]){
+  if (in_progress["round"]["value"] || in_progress["restock"]["value"]){
     return
   }
 
@@ -22,20 +22,20 @@ function newDay() {
 
   if (level_record["round"] < level_record["final_round"]) {
     if (new_money_stat >= rubicons[2]) {
-      round_transition_in_progress["value"] = true
-      incrementSublevel(rubiconMessageRef, 0, round_transition_in_progress);
+      in_progress["round"]["value"] = true
+      incrementSublevel(rubiconMessageRef, 0, in_progress);
     } else if (
       parseFloat(level_record["sublevel"]) < 1 &&
       new_money_stat >= rubicons[1]
     ) {
-      round_transition_in_progress["value"] = true
-      incrementSublevel(rubiconMessageRef, 1, round_transition_in_progress);
+      in_progress["round"]["value"] = true
+      incrementSublevel(rubiconMessageRef, 1, in_progress);
     }
   } else if (
     new_money_stat >= rubicons[2]
   ) {
-    round_transition_in_progress["value"] = true
-    incrementSublevel(rubiconMessageRef, 4, round_transition_in_progress);
+    in_progress["round"]["value"] = true
+    incrementSublevel(rubiconMessageRef, 4, in_progress);
   }
 
   // let salesNumDisplay = 70
@@ -47,7 +47,7 @@ function newDay() {
   overall_sales_history[days + 1] = { profit: day_profit, costs: day_costs };
 
   updateGamesTableNewDay(new_money_stat, new_days_stat, day_profit, overall_sales_history);
-  updateInventoryTable(incipient_sales); //done
+  updateInventoryTable(incipient_sales);
   updateTimestamp()
   day_costs = 0;
 }
@@ -141,9 +141,11 @@ function updateInventoryTable(incipient_sales) {
   });
 }
 
-function updateGamesTable(money_crement, money_absolute, new_level_record, round_transition_in_progress) {
+function updateGamesTable(money_crement, money_absolute, new_level_record, in_progress) {
   let type_definition_string;
   let update_data;
+
+  console.log(1, in_progress)
 
   if (new_level_record) {
     type_definition_string = "ss";
@@ -185,14 +187,18 @@ function updateGamesTable(money_crement, money_absolute, new_level_record, round
       );
     },
     success: function (result) {
-      if (result["status"]) {
-
-        if (round_transition_in_progress){
-          round_transition_in_progress["value"] = false
+      if (result["status"]) {      
+        if (!new_level_record){ 
+          updateGameStats(result["update_data"]['money_stat']);
         }
-        
-        if (!new_level_record){ updateGameStats(result["update_data"]['money_stat']);}
-       
+        // setTimeout(() => {
+          if (in_progress){
+          console.log(2, in_progress)
+          in_progress["round"]["value"] = false
+          in_progress["restock"]["value"] = false
+          console.log(3, in_progress)
+        }
+        // }, 2000);
       } else {
         console.log(result["message"], result["error"], result);
       }
@@ -372,7 +378,7 @@ function addRowToTable(fruit, shouldPrepend){
           "<div class='buttonSubHolder'>"+
             "<button "+
             "class='mediumButtonKind buyButton'"+
-            "onClick=restockFruit('"+formattedName+"')>BUY"+
+            "onClick=restockFruit('"+formattedName+"',in_progress)>BUY"+
             "</button>"+    
             "<button class='mediumButtonKind maxBuyButton' "+
               "onclick=setAmount('"+formattedName+"','restock','max') "+
@@ -401,16 +407,19 @@ function addRowToTable(fruit, shouldPrepend){
   }             
 }
 
-function restockFruit(formattedName) {
+function restockFruit(formattedName, in_progress) {
   name = formattedName.replace(/_/g, " ");
-
   let row = $("table#inventory tbody tr#" + formattedName);
-
   let requested_amount = digitGrouping(row.find(".amountInput_restock").val(), true);
 
-  if (!requested_amount) {
+  if (!requested_amount || in_progress["restock"]["value"]) {
+    console.log("restock is in progress, hold on")
     return;
   }
+
+  in_progress["restock"]["value"] = true
+
+  console.log(-1, in_progress)
 
   let restock_price = digitGrouping(row.find(".restockPriceData").text(), true);
   let putative_cost = requested_amount * restock_price;
@@ -455,7 +464,8 @@ function restockFruit(formattedName) {
 
             row.find(".amountInput_restock").val(digitGrouping(reset_value));
           }
-          updateGamesTable(putative_cost);
+          console.log(0, in_progress)
+          updateGamesTable(putative_cost, null, null, in_progress);
         } else {
           console.log(result["message"], result["error"], result);
         }

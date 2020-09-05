@@ -148,7 +148,7 @@ function validateNumbersAndSubmit(e, formattedName, operation) {
 
   if (k == 13 || w == 13) {
     if (operation == "restock") {
-      restockFruit(formattedName);
+      restockFruit(formattedName, in_progress);
     } else if (operation == "selling") {
       submitSellingPrice(formattedName);
     }
