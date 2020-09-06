@@ -1,4 +1,17 @@
 <script>
+
+function getSeasonDescription(days){
+  if (days <= 91) {
+    return "Spring"
+  } else if (91 * 1 < days && days <= 91 * 2) {
+    return "Summer"
+  } else if (91 * 2 < days && days <= 91 * 3) {
+    return "Autumn"
+  } else {
+    return "Winter"
+  }
+}
+
 function toggleTooltips() {
   let toggle = $("#tooltipToggle");
 

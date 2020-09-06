@@ -62,7 +62,6 @@ table#inventory {
 }
 
 .invTableOverlayTextHolder {
-  /* border: black solid 1px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -85,7 +84,6 @@ table#inventory {
   z-index: 3;
   position: absolute;
   left: 200px;
-  /* border: blue solid 1px; */
 }
 
 .invTableOverlayImage {
@@ -101,7 +99,6 @@ table#inventory {
   z-index: 3;
   position: absolute;
   left: 600px;
-  /* border: black solid 1px; */
 }
 
 .invTableOverlayImageTag {

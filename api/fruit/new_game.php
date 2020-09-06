@@ -1,7 +1,7 @@
 <?php
 
 include_once '../config/database.php';
-include_once '../objects/fruit_class.php'; //deleteable?
+include_once '../objects/fruit_class.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -21,7 +21,7 @@ function go($database, $db)
 $response = go($database, $db);
 $response["extra"] = clean_up_db($db);
 
-$database->closeConnection(); //possible screwpoint
+$database->closeConnection();
 echo json_encode($response);
 return;
 ?>

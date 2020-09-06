@@ -1,11 +1,9 @@
 <script>
 
 function submitSellingPrice(formattedName) {
-  event.preventDefault();
-
-  // in_progress["selling_price"]["value"] = true;
-  
+  event.preventDefault();  
   name = formattedName.replace(/_/g, " ");
+  
   let row = $("table#inventory tbody tr#" + formattedName);
   let sellingPriceData = row.find(".sellingPriceData");
   let sellingPriceData_text = digitGrouping(sellingPriceData.text(), true);

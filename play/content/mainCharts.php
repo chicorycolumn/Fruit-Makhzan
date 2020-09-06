@@ -11,24 +11,24 @@ $mainCharts =
 <div class='mainDiv' id='mainDivCharts1'>
 <div class='trendsChartTooltipHolder'>
 
-  <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding' id='tooltipSymbolLove'>ⓘ
+  <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding'>ⓘ
     <span class='tooltip trendsTooltip'>The love score is random every day!</span>
   </div>
 
-  <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding' id='tooltipSymbolWeather'>ⓘ
-    <span class='tooltip trendsTooltip'>The weather score goes in seasons.</span>
+  <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding'>ⓘ
+    <span class='tooltip trendsTooltip' id='tooltipWeather'>The weather score goes in 90-day seasons.</span>
   </div>
 
-  <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding' id='tooltipSymbolPolitics'>ⓘ
+  <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding'>ⓘ
     <span class='tooltip trendsTooltip'>The politics score changes weekly.</span>
   </div>
 
-  <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding' id='tooltipSymbolConformity'>ⓘ
+  <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding'>ⓘ
     <span class='tooltip trendsTooltip'>Whether the conformity score is rising, falling, or maintaining, it's more likely to keep doing that.</span>
   </div>
 
-  <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding' id='tooltipSymbolDecadence'>ⓘ
-    <span class='tooltip trendsTooltip'>The decadence score is high when you recently made a lot of profit, and low when you recently had a lot of costs.</span>
+  <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding'>ⓘ
+    <span class='tooltip trendsTooltip'>Decadence is high when you recently made a lot of profit. It's low when you recently had a lot of costs.</span>
   </div>
 
 </div>

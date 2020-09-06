@@ -18,6 +18,8 @@ function newDay() {
   let new_money_stat = money + day_profit;
   let new_days_stat = days + 1;
 
+  $("#tooltipWeather").text("The weather score goes in 90-day seasons. It's currently " + getSeasonDescription(new_days_stat) + ".")
+
   if (level_record["round"] < level_record["final_round"]) {
     if (new_money_stat >= rubicons[2]) {
       in_progress["round"]["value"] = true
@@ -78,10 +80,7 @@ function updateGamesTableNewDay(new_money_stat, new_days_stat, profit, overall_s
         if (Object.keys(overall_sales_history).length > salesNumDisplay) {
           delete overall_sales_history[Object.keys(overall_sales_history).sort((a, b) => parseInt(a) - parseInt(b))[0]]
         }
-
-
-        // let { money_stat, days_stat, trend_calculates } = result["update_data"];
-        // updateGameStats(money_stat, days_stat, trend_calculates, overall_sales_history);
+        
       } else {
         console.log(result["message"], result["error"], result);
       }
@@ -132,9 +131,7 @@ function updateInventoryTable(incipient_sales) {
       );
     },
     success: function (result) {
-      if (result["status"]) {
-        // incipient_sales = result["update_data"]
-      } else {
+      if (!result["status"]) {
         console.log(result["message"], result["error"], result);
       }
     },
