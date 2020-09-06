@@ -104,6 +104,7 @@ body {
   width: 520px;
   height: 265px;
   position: relative;
+  /* padding-bottom: 10px; */
 }
 
 #mainDivCharts2 {

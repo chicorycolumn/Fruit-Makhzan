@@ -15,8 +15,8 @@ function makeTrendsChart(){
       id: "trendsChart",
       type: 'realtimecolumn',
       renderAt: 'trendsChartContainer',
-      width: '500',
-      height: '260',
+      width: '515',
+      height: '250',
       dataFormat: 'json',
       dataSource: {
         "chart": {
@@ -33,7 +33,10 @@ function makeTrendsChart(){
           "showRealTimeValue": "0",
           "showToolTip": "0",
           "showHoverEffect" : "0",
-          "showHoverEffect" : "0"
+          "showHoverEffect" : "0",
+          "xAxisValueFont": "verdana,sans",
+          "xAxisValueFontSize": "10px",
+          "xAxisFontColor": "#ff0000",
         },
         "categories": [{
           "category": [{

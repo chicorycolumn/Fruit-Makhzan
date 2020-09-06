@@ -12,7 +12,7 @@ $mainCharts =
 <div class='trendsChartTooltipHolder'>
 
   <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding'>ⓘ
-    <span class='tooltip trendsTooltip'>The love score is random every day!</span>
+    <span class='tooltip trendsTooltip'>The love score is random every day.</span>
   </div>
 
   <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding'>ⓘ

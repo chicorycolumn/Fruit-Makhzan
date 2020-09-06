@@ -182,7 +182,6 @@ function verifyBuyButtons() {
     return
   }
 
-  console.log("verifyBuyButtons")
   $(".buyButton").each(function () {
     let row = $(this).parents("tr");
     let name = row.find(".nameData").text();

@@ -22,11 +22,7 @@ $get_full = false;
 $update_data = [
   "money_stat" => $new_money_stat,
   "days_stat" => $new_days_stat,
-  "trend_calculates" => evolve_trend_calculates(
-    $_SESSION['trend_calculates'],
-    $_SESSION['days_stat'],
-    $json_data_object
-  ),
+  "trend_calculates" => $_SESSION['trend_calculates'],
 ];
 $type_definition_string = "iiss";
 

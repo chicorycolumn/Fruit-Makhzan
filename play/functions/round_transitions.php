@@ -38,7 +38,6 @@ let createFruitForm =
       "</div>" +
     "</div>" +
   "</form>";
-
 let rubicons = {1: Math.pow(10, 3), 2: Math.pow(10, 6)}
 let prefix = rubicons[2]==1000000 ? "m" : "b"
 
@@ -239,7 +238,8 @@ function revealSpecificRows() {
       parseInt(row.find(".rubiconData").text()) <= current_rubicon &&
       row.hasClass("hidden")
     ) {
-      //Remove this row, then prepend it.
+      console.log(row.find(".nameData").text())
+      row.prependTo("table#inventory tbody")
       row.removeClass("hidden");
       makeSparkly(row);
     }
