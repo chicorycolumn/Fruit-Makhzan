@@ -8,6 +8,8 @@ function bindDevDataFunctions(value){
     $("#restockTH").css({"color": "purple"})
     $(".factorsTD").bind("click", function(e){return printSingle(e)})
     $(".factorsTD").css({"border": "purple solid 1px"})
+    rubicons[1] = 150
+    rubicons[2] = 300
   }
 }
 

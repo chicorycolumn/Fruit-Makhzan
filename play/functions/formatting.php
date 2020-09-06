@@ -23,6 +23,8 @@ function toggleTooltips() {
     });
 
     $(".popularityCircleSpan").addClass("popularityCircleSpanHover");
+    $(".trendsChartTooltipHolder").removeClass("hidden")
+    $(".trendsChartTooltipSymbol").addClass("trendsChartTooltipSymbolHover")
   } else {
     toggle.addClass("halfOpacity");
     $("th").each(function () {
@@ -39,6 +41,8 @@ function toggleTooltips() {
       }
     });
     $(".popularityCircleSpan").removeClass("popularityCircleSpanHover");
+    $(".trendsChartTooltipHolder").addClass("hidden")
+    $(".trendsChartTooltipSymbol").removeClass("trendsChartTooltipSymbolHover")
   }
 }
 

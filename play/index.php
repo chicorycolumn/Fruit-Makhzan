@@ -41,10 +41,12 @@ updateCurrentRubicon();
 fillInvTable()
 updateGameStats(sessionMoney, sessionDays, null)
 $(document).ready(function () {
+  // $(".invTableOverlay").removeClass("hidden")
+  // level_record["round"] = 3
   basicPageFunctions()
   loadRubiconIfAt()
   makeSalesChart(overall_sales_history)
-  makeTrendsChart()
+  makeTrendsChart(true)
   setTimeout(() => {
     if (!$("#trendsChart").length){
         $(".ersatzChart").removeClass("hidden")

@@ -3,14 +3,38 @@
 include '.././chart/charts.php';
 
 echo "<link rel='stylesheet' type='text/css' href='.././css/mainCharts.css' />";
+echo "<link rel='stylesheet' type='text/css' href='.././css/invTable.css' />";
 
 $mainCharts =
   "
 
 <div class='mainDiv' id='mainDivCharts1'>
+<div class='trendsChartTooltipHolder'>
+
+  <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding' id='tooltipSymbolLove'>ⓘ
+    <span class='tooltip trendsTooltip'>The love score is random every day!</span>
+  </div>
+
+  <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding' id='tooltipSymbolWeather'>ⓘ
+    <span class='tooltip trendsTooltip'>The weather score goes in seasons.</span>
+  </div>
+
+  <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding' id='tooltipSymbolPolitics'>ⓘ
+    <span class='tooltip trendsTooltip'>The politics score changes weekly.</span>
+  </div>
+
+  <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding' id='tooltipSymbolConformity'>ⓘ
+    <span class='tooltip trendsTooltip'>Whether the conformity score is rising, falling, or maintaining, it's more likely to keep doing that.</span>
+  </div>
+
+  <div class='trendsChartTooltipSymbol trendsChartTooltipSymbolHover noMarginPadding' id='tooltipSymbolDecadence'>ⓘ
+    <span class='tooltip trendsTooltip'>The decadence score is high when you recently made a lot of profit, and low when you recently had a lot of costs.</span>
+  </div>
+
+</div>
 " .
   '<div class="chartContainer" id="trendsChartContainer">
-  
+
   <img class="ersatzChart hidden" src="../images/ersatz_chart2.png">
   <div class="ersatzChartUnderlay hidden">
   

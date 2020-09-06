@@ -191,12 +191,11 @@ function updateGamesTable(money_crement, money_absolute, new_level_record) {
         if (!new_level_record){ 
           updateGameStats(result["update_data"]['money_stat']);
         }
-        // setTimeout(() => { //wang
           if (in_progress){
           console.log("updateGamesTable 2", in_progress, in_progress["restock"]["value"])
           in_progress["round"]["value"] = false
           in_progress["restock"]["value"] = false
-          allButtonsDisabled(false); //wang
+          allButtonsDisabled(false);
           if (!$(".invTableOverlay").hasClass("hidden")){
 
             let loadingGifs = ["avocado", "carrot", "lemon"]
@@ -206,7 +205,6 @@ function updateGamesTable(money_crement, money_absolute, new_level_record) {
           setTimeout(verifyBuyButtons, 10);
           console.log("updateGamesTable 3", in_progress, in_progress["restock"]["value"])
         }
-        // }, 2000);
       } else {
         console.log(result["message"], result["error"], result);
       }
@@ -260,6 +258,9 @@ function fillInvTable(shouldWipe, name) {
 }
 
 function addRowToTable(fruit, shouldPrepend){
+
+  console.log(fruit['name'], shouldPrepend)
+
   let response = "";
   let {
     name,
@@ -429,7 +430,7 @@ function restockFruit(formattedName) {
 
   console.log("setting in_progress.restock to TRUE...")
   in_progress["restock"]["value"] = true
-  allButtonsDisabled(true); //wang
+  allButtonsDisabled(true);
 
   setTimeout(() => {
     if (in_progress["restock"]["value"]){
@@ -446,7 +447,6 @@ function restockFruit(formattedName) {
 
   setAmount(formattedName, "restock", "", requested_amount);
 
-  // setTimeout(() => { //wang
     if (putative_cost > money) {
     alert("Insufficient funds!");
   } else {
@@ -491,7 +491,6 @@ function restockFruit(formattedName) {
       },
     });
   }
-  // }, 2000);
 }
 
 function updateGameStats(new_money_stat, new_days_stat, new_trend_calculates, newest_overall_sales_history) {

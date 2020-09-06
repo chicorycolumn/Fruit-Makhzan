@@ -39,13 +39,14 @@ let createFruitForm =
     "</div>" +
   "</form>";
 
+let rubicons = {1: Math.pow(10, 3), 2: Math.pow(10, 6)}
+let prefix = rubicons[2]==1000000 ? "m" : "b"
+
 const rubiconMessageRef = {
   1: "Well done! You unlocked a new fruit.",
-  0: "You're a millionaire! As a reward for all your hard work, you buy an island to relax on.",
+  0: "You're a "+prefix+"illionaire! As a reward for all your hard work, you buy an island to relax on.",
   4: "You won the whole game! You own four lovely islands and are now king.",
 };
-
-const rubicons = {1: Math.pow(10, 3), 2: Math.pow(10, 6)}
 
 function advance() {
   if (
@@ -238,6 +239,7 @@ function revealSpecificRows() {
       parseInt(row.find(".rubiconData").text()) <= current_rubicon &&
       row.hasClass("hidden")
     ) {
+      //Remove this row, then prepend it.
       row.removeClass("hidden");
       makeSparkly(row);
     }

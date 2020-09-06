@@ -154,7 +154,6 @@ function validateNumbersAndSubmit(e, formattedName, operation) {
 
   if (k == 13 || w == 13) {
     if (operation == "restock") {
-      console.log("wang")
       restockFruit(formattedName);
     } else if (operation == "selling") {
       submitSellingPrice(formattedName);

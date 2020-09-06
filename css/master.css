@@ -103,6 +103,7 @@ body {
   margin-top: 50px;
   width: 520px;
   height: 265px;
+  position: relative;
 }
 
 #mainDivCharts2 {
