@@ -69,10 +69,12 @@ function adjustNavbarGameLink() {
 
   if (!!check) {
     $("#navbarImagePlay").attr("src", "../images/cherry_sized_shadow2.png");
+    $("#navbarImagePlay").attr("alt", "A cherry");
     $("#navbarLinkPlay").off("click", "startNewGame");
     $("#navbarLinkPlay").bind("click", loadPrevious);
   } else {
     $("#navbarImagePlay").attr("src", "../images/banana_sized_shadow2.png");
+    $("#navbarImagePlay").attr("alt", "A banana");
     $("#navbarLinkPlay").off("click", "loadPrevious");
     $("#navbarLinkPlay").bind("click", startNewGame);
   }

@@ -194,6 +194,7 @@ function updateGamesTable(money_crement, money_absolute, new_level_record) {
 
             let loadingGifs = ["avocado", "carrot", "lemon"]
             $(".invTableOverlayImage").attr("src", ".././images/"+loadingGifs[Date.now() % 3]+".gif")
+            $(".invTableOverlayImage").attr("alt", "A loading animation depicting a cartoon fruit")
             $(".invTableOverlay").addClass("hidden")
           }
           setTimeout(verifyBuyButtons, 10);

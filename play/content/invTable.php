@@ -8,14 +8,14 @@ $invTable =
 
   <div class='invTableOverlay hidden'>
 
-    <img class='invTableOverlayOval' src='.././images/blurryBeige1.png'/>
+    <img class='invTableOverlayOval' src='.././images/blurryBeige1.png'/ alt='A blurry shadow' >
     <div class='invTableOverlayTextHolder'>
       <p class='invTableOverlayText'>Waiting for database...</p>
       <p class='invTableOverlayImageTag'>Art by Jonas Mosesson (CC BY-NC-ND 4.0)</p>
     </div>
-    <img class='invTableOverlayOval2' src='.././images/blurryBeige2.png'/>
+    <img class='invTableOverlayOval2' src='.././images/blurryBeige2.png' alt='A blurry shadow' />
     <a href='https://jonasmosesson.se/' target='_blank'>
-    <img class='invTableOverlayImage' src='.././images/avocado.gif'/>
+    <img class='invTableOverlayImage' src='.././images/avocado.gif' alt='A loading animation depicting a cartoon fruit'/>
     </a>
   </div>
 
@@ -23,7 +23,7 @@ $invTable =
 <div class='col'>
 <div class='box'>
   <div class='boxBody'>
-  <img id='tooltipToggle' src='../images/crossed_out_info.png' onclick='toggleTooltips()'/>
+  <img id='tooltipToggle' src='../images/crossed_out_info.png' onclick='toggleTooltips()' alt='An information symbol, crossed out' />
     <table id='inventory' class='table'>
       <thead>
       <tr>" .

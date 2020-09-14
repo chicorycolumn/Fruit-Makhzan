@@ -27,21 +27,21 @@
 
       <a class='navbarLink' href="../home">
       <div class=navbarLinkSubholder>
-      <img class='navbarImage' src='../images/blueberry_sized_shadow2.png'>  
+      <img class='navbarImage' src='../images/blueberry_sized_shadow2.png' alt='A blueberry'>  
       <p class='navbarText' >Home</p>
       </div>
       </a>    
 
       <div class='navbarLink' id='navbarLinkPlay'>
       <div class=navbarLinkSubholder>
-      <img class='navbarImage' id='navbarImagePlay' src='../images/banana_sized_shadow2.png'>  
+      <img class='navbarImage' id='navbarImagePlay' src='../images/banana_sized_shadow2.png' alt='A banana'>  
       <p class='navbarText' >Play</p>
       </div>
 </div> 
 
       <a class='navbarLink' href="../about">
       <div class=navbarLinkSubholder>
-      <img class='navbarImage' src='../images/pear_sized_shadow2.png'>  
+      <img class='navbarImage' src='../images/pear_sized_shadow2.png' alt='A pear'>  
       <p class='navbarText' >About</p>
       </div>
       </a>   

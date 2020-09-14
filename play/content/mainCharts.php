@@ -35,7 +35,7 @@ $mainCharts =
 " .
   '<div class="chartContainer" id="trendsChartContainer">
 
-  <img class="ersatzChart hidden" src="../images/ersatz_chart2.png">
+  <img class="ersatzChart hidden" src="../images/ersatz_chart2.png" alt="A column chart showing popularity trends over time" >
   <div class="ersatzChartUnderlay hidden">
   
     <div class="ersatzBarHolder">

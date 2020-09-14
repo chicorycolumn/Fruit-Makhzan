@@ -130,6 +130,7 @@ function loadRubiconIfAt() {
         showIsland();
         $(".newDayButton").addClass("hidden");
         $("#clock").attr("src", '.././images/crown2.png');
+        $("#clock").attr("alt", 'A golden crown');
         $(document).ready(function () {
           allButtonsDisabled(true);
         });
@@ -186,6 +187,7 @@ function showEndScreen(sublevel) {
   showIsland();
   $(".newDayButton").addClass("hidden");
   $("#clock").attr("src", '.././images/crown2.png');
+  $("#clock").attr("alt", 'A golden crown');
   $(document).ready(function () {
     allButtonsDisabled(true);
   });

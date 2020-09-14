@@ -10,7 +10,7 @@ $res = check_gid();
 <?php
 $content =
   '  <div class="dialogHolder">
-<img class="scroll" src=".././images/scroll2a.png">
+<img class="scroll" src=".././images/scroll2a.png" alt="A simplified old-timey parchment scroll background">
 <div class="dialogBox">
 
   <div class="dialogBoxInner dialogBoxInnerHome">
@@ -27,13 +27,13 @@ $content =
   (check_gid() ? "" : "disabled") .
   '>
       
-      <img class="homeButtonImage" src="../images/cherry_sized_shadow2.png" />
+      <img class="homeButtonImage" src="../images/cherry_sized_shadow2.png" alt="A cherry" />
       <p class="noMarginPadding homeButtonText">CONTINUE</p>
     
     </button>
 
     <button class="homeButton" onClick=startNewGame()>
-      <img class="homeButtonImage" src="../images/banana_sized_shadow2.png" />
+      <img class="homeButtonImage" src="../images/banana_sized_shadow2.png" alt="A banana" />
       <p class="noMarginPadding homeButtonText">NEW GAME</p>
     </button>
 

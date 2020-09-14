@@ -5,7 +5,7 @@ $content = "";
 $content .=
   '
   <div class="dialogHolder hidden">
-    <img class="scroll" src=".././images/scroll2a.png">
+    <img class="scroll" src=".././images/scroll2a.png" alt="A simplified old-timey parchment scroll background" >
     <div class="dialogBox">
       <div class="dialogBoxInner">
         <div class="dialogBoxInnerInner">
