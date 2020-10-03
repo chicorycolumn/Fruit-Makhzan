@@ -6,7 +6,7 @@ $invTable =
   "
 <div class='invTable'>
 
-  <div class='invTableOverlay hidden'>
+  <a class='invTableOverlay hidden' href='https://jonasmosesson.se/' target='_blank'>
 
     <img class='invTableOverlayOval' src='.././images/blurryBeige1.png'/ alt='A blurry shadow' >
     <div class='invTableOverlayTextHolder'>
@@ -14,10 +14,8 @@ $invTable =
       <p class='invTableOverlayImageTag'>Art by Jonas Mosesson (CC BY-NC-ND 4.0)</p>
     </div>
     <img class='invTableOverlayOval2' src='.././images/blurryBeige2.png' alt='A blurry shadow' />
-    <a href='https://jonasmosesson.se/' target='_blank'>
     <img class='invTableOverlayImage' src='.././images/avocado.gif' alt='A loading animation depicting a cartoon fruit'/>
-    </a>
-  </div>
+  </a>
 
 <div class='row'>
 <div class='col'>

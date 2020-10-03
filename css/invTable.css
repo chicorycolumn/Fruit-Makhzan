@@ -59,6 +59,13 @@ table#inventory {
   justify-content: center;
   align-items: center;
   font-size: 36px;
+  text-decoration: none;
+}
+
+.invTableOverlay:active,
+.invTableOverlay:hover,
+.invTableOverlay:visited {
+  color: inherit;
 }
 
 .invTableOverlayTextHolder {

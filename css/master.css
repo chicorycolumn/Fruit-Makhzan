@@ -70,6 +70,12 @@ body {
   opacity: 0.05;
 }
 
+button,
+input,
+textarea {
+  outline: none;
+}
+
 .contentWrapper {
   text-align: center;
   display: flex;
@@ -101,10 +107,9 @@ body {
 
 #mainDivCharts1 {
   margin-top: 50px;
-  width: 520px;
+  width: 525px;
   height: 265px;
   position: relative;
-  /* padding-bottom: 10px; */
 }
 
 #mainDivCharts2 {
