@@ -1,5 +1,11 @@
 # Fruit Makhzan
 
+# Description
+
+A database-themed shop-management game.
+
+Players interact with an artistically presented database of fruit items, and make decisions about selling prices and when to restock. Fruit sales are controlled by in-game factors like 'weather' and 'politics'. Day-by-day spending and sales performance are displayed graphically. The player unlocks new fruits at different levels of achievement, and is given the opportunity to create their own fruits to add to the database.
+
 ## Instructions
 
 This application is live on [Heroku](http://fruit-makhzan.herokuapp.com/), but you can also download this repository and run the project locally by following these steps:
@@ -35,3 +41,16 @@ General instructions for hosting on **Heroku** for **automatic deployment** are 
 3. Login to Heroku and enable automatic deploys from Github, and connect the repo.
 
 Now when you commit and push to Github, Heroku will deploy the latest version of the project automatically.
+
+## Built with
+
+- [PHP](https://www.php.net/) - The primary coding language
+- [VisualStudioCode](https://code.visualstudio.com/) - The code editor
+
+- [Heroku](https://www.heroku.com/) - The cloud application platform
+- [ClearDB](https://www.cleardb.com/) - The cloud database service
+
+- [MySQL](https://www.mysql.com/) - The database management system
+- [Apache](http://httpd.apache.org/) - The web server used in development
+
+- [jQuery](https://jquery.com/) - The JavaScript library used for design and display
