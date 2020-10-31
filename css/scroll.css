@@ -47,7 +47,6 @@
 .dialogBoxTextSmall {
   font-size: var(--dialogBoxFontSize2);
   line-height: 20px;
-  margin: 0px;
+  margin: 0px 0px 14px;
   padding: 0px;
-  margin-bottom: 14px;
 }

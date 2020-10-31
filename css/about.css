@@ -11,7 +11,6 @@
 
 .homeCoinHolder {
   cursor: pointer;
-
   width: var(--aboutCoinDimensions);
   height: var(--aboutCoinDimensions);
   text-decoration: none;
@@ -53,9 +52,6 @@
 .homeSun {
   width: var(--aboutCoinDimensions);
   height: var(--aboutCoinDimensions);
-}
-
-.homeSunText {
 }
 
 .homeSunTextHolder {

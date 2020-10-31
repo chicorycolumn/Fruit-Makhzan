@@ -19,9 +19,6 @@
   display: none;
 }
 
-.shown {
-}
-
 .sparkly {
   -webkit-animation: glow 1.2s ease-in-out alternate;
   -moz-animation: glow 1.2s ease-in-out alternate;

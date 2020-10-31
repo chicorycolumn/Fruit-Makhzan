@@ -33,7 +33,6 @@ table#inventory {
 
 .buttonTD {
   padding-left: 0px;
-  padding-left: 0px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
   border-radius: var(--bradius1);
 }
@@ -123,7 +122,6 @@ table#inventory {
 
 .invSubtd {
   margin: 0px;
-  margin-left: 0px;
   height: 70px;
   width: 100%;
   text-align: center;
@@ -136,12 +134,6 @@ table#inventory {
   width: 120px;
   margin-left: 0px;
   position: relative;
-}
-
-.quantitySubtd {
-}
-
-.restockPriceSubtd {
 }
 
 .sellingPriceSubtd {
@@ -320,12 +312,11 @@ table#inventory {
 
 .popularityCircleSpan {
   box-shadow: 1px 1px 3px black;
-  margin: 0px;
+  margin: 0px 0px 0px 15px;
   background-color: white;
   border-radius: 50px;
   height: 32.5px;
   width: 32.5px;
-  margin-left: 15px;
   text-align: center;
   font-size: var(--tdFontSize1);
   position: relative;
