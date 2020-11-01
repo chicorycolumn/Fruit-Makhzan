@@ -21,14 +21,23 @@
 
 .sparkly {
   -webkit-animation: glow 1.2s ease-in-out alternate;
-  -moz-animation: glow 1.2s ease-in-out alternate;
+  -webkit-animation-iteration-count: 2;
   animation: glow 1.2s ease-in-out alternate;
   animation-iteration-count: 2;
-  -moz-animation-iteration-count: 2;
-  -webkit-animation-iteration-count: 2;
 }
 
 @-webkit-keyframes glow {
+  from {
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  }
+  to {
+    box-shadow: 0 0 6px var(--glowColor1), 0 0 11px var(--glowColor1),
+      0 0 16px var(--glowColor1), 0 0 21px var(--glowColor1),
+      0 0 26px var(--glowColor1);
+  }
+}
+
+@keyframes glow {
   from {
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
   }

@@ -55,6 +55,7 @@
 
 .islandFaded {
   opacity: 0.25;
+  -webkit-filter: grayscale(50%);
   filter: grayscale(50%);
 }
 
