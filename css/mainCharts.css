@@ -45,11 +45,11 @@
   justify-content: center;
   z-index: 4;
   position: absolute;
+  height: 200px;
   width: fit-content;
   margin-left: 57.5px;
   bottom: 5px;
   font-size: 16px;
-  height: 200px;
 }
 
 .trendsChartTooltipSymbol {

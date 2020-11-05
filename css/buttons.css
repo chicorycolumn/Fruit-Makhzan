@@ -62,7 +62,6 @@ button:disabled {
 
 .newDayButton {
   outline: none;
-  font-size: var(--newDayButtonFontSize);
   background-color: white;
   height: 145px;
   width: 145px;
