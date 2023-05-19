@@ -6,7 +6,7 @@
         "version": "1.0.2"
     },
     "php": {
-        "version": "8.2.6"
+        "version": "8.2.5"
     },
     "symfony/flex": {
         "version": "1.0",
