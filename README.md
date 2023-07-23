@@ -16,13 +16,13 @@ This application is live on [Heroku](http://fruit-makhzan.herokuapp.com/), but y
    <br/>
    If you are unsure, instructions on forking can be found [here](https://guides.github.com/activities/forking/) or [here](https://www.toolsqa.com/git/git-fork/), and cloning [here](https://www.wikihow.com/Clone-a-Repository-on-Github) or [here](https://www.howtogeek.com/451360/how-to-clone-a-github-repository/).
 
-2. Open the project in a code editor, and run `npm install` to install necessary packages. You may also need to install [Node.js](https://nodejs.org/en/) by running `npm install node.js`.
+2. Open the project in a code editor, and run `composer install` to install necessary packages. You may need to install [Composer](https://getcomposer.org/download/).
 
 3. Install [XAMPP](https://www.apachefriends.org/index.html) to get an Apache server. Instructions can be found [here](https://vitux.com/how-to-install-xampp-on-your-ubuntu-18-04-lts-system/). Once all the steps have been followed, on Ubuntu the command `sudo /opt/lampp/lampp start` will start the server.
 
-4. You will need to import the database at [phpmyadmin](http://localhost/phpmyadmin/), and also install [Composer](https://getcomposer.org/download/).
+4. You will need to import the database at [phpmyadmin](http://localhost/phpmyadmin/).
 
-5. Open _localhost/name-of-folder-containing-project-here_ to open the project in development mode.
+5. Open _localhost/fruit_makhzan_ to open the project in development mode.
 
 ## Deploy
 
