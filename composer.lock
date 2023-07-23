@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "acbb6bae7e29c9e505ce47fd21d132ea",
+    "content-hash": "b67e40082792570081799b902ec07f3a",
     "packages": [
         {
             "name": "monolog/monolog",
@@ -47,6 +47,10 @@
                 "log",
                 "logging"
             ],
+            "support": {
+                "issues": "https://github.com/Seldaek/monolog/issues",
+                "source": "https://github.com/Seldaek/monolog/tree/1.0.2"
+            },
             "time": "2011-10-24T09:39:02+00:00"
         },
         {
@@ -94,6 +98,10 @@
                 }
             ],
             "description": "Composer plugin for Symfony",
+            "support": {
+                "issues": "https://github.com/symfony/flex/issues",
+                "source": "https://github.com/symfony/flex/tree/v1.20.0"
+            },
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",
@@ -151,6 +159,10 @@
                 "nginx",
                 "php"
             ],
+            "support": {
+                "issues": "https://github.com/heroku/heroku-buildpack-php/issues",
+                "source": "https://github.com/heroku/heroku-buildpack-php/tree/v231"
+            },
             "time": "2023-02-14T21:03:27+00:00"
         }
     ],
@@ -160,8 +172,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "composer-plugin-api": "^1.1"
+        "composer-plugin-api": "^2.3.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.3.0"
 }
