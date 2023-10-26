@@ -428,6 +428,7 @@ function restockFruit(formattedName) {
   }, 1000);
 
   let restock_price = digitGrouping(row.find(".restockPriceData").text(), true);
+  let selling_price = digitGrouping(row.find(".sellingPriceData").text(), true);
   let putative_cost = requested_amount * restock_price;
   let money = digitGrouping($("#moneyStat").text(), true);
 
@@ -470,6 +471,10 @@ function restockFruit(formattedName) {
             row.find(".amountInput_restock").val(digitGrouping(reset_value));
           }
           updateGamesTable(putative_cost, null, null);
+
+          if (!selling_price){
+            alert("Remember to set a Selling Price for this fruit.");
+          }
         } else {
           console.log(result["message"], result["error"], result);
         }
