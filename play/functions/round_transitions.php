@@ -93,7 +93,7 @@ function advance() {
       !nameInput.replace(/ /g, "").length
     ) {
       alert(
-        "You must pick a name and two factors to affect the popularity of your new fruit."
+        "Pick a name and doubleclick two factors to affect the popularity of your new fruit."
       );
       return;
     } else {
