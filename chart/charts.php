@@ -143,7 +143,7 @@ function makeSalesChart(initial_data) {
         chart: {
           theme: "fusion",
           caption: "Daily Transactions",
-          xAxisName: "",
+          xAxisName: "Time (days)",
           yAxisName: "Gold Dinars",
           numDisplaySets: salesNumDisplay,
           setadaptiveymin: "1",
